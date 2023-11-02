@@ -5,16 +5,27 @@ include 'pilaresModel.php';
 $arreglo = json_decode(file_get_contents('php://input'), true);
 header('Content-Type: application/json');
 $val = [];
+$ids = [];
 
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
         // Manejar solicitud GET (consultar)
-        $val[] = consultarPilares();
+            $val[] = consultarPilares();
         break;
-
     case 'POST':
-        
         // Manejar solicitud POST (creación)
+        if(isset($arreglo['nueva']) && isset($arreglo['siglas']) && isset($arreglo['id_mision'])){
+            $nueva=$arreglo['nueva'];
+            $siglas = $arreglo['siglas'];
+            $id_mision = $arreglo['id_mision'];
+            $val[] =insertarPilares($nueva,$siglas,$id_mision);
+        }else if(isset($arreglo['idsPilares'])){
+            $idsPilares=$arreglo['idsPilares'];
+            $val[] =consultarPilaresID($idsPilares);
+        }else{
+            $val[]= "No llegaron las variables";
+        }
+            
         // ...
         break;
 

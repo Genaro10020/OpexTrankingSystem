@@ -311,7 +311,12 @@ background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
 background: #e9fbdd;
 }
 
+.actualizar_responsable{
+background: #eceec5;
+}
+
 .btn-nuevo-responsable{
+width: 110px;
 padding: 5px 15px;    
 border: none;
 border-radius: 15px;
@@ -323,6 +328,34 @@ box-shadow: 5px 2px 5px black;
 .btn-nuevo-responsable:hover{
 box-shadow: 10px 5px 10px black;   
 }
+
+.btn-actualizar-responsable{
+    width: 110px;
+    padding: 5px 15px;    
+    border: none;
+    border-radius: 15px;
+    background: #e0cd1c;
+    color:rgb(77, 77, 77);
+    transition:all 0.5s;
+    box-shadow: 5px 2px 5px black; 
+    }
+.btn-actualizar-responsable:hover{
+    box-shadow: 10px 5px 10px black;   
+    }
+
+.btn-cancelar-responsable{
+    width: 110px;
+    padding: 5px 15px;    
+    border: none;
+    border-radius: 15px;
+    background: #868686;
+    color:rgb(235, 235, 235);
+    transition:all 0.5s;
+    box-shadow: 5px 2px 5px black; 
+    }
+.btn-cancelar-responsable:hover{
+    box-shadow: 10px 5px 10px black;   
+    }
 
 /* Small devices (landscape phones, 576px and up)*/
 @media (min-width: 576px) {    

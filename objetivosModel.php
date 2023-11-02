@@ -1,10 +1,10 @@
 <?php
 include("conexionGhoner.php");
-    function consultarDepartamentos(){
+    function consultarObjetivos(){
         global $conexion;
         $resultado = [];
         $estado = false;
-            $consulta = "SELECT * FROM departamentos ORDER BY id DESC";
+            $consulta = "SELECT * FROM objetivos ORDER BY id DESC";
             $query = $conexion->query($consulta);
             if($query){
                 while ($datos=mysqli_fetch_array($query)){
@@ -17,12 +17,11 @@ include("conexionGhoner.php");
             return array ($resultado,$estado);
     }
 
-   
-    function insertarDepartamento($nueva,$siglas){
+    function insertarObjetivo($nueva,$siglas,$id_pilar){
         global $conexion;
-        $query = "INSERT INTO departamentos (nombre,siglas) VALUES (?,?)";
+        $query = "INSERT INTO objetivos (nombre, siglas, id_pilares) VALUES (?,?,?)";
         $stmt = $conexion->prepare($query);
-        $stmt->bind_param("ss", $nueva, $siglas);
+        $stmt->bind_param("ssi", $nueva, $siglas,$id_pilar);
         if($stmt->execute()){
             $estado = true;
         }else{
@@ -33,12 +32,12 @@ include("conexionGhoner.php");
         return $estado;
     }
 
-    function actualizarDepartamento($id,$nuevoNombre,$siglas){
+    function actualizarObjetivo($nombre,$siglas,$id_pilar,$id){
         global $conexion;
         $estado = false;
-        $update = "UPDATE departamentos SET nombre=?, siglas=? WHERE  id=?";
+        $update = "UPDATE objetivos SET nombre=?, siglas=?, id_pilares=? WHERE  id=?";
         $stmt = $conexion->prepare($update);
-        $stmt->bind_param("ssi", $nuevoNombre,$siglas, $id);
+        $stmt->bind_param("ssii", $nombre, $siglas, $id_pilar,$id);
         if($stmt->execute()){
             $estado = true;
         }
@@ -46,10 +45,10 @@ include("conexionGhoner.php");
         return $estado;
     }
 
-    function eliminarDepartamento($id){
+    function eliminarObjetivo($id){
         global $conexion;
         $estado = false;
-        $delete = "DELETE FROM departamentos WHERE id=?";
+        $delete = "DELETE FROM objetivos WHERE id=?";
         $stmt = $conexion->prepare($delete);
         $stmt->bind_param("i", $id);
         if($stmt->execute()){
@@ -58,5 +57,4 @@ include("conexionGhoner.php");
         $stmt->close();
         return $estado;
     }
-       
 ?>

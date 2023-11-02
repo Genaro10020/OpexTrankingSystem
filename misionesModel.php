@@ -1,10 +1,10 @@
 <?php
 include("conexionGhoner.php");
-    function consultarDepartamentos(){
+    function consultarMisiones(){
         global $conexion;
         $resultado = [];
         $estado = false;
-            $consulta = "SELECT * FROM departamentos ORDER BY id DESC";
+            $consulta = "SELECT * FROM misiones ORDER BY id DESC";
             $query = $conexion->query($consulta);
             if($query){
                 while ($datos=mysqli_fetch_array($query)){
@@ -17,12 +17,11 @@ include("conexionGhoner.php");
             return array ($resultado,$estado);
     }
 
-   
-    function insertarDepartamento($nueva,$siglas){
+    function insertarMetodologia($nueva){
         global $conexion;
-        $query = "INSERT INTO departamentos (nombre,siglas) VALUES (?,?)";
+        $query = "INSERT INTO metodologias (nombre) VALUES (?)";
         $stmt = $conexion->prepare($query);
-        $stmt->bind_param("ss", $nueva, $siglas);
+        $stmt->bind_param("s", $nueva);
         if($stmt->execute()){
             $estado = true;
         }else{
@@ -33,12 +32,12 @@ include("conexionGhoner.php");
         return $estado;
     }
 
-    function actualizarDepartamento($id,$nuevoNombre,$siglas){
+    function actualizarMetodologia($id,$nuevoNombre){
         global $conexion;
         $estado = false;
-        $update = "UPDATE departamentos SET nombre=?, siglas=? WHERE  id=?";
+        $update = "UPDATE metodologias SET nombre=? WHERE  id=?";
         $stmt = $conexion->prepare($update);
-        $stmt->bind_param("ssi", $nuevoNombre,$siglas, $id);
+        $stmt->bind_param("si", $nuevoNombre, $id);
         if($stmt->execute()){
             $estado = true;
         }
@@ -46,10 +45,10 @@ include("conexionGhoner.php");
         return $estado;
     }
 
-    function eliminarDepartamento($id){
+    function eliminarMetodologia($id){
         global $conexion;
         $estado = false;
-        $delete = "DELETE FROM departamentos WHERE id=?";
+        $delete = "DELETE FROM metodologias WHERE id=?";
         $stmt = $conexion->prepare($delete);
         $stmt->bind_param("i", $id);
         if($stmt->execute()){
@@ -58,5 +57,4 @@ include("conexionGhoner.php");
         $stmt->close();
         return $estado;
     }
-       
 ?>

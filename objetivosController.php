@@ -1,7 +1,7 @@
 <?php
 session_start();
 if(isset($_SESSION['nombre'])){
-include 'departamentosModel.php';
+include 'objetivosModel.php';
 $arreglo = json_decode(file_get_contents('php://input'), true);
 header('Content-Type: application/json');
 $val = [];
@@ -9,31 +9,32 @@ $val = [];
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
         // Manejar solicitud GET (consultar)
-        $val[] = consultarDepartamentos();
+        $val[] = consultarObjetivos();
         break;
-
     case 'POST':
         // Manejar solicitud POST (creación)
-            if(isset($arreglo['nueva']) && isset($arreglo['siglas'])){
-                $nueva = $arreglo['nueva'];
-                $siglas = $arreglo['siglas'];
-               $val [] = insertarDepartamento($nueva,$siglas);     
-            }else{
-                $val [] =  "No existe la variable nueva";
-            }
+        if(isset($arreglo['nueva']) && isset($arreglo['siglas']) && isset($arreglo['id_pilar'])){
+            $nueva = $arreglo['nueva'];
+            $siglas = $arreglo['siglas'];
+            $id_pilar = $arreglo['id_pilar'];
+            $val [] = insertarObjetivo($nueva,$siglas,$id_pilar);     
+        }else{
+            $val [] =  "No existe la variable nueva o siglas";
+        }
         // ...
         break;
 
     case 'PUT':
         // Manejar solicitud PUT (actualización)
-        if(isset($arreglo['id']) && isset($arreglo['nuevo']) && isset($arreglo['siglas'])){
-            $id=$arreglo['id'];
-            $nuevo=$arreglo['nuevo'];
-            $siglas=$arreglo['siglas'];
-            $val[]=actualizarDepartamento($id,$nuevo,$siglas);
-        }else{
-            $val[] = "No existe variable ID o Nuevo";
-        }
+            if(isset($arreglo['id']) && isset($arreglo['nombre']) && isset($arreglo['siglas']) && isset($arreglo['id_pilar'])){
+                $id = $arreglo['id'];
+                $nombre = $arreglo['nombre'];
+                $siglas = $arreglo['siglas'];
+                $id_pilar = $arreglo['id_pilar'];
+                $val[] = actualizarObjetivo($nombre,$siglas,$id_pilar,$id);
+            }else{
+                $val[] = "No existe variable ID o Nuevo";
+            }
         // ...
         break;
 
@@ -41,7 +42,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         // Manejar solicitud DELETE (eliminación)
             if(isset($arreglo['id'])){
                 $id = $arreglo['id'];
-                $val[] = eliminarDepartamento($id);
+                $val[] = eliminarObjetivo($id);
             } else {
                 $val[] = "No llego la varible ID".$arreglo['id'];
             //  http_response_code(400); // Bad Request
