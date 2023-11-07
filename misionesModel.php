@@ -17,9 +17,9 @@ include("conexionGhoner.php");
             return array ($resultado,$estado);
     }
 
-    function insertarMetodologia($nueva){
+    function insertarMision($nueva){
         global $conexion;
-        $query = "INSERT INTO metodologias (nombre) VALUES (?)";
+        $query = "INSERT INTO misiones (nombre) VALUES (?)";
         $stmt = $conexion->prepare($query);
         $stmt->bind_param("s", $nueva);
         if($stmt->execute()){

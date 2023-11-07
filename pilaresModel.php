@@ -34,41 +34,38 @@ include("conexionGhoner.php");
        $stmt->close();
     }
 
-    function consultarPilaresID($idsPilares){
+    function consultarPilaresIDmisiones($idsMisiones){
         global $conexion;
         $resultado = [];
         $resultado2 = [];
-        $idsMisiones = [];
+        $idsPilares = [];
         $estado = false;
-        $tamanio=count($idsPilares);
+        $tamanio=count($idsMisiones);
         
             for ($i=0; $i < $tamanio; $i++) { 
-                $consulta = "SELECT * FROM pilares WHERE id = '$idsPilares[$i]' LIMIT 1";
+                $consulta = "SELECT * FROM pilares WHERE id_misiones = '$idsMisiones[$i]'";
                 $query = $conexion->query($consulta);
                 if($query){
                     while ($datos=mysqli_fetch_array($query)){
                         $resultado [] = $datos;
-                        $idsMisiones [] = $datos['id_misiones'];
+                        $idsPilares [] = $datos['id'];
                     }
                         $estado  = true;
                 }
             }
-          
-       
-         $idsMisioneNoRepetidos = array_values(array_unique($idsMisiones));
-         $tamanioMisiones = count($idsMisioneNoRepetidos);
+        return array ($resultado,$estado);
+    }
 
-         for ($i=0; $i < $tamanioMisiones; $i++) { 
-            $consulta = "SELECT * FROM misiones WHERE id = '$idsMisioneNoRepetidos[$i]' LIMIT 1";
-                $query = $conexion->query($consulta);
-                if($query){
-                    while ($datos=mysqli_fetch_array($query)){
-                        $resultado2 [] = $datos;
-                    }
-                        $estado  = true;
-                }
-         }
-
-        return array ($resultado,$estado,$resultado2);
+    function eliminarPilar($id){
+        global $conexion;
+        $estado = false;
+        $delete = "DELETE FROM pilares WHERE id=?";
+        $stmt = $conexion->prepare($delete);
+        $stmt->bind_param("i", $id);
+        if($stmt->execute()){
+            $estado = true;
+        }
+        $stmt->close();
+        return "Metodo Eliminar";
     }
 ?>

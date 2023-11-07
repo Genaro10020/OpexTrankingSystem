@@ -19,9 +19,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
             $siglas = $arreglo['siglas'];
             $id_mision = $arreglo['id_mision'];
             $val[] =insertarPilares($nueva,$siglas,$id_mision);
-        }else if(isset($arreglo['idsPilares'])){
-            $idsPilares=$arreglo['idsPilares'];
-            $val[] =consultarPilaresID($idsPilares);
+        }else if(isset($arreglo['idsMisiones'])){
+            $idsMisiones=$arreglo['idsMisiones'];
+            $val[] =consultarPilaresIDmisiones($idsMisiones);
         }else{
             $val[]= "No llegaron las variables";
         }
@@ -36,6 +36,13 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
     case 'DELETE':
         // Manejar solicitud DELETE (eliminación)
+        if(isset($arreglo['id'])){
+            $id = $arreglo['id'];
+                $val[] = eliminarPilar($id);
+        } else {
+                $val[] = "No llego la varible ID".$arreglo['id'];
+        //  http_response_code(400); // Bad Request
+        }
         // ...
         break;
 

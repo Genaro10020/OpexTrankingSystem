@@ -17,6 +17,47 @@ include("conexionGhoner.php");
             return array ($resultado,$estado);
     }
 
+
+    
+    function consultarObjetivosIDpilares($idsPilares){
+        global $conexion;
+        $resultado = [];
+        //$resultado2 = [];
+        // $idsPilares = [];
+        $estado = false;
+        $tamanio=count($idsPilares);
+        
+            for ($i=0; $i < $tamanio; $i++) { 
+                $consulta = "SELECT * FROM objetivos WHERE id_pilares = '$idsPilares[$i]'";
+                $query = $conexion->query($consulta);
+                if($query){
+                    while ($datos=mysqli_fetch_array($query)){
+                        $resultado [] = $datos;
+                        //$idsPilares [] = $datos['id'];
+                    }
+                        $estado  = true;
+                }
+            }
+          
+       
+         /*$idsPilaresNoRepetidos = array_values(array_unique($idsPilares));
+         $tamanioPilares = count($idsPilaresNoRepetidos);
+
+         for ($i=0; $i < $tamanioPilares; $i++) { 
+            $consulta = "SELECT * FROM objetivos WHERE id_pilares = '$idsPilaresNoRepetidos[$i]'";
+                $query = $conexion->query($consulta);
+                if($query){
+                    while ($datos=mysqli_fetch_array($query)){
+                        $resultado2 [] = $datos;
+                    }
+                        $estado  = true;
+                }
+         }*/
+
+        return array ($resultado,$estado);
+    }
+
+
     function insertarObjetivo($nueva,$siglas,$id_pilar){
         global $conexion;
         $query = "INSERT INTO objetivos (nombre, siglas, id_pilares) VALUES (?,?,?)";

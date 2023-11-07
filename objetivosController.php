@@ -18,6 +18,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
             $siglas = $arreglo['siglas'];
             $id_pilar = $arreglo['id_pilar'];
             $val [] = insertarObjetivo($nueva,$siglas,$id_pilar);     
+        }else if(isset($arreglo['idsPilares'])){
+            $idsPilares=$arreglo['idsPilares'];
+            $val[] =consultarObjetivosIDpilares($idsPilares);
         }else{
             $val [] =  "No existe la variable nueva o siglas";
         }

@@ -18,9 +18,10 @@ const AltaProyectos = {
       metodologias:[],
       pilares:[],
       allPilares:[],
-      selectPilar:[],
       siglas:'',
       objetivos:[],
+      checkMisiones:[],
+      checkPilares:[],
       checkObjetivos:[],
       impactoAmbiental:[],
       selectImpactoAmbiental:'',
@@ -179,6 +180,63 @@ const AltaProyectos = {
             
       })
     },
+       /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PILARES*/
+       consultarPilaresXobjetivoSeleccionado(){
+       /* if(this.checkObjetivos.length >0){
+            const valoresAntesDelGuion = this.checkObjetivos.map(item => {
+              const partes = item.split('<->'); // utilizo para separar por guion
+              return partes[2]//todas las partes en posicion 2 contienen el id_pilar, que necesitaremos para la consulta
+            });
+
+            const valoresUnicos = [...new Set(valoresAntesDelGuion)];//Obtengo los numero no repetidos del arreglo 
+            console.log(valoresUnicos);
+            axios.post('pilaresController.php',{
+                idsPilares:valoresUnicos
+            }).then(response =>{
+                console.log(response.data[0])
+                if (response.data[0][1]==true){
+                    if (response.data[0][0].length>0) {
+                      this.pilares = response.data[0][0]
+                      this.misiones = response.data[0][2]
+                    }
+                }else{
+                    alert("La consulta Pilares por Objetivos Seleccionado, no se realizo correctamente.")
+                }
+            }).catch(error =>{
+              console.log('Erro :-('+error)
+            }).finally(() =>{
+      
+            })
+      }else{
+        this.pilares =''
+        this.misiones=''
+      }*/
+  },
+   /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR OBJETIVOS POR PILARES SELECCIONADA*/
+   consultarObjetivosXpilaresSeleccionados(){
+    if(this.checkPilares.length >0){
+        console.log(this.checkPilares);
+        axios.post('objetivosController.php',{
+            idsPilares:this.checkPilares
+        }).then(response =>{
+            console.log(response.data[0])
+            if (response.data[0][1]==true){
+                if (response.data[0][0].length>0) {
+                  //this.pilares = response.data[0][0]
+                  this.objetivos = response.data[0][0]
+                }
+            }else{
+                alert("La consulta Objetivos por Pilares Seleccionados, no se realizo correctamente.")
+            }
+        }).catch(error =>{
+          console.log('Erro :-('+error)
+        }).finally(() =>{
+  
+        })
+  }else{
+    this.objetivos=''
+  }
+},
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR OBJETIVOS*/
     consultarObjetivos(){
       axios.get('objetivosController.php',{
@@ -191,45 +249,12 @@ const AltaProyectos = {
           }else{
               alert("La consulta Objetivos, no se realizo correctamente.")
           }
-  
       }).catch(error =>{
         console.log('Erro :-('+error)
       }).finally(() =>{
 
       })
     },
-      /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PILARES*/
-      consultarPilaresXobjetivoSeleccionado(){
-            if(this.checkObjetivos.length >0){
-                const valoresAntesDelGuion = this.checkObjetivos.map(item => {
-                  const partes = item.split('-'); // utilizo para separar por guion
-                  return partes[2]//todas las partes en posicion 2 contienen el id_pilar, que necesitaremos para la consulta
-                });
-
-                const valoresUnicos = [...new Set(valoresAntesDelGuion)];//Obtengo los numero no repetidos del arreglo 
-                console.log(valoresUnicos);
-                axios.post('pilaresController.php',{
-                    idsPilares:valoresUnicos
-                }).then(response =>{
-                    console.log(response.data[0])
-                    if (response.data[0][1]==true){
-                        if (response.data[0][0].length>0) {
-                          this.pilares = response.data[0][0]
-                          this.misiones = response.data[0][2]
-                        }
-                    }else{
-                        alert("La consulta Pilares por Objetivos Seleccionado, no se realizo correctamente.")
-                    }
-                }).catch(error =>{
-                  console.log('Erro :-('+error)
-                }).finally(() =>{
-          
-                })
-          }else{
-            this.pilares =''
-            this.misiones=''
-          }
-      },
       /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PILARES*/
       consultarPilares(){
       axios.get('pilaresController.php',{
@@ -250,6 +275,32 @@ const AltaProyectos = {
 
       })
     },
+     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PILARES POR MISION SELECCIONADA*/
+     consultarPilaresXmisionSeleccionada(){
+      if(this.checkMisiones.length >0){
+          console.log(this.checkMisiones);
+          axios.post('pilaresController.php',{
+              idsMisiones:this.checkMisiones
+          }).then(response =>{
+              console.log(response.data[0])
+              if (response.data[0][1]==true){
+                  if (response.data[0][0].length>0) {
+                    this.pilares = response.data[0][0]
+                    //this.objetivos = response.data[0][2]
+                  }
+              }else{
+                  alert("La consulta Pilares por Misiones Seleccionadas, no se realizo correctamente.")
+              }
+          }).catch(error =>{
+            console.log('Erro :-('+error)
+          }).finally(() =>{
+    
+          })
+    }else{
+      this.pilares =''
+      this.objetivos=''
+    }
+  },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PILARES*/
     consultarMisiones(){
       axios.get('misionesController.php',{
@@ -454,6 +505,30 @@ const AltaProyectos = {
             alert("Todos los campos son requeridos")
           }
     },
+       /*/////////////////////////////////////////////////////////////////////////////////INSERTAR PILAR*/
+       insertarMision(){
+        if(this.nueva!=''){
+            axios.post('misionesController.php',{
+              nueva:this.nueva
+            }).then(response =>{
+                console.log(response.data)
+                if (response.data[0]==true){
+                  this.myModalCRUD.hide()
+                  this.consultarMisiones()
+                  this.nueva = ''
+                }else{
+                    alert("La inserción Mision, no se realizo correctamente.")
+                }
+        
+            }).catch(error =>{
+              //console.log('Erro :-('+error)
+            }).finally(() =>{
+      
+            })
+          }else{
+            alert("Todos los campos son requeridos")
+          }
+      },
         /*/////////////////////////////////////////////////////////////////////////////////ACTUALIZAR PLANTA*/
         actualizarPlanta(){
         if(this.selectPlanta!=""){
@@ -624,7 +699,7 @@ actualizandoResponsable(){
       },
      /*/////////////////////////////////////////////////////////////////////////////////ELIMINAR PLANTA*/
      eliminarPlanta(){
-        const id_nombre_planta = this.selectPlanta.split('-');
+        const id_nombre_planta = this.selectPlanta.split('<->');
         this.id=id_nombre_planta[0]
         var nombre_planta=id_nombre_planta[1]
         console.log(this.selectPlanta)
@@ -658,7 +733,7 @@ actualizandoResponsable(){
       },
       /*/////////////////////////////////////////////////////////////////////////////////ELIMINAR AREA*/
      eliminarArea(){
-      const id_nombre_area = this.selectArea.split('-');
+      const id_nombre_area = this.selectArea.split('<->');
       this.id=id_nombre_area[0]
       var nombre=id_nombre_area[1]
       console.log(this.selectArea)
@@ -692,7 +767,7 @@ actualizandoResponsable(){
     },
     /*/////////////////////////////////////////////////////////////////////////////////ELIMINAR DEPARTAMENTOS*/
     eliminarDepartamento(){
-      const id_nombre_area = this.selectDepartamento.split('-');
+      const id_nombre_area = this.selectDepartamento.split('<->');
       this.id=id_nombre_area[0]
       var nombre=id_nombre_area[1]
       console.log(this.selectDepartamento)
@@ -726,7 +801,7 @@ actualizandoResponsable(){
     },
      /*/////////////////////////////////////////////////////////////////////////////////ELIMINAR METODOLOGIAS*/
      eliminarMetodologia(){
-      const id_nombre_area = this.selectMetodologia.split('-');
+      const id_nombre_area = this.selectMetodologia.split('<->');
       this.id=id_nombre_area[0]
       var nombre=id_nombre_area[1]
       console.log(this.selectMetodologia)
@@ -760,7 +835,7 @@ actualizandoResponsable(){
     },
     /*/////////////////////////////////////////////////////////////////////////////////ELIMINAR RESPONSABLE*/
     eliminarResponsable(){
-      const id_nombre_responsable = this.selectResponsable.split('-');
+      const id_nombre_responsable = this.selectResponsable.split('<->');
       this.id=id_nombre_responsable[0]
       var nombre=id_nombre_responsable[1]
       console.log(this.selectResponsable)
@@ -797,18 +872,75 @@ actualizandoResponsable(){
         alert("Selecione la planta a eliminar")
       }
     },
+     /*/////////////////////////////////////////////////////////////////////////////////ELIMINAR PILAR*/
+     eliminarPilar(){
+      if(this.checkPilares.length==1){
+        this.id=this.checkPilares
+        if(confirm("Desea eliminar el Pilar seleccionado?")){
+              axios.delete('pilaresController.php',{
+                data:{
+                  id:this.id
+                }
+              }).then(response =>{
+                  console.log(response.data)
+                  if (response.data[0]==true){
+                    this.consultarPilares()
+                    this.id=''
+                  }else{
+                      alert("No se elimino la Metodología.")
+                  }
+          
+              }).catch(error =>{
+                //console.log('Erro :-('+error)
+              }).finally(() =>{
+        
+              })
+        }
+      }else{
+        alert("Solamente debe estar marcado un Pilar a eliminar, no varios.")
+      }
+      /*const id_nombre_area = this.selectMetodologia.split('<->');
+      this.id=id_nombre_area[0]
+      var nombre=id_nombre_area[1]
+      console.log(this.selectMetodologia)
+      if(this.selectMetodologia!=""){
+        if(confirm("¿Desea eliminar la Metodología: " + nombre+"?"))
+        {
+          axios.delete('metodologiasController.php',{
+            data:{
+              id:this.id
+            }
+          }).then(response =>{
+              console.log(response.data)
+              if (response.data[0]==true){
+                this.selectMetodologia="";
+                this.myModalCRUD.hide()
+                this.consultarMetodologias()
+                this.id=''
+              }else{
+                  alert("No se elimino la Metodología.")
+              }
+      
+          }).catch(error =>{
+            //console.log('Erro :-('+error)
+          }).finally(() =>{
+    
+          })
+        }
+      }else{ 
+        alert("Selecione la planta a eliminar")
+      }*/
+    },
     /*/////////////////////////////////////////////////////////////////////////////////ELIMINAR RESPONSABLE*/
     eliminarObjetivo(){
-
-     
       if(this.checkObjetivos.length>0){
 
-      const id_nombre_responsable = this.checkObjetivos[0].split('-');
+      const id_nombre_responsable = this.checkObjetivos[0].split('<->');
       this.id=id_nombre_responsable[0]
       var nombre=id_nombre_responsable[1]
       console.log(this.id)
 
-       if(confirm("¿Desea eliminar el Objeetivo: " + nombre+"?"))
+       if(confirm("¿Desea eliminar el Objetivo: " + nombre+"?"))
         {
           axios.delete('objetivosController.php',{
             data:{
@@ -868,7 +1000,7 @@ actualizandoResponsable(){
                 if(tipo=="Planta"){
                     if(this.selectPlanta!=""){
                       this.myModalCRUD.show()
-                        const id_nombre_planta = this.selectPlanta.split('-');//separando
+                        const id_nombre_planta = this.selectPlanta.split('<->');//separando
                         this.id=id_nombre_planta[0]//recuperando nombre planta
                         this.nuevoNombre=id_nombre_planta[1]//recuperando nombre planta
                     }else{
@@ -879,7 +1011,7 @@ actualizandoResponsable(){
                 console.log(this.selectArea)
                     if(this.selectArea!=""){
                       this.myModalCRUD.show()
-                        const id_nombre_area = this.selectArea.split('-');//separando
+                        const id_nombre_area = this.selectArea.split('<->');//separando
                         this.id = id_nombre_area[0]//recuperando nombre planta
                         this.nuevoNombre =id_nombre_area[1]//recuperando nombre planta
                     }else{
@@ -890,7 +1022,7 @@ actualizandoResponsable(){
                   console.log(this.selectDepartamento)
                       if(this.selectDepartamento!=""){
                         this.myModalCRUD.show()
-                          const id_nombre = this.selectDepartamento.split('-');//separando
+                          const id_nombre = this.selectDepartamento.split('<->');//separando
                           this.id = id_nombre[0]//recuperando nombre planta
                           this.nuevoNombre =id_nombre[1]//recuperando nombre planta
                           this.siglas =id_nombre[2]//recuperando siglas de departamento
@@ -902,7 +1034,7 @@ actualizandoResponsable(){
                     console.log(this.selectMetodologia)
                         if(this.selectMetodologia!=""){
                           this.myModalCRUD.show()
-                            const id_nombre = this.selectMetodologia.split('-');//separando
+                            const id_nombre = this.selectMetodologia.split('<->');//separando
                             this.id = id_nombre[0]//recuperando nombre planta
                             this.nuevoNombre =id_nombre[1]//recuperando nombre planta
                         }else{
@@ -914,7 +1046,7 @@ actualizandoResponsable(){
                           if(this.checkObjetivos!=""){      
                               if(this.checkObjetivos.length==1){
                                 this.myModalCRUD.show()
-                                const id_nombre_idpilar_siglas = this.checkObjetivos[0].split('-');//separando
+                                const id_nombre_idpilar_siglas = this.checkObjetivos[0].split('<->');//separando
                                 this.id = id_nombre_idpilar_siglas[0]//recuperando nombre planta
                                 this.nuevoNombre = id_nombre_idpilar_siglas[1]//recuperando nombre planta*/
                                 this.select_pilar = id_nombre_idpilar_siglas[2]

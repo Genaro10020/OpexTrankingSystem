@@ -15,7 +15,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         // Manejar solicitud POST (creación)
         if(isset($arreglo['nueva'])){
             $nueva = $arreglo['nueva'];
-           $val [] = insertarMetodologia($nueva);     
+            $val [] = insertarMision($nueva);     
         }else{
             $val [] =  "No existe la variable nueva";
         }
