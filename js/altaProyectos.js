@@ -2,6 +2,7 @@ const AltaProyectos = {
   data() {
     return{
        /*/////////////////////////////////////////////////////////////////////////////////VARIBLES USUARIOS Y DEPARTAMENTOS INICIO*/
+      ventana:'Altas',
       myModal:'',
       myModalCRUD:'',
       tipo:'',
@@ -885,6 +886,7 @@ actualizandoResponsable(){
                   console.log(response.data)
                   if (response.data[0]==true){
                     this.consultarPilares()
+                    this.checkPilares = [] 
                     this.id=''
                   }else{
                       alert("No se elimino la Metodología.")

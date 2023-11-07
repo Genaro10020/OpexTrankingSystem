@@ -61,11 +61,11 @@ include("conexionGhoner.php");
         $estado = false;
         $delete = "DELETE FROM pilares WHERE id=?";
         $stmt = $conexion->prepare($delete);
-        $stmt->bind_param("i", $id);
+        $stmt->bind_param("i", $id_pilar);
         if($stmt->execute()){
             $estado = true;
         }
         $stmt->close();
-        return "Metodo Eliminar";
+        return $id;
     }
 ?>

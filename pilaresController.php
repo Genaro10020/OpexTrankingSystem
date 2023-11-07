@@ -39,6 +39,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         if(isset($arreglo['id'])){
             $id = $arreglo['id'];
                 $val[] = eliminarPilar($id);
+                
         } else {
                 $val[] = "No llego la varible ID".$arreglo['id'];
         //  http_response_code(400); // Bad Request

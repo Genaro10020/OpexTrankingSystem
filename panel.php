@@ -8,18 +8,22 @@ if(isset($_SESSION['nombre'])){
     <?php include('head.php'); ?> 
 </head>
 <body class="container-fluid d-flex flex-column" style="min-height: 100vh;">
-       
+<div id="alta-proyectos">
         <!--Encabezado-->
         <?php include('header.php'); ?> 
          <!--Cinta-->
         <div class="cinta row d-flex align-items-center" style="min-height:5vh; ">
                  <!--Bóton Crear misiones/pilares/Objetivos-->
-                <button class="btn-menu" @click="abrirModal('Alta')"> 
+                
+               
+                 
+            <!--Bóton-->
+            <div  class="text-center">
+                <button class="btn-menu me-3" @click="ventana='Crear'"> 
                     <i class="bi bi-plus-circle" ></i> Creas Misiones/Pilares/Objetivos
                 </button>
-            <!--Bóton Alta Proyectoss-->
-            <div id="alta-proyectos" class="text-center">
-                <button class="btn-menu" @click="abrirModal('Alta')"> 
+
+                <button class="btn-menu" @click="abrirModal('Alta'), ventana='Altas'"> 
                     <i class="bi bi-plus-circle" ></i> Alta Proyectos
                 </button>
                                 <!--Modal Alta Proyectos-->
@@ -160,10 +164,10 @@ if(isset($_SESSION['nombre'])){
 
                                                             <!--Pilares-->
                                                             <div v-if="checkObjetivos.length  > 0 " class="input-group mb-3 ">
-                                                                <span class="input-group-text w-25 text-start">Pilares <br>Estrategicos</span>
+                                                                <span class="input-group-text w-25 text-start">Pilares <br>Estrategicos{{checkPilares}}</span>
                                                                 <div class="w-50">
                                                                     <div class="form-check border border-1 mt-1" v-for="(pilar, index) in pilares" :key="index">
-                                                                        <input class="form-check-input" type="checkbox" :value="pilar.id" v-model="selectPilar">
+                                                                        <input class="form-check-input" type="checkbox" :value="pilar.id" v-model="checkPilares">
                                                                         <label class="form-check-label">
                                                                             {{ pilar.nombre }}
                                                                         </label>
@@ -418,51 +422,56 @@ if(isset($_SESSION['nombre'])){
              <!--Fin Bóton Alta Proyectoss-->
         </div>
          <!--Cuerpo-->
-        <div id="app"  style="min-height: 80vh">
-            <!--AQUI TRABAJA-->
-                <div class="input-group mt-5 mx-2 ">
-                    <span class="input-group-text w-5" >Seleccione Proyecto</span>
-                    <select class="w-5">
-                        <option value="" disabled selected>Seleccione..</option>
-                        <option>Proyecto 1</option>
-                        <option>Proyecto 2</option>
-                    </select>
-                </div>
+        <div style="min-height: 80vh">
+                    <!--AQUI TRABAJA //ALTA DE PROYECTOS-->
+                    <div v-if="ventana=='Altas'">
+                                            <div class="input-group mt-5 mx-2 ">
+                                                <span class="input-group-text w-5" >Seleccione Proyecto</span>
+                                                <select class="w-5">
+                                                    <option value="" disabled selected>Seleccione..</option>
+                                                    <option>Proyecto 1</option>
+                                                    <option>Proyecto 2</option>
+                                                </select>
+                                            </div>
 
-            <table class="mx-2 mt-5  mb-5 table table-hover table-bordered border-dark text-center">
-                                    <thead class="  border:1px solid black">
-                                        <tr>
-                                            <th>Fecha</th>
-                                            <th>Consumo de Electricidad</th>
-                                            <th>Consumo de Agua</th>
-                                            <th>Tons de CO2 por Evitar</th>
-                                            <th>Ahorro Duro</th>
-                                            <th>Ahorro Suave </th>
-                                            <th>Estatus</th>
-                                            
-                                    </thead>
-                                    <tbody class=" border:1px solid black" style="text-align: center">
-                                        <tr style="vertical-align: middle ">
-                                            <td>
-                                                <input type="date" >
-                                                </input>
-                                            </td>
-                                            <td>kwh</td>
-                                            <td>Metros cubicos</td>
-                                            <td>Tons de CO2 por Evitar</td>
-                                            <td>Ahorro Duro (Proyectado)</td>
-                                            <td>Ahorro Suave (Proyectado)</td>
-                                            <td>Estatus</td>
-                                                 
-                            </table>
-
-            <!---->
+                                        <table class="mx-2 mt-5  mb-5 table table-hover table-bordered border-dark text-center">
+                                                                <thead class="  border:1px solid black">
+                                                                    <tr>
+                                                                        <th>Fecha</th>
+                                                                        <th>Consumo de Electricidad</th>
+                                                                        <th>Consumo de Agua</th>
+                                                                        <th>Tons de CO2 por Evitar</th>
+                                                                        <th>Ahorro Duro</th>
+                                                                        <th>Ahorro Suave </th>
+                                                                        <th>Estatus</th>
+                                                                        
+                                                                </thead>
+                                                                <tbody class=" border:1px solid black" style="text-align: center">
+                                                                    <tr style="vertical-align: middle ">
+                                                                        <td>
+                                                                            <input type="date" >
+                                                                            </input>
+                                                                        </td>
+                                                                        <td>kwh</td>
+                                                                        <td>Metros cubicos</td>
+                                                                        <td>Tons de CO2 por Evitar</td>
+                                                                        <td>Ahorro Duro (Proyectado)</td>
+                                                                        <td>Ahorro Suave (Proyectado)</td>
+                                                                        <td>Estatus</td>
+                                                                            
+                                                        </table>
+                                        <!---->
+                    </div>
+                      <!--CREAR PERFILES, PILARES OBJETIVOS-->
+                     <div v-if="ventana=='Crear'">
+                                CREAR PILARES ETC.
+                     </div>
          </div>
          <!--pie-->
          <div  class="footer row" style="min-height:10vh;">
 
         </div>    
-
+</div>
     <script src="js/panel.js"></script>
     <script src="js/altaProyectos.js"></script>
     
