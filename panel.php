@@ -51,7 +51,7 @@ if(isset($_SESSION['nombre'])){
                                                             <span class="input-group-text w-25" >Planta</span>
                                                             <select v-model="selectPlanta" size="3" class="w-50">
                                                                 <option value="" selected>Seleccione..</option>
-                                                                <option v-for="planta in plantas" :value="planta.id + '-' + planta.nombre">{{planta.nombre}}</option>
+                                                                <option v-for="planta in plantas" :value="planta.id +'<->'+ planta.nombre">{{planta.nombre}}</option>
                                                             </select>
                                                             <div>
                                                                 <div class="col-12"><button class="btn-anadir" title="Crear "  @click="abrirModal('CRUD','Planta','Crear')"><i class="bi bi-plus-circle"></i></button></div>
@@ -65,7 +65,7 @@ if(isset($_SESSION['nombre'])){
                                                             <span class="input-group-text w-25" >Área</span>
                                                             <select v-model="selectArea" size="3" class="w-50">
                                                                 <option selected>Seleccione..</option>
-                                                                <option v-for="area in areas" :value="area.id + '-' + area.nombre">{{area.nombre}}</option>
+                                                                <option v-for="area in areas" :value="area.id +'<->'+ area.nombre">{{area.nombre}}</option>
                                                             </select>
                                                             <div>
                                                                 <div class="col-12"><button class="btn-anadir" title="Crear" @click="abrirModal('CRUD','Área','Crear')"><i class="bi bi-plus-circle"></i></button></div>
@@ -79,7 +79,7 @@ if(isset($_SESSION['nombre'])){
                                                             <span class="input-group-text w-25" >Departamento</span>
                                                             <select v-model="selectDepartamento" size="3" class="w-50">
                                                                 <option selected>Seleccione..</option>
-                                                                <option v-for="departamento in departamentos" :value="departamento.id+'-'+departamento.nombre+'-'+departamento.siglas">{{departamento.nombre}} ({{departamento.siglas}})</option>
+                                                                <option v-for="departamento in departamentos" :value="departamento.id+'<->'+departamento.nombre+'<->'+departamento.siglas">{{departamento.nombre}} ({{departamento.siglas}})</option>
                                                             </select>
                                                             <div>
                                                                 <div class="col-12"><button class="btn-anadir" title="Crear"  @click="abrirModal('CRUD','Departamento','Crear')"><i class="bi bi-plus-circle"></i></button></div>
@@ -92,7 +92,7 @@ if(isset($_SESSION['nombre'])){
                                                             <span class="input-group-text w-25" >Metodología</span>
                                                             <select v-model="selectMetodologia" size="3" class="w-50">
                                                                 <option selected>Seleccione..</option>
-                                                                <option v-for="metodologia in metodologias" :value="metodologia.id+'-'+metodologia.nombre">{{metodologia.nombre}}</option>
+                                                                <option v-for="metodologia in metodologias" :value="metodologia.id+'<->'+metodologia.nombre">{{metodologia.nombre}}</option>
                                                             </select>
                                                             <div>
                                                                 <div class="col-12"><button class="btn-anadir" title="Crear " @click="abrirModal('CRUD','Metodología','Crear')"><i class="bi bi-plus-circle"></i></button></div>
@@ -111,7 +111,7 @@ if(isset($_SESSION['nombre'])){
                                                                 <span class="input-group-text w-25" >Responsable</span>
                                                                 <select  v-model="selectResponsable"  class="w-50">
                                                                     <option value="" disabled selected>Seleccione..</option>
-                                                                    <option v-for="responsable in responsables" :value="responsable.id+'-'+responsable.nombre">{{responsable.nombre}}</option>
+                                                                    <option v-for="responsable in responsables" :value="responsable.id+'<->'+responsable.nombre">{{responsable.nombre}}</option>
                                                                 </select>
                                                             </div>
                                                             <!--Campos Responsable-->
@@ -144,65 +144,74 @@ if(isset($_SESSION['nombre'])){
                                                                     </div>
                                                             </div>
 
-                                                             <!--Objetivos-->
-                                                            <div class="input-group mb-3 mt-3">
-                                                                <span class="input-group-text w-25 text-start">Objetivo <br>Estrategicos</span>
-                                                                <div class="w-50">
-                                                                    <div v-for="objetivo in objetivos"class="form-check border border-1 mt-1">
-                                                                        <input class="form-check-input" v-model="checkObjetivos" type="checkbox" id="checkbox1" :value="objetivo.id+'-'+objetivo.nombre+'-'+objetivo.id_pilares+'-'+objetivo.siglas" @change="consultarPilaresXobjetivoSeleccionado()">
-                                                                        <label class="form-check-label" for="checkbox1">
-                                                                            {{objetivo.nombre}} ({{objetivo.siglas}})
-                                                                        </label>
-                                                                    </div>
-                                                                </div>
-                                                                <div>
-                                                                    <div class="col-12"><button class="btn-anadir" title="Crear" @click="abrirModal('CRUD','Objetivo','Crear')"><i class="bi bi-plus-circle"></i></button></div>
-                                                                    <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Objetivo','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
-                                                                    <div class="col-12"><button class="btn-delete" title="Eliminar"  @click="eliminarObjetivo()"><i class="bi bi-x-circle"></i></button></div>
-                                                                </div>
-                                                            </div>
-
-                                                            <!--Pilares-->
-                                                            <div v-if="checkObjetivos.length  > 0 " class="input-group mb-3 ">
-                                                                <span class="input-group-text w-25 text-start">Pilares <br>Estrategicos{{checkPilares}}</span>
-                                                                <div class="w-50">
-                                                                    <div class="form-check border border-1 mt-1" v-for="(pilar, index) in pilares" :key="index">
-                                                                        <input class="form-check-input" type="checkbox" :value="pilar.id" v-model="checkPilares">
-                                                                        <label class="form-check-label">
-                                                                            {{ pilar.nombre }}
-                                                                        </label>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="my-auto">
-                                                                    <div class="col-12"><button class="btn-anadir" title="Crear " @click="abrirModal('CRUD','Pilar','Crear')"><i class="bi bi-plus-circle"></i></button></div>
-                                                                    <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Pilar','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
-                                                                    <div class="col-12"><button class="btn-delete" title="Eliminar" @click="eliminarPilar()"><i class="bi bi-x-circle"></i></button></div>
-                                                                </div>
-                                                            </div>
-
-                                                            <!--Misiones-->
-                                                            <div v-if="checkObjetivos.length  > 0 " class="input-group mb-3 ">
+                                                             <!--Misiones-->
+                                                             Misiones:{{checkMisiones}}<br>
+                                                                Pilares:{{checkPilares}}<br>
+                                                                Objtivos:{{checkObjetivos}}<br>
+                                                             <div  class="input-group mb-3 mt-3 ">
+                                                               
                                                                 <span class="input-group-text w-25 text-start">Misiones </span>
                                                                 <div class="w-50">
                                                                     <div class="form-check border border-1 mt-1" v-for="(mision, index) in misiones" :key="index">
-                                                                     
+                                                                    <input class="form-check-input" type="checkbox" :value="mision.id" v-model="checkMisiones" @change="consultarPilaresXmisionSeleccionada()">
                                                                         <label class="form-check-label">
                                                                             {{ mision.nombre }}
                                                                         </label>
                                                                     </div>
                                                                 </div>
-                                                                <div class="my-auto">
+                                                                <!--<div class="my-auto">
                                                                     <div class="col-12"><button class="btn-anadir" title="Crear "><i class="bi bi-plus-circle"></i></button></div>
                                                                     <div class="col-12"><button class="btn-up" title="Actualizar"><i class="bi bi-arrow-up-circle"></i></button></div>
                                                                     <div class="col-12"><button class="btn-delete" title="Eliminar"><i class="bi bi-x-circle"></i></button></div>
-                                                                </div>
+                                                                </div>-->
                                                             </div>
+
+
+                                                            <!--Pilares-->
+                                                            <div class="input-group mb-3 ">
+                                                                <span class="input-group-text w-25 text-start">Pilares <br>Estrategicos</span>
+                                                                <div class="w-50">
+                                                                    <div class="form-check border border-1 mt-1" v-for="(pilar, index) in pilares" :key="index">
+                                                                        <input class="form-check-input" type="checkbox" :value="pilar.id" v-model="checkPilares" @change="consultarObjetivosXpilaresSeleccionados()">
+                                                                        <label class="form-check-label">
+                                                                            {{ pilar.nombre }}
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <!--<div class="my-auto">
+                                                                    <div class="col-12"><button class="btn-anadir" title="Crear " @click="abrirModal('CRUD','Pilar','Crear')"><i class="bi bi-plus-circle"></i></button></div>
+                                                                    <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Pilar','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
+                                                                    <div class="col-12"><button class="btn-delete" title="Eliminar" @click="eliminarPilar()"><i class="bi bi-x-circle"></i></button></div>
+                                                                </div>-->
+                                                            </div>
+
+                                                             <!--Objetivos-->
+                                                            <div class="input-group mb-3 ">
+                                                                <span class="input-group-text w-25 text-start">Objetivo <br>Estrategicos</span>
+                                                                <div class="w-50">
+                                                                    <div v-for="objetivo in objetivos"class="form-check border border-1 mt-1">
+                                                                        <input class="form-check-input" v-model="checkObjetivos" type="checkbox" id="checkbox1" :value="objetivo.id+'<->'+objetivo.nombre+'<->'+objetivo.id_pilares+'<->'+objetivo.siglas">
+                                                                        <label class="form-check-label" for="checkbox1">
+                                                                            {{objetivo.nombre}} ({{objetivo.siglas}})
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <!--<div>
+                                                                    <div class="col-12"><button class="btn-anadir" title="Crear" @click="abrirModal('CRUD','Objetivo','Crear')"><i class="bi bi-plus-circle"></i></button></div>
+                                                                    <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Objetivo','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
+                                                                    <div class="col-12"><button class="btn-delete" title="Eliminar"  @click="eliminarObjetivo()"><i class="bi bi-x-circle"></i></button></div>
+                                                                </div>-->
+                                                            </div>
+
+                                                            
+
+                                                           
                                                             <!--Impacto Ambiental-->
                                                             <div class="input-group mb-3">
                                                                 <span class="input-group-text w-25 text-start">Impacto <br>Ambiental</span>
                                                                 <div class="w-50">
                                                                     <div v-for="impacto in impactoAmbiental" class="form-check border border-1  mt-1">
-                                                                        <input class="form-check-input" type="checkbox" id="checkbox1" :value="impacto.id+'-'+impacto.nombre">
+                                                                        <input class="form-check-input" type="checkbox" id="checkbox1" :value="impacto.id+'<->'+impacto.nombre">
                                                                         <label class="form-check-label" for="checkbox1">
                                                                         {{impacto.nombre}}
                                                                         </label>
@@ -472,7 +481,6 @@ if(isset($_SESSION['nombre'])){
 
         </div>    
 </div>
-    <script src="js/panel.js"></script>
     <script src="js/altaProyectos.js"></script>
     
 </body>

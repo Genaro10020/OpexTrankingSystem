@@ -876,7 +876,7 @@ actualizandoResponsable(){
      /*/////////////////////////////////////////////////////////////////////////////////ELIMINAR PILAR*/
      eliminarPilar(){
       if(this.checkPilares.length==1){
-        this.id=this.checkPilares
+        this.id=this.checkPilares[0]
         if(confirm("Desea eliminar el Pilar seleccionado?")){
               axios.delete('pilaresController.php',{
                 data:{
@@ -889,7 +889,7 @@ actualizandoResponsable(){
                     this.checkPilares = [] 
                     this.id=''
                   }else{
-                      alert("No se elimino la Metodología.")
+                      alert("No se elimino el Pilar.")
                   }
           
               }).catch(error =>{
