@@ -463,8 +463,16 @@ if(isset($_SESSION['nombre'])){
                                         <!---->
                     </div>
                       <!--CREAR PERFILES, PILARES OBJETIVOS-->
-                     <div v-if="ventana=='Crear'">
-                                CREAR PILARES ETC.
+                     <div class="row" v-if="ventana=='Crear'">
+                        <div class= "col-4  text-center bg-primary">
+                           a
+                        </div>
+                        <div class= "col-4  text-center">
+                           b
+                        </div>
+                        <div class= "col-4  text-center">
+                          z 
+                        </div>
                      </div>
          </div>
          <!--pie-->
