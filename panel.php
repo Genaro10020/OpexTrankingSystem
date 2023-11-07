@@ -145,11 +145,7 @@ if(isset($_SESSION['nombre'])){
                                                             </div>
 
                                                              <!--Misiones-->
-                                                             Misiones:{{checkMisiones}}<br>
-                                                                Pilares:{{checkPilares}}<br>
-                                                                Objtivos:{{checkObjetivos}}<br>
-                                                             <div  class="input-group mb-3 mt-3 ">
-                                                               
+                                                            <div  class="input-group mb-3 mt-3 ">
                                                                 <span class="input-group-text w-25 text-start">Misiones </span>
                                                                 <div class="w-50">
                                                                     <div class="form-check border border-1 mt-1" v-for="(mision, index) in misiones" :key="index">
@@ -168,7 +164,7 @@ if(isset($_SESSION['nombre'])){
 
 
                                                             <!--Pilares-->
-                                                            <div class="input-group mb-3 ">
+                                                            <div v-if="checkMisiones.length>0" class="input-group mb-3 ">
                                                                 <span class="input-group-text w-25 text-start">Pilares <br>Estrategicos</span>
                                                                 <div class="w-50">
                                                                     <div class="form-check border border-1 mt-1" v-for="(pilar, index) in pilares" :key="index">
@@ -186,11 +182,11 @@ if(isset($_SESSION['nombre'])){
                                                             </div>
 
                                                              <!--Objetivos-->
-                                                            <div class="input-group mb-3 ">
+                                                            <div v-if="checkMisiones.length>0" class="input-group mb-3 ">
                                                                 <span class="input-group-text w-25 text-start">Objetivo <br>Estrategicos</span>
                                                                 <div class="w-50">
                                                                     <div v-for="objetivo in objetivos"class="form-check border border-1 mt-1">
-                                                                        <input class="form-check-input" v-model="checkObjetivos" type="checkbox" id="checkbox1" :value="objetivo.id+'<->'+objetivo.nombre+'<->'+objetivo.id_pilares+'<->'+objetivo.siglas">
+                                                                        <input class="form-check-input" v-model="checkObjetivos" type="checkbox" id="checkbox1" :value="objetivo.id">
                                                                         <label class="form-check-label" for="checkbox1">
                                                                             {{objetivo.nombre}} ({{objetivo.siglas}})
                                                                         </label>
@@ -202,26 +198,24 @@ if(isset($_SESSION['nombre'])){
                                                                     <div class="col-12"><button class="btn-delete" title="Eliminar"  @click="eliminarObjetivo()"><i class="bi bi-x-circle"></i></button></div>
                                                                 </div>-->
                                                             </div>
-
-                                                            
-
+                                                         
                                                            
                                                             <!--Impacto Ambiental-->
                                                             <div class="input-group mb-3">
                                                                 <span class="input-group-text w-25 text-start">Impacto <br>Ambiental</span>
                                                                 <div class="w-50">
                                                                     <div v-for="impacto in impactoAmbiental" class="form-check border border-1  mt-1">
-                                                                        <input class="form-check-input" type="checkbox" id="checkbox1" :value="impacto.id+'<->'+impacto.nombre">
+                                                                        <input class="form-check-input" type="checkbox" id="checkbox1" :value="impacto.id" v-model="checkImpactoAmbiental">
                                                                         <label class="form-check-label" for="checkbox1">
                                                                         {{impacto.nombre}}
                                                                         </label>
                                                                     </div>
                                                                 </div>
-                                                                <div>
+                                                                <!--<div>
                                                                     <div class="col-12"><button class="btn-anadir" title="Crear "><i class="bi bi-plus-circle"></i></button></div>
                                                                     <div class="col-12"><button class="btn-up" title="Actualizar"><i class="bi bi-arrow-up-circle"></i></button></div>
                                                                     <div class="col-12"><button class="btn-delete" title="Eliminar"><i class="bi bi-x-circle"></i></button></div>
-                                                                </div>
+                                                                </div>-->
                                                             </div>
 
                                                             <div class="input-group mb-3">

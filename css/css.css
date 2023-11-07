@@ -357,6 +357,20 @@ box-shadow: 10px 5px 10px black;
     box-shadow: 10px 5px 10px black;   
     }
 
+
+    .eventoUno {
+        /* Estilos para eventoUno */
+        background-color: lightblue;
+    }
+    
+    .eventoDos {
+        /* Estilos para eventoDos */
+        background-color: lightgreen;
+    }
+
+    
+
+
 /* Small devices (landscape phones, 576px and up)*/
 @media (min-width: 576px) {    
     .titulo{ font-size:1.5em;}

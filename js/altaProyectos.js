@@ -24,6 +24,7 @@ const AltaProyectos = {
       checkMisiones:[],
       checkPilares:[],
       checkObjetivos:[],
+      checkImpactoAmbiental:[],
       impactoAmbiental:[],
       selectImpactoAmbiental:'',
       misiones:[],
@@ -43,6 +44,7 @@ const AltaProyectos = {
       correo:'',
       telefono:'',
       responsableID:[],
+      variable: false,
       /*Impacto Ambiental */
       //general
       id:''// utilizado y reseteado despues de usar.
@@ -52,6 +54,10 @@ const AltaProyectos = {
   //  this.consultarUsuarios()
   },
   methods: {
+    toggleDiv(){
+      this.showDiv = !this.showDiv;
+      console.log(this.showDiv);
+  },
         /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PLANTAS*/
         consultarPlantas(){
           axios.get('plantasController.php',{
@@ -216,6 +222,7 @@ const AltaProyectos = {
    /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR OBJETIVOS POR PILARES SELECCIONADA*/
    consultarObjetivosXpilaresSeleccionados(){
     if(this.checkPilares.length >0){
+      this.checkObjetivos =[]
         console.log(this.checkPilares);
         axios.post('objetivosController.php',{
             idsPilares:this.checkPilares
@@ -235,6 +242,7 @@ const AltaProyectos = {
   
         })
   }else{
+    this.checkObjetivos =[]
     this.objetivos=''
   }
 },
@@ -279,6 +287,8 @@ const AltaProyectos = {
      /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PILARES POR MISION SELECCIONADA*/
      consultarPilaresXmisionSeleccionada(){
       if(this.checkMisiones.length >0){
+        this.checkPilares =[]
+        this.checkObjetivos=[]
           console.log(this.checkMisiones);
           axios.post('pilaresController.php',{
               idsMisiones:this.checkMisiones
@@ -300,6 +310,8 @@ const AltaProyectos = {
     }else{
       this.pilares =''
       this.objetivos=''
+      this.checkPilares =[]
+      this.checkObjetivos=[]
     }
   },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PILARES*/
