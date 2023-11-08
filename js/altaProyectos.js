@@ -566,7 +566,6 @@ const AltaProyectos = {
                 this.selectPlanta='',
                 this.id='',
                 this.nuevoNombre=''
-                this.siglas=''
               }else{
                   alert("No se actualizo.")
               }
@@ -595,7 +594,7 @@ const AltaProyectos = {
               this.selectArea='',
               this.id='',
               this.nuevoNombre=''
-              this.siglas=''
+              this.siglas
             }else{
                 alert("No se actualizo.")
             }
@@ -1099,6 +1098,7 @@ actualizandoResponsable(){
     cancelar(){
       this.nuevoResponsable = false;
       this.actualizarResponsable=false;
+
     },
     guardarAltaProyecto(){
       //fecha_alta  nombre_proyecto selectPlanta selectArea selectDepartamento selectMetodologia selectResponsable  checkMisiones checkPilares checkObjetivos checkImpactoAmbiental tons_co2 ahorro_duro ahorro_suave      

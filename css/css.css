@@ -369,6 +369,36 @@ box-shadow: 10px 5px 10px black;
         border-radius:5px;
     }
 
+
+
+    .ocultar {
+        animation: fadeOut 4s;
+    width: 100%; /* O el ancho adecuado para tu diseño */
+    height: 0; /* O la altura adecuada para tu diseño */
+    overflow: hidden;
+    opacity: 0;
+    }
+
+    @keyframes fadeOut {
+        from {opacity: 1;}
+        to {opacity: 0; }
+    }
+
+    .mostrar {
+        animation: fadeIn 2s;
+    position: relative; /* Cambia la posición a relativa para volver a colocar el elemento en su posición original */
+    height: auto; /* Ajusta la altura según el contenido real del elemento */
+    opacity: 1;
+    }
+
+
+    @keyframes fadeIn {
+        from {opacity: 0;}
+        to {opacity: 1; }
+    }
+  
+
+
     
 
 

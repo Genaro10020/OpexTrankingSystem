@@ -123,24 +123,21 @@ if(isset($_SESSION['nombre'])){
                                                                 <div v-if="selectResponsable !==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                                             </div>
                                                             <!--Campos Responsable-->
-                                                            <div class="row pt-2 mt-3" v-if="nuevoResponsable" :class="{'nuevo_responsable': nuevoResponsable==true, 'actualizar_responsable': actualizarResponsable==true}">
-                                                          
+                                                            <div class="row pt-2 mt-3 ocultar" :class="{'nuevo_responsable mostrar': nuevoResponsable, 'actualizar_responsable mostrar': actualizarResponsable}">
                                                                     <div class="col-10">
-                                                                            <div v-if="nuevoResponsable" class="input-group mb-3" >
+                                                                            <div  class="input-group mb-3" >
                                                                                 <span class="input-group-text w-25" >Nombre</span>
                                                                                 <input type="text" v-model="nombre" class="w-75" :disabled="!nuevoResponsable">
                                                                             </div>
-                                                                            <div v-if="nuevoResponsable" class="input-group mb-3" >
+                                                                            <div  class="input-group mb-3" >
                                                                                 <span class="input-group-text w-25" >No. de Nómina</span>
                                                                                 <input type="text"  v-model="numero_nomina"  class="w-75" >
                                                                             </div>
-
-                                                                            <div  v-if="nuevoResponsable" class="input-group mb-3">
+                                                                            <div   class="input-group mb-3">
                                                                                 <span class="input-group-text w-25" >Correo</span>
                                                                                 <input type="text"  v-model="correo"  class="w-75" :disabled="!nuevoResponsable">
                                                                             </div>
-
-                                                                            <div  v-if="nuevoResponsable" class="input-group mb-3">
+                                                                            <div class="input-group mb-3">
                                                                                 <span class="input-group-text w-25" >Teléfono</span>
                                                                                 <input type="text"  v-model="telefono"  class="w-75" :disabled="!nuevoResponsable">
                                                                             </div>
@@ -174,7 +171,7 @@ if(isset($_SESSION['nombre'])){
 
                                                             
                                                             <!--Pilares-->
-                                                            <div class="input-group mb-3 ">
+                                                            <div id="div_pilares" class="input-group mb-3 " :class="{'mostrar':checkMisiones.length>0, 'ocultar': checkMisiones.length <= 0}">
                                                                 <span class="input-group-text w-25 text-start">Pilares <br>Estrategicos</span>
                                                                 <div class="w-50">
                                                                     <div class="form-check border border-1 mt-1" v-for="(pilar, index) in pilares" :key="index">
@@ -193,7 +190,7 @@ if(isset($_SESSION['nombre'])){
                                                             </div>
 
                                                              <!--Objetivos-->
-                                                            <div v-if="checkObjetivos.length>0" class="input-group mb-3 ">
+                                                            <div v-if="checkPilares.length>0" class="input-group mb-3 " :class="{'mostrar':checkPilares.length>0, 'ocultar': checkPilares.length <= 0}">
                                                                 <span class="input-group-text w-25 text-start">Objetivos <br>Estrategicos</span>
                                                                 <div class="w-50">
                                                                     <div v-for="objetivo in objetivos"class="form-check border border-1 mt-1">
@@ -203,6 +200,7 @@ if(isset($_SESSION['nombre'])){
                                                                         </label>
                                                                     </div>
                                                                 </div>
+                                                               
                                                                 <!--<div>
                                                                     <div class="col-12"><button class="btn-anadir" title="Crear" @click="abrirModal('CRUD','Objetivo','Crear')"><i class="bi bi-plus-circle"></i></button></div>
                                                                     <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Objetivo','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
@@ -229,7 +227,7 @@ if(isset($_SESSION['nombre'])){
                                                                     <div class="col-12"><button class="btn-anadir" title="Crear "><i class="bi bi-plus-circle"></i></button></div>
                                                                     <div class="col-12"><button class="btn-up" title="Actualizar"><i class="bi bi-arrow-up-circle"></i></button></div>
                                                                     <div class="col-12"><button class="btn-delete" title="Eliminar"><i class="bi bi-x-circle"></i></button></div>
-                                                                </div>-->
+                                                                </div>
                                                                 <div v-if="checkImpactoAmbiental.length>0" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                                             </div>  
                                                             <div class="input-group mb-3">
@@ -707,11 +705,13 @@ if(isset($_SESSION['nombre'])){
                             </div>
                         </div>
          </div>
-         <!--pie-->
-         <div  class="footer row" style="min-height:10vh;">
+       
+    </div><!--cuerpo-->
+  
+    <div  class="footer row" style="min-height:10vh;">  <!--pie-->
 
-        </div>    
-</div>
+    </div>    
+</div><!--div motando js-->
     <script src="js/altaProyectos.js"></script>
     
 </body>
