@@ -36,49 +36,54 @@ if(isset($_SESSION['nombre'])){
                                                 </div>
                                                 <div class="modal-body">
                                                         <!--Formulario Alta Proyecto-->
-                                                        <div class="input-group mb-3">
-                                                            <span class="input-group-text w-25" >Fecha</span>
-                                                            <input type="date" class="w-50" >
+                                                        <div class="input-group mb-3" >
+                                                            <span class="input-group-text w-25">Fecha</span>
+                                                            <input type="date" class="w-50" v-model="fecha_alta">
+                                                            <div v-if="fecha_alta !==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                                         </div>
+                                                        
                                                
                                                         <div class="input-group mb-3">
                                                             <span class="input-group-text w-25" >Nombre Proyecto</span>
-                                                            <input type="text" class="w-50">
+                                                            <input type="text" class="w-50" v-model="nombre_proyecto"> 
+                                                            <div v-if="nombre_proyecto !==''" class=" text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                                         </div>
 
                                                         <!---Planta-->
                                                         <div class="input-group mb-3 ">
                                                             <span class="input-group-text w-25" >Planta</span>
                                                             <select v-model="selectPlanta" size="3" class="w-50">
-                                                                <option value="" selected>Seleccione..</option>
-                                                                <option v-for="planta in plantas" :value="planta.id +'<->'+ planta.nombre">{{planta.nombre}}</option>
+                                                                <option value="" selected disabled>Seleccione..</option>
+                                                                <option v-for="planta in plantas" :value="planta.id +'<->'+ planta.nombre+'<->'+planta.siglas" >{{planta.nombre}} ({{planta.siglas}})</option>
                                                             </select>
-                                                            <div>
+                                                            <div class="flex-column">
                                                                 <div class="col-12"><button class="btn-anadir" title="Crear "  @click="abrirModal('CRUD','Planta','Crear')"><i class="bi bi-plus-circle"></i></button></div>
                                                                 <div class="col-12"><button class="btn-up" title="Actualizar"  @click="abrirModal('CRUD','Planta','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
                                                                 <div class="col-12"><button class="btn-delete" title="Eliminar"  @click="eliminarPlanta()"><i class="bi bi-x-circle"></i></button></div>
                                                             </div>
+                                                            <div v-if="selectPlanta !==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                                         </div>
                                                         
                                                         <!---Área-->
                                                          <div class="input-group mb-3">
                                                             <span class="input-group-text w-25" >Área</span>
-                                                            <select v-model="selectArea" size="3" class="w-50">
-                                                                <option selected>Seleccione..</option>
-                                                                <option v-for="area in areas" :value="area.id +'<->'+ area.nombre">{{area.nombre}}</option>
+                                                            <select v-model="selectArea" size="3" class="w-50" > 
+                                                                <option selected disabled>Seleccione..</option>
+                                                                <option v-for="area in areas" :value="area.id +'<->'+ area.nombre+'<->'+ area.siglas">{{area.nombre}}  ({{area.siglas}})</option>
                                                             </select>
                                                             <div>
                                                                 <div class="col-12"><button class="btn-anadir" title="Crear" @click="abrirModal('CRUD','Área','Crear')"><i class="bi bi-plus-circle"></i></button></div>
                                                                 <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Área','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
                                                                 <div class="col-12"><button class="btn-delete" title="Eliminar"  @click="eliminarArea()"><i class="bi bi-x-circle"></i></button></div>
                                                             </div>
+                                                            <div v-if="selectArea !==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                                         </div>
 
                                                           <!---Departamentos-->
                                                         <div class="input-group mb-3">
                                                             <span class="input-group-text w-25" >Departamento</span>
                                                             <select v-model="selectDepartamento" size="3" class="w-50">
-                                                                <option selected>Seleccione..</option>
+                                                                <option selected disabled>Seleccione..</option>
                                                                 <option v-for="departamento in departamentos" :value="departamento.id+'<->'+departamento.nombre+'<->'+departamento.siglas">{{departamento.nombre}} ({{departamento.siglas}})</option>
                                                             </select>
                                                             <div>
@@ -86,12 +91,13 @@ if(isset($_SESSION['nombre'])){
                                                                 <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Departamento','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
                                                                 <div class="col-12"><button class="btn-delete" title="Eliminar" @click="eliminarDepartamento()"><i class="bi bi-x-circle"></i></button></div>
                                                             </div>
+                                                            <div v-if="selectDepartamento !==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                                         </div>
                                                          <!---Metodologías-->
                                                         <div class="input-group mb-3">
                                                             <span class="input-group-text w-25" >Metodología</span>
-                                                            <select v-model="selectMetodologia" size="3" class="w-50">
-                                                                <option selected>Seleccione..</option>
+                                                            <select v-model="selectMetodologia" size="3" class="w-50"> 
+                                                                <option selected disabled>Seleccione..</option>
                                                                 <option v-for="metodologia in metodologias" :value="metodologia.id+'<->'+metodologia.nombre">{{metodologia.nombre}}</option>
                                                             </select>
                                                             <div>
@@ -99,7 +105,8 @@ if(isset($_SESSION['nombre'])){
                                                                 <div class="col-12"><button class="btn-up" title="Actualizar"  @click="abrirModal('CRUD','Metodología','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
                                                                 <div class="col-12"><button class="btn-delete" title="Eliminar" @click="eliminarMetodologia()"><i class="bi bi-x-circle"></i></button></div>
                                                             </div>
-                                                        </div>
+                                                            <div v-if="selectMetodologia !==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                                        </div> 
                                                          <!---Responsables-->
                                                             <div class="d-flex d-flex-row justify-content-center">
                                                                 <div ><button class="btn-anadir" title="Crear " @click="crearResponsable()"><i class="bi bi-plus-circle"></i></button></div>
@@ -113,6 +120,7 @@ if(isset($_SESSION['nombre'])){
                                                                     <option value="" disabled selected>Seleccione..</option>
                                                                     <option v-for="responsable in responsables" :value="responsable.id+'<->'+responsable.nombre">{{responsable.nombre}}</option>
                                                                 </select>
+                                                                <div v-if="selectResponsable !==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                                             </div>
                                                             <!--Campos Responsable-->
                                                             <div class="row pt-2 mt-3" v-if="nuevoResponsable" :class="{'nuevo_responsable': nuevoResponsable==true, 'actualizar_responsable': actualizarResponsable==true}">
@@ -142,10 +150,11 @@ if(isset($_SESSION['nombre'])){
                                                                             <button type="button" v-if="actualizarResponsable" class="btn-actualizar-responsable" @click="actualizandoResponsable()" >Actualiazar</button>
                                                                             <button type="button" class="btn-cancelar-responsable mt-3" @click="cancelar()" >Cancelar</button>
                                                                     </div>
+                                                                    
                                                             </div>
 
                                                              <!--Misiones-->
-                                                            <div  class="input-group mb-3 mt-3 ">
+                                                            <div  class="input-group mb-3 mt-3 ">  
                                                                 <span class="input-group-text w-25 text-start">Misiones </span>
                                                                 <div class="w-50">
                                                                     <div class="form-check border border-1 mt-1" v-for="(mision, index) in misiones" :key="index">
@@ -160,9 +169,10 @@ if(isset($_SESSION['nombre'])){
                                                                     <div class="col-12"><button class="btn-up" title="Actualizar"><i class="bi bi-arrow-up-circle"></i></button></div>
                                                                     <div class="col-12"><button class="btn-delete" title="Eliminar"><i class="bi bi-x-circle"></i></button></div>
                                                                 </div>-->
+                                                                <div v-if="checkMisiones.length>0" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                                             </div>
 
-
+                                                            
                                                             <!--Pilares-->
                                                             <div v-if="checkMisiones.length>0" class="input-group mb-3 ">
                                                                 <span class="input-group-text w-25 text-start">Pilares <br>Estrategicos</span>
@@ -179,11 +189,12 @@ if(isset($_SESSION['nombre'])){
                                                                     <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Pilar','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
                                                                     <div class="col-12"><button class="btn-delete" title="Eliminar" @click="eliminarPilar()"><i class="bi bi-x-circle"></i></button></div>
                                                                 </div>-->
+                                                                <div v-if="checkPilares.length>0" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                                             </div>
 
                                                              <!--Objetivos-->
-                                                            <div v-if="checkMisiones.length>0" class="input-group mb-3 ">
-                                                                <span class="input-group-text w-25 text-start">Objetivo <br>Estrategicos</span>
+                                                            <div v-if="checkObjetivos.length>0" class="input-group mb-3 ">
+                                                                <span class="input-group-text w-25 text-start">Objetivos <br>Estrategicos</span>
                                                                 <div class="w-50">
                                                                     <div v-for="objetivo in objetivos"class="form-check border border-1 mt-1">
                                                                         <input class="form-check-input" v-model="checkObjetivos" type="checkbox" id="checkbox1" :value="objetivo.id">
@@ -197,12 +208,13 @@ if(isset($_SESSION['nombre'])){
                                                                     <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Objetivo','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
                                                                     <div class="col-12"><button class="btn-delete" title="Eliminar"  @click="eliminarObjetivo()"><i class="bi bi-x-circle"></i></button></div>
                                                                 </div>-->
+                                                                <div v-if="checkObjetivos.length>0" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                                             </div>
                                                          
                                                            
                                                             <!--Impacto Ambiental-->
-                                                            <div class="input-group mb-3">
-                                                                <span class="input-group-text w-25 text-start">Impacto <br>Ambiental</span>
+                                                            <div class="input-group mb-3"> 
+                                                                <span class="input-group-text w-25 text-start">Impacto <br>Ambiental{{checkImpactoAmbiental}}</span>
                                                                 <div class="w-50">
                                                                     <div v-for="impacto in impactoAmbiental" class="form-check border border-1  mt-1">
                                                                         <input class="form-check-input" type="checkbox" id="checkbox1" :value="impacto.id" v-model="checkImpactoAmbiental">
@@ -216,21 +228,24 @@ if(isset($_SESSION['nombre'])){
                                                                     <div class="col-12"><button class="btn-up" title="Actualizar"><i class="bi bi-arrow-up-circle"></i></button></div>
                                                                     <div class="col-12"><button class="btn-delete" title="Eliminar"><i class="bi bi-x-circle"></i></button></div>
                                                                 </div>-->
-                                                            </div>
-
+                                                                <div v-if="checkImpactoAmbiental.length>0" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                                            </div>  
                                                             <div class="input-group mb-3">
                                                                 <span class="input-group-text w-50" >Tons CO2 por Evitar (Proyectado)</span>
-                                                                <input type="text" class="w-25" >
+                                                                <input type="text" v-model="tons_co2" class="w-25" >
+                                                                <div v-if="tons_co2!==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                                             </div>
 
                                                             <div class="input-group mb-3">
                                                                 <span class="input-group-text w-50" >Ahorro Duro $MXN (Proyectado )</span>
-                                                                <input type="text" class="w-25" >
+                                                                <input type="text" v-model="ahorro_duro" class="w-25" >
+                                                                <div v-if="ahorro_duro!==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                                             </div>
 
                                                             <div class="input-group mb-3">
                                                                 <span class="input-group-text w-50" >Ahorro Suave $MXN (Proyectado)</span>
-                                                                <input type="text" class="w-25" >
+                                                                <input type="text" v-model="ahorro_suave" class="w-25" >
+                                                                <div v-if="ahorro_suave!==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                                             </div>
                                                     <!--Fin Formulario Alta Proyecto--> 
                                                 </div>
@@ -254,33 +269,48 @@ if(isset($_SESSION['nombre'])){
                                                 <!--PLANTA-->
                                                     <!--CRUD Planta Crear-->
                                                     <div v-if="tipo=='Planta' && accion=='Crear'">
-
                                                         <div  class="input-group mb-3">
-                                                            <span class="input-group-text w-25" >Nombre:</span>
-                                                            <input type="text" v-model="nueva" class="w-75" >
+                                                            <span class="input-group-text w-50" >Nombre:</span>
+                                                            <input type="text" v-model="nueva" class="w-50" >
+                                                        </div>
+                                                        <div  class="input-group mb-3">
+                                                            <span class="input-group-text w-50" >Siglas:</span>
+                                                            <input type="text" v-model="siglas" class="w-50" >
                                                         </div>
                                                     </div>
                                                      <!--CRUD Planta Actualizar-->
                                                      <div v-if="tipo=='Planta' && accion=='Actualizar'">
-                                                            <div  class="input-group mb-3">
-                                                                <span class="input-group-text w-25" >Nombre:</span>
-                                                                <input type="text" v-model="nuevoNombre" class="w-75" >
-                                                            </div>
-                                                    </div>
-                                                <!--ÁREAS-->    
-                                                     <!--CRUD Planta Crear-->
-                                                     <div v-if="tipo=='Área' && accion=='Crear'">
                                                         <div  class="input-group mb-3">
-                                                            <span class="input-group-text w-25" >Nombre:</span>
-                                                            <input type="text" v-model="nueva" class="w-75" >
+                                                                <span class="input-group-text w-50" >Nombre:</span>
+                                                                <input type="text" v-model="nuevoNombre" class="w-50" >
+                                                        </div>
+                                                        <div  class="input-group mb-3">
+                                                                <span class="input-group-text w-50" >Siglas:</span>
+                                                                <input type="text" v-model="siglas" class="w-50" >
                                                         </div>
                                                     </div>
-                                                     <!--CRUD Planta Actualizar-->
+                                                <!--ÁREAS-->    
+                                                     <!--CRUD Área Crear-->
+                                                     <div v-if="tipo=='Área' && accion=='Crear'">
+                                                        <div  class="input-group mb-3">
+                                                            <span class="input-group-text w-50" >Nombre:</span>
+                                                            <input type="text" v-model="nueva" class="w-50" >
+                                                        </div>
+                                                        <div  class="input-group mb-3">
+                                                            <span class="input-group-text w-50" >Siglas:</span>
+                                                            <input type="text" v-model="siglas" class="w-50" >
+                                                        </div>
+                                                    </div>
+                                                     <!--CRUD Área Actualizar-->
                                                      <div v-if="tipo=='Área' && accion=='Actualizar'">
-                                                            <div  class="input-group mb-3">
-                                                                <span class="input-group-text w-25" >Nombre:</span>
-                                                                <input type="text" v-model="nuevoNombre" class="w-75" >
-                                                            </div>
+                                                        <div  class="input-group mb-3">
+                                                                <span class="input-group-text w-50" >Nombre:</span>
+                                                                <input type="text" v-model="nuevoNombre" class="w-50" >
+                                                        </div>
+                                                        <div  class="input-group mb-3">
+                                                            <span class="input-group-text w-50" >Siglas:</span>
+                                                            <input type="text" v-model="siglas" class="w-50" >
+                                                        </div>
                                                     </div>
                                                 <!--DEPARTAMENTOS-->    
                                                      <!--CRUD Departamento Crear-->

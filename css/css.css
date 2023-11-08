@@ -358,14 +358,15 @@ box-shadow: 10px 5px 10px black;
     }
 
 
-    .eventoUno {
+    .nocontestado {
         /* Estilos para eventoUno */
-        background-color: lightblue;
+        border: solid 2px rgb(246, 65, 56) ;
     }
     
-    .eventoDos {
+    .contestado {
         /* Estilos para eventoDos */
-        background-color: lightgreen;
+        border: solid 2px #21981b ;
+        border-radius:5px;
     }
 
     

@@ -15,6 +15,9 @@ const AltaProyectos = {
       responsables:[],
       plantas:[],
       areas:[],
+      /*Alta Proyectos */
+      fecha_alta:'',
+      nombre_proyecto:'',
       departamentos:[],
       metodologias:[],
       pilares:[],
@@ -32,6 +35,9 @@ const AltaProyectos = {
       idsPilares:[],
       select_pilar:'',
       select_mision:'',
+      tons_co2:'',
+      ahorro_duro:'',
+      ahorro_suave:'',
       /*Planta*/ /*Área*/ /*Departamento*/
       nueva:'',
       nuevoNombre:'',
@@ -356,8 +362,11 @@ const AltaProyectos = {
      /*/////////////////////////////////////////////////////////////////////////////////INSERTAR PLANTA*/
      insertarPlanta(){
       axios.post('plantasController.php',{
-        nueva:this.nueva
+        nueva:this.nueva,
+        siglas:this.siglas
       }).then(response =>{
+          this.nueva = ''
+          this.siglas=''
           console.log(response.data)
           if (!response.data[0]==false){
             this.myModalCRUD.hide()
@@ -547,7 +556,8 @@ const AltaProyectos = {
         if(this.selectPlanta!=""){
           axios.put('plantasController.php',{
             idPlanta:this.id,
-            nuevoNombre:this.nuevoNombre
+            nuevoNombre:this.nuevoNombre,
+            siglas:this.siglas
           }).then(response =>{
               console.log(response.data)
               if (response.data[0]==true){
@@ -556,6 +566,7 @@ const AltaProyectos = {
                 this.selectPlanta='',
                 this.id='',
                 this.nuevoNombre=''
+                this.siglas=''
               }else{
                   alert("No se actualizo.")
               }
@@ -574,7 +585,8 @@ const AltaProyectos = {
       if(this.selectArea!=""){
         axios.put('areasController.php',{
           id:this.id,
-          nuevo:this.nuevoNombre
+          nuevo:this.nuevoNombre,
+          siglas:this.siglas
         }).then(response =>{
             console.log(response.data)
             if (response.data[0]==true){
@@ -583,6 +595,7 @@ const AltaProyectos = {
               this.selectArea='',
               this.id='',
               this.nuevoNombre=''
+              this.siglas=''
             }else{
                 alert("No se actualizo.")
             }
@@ -1017,6 +1030,7 @@ actualizandoResponsable(){
                         const id_nombre_planta = this.selectPlanta.split('<->');//separando
                         this.id=id_nombre_planta[0]//recuperando nombre planta
                         this.nuevoNombre=id_nombre_planta[1]//recuperando nombre planta
+                        this.siglas =this.siglas =id_nombre_planta[2]
                     }else{
                       alert("Favor de seleccionar la Planta que actualizará")
                     }
@@ -1085,6 +1099,9 @@ actualizandoResponsable(){
     cancelar(){
       this.nuevoResponsable = false;
       this.actualizarResponsable=false;
+    },
+    guardarAltaProyecto(){
+      //fecha_alta  nombre_proyecto selectPlanta selectArea selectDepartamento selectMetodologia selectResponsable  checkMisiones checkPilares checkObjetivos checkImpactoAmbiental tons_co2 ahorro_duro ahorro_suave      
     }
   }
 };
