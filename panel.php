@@ -20,7 +20,7 @@ if(isset($_SESSION['nombre'])){
             <!--Bóton-->
             <div  class="text-center">
                 <button class="btn-menu me-3" @click="ventana='Crear'"> 
-                    <i class="bi bi-plus-circle" ></i> Creas Misiones/Pilares/Objetivos
+                    <i class="bi bi-plus-circle" ></i> Crear Catalogos
                 </button>
 
                 <button class="btn-menu" @click="abrirModal('Alta'), ventana='Altas'"> 
@@ -145,7 +145,11 @@ if(isset($_SESSION['nombre'])){
                                                             </div>
 
                                                              <!--Misiones-->
-                                                            <div  class="input-group mb-3 mt-3 ">
+                                                             Misiones:{{checkMisiones}}<br>
+                                                                Pilares:{{checkPilares}}<br>
+                                                                Objtivos:{{checkObjetivos}}<br>
+                                                             <div  class="input-group mb-3 mt-3 ">
+                                                               
                                                                 <span class="input-group-text w-25 text-start">Misiones </span>
                                                                 <div class="w-50">
                                                                     <div class="form-check border border-1 mt-1" v-for="(mision, index) in misiones" :key="index">
@@ -164,7 +168,7 @@ if(isset($_SESSION['nombre'])){
 
 
                                                             <!--Pilares-->
-                                                            <div v-if="checkMisiones.length>0" class="input-group mb-3 ">
+                                                            <div class="input-group mb-3 ">
                                                                 <span class="input-group-text w-25 text-start">Pilares <br>Estrategicos</span>
                                                                 <div class="w-50">
                                                                     <div class="form-check border border-1 mt-1" v-for="(pilar, index) in pilares" :key="index">
@@ -182,11 +186,11 @@ if(isset($_SESSION['nombre'])){
                                                             </div>
 
                                                              <!--Objetivos-->
-                                                            <div v-if="checkMisiones.length>0" class="input-group mb-3 ">
+                                                            <div class="input-group mb-3 ">
                                                                 <span class="input-group-text w-25 text-start">Objetivo <br>Estrategicos</span>
                                                                 <div class="w-50">
                                                                     <div v-for="objetivo in objetivos"class="form-check border border-1 mt-1">
-                                                                        <input class="form-check-input" v-model="checkObjetivos" type="checkbox" id="checkbox1" :value="objetivo.id">
+                                                                        <input class="form-check-input" v-model="checkObjetivos" type="checkbox" id="checkbox1" :value="objetivo.id+'<->'+objetivo.nombre+'<->'+objetivo.id_pilares+'<->'+objetivo.siglas">
                                                                         <label class="form-check-label" for="checkbox1">
                                                                             {{objetivo.nombre}} ({{objetivo.siglas}})
                                                                         </label>
@@ -198,24 +202,26 @@ if(isset($_SESSION['nombre'])){
                                                                     <div class="col-12"><button class="btn-delete" title="Eliminar"  @click="eliminarObjetivo()"><i class="bi bi-x-circle"></i></button></div>
                                                                 </div>-->
                                                             </div>
-                                                         
+
+                                                            
+
                                                            
                                                             <!--Impacto Ambiental-->
                                                             <div class="input-group mb-3">
                                                                 <span class="input-group-text w-25 text-start">Impacto <br>Ambiental</span>
                                                                 <div class="w-50">
                                                                     <div v-for="impacto in impactoAmbiental" class="form-check border border-1  mt-1">
-                                                                        <input class="form-check-input" type="checkbox" id="checkbox1" :value="impacto.id" v-model="checkImpactoAmbiental">
+                                                                        <input class="form-check-input" type="checkbox" id="checkbox1" :value="impacto.id+'<->'+impacto.nombre">
                                                                         <label class="form-check-label" for="checkbox1">
                                                                         {{impacto.nombre}}
                                                                         </label>
                                                                     </div>
                                                                 </div>
-                                                                <!--<div>
+                                                                <div>
                                                                     <div class="col-12"><button class="btn-anadir" title="Crear "><i class="bi bi-plus-circle"></i></button></div>
                                                                     <div class="col-12"><button class="btn-up" title="Actualizar"><i class="bi bi-arrow-up-circle"></i></button></div>
                                                                     <div class="col-12"><button class="btn-delete" title="Eliminar"><i class="bi bi-x-circle"></i></button></div>
-                                                                </div>-->
+                                                                </div>
                                                             </div>
 
                                                             <div class="input-group mb-3">
@@ -467,16 +473,213 @@ if(isset($_SESSION['nombre'])){
                     </div>
                       <!--CREAR PERFILES, PILARES OBJETIVOS-->
                      <div class="row" v-if="ventana=='Crear'">
-                        <div class= "col-4  text-center bg-primary">
-                           a
+                        <div class=" bg-secondary mt-3 text-white align-items-center ">
+                            <div class=" text-center">
+                                RELACIONES
+                            </div>
                         </div>
-                        <div class= "col-4  text-center">
-                           b
+                            <div class=" row align-items-center">
+                                <div class="col-12  col-lg-6 offset-lg-3 text-center align-content">
+                                    <table class="mt-2 mx-2 table table-bordered border-dark">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    Mision
+                                                </th>
+                                                <th>
+                                                    Pilar
+                                                </th>
+                                                <th>
+                                                    Objetivo
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    Nombre Mision
+                                                </td>
+                                                <td>
+                                                    Nombre Pilar
+                                                </td>
+                                                <td>
+                                                    Nombre Objetivo
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        <!--TABLA DE LA MISION-->
+                        <div class= "col-12  col-lg-6 offset-lg-3 col-xl-6 offset-xl-3 text-center align-content">
+                            <button type="button" class=" btn btn-menu mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">Crear Mision</button>
+                           <table class="mt-2 mx-2 table table-bordered border-dark">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Mision 
+                                        </th>
+                                        <th>
+                                            Siglas 
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            Mision 1
+                                        </td>
+                                        <td>
+                                            M1
+                                        </td>
+                                    </tr>
+                                </tbody>
+                           </table>
                         </div>
-                        <div class= "col-4  text-center">
-                          z 
+                        <!--TABLA DE LA PILARES-->
+                        <div class= "col-12 col-xl-6 col-lg-6 offset-lg-3 offset-xl-3 text-center align-content">
+                        <button type="button" class=" btn btn-menu mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">Crear Pilares</button>
+                           <table class="mt-2 mx-2 table table-bordered border-dark">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Pilares 
+                                        </th>
+                                        <th>
+                                            Siglas 
+                                        </th>
+                                        <th>
+                                            Mision
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            Pilar 1
+                                        </td>
+                                        <td>
+                                            P1
+                                        </td>
+                                        <td>
+                                            Mision Relacion
+                                        </td>
+                                    </tr>
+                                </tbody>
+                           </table>
                         </div>
-                     </div>
+                        <!--TABLA DE LA OBJETIVOS-->
+                        <div class= "col-12 col-xl-6 col-lg-6 offset-lg-3 offset-xl-3 text-center align-content">
+                        <button type="button" class=" btn btn-menu mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal" >Crear Objetivo</button>
+                           <table class="mt-2 mx-2 table table-bordered border-dark">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Objetivo 1
+                                        </th>
+                                        <th>
+                                            Siglas 
+                                        </th>
+                                        <th>
+                                            Pílar  
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            Objetivo 1
+                                        </td>
+                                        <td>
+                                            O1
+                                        </td>
+                                        <td>
+                                            Pilar Relacionado
+                                        </td>
+                                    </tr>
+                                </tbody>
+                           </table>
+                        </div>
+                        <!--TABLA DE IMPACTO AMBIENTAL-->
+                        <div class= "col-12  col-lg-6 offset-lg-3 col-xl-6 offset-xl-3 text-center align-content">
+                            <button type="button" class=" btn btn-menu mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">Crear Impacto ambiental</button>
+                           <table class="mt-2 mx-2 table table-bordered border-dark">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Impacto ambiental  
+                                        </th>
+                                        <th>
+                                            Siglas 
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            Nombre 1
+                                        </td>
+                                        <td>
+                                            N1
+                                        </td>
+                                    </tr>
+                                </tbody>
+                           </table>
+                        </div>
+                        <div class= "col-12 col-xl-6 col-lg-6 offset-lg-3 offset-xl-3 text-center align-content">
+                        <button type="button" class=" btn btn-menu mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal" >Crear Estandares CO2</button>
+                           <table class="mt-2 mx-2 table table-bordered border-dark">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Objetivo 1
+                                        </th>
+                                        <th>
+                                            Siglas 
+                                        </th>
+                                        <th>
+                                            unidad de medida  
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            Objetivo 1
+                                        </td>
+                                        <td>
+                                            O1
+                                        </td>
+                                        <td>
+                                            unidad de medida
+                                        </td>
+                                    </tr>
+                                </tbody>
+                           </table>
+                        </div>
+                        <!--TABLA DE ESTANDARES DE C02-->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Crear</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body input-group mb-3">
+                                        <span class="input-group-text w-25 mt-3" >Nombre:</span>
+                                        <input type="text" class="w-75 mt-3" >
+                                        <span class="input-group-text w-25 mt-3" >Siglas:</span>
+                                        <input type="text" class="w-75 mt-3" >
+                                        <span class="input-group-text w-25 mt-3" >Pilar:</span>
+                                        <input type="text" class="w-75 mt-3" >
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="boton-cancelar">Cerrar</button>
+                                        <button type="button" class="boton-aceptar">Crear</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
          </div>
          <!--pie-->
          <div  class="footer row" style="min-height:10vh;">
