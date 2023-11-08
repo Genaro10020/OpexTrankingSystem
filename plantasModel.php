@@ -15,12 +15,12 @@ include("conexionGhoner.php");
             return array ($resultado,$estado);
     }
 
-    function insertarPlanta($nueva){
+    function insertarPlanta($nueva,$siglas){
         global $conexion;
         $estado = false;
-        $query = "INSERT INTO plantas (nombre) VALUES (?)";
+        $query = "INSERT INTO plantas (nombre,siglas) VALUES (?,?)";
         $stmt = $conexion->prepare($query);
-        $stmt->bind_param("s", $nueva);
+        $stmt->bind_param("ss", $nueva, $siglas);
         if($stmt->execute()){
             $estado = true;
         }
@@ -29,12 +29,12 @@ include("conexionGhoner.php");
         return $estado;
     }
 
-    function actualizarPlanta($idPlanta,$nuevoNombre){
+    function actualizarPlanta($idPlanta,$nuevoNombre,$siglas){
         global $conexion;
         $estado = false;
-        $update = "UPDATE plantas SET nombre=? WHERE  id=?";
+        $update = "UPDATE plantas SET nombre=?, siglas=? WHERE  id=?";
         $stmt = $conexion->prepare($update);
-        $stmt->bind_param("si", $nuevoNombre, $idPlanta);
+        $stmt->bind_param("ssi", $nuevoNombre,$siglas, $idPlanta);
         if($stmt->execute()){
             $estado = true;
         }
