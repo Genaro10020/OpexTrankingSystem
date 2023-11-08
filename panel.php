@@ -154,7 +154,7 @@ if(isset($_SESSION['nombre'])){
                                                             </div>
 
                                                              <!--Misiones-->
-                                                            <div  class="input-group mb-3 mt-3 ">
+                                                            <div  class="input-group mb-3 mt-3 ">  
                                                                 <span class="input-group-text w-25 text-start">Misiones </span>
                                                                 <div class="w-50">
                                                                     <div class="form-check border border-1 mt-1" v-for="(mision, index) in misiones" :key="index">
@@ -193,8 +193,8 @@ if(isset($_SESSION['nombre'])){
                                                             </div>
 
                                                              <!--Objetivos-->
-                                                            <div v-if="checkMisiones.length>0" class="input-group mb-3 ">
-                                                                <span class="input-group-text w-25 text-start">Objetivo <br>Estrategicos</span>
+                                                            <div v-if="checkObjetivos.length>0" class="input-group mb-3 ">
+                                                                <span class="input-group-text w-25 text-start">Objetivos <br>Estrategicos</span>
                                                                 <div class="w-50">
                                                                     <div v-for="objetivo in objetivos"class="form-check border border-1 mt-1">
                                                                         <input class="form-check-input" v-model="checkObjetivos" type="checkbox" id="checkbox1" :value="objetivo.id+'<->'+objetivo.nombre+'<->'+objetivo.id_pilares+'<->'+objetivo.siglas">
@@ -230,8 +230,8 @@ if(isset($_SESSION['nombre'])){
                                                                     <div class="col-12"><button class="btn-up" title="Actualizar"><i class="bi bi-arrow-up-circle"></i></button></div>
                                                                     <div class="col-12"><button class="btn-delete" title="Eliminar"><i class="bi bi-x-circle"></i></button></div>
                                                                 </div>-->
-                                                            </div>
-
+                                                                <div v-if="checkImpactoAmbiental.length>0" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                                            </div>  
                                                             <div class="input-group mb-3">
                                                                 <span class="input-group-text w-50" >Tons CO2 por Evitar (Proyectado)</span>
                                                                 <input type="text" v-model="tons_co2" class="w-25" >
