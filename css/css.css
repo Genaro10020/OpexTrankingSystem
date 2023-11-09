@@ -396,6 +396,11 @@ box-shadow: 10px 5px 10px black;
         from {opacity: 0;}
         to {opacity: 1; }
     }
+
+    .thmodal{
+        color:#912525 !important;
+        background-color: #ccc6c6 !important;
+    }
   
 
 

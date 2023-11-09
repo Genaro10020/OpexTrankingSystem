@@ -1135,7 +1135,13 @@ actualizandoResponsable(){
       
       if(this.respondio===false){alert("Existen campos vacios, favor de contestar")}
       //fecha_alta  nombre_proyecto selectPlanta selectArea selectDepartamento selectMetodologia selectResponsable  checkMisiones checkPilares checkObjetivos checkImpactoAmbiental tons_co2 ahorro_duro ahorro_suave      
-    }
+    },
+    modalCatalogos(accion,tipo){//accion: es CREAR, ACTUALIZAR, ELIMINAR y tipo: es Pilares, Misiones, Objetivos.
+      this.accion = accion
+      this.tipo = tipo
+      this.myModal = new bootstrap.Modal(document.getElementById("modalCrearCatalogos"))
+      this.myModal.show()
+      }
   }
 };
 
