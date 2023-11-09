@@ -38,6 +38,7 @@ const AltaProyectos = {
       tons_co2:'',
       ahorro_duro:'',
       ahorro_suave:'',
+      respondio: true,//utilizo para cambiar el css si no repondio en altas
       /*Planta*/ /*Área*/ /*Departamento*/
       nueva:'',
       nuevoNombre:'',
@@ -50,7 +51,7 @@ const AltaProyectos = {
       correo:'',
       telefono:'',
       responsableID:[],
-      variable: false,
+     
       /*Impacto Ambiental */
       //general
       id:''// utilizado y reseteado despues de usar.
@@ -1001,6 +1002,7 @@ actualizandoResponsable(){
       this.telefono =''
     },
    abrirModal(modal,tipo,accion){
+      this.respondio=true;
       this.nueva=''
       this.tipo = tipo
       this.accion = accion
@@ -1100,9 +1102,38 @@ actualizandoResponsable(){
     cancelar(){
       this.nuevoResponsable = false;
       this.actualizarResponsable=false;
-
     },
     guardarAltaProyecto(){
+     
+      //Comprobando fecha
+      if(this.fecha_alta!=''){ this.respondio = true;}else{this.respondio = false;}
+      //nombre del proyecto
+      if(this.nombre_proyecto!=''){ this.respondio = true;}else{this.respondio = false;}
+      //Planta
+      if(this.selectPlanta!=''){this.respondio=true;}else{this.respondio=false;}
+      //Area
+      if(this.selectArea!=''){this.respondio=true;}else{this.respondio=false;}
+      //Departamento
+      if(this.selectDepartamento!=''){this.respondio=true;}else{this.respondio=false;}
+      //Metodologia
+      if(this.selectMetodologia!=''){this.respondio=true;}else{this.respondio=false;}
+      //Responsable
+      if(this.selectResponsable!=''){this.respondio=true;}else{this.respondio=false;}
+      //Responsable
+      if(this.selectResponsable!=''){this.respondio=true;}else{this.respondio=false;}
+      //Misiones
+      if(this.checkMisiones.length>0){this.respondio=true;}else{this.respondio=false;}
+      //Pilares
+      if(this.checkPilares.length>0){this.respondio=true;}else{this.respondio=false;}
+      //Objetivos
+      if(this.checkPilares.length>0){this.respondio=true;}else{this.respondio=false;}
+      //Objetivos
+      if(this.checkObjetivos.length>0){this.respondio=true;}else{this.respondio=false;}
+      //Impacto Ambiental
+      if(this.checkImpactoAmbiental.length>0){this.respondio=true;}else{this.respondio=false;}
+      //Si algo no se a contestado
+      
+      if(this.respondio===false){alert("Existen campos vacios, favor de contestar")}
       //fecha_alta  nombre_proyecto selectPlanta selectArea selectDepartamento selectMetodologia selectResponsable  checkMisiones checkPilares checkObjetivos checkImpactoAmbiental tons_co2 ahorro_duro ahorro_suave      
     }
   }
