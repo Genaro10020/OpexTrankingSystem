@@ -26,6 +26,10 @@ if(isset($_SESSION['nombre'])){
                 <button class="btn-menu" @click="abrirModal('Alta'), ventana='Altas'"> 
                     <i class="bi bi-plus-circle" ></i> Alta Proyectos
                 </button>
+
+                <button class="btn-menu mx-3" @click="ventana='Seguimiento'"> 
+                    <i class="bi bi-plus-circle" ></i> Seguimiento
+                </button>
                                 <!--Modal Alta Proyectos-->
                                     <div id="modal-alta-proyecto" class="modal text-start"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" >
                                             <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
@@ -458,39 +462,41 @@ if(isset($_SESSION['nombre'])){
         <div style="min-height: 80vh">
                     <!--AQUI TRABAJA //ALTA DE PROYECTOS-->
                     <div v-if="ventana=='Altas'">
-                                            <div class="input-group mt-5 mx-2 ">
-                                                <span class="input-group-text w-5" >Seleccione Proyecto</span>
-                                                <select class="w-5">
-                                                    <option value="" disabled selected>Seleccione..</option>
-                                                    <option>Proyecto 1</option>
-                                                    <option>Proyecto 2</option>
-                                                </select>
-                                            </div>
-
                                         <table class="mx-2 mt-5  mb-5 table table-hover table-bordered border-dark text-center">
                                                                 <thead class="  border:1px solid black">
                                                                     <tr>
                                                                         <th>Fecha</th>
-                                                                        <th>Consumo de Electricidad</th>
-                                                                        <th>Consumo de Agua</th>
-                                                                        <th>Tons de CO2 por Evitar</th>
+                                                                        <th>Nombre De Proyecto</th>
+                                                                        <th>Planta</th>
+                                                                        <th>Área</th>
+                                                                        <th>Departamento</th>
+                                                                        <th>Metodología</th>
+                                                                        <th>Responsable</th>
+                                                                        <th>Correo</th>
+                                                                        <th>Telefono</th>
+                                                                        <th>Pilar Estrategico</th>
+                                                                        <th>Impacto Ambiental</th>
+                                                                        <th>Tons De CO2 Por Evitar</th>
                                                                         <th>Ahorro Duro</th>
-                                                                        <th>Ahorro Suave </th>
-                                                                        <th>Estatus</th>
+                                                                        <th>Ahorro Suave</th>
                                                                         
                                                                 </thead>
                                                                 <tbody class=" border:1px solid black" style="text-align: center">
                                                                     <tr style="vertical-align: middle ">
-                                                                        <td>
-                                                                            <input type="date" >
-                                                                            </input>
-                                                                        </td>
-                                                                        <td>kwh</td>
-                                                                        <td>Metros cubicos</td>
-                                                                        <td>Tons de CO2 por Evitar</td>
-                                                                        <td>Ahorro Duro (Proyectado)</td>
-                                                                        <td>Ahorro Suave (Proyectado)</td>
-                                                                        <td>Estatus</td>
+                                                                        <td><input type="date"></input></td>
+                                                                        <td>Nombre De Proyecto</td>
+                                                                        <td>Planta</td>
+                                                                        <td>Área</td>
+                                                                        <td>Departamento</td>
+                                                                        <td>Metodología</td>
+                                                                        <td>Responsable</td>
+                                                                        <td>Correo</td>
+                                                                        <td>Telefono</td>
+                                                                        <td>Pilar Estrategico</td>
+                                                                        <td>Impacto Ambiental</td>
+                                                                        <td>Tons De CO2 Por Evitar</td>
+                                                                        <td>Ahorro Duro</td>
+                                                                        <td>Ahorro Suave</td>
                                                                             
                                                         </table>
                                         <!---->
@@ -705,6 +711,45 @@ if(isset($_SESSION['nombre'])){
                             </div>
                         </div>
          </div>
+
+                    <div v-if="ventana=='Seguimiento'">
+                                <div class="input-group mt-5 mx-2 ">
+                                    <span class="input-group-text w-5" >Seleccione Proyecto</span>
+                                    <select class="w-5">
+                                        <option value="" disabled selected>Seleccione..</option>
+                                        <option>Proyecto 1</option>
+                                        <option>Proyecto 2</option>
+                                    </select>
+                                </div>
+
+                            <table class="mx-2 mt-5  mb-5 table table-hover table-bordered border-dark text-center">
+                                                    <thead class="  border:1px solid black">
+                                                        <tr>
+                                                            <th>Fecha</th>
+                                                            <th>Consumo de Electricidad</th>
+                                                            <th>Consumo de Agua</th>
+                                                            <th>Tons de CO2 por Evitar</th>
+                                                            <th>Ahorro Duro</th>
+                                                            <th>Ahorro Suave </th>
+                                                            <th>Estatus</th>
+                                                            
+                                                    </thead>
+                                                    <tbody class=" border:1px solid black" style="text-align: center">
+                                                        <tr style="vertical-align: middle ">
+                                                            <td>
+                                                                <input type="date" >
+                                                                </input>
+                                                            </td>
+                                                            <td>kwh</td>
+                                                            <td>Metros cubicos</td>
+                                                            <td>Tons de CO2 por Evitar</td>
+                                                            <td>Ahorro Duro (Proyectado)</td>
+                                                            <td>Ahorro Suave (Proyectado)</td>
+                                                            <td>Estatus</td>
+                                                                
+                                            </table>
+                            <!---->
+                </div>
        
     </div><!--cuerpo-->
   
