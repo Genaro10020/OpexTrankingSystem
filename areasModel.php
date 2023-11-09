@@ -17,12 +17,12 @@ include("conexionGhoner.php");
             return array ($resultado,$estado);
     }
 
-    function insertarArea($nueva){
+    function insertarArea($nueva,$siglas){
         global $conexion;
         $estado = false;
-        $query = "INSERT INTO areas (nombre) VALUES (?)";
+        $query = "INSERT INTO areas (nombre,siglas) VALUES (?,?)";
         $stmt = $conexion->prepare($query);
-        $stmt->bind_param("s", $nueva);
+        $stmt->bind_param("ss", $nueva, $siglas);
         if($stmt->execute()){
             $estado = true;
         }
@@ -31,12 +31,12 @@ include("conexionGhoner.php");
     }
 
 
-    function actualizarPlanta($idArea,$nuevoNombre){
+    function actualizarArea($id,$nuevo,$siglas){
         global $conexion;
         $estado = false;
-        $update = "UPDATE areas SET nombre=? WHERE  id=?";
+        $update = "UPDATE areas SET nombre=?, siglas =? WHERE  id=?";
         $stmt = $conexion->prepare($update);
-        $stmt->bind_param("si", $nuevoNombre, $idArea);
+        $stmt->bind_param("ssi", $nuevo,$siglas, $id);
         if($stmt->execute()){
             $estado = true;
         }

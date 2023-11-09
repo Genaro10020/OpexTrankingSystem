@@ -385,7 +385,8 @@ const AltaProyectos = {
      /*/////////////////////////////////////////////////////////////////////////////////INSERTAR ÁREAS*/
      insertarArea(){
       axios.post('areasController.php',{
-        nueva:this.nueva
+        nueva:this.nueva,
+        siglas:this.siglas
       }).then(response =>{
           console.log(response.data)
           if (!response.data[0]==false){
@@ -1039,8 +1040,9 @@ actualizandoResponsable(){
                     if(this.selectArea!=""){
                       this.myModalCRUD.show()
                         const id_nombre_area = this.selectArea.split('<->');//separando
-                        this.id = id_nombre_area[0]//recuperando nombre planta
-                        this.nuevoNombre =id_nombre_area[1]//recuperando nombre planta
+                        this.id = id_nombre_area[0]//recuperando ID
+                        this.nuevoNombre =id_nombre_area[1]//recuperando Nombre  
+                        this.siglas =id_nombre_area[2]//recuperando Siglas
                     }else{
                       alert("Favor de seleccionar la Área que actualizará")
                     }

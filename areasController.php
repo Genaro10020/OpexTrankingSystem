@@ -13,9 +13,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
     case 'POST':
         // Manejar solicitud POST (creación)
-        if(isset($arreglo['nueva'])){
+        if(isset($arreglo['nueva']) && isset($arreglo['siglas'])){
             $nueva = $arreglo['nueva'];
-            $val[] = insertarArea($nueva);
+            $siglas = $arreglo['siglas'];
+            $val[] = insertarArea($nueva,$siglas);
         } else {
             $val[] = "No se encuentra la variable nueva";
             http_response_code(400); // Bad Request
@@ -25,10 +26,11 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
     case 'PUT':
         // Manejar solicitud PUT (actualización)
-        if(isset($arreglo['id']) && isset($arreglo['nuevo'])){
+        if(isset($arreglo['id']) && isset($arreglo['nuevo']) && isset($arreglo['siglas'])){
             $id=$arreglo['id'];
             $nuevo=$arreglo['nuevo'];
-            $val[]=actualizarPlanta($id,$nuevo);
+            $siglas=$arreglo['siglas'];
+            $val[]=actualizarArea($id,$nuevo,$siglas);
         }else{
             $val[] = "No existe variable ID";
         }
