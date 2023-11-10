@@ -97,7 +97,6 @@ const AltaProyectos = {
               }else{
                  alert("La consulta  plantas no se realizo correctamente.")
               }
-      
           }).catch(error =>{
             console.log('Erro :-('+error)
           }).finally(() =>{
@@ -295,9 +294,10 @@ const AltaProyectos = {
      /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PILARES POR MISION SELECCIONADA*/
      consultarPilaresXmisionSeleccionada(){
       if(this.checkMisiones.length >0){
+        console.log(this.checkMisiones);
         this.checkPilares =[]
         this.checkObjetivos=[]
-          console.log(this.checkMisiones);
+         
           axios.post('pilaresController.php',{
               idsMisiones:this.checkMisiones
           }).then(response =>{
@@ -305,6 +305,7 @@ const AltaProyectos = {
               if (response.data[0][1]==true){
                   if (response.data[0][0].length>0) {
                     this.pilares = response.data[0][0]
+                    alert("BIEN")
                     //this.objetivos = response.data[0][2]
                   }
               }else{
@@ -1104,7 +1105,7 @@ actualizandoResponsable(){
       this.nuevoResponsable = false;
       this.actualizarResponsable=false;
     },
-    guardarAltaProyecto(){
+    verificarAltaProyecto(){
      
       //Comprobando fecha
       if(this.fecha_alta==''){this.respondio = false;}
@@ -1138,13 +1139,53 @@ actualizandoResponsable(){
       }
  
       if(this.respondio===true){
-        console.log("A guardar esto")
+        
+        this.guardarAltaProyecto()
       }else{
         alert("Verifique los campos marcados en rojo")
       }
 
-      
-      //fecha_alta  nombre_proyecto selectPlanta selectArea selectDepartamento selectMetodologia selectResponsable  checkMisiones checkPilares checkObjetivos checkImpactoAmbiental tons_co2 ahorro_duro ahorro_suave      
+         
+    },
+    guardarAltaProyecto(){
+      var objetivos_ids = [];
+      var impacto_ambiental_ids = [];
+      //Utilizo para tomar todos los ids.
+      for (var i = 0; i <this.checkObjetivos.length; i++) {
+         var id_objetivo = this.checkObjetivos[i].split('<->')[0];
+         objetivos_ids.push(id_objetivo);
+      }
+      //Utilizo para tomar todos los ids.
+      for (var i = 0; i < this.checkImpactoAmbiental.length; i++) {
+        var id_impacto = this.checkImpactoAmbiental[i].split('<->')[0];//tomo la primera diviocion en este caso id
+        impacto_ambiental_ids.push(id_impacto);//agregando los id al arreglo
+      }
+  
+      axios.post("proyectosController.php",{
+        fecha_alta:this.fecha_alta,  
+        nombre_proyecto:this.nombre_proyecto,
+        select_planta:this.selectPlanta,
+        select_area:this.selectArea,
+        select_departamento:this.selectDepartamento,
+        select_metodologia:this.selectMetodologia,
+        select_responsable:this.selectResponsable,
+        misiones:this.checkMisiones,
+        pilares:this.checkPilares,
+        objetivos:objetivos_ids,
+        impacto_ambiental:impacto_ambiental_ids,
+        tons_co2:this.tons_co2,
+        ahorro_duro:this.ahorro_duro,
+        ahorro_suave:this.ahorro_suave   
+      }).then(response=>{
+          console.log(response.data)
+          if(response.data[0]==true){
+
+          }else{
+            alert("No se dio de alta el proyecto.")
+          }
+      }).catch(error =>{
+
+      })
     },
     modalCatalogos(accion,tipo){//accion: es CREAR, ACTUALIZAR, ELIMINAR y tipo: es Pilares, Misiones, Objetivos.
       this.accion = accion

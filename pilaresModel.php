@@ -41,7 +41,6 @@ include("conexionGhoner.php");
         $idsPilares = [];
         $estado = false;
         $tamanio=count($idsMisiones);
-        
             for ($i=0; $i < $tamanio; $i++) { 
                 $consulta = "SELECT * FROM pilares WHERE id_misiones = '$idsMisiones[$i]'";
                 $query = $conexion->query($consulta);
@@ -53,7 +52,7 @@ include("conexionGhoner.php");
                         $estado  = true;
                 }
             }
-        return array ($resultado,$estado);
+        return array ($resultado,$estado,$idsMisiones);
     }
 
     function eliminarPilar($id){

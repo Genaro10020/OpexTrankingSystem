@@ -155,11 +155,12 @@ if(isset($_SESSION['nombre'])){
                                                             </div>
 
                                                              <!--Misiones-->
+                                                             {{checkMisiones}}
                                                             <div  class="input-group mb-3 mt-3 ">  
                                                                 <span class="input-group-text w-25 text-start">Misiones </span>
                                                                 <div class="w-50" :class="{'nocontestado': respondio === false && checkMisiones.length<=0, '': checkMisiones.length>0}">
                                                                     <div class="form-check border border-1 mt-1" v-for="(mision, index) in misiones" :key="index">
-                                                                    <input class="form-check-input" type="checkbox" :value="mision.id" v-model="checkMisiones" @change="consultarPilaresXmisionSeleccionada()">
+                                                                    <input class="form-check-input" type="checkbox" :value="mision.id+'<->'+mision.nombre" v-model="checkMisiones" @change="consultarPilaresXmisionSeleccionada()">
                                                                         <label class="form-check-label">
                                                                             {{ mision.nombre }}
                                                                         </label>
@@ -174,11 +175,12 @@ if(isset($_SESSION['nombre'])){
                                                             </div>
 
                                                             <!--Pilares-->
+                                                            {{checkPilares}}
                                                             <div id="div_pilares" class="input-group mb-3 " :class="{'mostrar':checkMisiones.length>0, 'ocultar': checkMisiones.length <= 0}">
                                                                 <span class="input-group-text w-25 text-start">Pilares <br>Estrategicos</span>
                                                                 <div class="w-50" :class="{'nocontestado': respondio === false && checkPilares.length<=0, '': checkPilares.length>0}">
                                                                     <div class="form-check border border-1 mt-1" v-for="(pilar, index) in pilares" :key="index">
-                                                                        <input class="form-check-input" type="checkbox" :value="pilar.id" v-model="checkPilares" @change="consultarObjetivosXpilaresSeleccionados()">
+                                                                        <input class="form-check-input" type="checkbox" :value="pilar.id+'<->'+pilar.nombre" v-model="checkPilares" @change="consultarObjetivosXpilaresSeleccionados()">
                                                                         <label class="form-check-label">
                                                                             {{ pilar.nombre }}
                                                                         </label>
@@ -193,6 +195,7 @@ if(isset($_SESSION['nombre'])){
                                                             </div>
 
                                                              <!--Objetivos-->
+                                                             {{checkObjetivos}}
                                                             <div v-if="checkPilares.length>0" class="input-group mb-3 " :class="{'mostrar':checkPilares.length>0, 'ocultar': checkPilares.length <= 0}">
                                                                 <span class="input-group-text w-25 text-start">Objetivos <br>Estrategicos</span>
                                                                 <div class="w-50" :class="{'nocontestado': respondio === false && checkObjetivos.length<=0, '': checkObjetivos.length>0}">
@@ -213,6 +216,7 @@ if(isset($_SESSION['nombre'])){
                                                             </div>
 
                                                             <!--Impacto Ambiental-->
+                                                            {{checkImpactoAmbiental}}
                                                             <div class="input-group mb-3"> 
                                                                 <span class="input-group-text w-25 text-start">Impacto <br>Ambiental<br><label class="ms-5"><i class="bi bi-question-circle"></label></i></span>
                                                                 <div class="w-50"  :class="{'nocontestado': respondio === false && checkImpactoAmbiental.length<=0, '': checkImpactoAmbiental.length>0}">
@@ -230,33 +234,33 @@ if(isset($_SESSION['nombre'])){
                                                                 </div>-->
                                                                 <div v-if="checkImpactoAmbiental.length>0" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                                             </div>  
+                                                               
                                                             <div class="input-group mb-3">
                                                                 <span class="input-group-text w-50" >Tons CO2 por Evitar (Proyectado)</span>
-                                                                <input type="number" v-model="tons_co2" class="w-25" :class="{'nocontestado': respondio === false && tons_co2===0, '': tons_co2!==0 && tons_co2!==''}">
+                                                                <input type="number" v-model="tons_co2" min="0" class="w-25" :class="{'nocontestado': respondio === false && tons_co2===0, '': tons_co2!==0 && tons_co2!==''}">
                                                                 <div v-if="tons_co2!==0 && tons_co2!==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                                             </div>
 
                                                             <div class="input-group mb-3">
                                                                 <span class="input-group-text w-50" >Ahorro Duro $MXN/Año (Proyectado )</span>
-                                                                <input type="number" v-model="ahorro_duro" class="w-25" :class="{'nocontestado': respondio === false && ahorro_duro===0, '': ahorro_duro!==0 && ahorro_duro!==''}">
+                                                                <input type="number" v-model="ahorro_duro" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_duro===0, '': ahorro_duro!==0 && ahorro_duro!==''}">
                                                                 <div v-if="ahorro_duro!==0 && ahorro_duro!==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                                             </div>
 
                                                             <div class="input-group mb-3">
                                                                 <span class="input-group-text w-50" >Ahorro Suave $MXN/Año (Proyectado)</span>
-                                                                <input type="number" v-model="ahorro_suave" class="w-25" :class="{'nocontestado': respondio === false && ahorro_suave===0, '': ahorro_suave!==0 && ahorro_suave!==''}">
-                                                                <div v-if="ahorro_suave!==0 && ahorro_suave!==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                                                <input type="number" v-model="ahorro_suave" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_suave===0, '': ahorro_suave!==0 && ahorro_suave!==''}">
+                                                                <div v-if="ahorro_suave!==0 && ahorro_suave!==''"  class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                                             </div>
                                                             <div class="input-group mb-3">
                                                                 <span class="input-group-text w-25 me-2" >Objetivo Estrategico</span>
                                                                 <input type="checkbox" v-model="objetivo_estrategico">
-                                                                <label class="ms-2 mt-1">{{ objetivo_estrategico ? 'Sí' : 'No' }}<label>
                                                             </div>
                                                     <!--Fin Formulario Alta Proyecto--> 
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="boton-cancelar" data-bs-dismiss="modal">Salir</button>
-                                                    <button type="button" class="boton-aceptar" @click="guardarAltaProyecto()">Crear</button>
+                                                    <button type="button" class="boton-aceptar" @click="verificarAltaProyecto()">Crear</button>
                                                 </div>
                                                 </div>
                                             </div>
@@ -758,7 +762,7 @@ if(isset($_SESSION['nombre'])){
                                                         <input type="text" class="w-75 mt-3" >
                                                         <span class="input-group-text w-25 mt-3" >Siglas:</span>
                                                         <input type="text" class="w-75 mt-3" >
-                                                        <span class="input-group-text w-25 mt-3" >Unidad de Medida:</span>
+                                                        <span class="input-group-text w-25 mt-3" >Unidad Medida:</span>
                                                         <input type="text" class="w-75 mt-3" >
                                                  </div>
                                             </div>
@@ -819,7 +823,7 @@ if(isset($_SESSION['nombre'])){
 
     </div>    
 </div><!--div motando js-->
-    <script src="js/altaProyectos.js"></script>
+    <script src="js/app.js"></script>
     
 </body>
 </html>
