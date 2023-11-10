@@ -13,9 +13,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
     case 'POST':
         // Manejar solicitud POST (creación)
-        if(isset($arreglo['nueva'])){
+        if(isset($arreglo['nueva']) && isset($arreglo['siglas'])){
             $nueva = $arreglo['nueva'];
-            $val [] = insertarMision($nueva);     
+            $siglas = $arreglo['siglas'];
+            $val [] = insertarMision($nueva,$siglas);     
         }else{
             $val [] =  "No existe la variable nueva";
         }

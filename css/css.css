@@ -398,9 +398,20 @@ box-shadow: 10px 5px 10px black;
     }
 
     .thmodal{
-        color:#912525 !important;
+        color:#080808 !important;
         background-color: #ccc6c6 !important;
     }
+
+    .encabezadoTablas{
+        height: 50px;
+        background-color: gray !important;
+        color: white;
+    }
+
+    .titulotabla{
+        margin-top: 15px !important;
+    }
+
   
 
 

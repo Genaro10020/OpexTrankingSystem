@@ -19,7 +19,7 @@ if(isset($_SESSION['nombre'])){
                  
             <!--Bóton-->
             <div  class="text-center">
-                <button class="btn-menu me-3" @click="ventana='Crear'"> 
+                <button class="btn-menu me-3" @click="ventana='Crear',consultarMisiones()"> 
                     <i class="bi bi-plus-circle" ></i> Crear Catalogos
                 </button>
 
@@ -541,11 +541,18 @@ if(isset($_SESSION['nombre'])){
                             </div>
                         <!--TABLA DE LA MISION-->
                         <div class= "col-12  col-lg-6 offset-lg-3 col-xl-6 offset-xl-3 text-center align-content">
-                           <table class="mt-2 mx-2 table table-bordered border-dark">
+                                <div class=" encabezadoTablas">
+                                    <div class=" d-flex justify-content-center align-items-center"  > 
+                                            <div class="d-none d-lg-block col-lg-4"></div>
+                                            <div class="col-6 col-lg-4 mt-2">Misiones</div>
+                                            <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
+                                                <button type="button" class=" btn btn-menu " @Click="modalCatalogos('Crear','Mision')">Crear</button>
+                                            </div>
+                                                
+                                        </div>
+                                </div>
+                           <table class="table table-bordered table-striped border-dark">
                                 <thead>
-                                    <td colspan="2"> Misiones
-                                        <button type="button" class=" btn btn-menu mx-5"  @click="modalCatalogos('Crear','Mision')">Crear</button>
-                                    </td>
                                     <tr>
                                         <th class=" thmodal w-50">
                                             Nombre  
@@ -556,12 +563,12 @@ if(isset($_SESSION['nombre'])){
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                    <tr v-for="mision in misiones">
                                         <td>
-                                            Mision 1
+                                           {{mision.nombre}}
                                         </td>
                                         <td>
-                                            M1
+                                           {{mision.siglas}}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -569,11 +576,18 @@ if(isset($_SESSION['nombre'])){
                         </div>
                         <!--TABLA DE LA PILARES-->
                         <div class= "col-12 col-xl-6 col-lg-6 offset-lg-3 offset-xl-3 text-center align-content">
-                           <table class="mt-2 mx-2 table table-bordered border-dark">
+                                <div class=" encabezadoTablas">
+                                    <div class=" d-flex justify-content-center align-items-center"  > 
+                                            <div class="d-none d-lg-block col-lg-4"></div>
+                                            <div class="col-6 col-lg-4 mt-2">Pilares</div>
+                                            <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
+                                                <button type="button" class=" btn btn-menu " @Click="modalCatalogos('Crear','Pilar')">Crear</button>
+                                            </div>
+                                                
+                                        </div>
+                                </div>
+                           <table class="table table-bordered table-striped border-dark">
                                 <thead>
-                                    <td colspan="3"> Pilares
-                                        <button type="button" class=" btn btn-menu mx-5" @click="modalCatalogos('Crear','Pilar')">Crear</button>
-                                    </td>
                                     <tr>
                                         <th class="thmodal">
                                             Nombre
@@ -603,19 +617,26 @@ if(isset($_SESSION['nombre'])){
                         </div>
                         <!--TABLA DE LA OBJETIVOS-->
                         <div class= "col-12 col-xl-6 col-lg-6 offset-lg-3 offset-xl-3 text-center align-content">
-                           <table class="mt-2 mx-2 table table-bordered border-dark">
+                                <div class=" encabezadoTablas">
+                                    <div class=" d-flex justify-content-center align-items-center"  > 
+                                            <div class="d-none d-lg-block col-lg-4"></div>
+                                            <div class="col-6 col-lg-4 mt-2">Objetivos</div>
+                                            <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
+                                                <button type="button" class=" btn btn-menu " @Click="modalCatalogos('Crear','Objetivo')">Crear</button>
+                                            </div>
+                                                
+                                        </div>
+                                </div>
+                           <table class="table table-bordered table-striped border-dark">
                                 <thead>
-                                    <td colspan="3"> Objetivos
-                                        <button type="button" class=" btn btn-menu mx-5"  @click="modalCatalogos('Crear','Objetivo')">Crear</button>
-                                    </td>
                                     <tr>
-                                        <th>
+                                        <th class="thmodal">
                                             Nombre
                                         </th>
-                                        <th>
+                                        <th class="thmodal">
                                             Siglas 
                                         </th>
-                                        <th>
+                                        <th class="thmodal">
                                             Pílar  
                                         </th>
                                     </tr>
@@ -637,16 +658,23 @@ if(isset($_SESSION['nombre'])){
                         </div>
                         <!--TABLA DE IMPACTO AMBIENTAL-->
                         <div class= "col-12  col-lg-6 offset-lg-3 col-xl-6 offset-xl-3 text-center align-content">
-                           <table class="mt-2 mx-2 table table-bordered border-dark">
+                                <div class=" encabezadoTablas">
+                                    <div class=" d-flex justify-content-center align-items-center"  > 
+                                            <div class="d-none d-lg-block col-lg-4"></div>
+                                            <div class="col-6 col-lg-4 mt-2">Impacto Ambiental</div>
+                                            <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
+                                                <button type="button" class=" btn btn-menu " @Click="modalCatalogos('Crear','Impacto Ambiental')">Crear</button>
+                                            </div>
+                                                
+                                        </div>
+                                </div>
+                           <table class=" table table-bordered table-striped border-dark">
                                 <thead>
-                                    <td colspan="2"> Impacto Ambiental
-                                    <button type="button" class=" btn btn-menu mx-5" @Click="modalCatalogos('Crear','Impacto Ambiental')">Crear</button>
-                                    </td>
                                     <tr>
-                                        <th class="w-50">
+                                        <th class=" thmodal w-50">
                                             Nombre
                                         </th>
-                                        <th class="w-50">
+                                        <th class=" thmodal w-50">
                                             Siglas 
                                         </th>
                                     </tr>
@@ -663,20 +691,27 @@ if(isset($_SESSION['nombre'])){
                                 </tbody>
                            </table>
                         </div>
-                        <div class= "col-12 col-xl-6 col-lg-6 offset-lg-3 offset-xl-3 text-center align-content">
-                           <table class="mt-2 mx-2 table table-bordered border-dark">
+                        <div class= "col-12 col-xl-6 col-lg-6 offset-lg-3 offset-xl-3 text-center">
+                            <div class=" encabezadoTablas">
+                                   <div class=" d-flex justify-content-center align-items-center"  > 
+                                        <div class="d-none d-lg-block col-lg-4"></div>
+                                        <div class="col-6 col-lg-4 mt-2">Estandares de CO2</div>
+                                        <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
+                                            <button type="button" class=" btn btn-menu " @Click="modalCatalogos('Crear','Estandar')">Crear</button>
+                                        </div>
+                                            
+                                    </div>
+                            </div>
+                           <table class="  table table-bordered border-dark">
                                 <thead>
-                                        <td colspan="3">Estandares de CO2
-                                        <button type="button" class=" btn btn-menu   mx-5"  @Click="modalCatalogos('Crear','Estandar')" >Crear</button>
-                                        </td>
                                     <tr>
-                                        <th>
+                                        <th class="thmodal">
                                             Nombre
                                         </th>
-                                        <th>
+                                        <th class="thmodal">
                                             Siglas 
                                         </th>
-                                        <th>
+                                        <th class="thmodal">
                                             unidad de medida  
                                         </th>
                                     </tr>
@@ -708,18 +743,18 @@ if(isset($_SESSION['nombre'])){
                                         <div v-if="tipo=='Mision'">
                                             <div class="modal-body input-group mb-3">
                                                 <span class="input-group-text w-25 mt-3" >Nombre:</span>
-                                                <input type="text" class="w-75 mt-3" >
+                                                <input type="text" class="w-75 mt-3" v-model="nueva">
                                                 <span class="input-group-text w-25 mt-3" >Siglas:</span>
-                                                <input type="text" class="w-75 mt-3" >
+                                                <input type="text" class="w-75 mt-3" v-model="siglas">
                                             </div>
                                         </div> 
                                         <!--Cuerpo de MODAL PILARES-->
                                         <div v-if="tipo=='Pilar'">
                                             <div class="modal-body input-group mb-3">
                                                 <span class="input-group-text w-25 mt-3" >Nombre:</span>
-                                                <input type="text" class="w-75 mt-3" >
+                                                <input type="text" class="w-75 mt-3"  v-model="nueva">
                                                 <span class="input-group-text w-25 mt-3" >Siglas:</span>
-                                                <input type="text" class="w-75 mt-3" >
+                                                <input type="text" class="w-75 mt-3" v-model="siglas">
                                                 <span class="input-group-text w-25 mt-3" >Mision:</span>
                                                 <input type="text" class="w-75 mt-3" >
                                                 </div>
@@ -760,11 +795,19 @@ if(isset($_SESSION['nombre'])){
                                                         <input type="text" class="w-75 mt-3" >
                                                  </div>
                                             </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="boton-cancelar">Cerrar</button>
-                                        <button type="button" class="boton-aceptar">Crear</button>
+                                        </div>
+                                        <!--BOTONES MODAL CREAR CATALOGO-->
+                                        <div class="modal-footer">
+                                        <button type="button" class="boton-cancelar" data-bs-dismiss="modal">Cerrar</button>
+                                        <button type="button" class="boton-aceptar" v-if="tipo=='Mision'" @click="insertarMision()">Crear</button>
+                                        <button type="button" class="boton-aceptar" v-if="tipo=='Pilar'" @click="">Crear</button>
+                                        <button type="button" class="boton-aceptar" v-if="tipo=='Objetivo'" @click="insertarMision()">Crear</button>
+                                        <button type="button" class="boton-aceptar" v-if="tipo=='Impacto Ambiental'" @click="insertarImpactoAmbiental()">Crear</button>
+                                        <button type="button" class="boton-aceptar" v-if="tipo=='Estandar'" @click="insertarMision()">Crear</button>
+
+                                       
+
                                     </div>
-                                </div>
                             </div>
                         </div>
                     </div>
