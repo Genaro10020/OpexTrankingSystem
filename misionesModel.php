@@ -17,11 +17,11 @@ include("conexionGhoner.php");
             return array ($resultado,$estado);
     }
 
-    function insertarMision($nueva){
+    function insertarMision($nueva,$siglas){
         global $conexion;
-        $query = "INSERT INTO misiones (nombre) VALUES (?)";
+        $query = "INSERT INTO misiones (nombre,siglas) VALUES (?,?)";
         $stmt = $conexion->prepare($query);
-        $stmt->bind_param("s", $nueva);
+        $stmt->bind_param("ss", $nueva,$siglas);
         if($stmt->execute()){
             $estado = true;
         }else{

@@ -384,6 +384,29 @@ const AltaProyectos = {
 
       })
     },
+    /*/////////////////////////////////////////////////////////////////////////////////INSERTAR PLANTA*/
+    insertarImpactoAmbiental(){
+      axios.post('impactoAmbientalController.php',{
+        nueva:this.nueva,
+        siglas:this.siglas
+      }).then(response =>{
+          this.nueva = ''
+          this.siglas=''
+          console.log(response.data)
+          if (!response.data[0]==false){
+            // this.myModalCRUD.hide()
+            this.consultarImpactoAmbiental()
+          }else{
+              alert("La inserción de Planta, no se realizo correctamente.")
+          }
+  
+      }).catch(error =>{
+        //console.log('Erro :-('+error)
+      }).finally(() =>{
+
+      })
+    },
+
 
      /*/////////////////////////////////////////////////////////////////////////////////INSERTAR ÁREAS*/
      insertarArea(){
@@ -533,15 +556,18 @@ const AltaProyectos = {
     },
        /*/////////////////////////////////////////////////////////////////////////////////INSERTAR PILAR*/
        insertarMision(){
-        if(this.nueva!=''){
+        if(this.nueva!='' && this.siglas!=''){
             axios.post('misionesController.php',{
-              nueva:this.nueva
+              nueva:this.nueva,
+              siglas:this.siglas
             }).then(response =>{
                 console.log(response.data)
                 if (response.data[0]==true){
-                  this.myModalCRUD.hide()
+                  //this.myModalCRUD.hide
+                  alert("Alta exitosa..")
                   this.consultarMisiones()
                   this.nueva = ''
+                  this.siglas = ''
                 }else{
                     alert("La inserción Mision, no se realizo correctamente.")
                 }
