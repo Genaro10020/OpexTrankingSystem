@@ -17,7 +17,26 @@ switch ($_SERVER['REQUEST_METHOD']) {
         && isset($arreglo['select_departamento']) && isset($arreglo['select_metodologia']) && isset($arreglo['select_responsable']) && isset($arreglo['misiones']) 
         && isset($arreglo['pilares']) && isset($arreglo['objetivos']) && isset($arreglo['impacto_ambiental']) && isset($arreglo['tons_co2'])
         && isset($arreglo['ahorro_duro']) && isset($arreglo['ahorro_suave'])){
-            $val[]= true;
+            $fecha_alta = $arreglo['fecha_alta'];
+            $nombre_proyecto=$arreglo['nombre_proyecto'];
+            $planta=$arreglo['select_planta'];
+            $area=$arreglo['select_area'];
+            $departamento=$arreglo['select_departamento'];
+            $metodologia=$arreglo['select_metodologia'];
+            $responsable=$arreglo['select_responsable'];
+            $misiones=$arreglo['misiones'];
+            $pilares=$arreglo['pilares'];
+            $objetivos=$arreglo['objetivos'];
+            $impacto_ambiental=$arreglo['impacto_ambiental'];
+            $tons_co2=$arreglo['tons_co2'];
+            $ahorro_duro=$arreglo['ahorro_duro'];
+            $ahorro_suave=$arreglo['ahorro_suave'];
+            $misiones = json_encode($misiones);//conviertiendo arreglos en cadena
+            $pilares = json_encode($pilares);//conviertiendo arreglos en cadena
+            $objetivos = json_encode($objetivos);//conviertiendo arreglos en cadena
+            $impacto_ambiental = json_encode($impacto_ambiental);//conviertiendo arreglos en cadena
+
+            $val[]= insertarProyecto($fecha_alta,$nombre_proyecto,$planta,$area,$departamento,$metodologia,$responsable,$misiones,$pilares,$objetivos,$impacto_ambiental,$tons_co2,$ahorro_duro,$ahorro_suave);
         }else{
             $val[]= "No llegaron tadas la variables";
         }

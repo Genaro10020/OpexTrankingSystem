@@ -230,9 +230,14 @@ const AltaProyectos = {
    consultarObjetivosXpilaresSeleccionados(){
     if(this.checkPilares.length >0){
       this.checkObjetivos =[]
-        console.log(this.checkPilares);
+      var ids_pilares= [];
+      console.log(this.checkPilares);
+      for (let i = 0; i < this.checkPilares.length; i++) {
+       var id_pilar = this.checkPilares[i].split('<->')[0];
+        ids_pilares.push(id_pilar);
+      }
         axios.post('objetivosController.php',{
-            idsPilares:this.checkPilares
+            idsPilares:ids_pilares
         }).then(response =>{
             console.log(response.data[0])
             if (response.data[0][1]==true){
@@ -295,17 +300,22 @@ const AltaProyectos = {
      consultarPilaresXmisionSeleccionada(){
       if(this.checkMisiones.length >0){
         console.log(this.checkMisiones);
+        var misiones_ids = [];
+        var id_mision = "";
+        for (var i = 0; i <this.checkMisiones.length; i++) {
+          var id_mision = this.checkMisiones[i].split('<->')[0];
+          misiones_ids.push(id_mision);
+       }
         this.checkPilares =[]
         this.checkObjetivos=[]
          
           axios.post('pilaresController.php',{
-              idsMisiones:this.checkMisiones
+              idsMisiones:misiones_ids
           }).then(response =>{
               console.log(response.data[0])
               if (response.data[0][1]==true){
                   if (response.data[0][0].length>0) {
                     this.pilares = response.data[0][0]
-                    alert("BIEN")
                     //this.objetivos = response.data[0][2]
                   }
               }else{
@@ -1042,8 +1052,8 @@ actualizandoResponsable(){
           this.consultarDepartamentos()
           this.consultarMetodologias()
           this.consultarResponsables()
-          this.consultarObjetivos()
-          this.consultarPilares()
+          //this.consultarObjetivos()
+          //this.consultarPilares()
           this.consultarImpactoAmbiental()
           this.consultarMisiones()
           
@@ -1081,7 +1091,7 @@ actualizandoResponsable(){
                   console.log(this.selectDepartamento)
                       if(this.selectDepartamento!=""){
                         this.myModalCRUD.show()
-                          const id_nombre = this.selectDepartamento.split('<->');//separando
+                          const id_nombre = this.selectDepartamento.split('<->');//separando 
                           this.id = id_nombre[0]//recuperando nombre planta
                           this.nuevoNombre =id_nombre[1]//recuperando nombre planta
                           this.siglas =id_nombre[2]//recuperando siglas de departamento
@@ -1093,7 +1103,7 @@ actualizandoResponsable(){
                     console.log(this.selectMetodologia)
                         if(this.selectMetodologia!=""){
                           this.myModalCRUD.show()
-                            const id_nombre = this.selectMetodologia.split('<->');//separando
+                            const id_nombre = this.selectMetodologia.split('<->');//separando 
                             this.id = id_nombre[0]//recuperando nombre planta
                             this.nuevoNombre =id_nombre[1]//recuperando nombre planta
                         }else{
@@ -1174,38 +1184,76 @@ actualizandoResponsable(){
          
     },
     guardarAltaProyecto(){
-      var objetivos_ids = [];
-      var impacto_ambiental_ids = [];
-      //Utilizo para tomar todos los ids.
+      const separandoPlanta= this.selectPlanta.split('<->');//separando
+      var planta = separandoPlanta[1];
+      
+      const separandoArea = this.selectArea.split('<->');//separando const */
+      var area = separandoArea[1];
+
+      const separandoMetodologia = this.selectMetodologia.split('<->');//separando */
+      var metodologia = separandoMetodologia[1];
+
+      const separandoDepartamento = this.selectDepartamento.split('<->');//separando*/;
+      var departamento = separandoDepartamento[1];
+      
+      const separandoResponsable = this.selectResponsable.split('<->');
+      var responsable = separandoResponsable[1];
+
+      //Utilizo para tomar todos los nombres.
+      console.log(this.checkMisiones)
+      var misiones_nombres = [];
+      for (let i = 0; i < this.checkMisiones.length; i++) {
+        var mision_nom = this.checkMisiones[i].split('<->')[1];
+        misiones_nombres.push(mision_nom); 
+      }
+      console.log(misiones_nombres)
+
+      //Utilizo para tomar todos los nombres.
+      console.log(this.checkPilares)
+      var pilares_nombres = [];
+      for (let i = 0; i < this.checkPilares.length; i++) {
+         var pilar_nom = this.checkPilares[0].split('<->')[1];
+          pilares_nombres.push(pilar_nom)
+      }
+      console.log(pilares_nombres);
+      
+      //Utilizo para tomar todos los nombres.
+      console.log(this.checkObjetivos)
+      var objetivos_nombres = [];
       for (var i = 0; i <this.checkObjetivos.length; i++) {
-         var id_objetivo = this.checkObjetivos[i].split('<->')[0];
-         objetivos_ids.push(id_objetivo);
+         var nombre_objetivo = this.checkObjetivos[i].split('<->')[1];//tomo el nombre
+         objetivos_nombres.push(nombre_objetivo);
       }
-      //Utilizo para tomar todos los ids.
-      for (var i = 0; i < this.checkImpactoAmbiental.length; i++) {
-        var id_impacto = this.checkImpactoAmbiental[i].split('<->')[0];//tomo la primera diviocion en este caso id
-        impacto_ambiental_ids.push(id_impacto);//agregando los id al arreglo
+      console.log(objetivos_nombres)
+      
+      //Utilizo para tomar todos los nombres.
+      console.log(this.checkImpactoAmbiental)
+      var impacto_ambiental_nombres = [];
+      for (let i = 0; i < this.checkImpactoAmbiental.length; i++) {
+        var nombre_impacto = this.checkImpactoAmbiental[i].split('<->')[1];
+        impacto_ambiental_nombres.push(nombre_impacto)
       }
-  
+      console.log(impacto_ambiental_nombres)
+   
       axios.post("proyectosController.php",{
         fecha_alta:this.fecha_alta,  
         nombre_proyecto:this.nombre_proyecto,
-        select_planta:this.selectPlanta,
-        select_area:this.selectArea,
-        select_departamento:this.selectDepartamento,
-        select_metodologia:this.selectMetodologia,
-        select_responsable:this.selectResponsable,
-        misiones:this.checkMisiones,
-        pilares:this.checkPilares,
-        objetivos:objetivos_ids,
-        impacto_ambiental:impacto_ambiental_ids,
+        select_planta:planta,
+        select_area:area,
+        select_departamento:departamento,
+        select_metodologia:metodologia,
+        select_responsable:responsable,
+        misiones:misiones_nombres,
+        pilares:pilares_nombres,
+        objetivos:objetivos_nombres,
+        impacto_ambiental:impacto_ambiental_nombres,
         tons_co2:this.tons_co2,
         ahorro_duro:this.ahorro_duro,
         ahorro_suave:this.ahorro_suave   
       }).then(response=>{
           console.log(response.data)
           if(response.data[0]==true){
-
+             
           }else{
             alert("No se dio de alta el proyecto.")
           }

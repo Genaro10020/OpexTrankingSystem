@@ -155,9 +155,9 @@ if(isset($_SESSION['nombre'])){
                                                             </div>
 
                                                              <!--Misiones-->
-                                                             {{checkMisiones}}
+                                                            
                                                             <div  class="input-group mb-3 mt-3 ">  
-                                                                <span class="input-group-text w-25 text-start">Misiones </span>
+                                                                <span class="input-group-text w-25 text-start">Misión </span>
                                                                 <div class="w-50" :class="{'nocontestado': respondio === false && checkMisiones.length<=0, '': checkMisiones.length>0}">
                                                                     <div class="form-check border border-1 mt-1" v-for="(mision, index) in misiones" :key="index">
                                                                     <input class="form-check-input" type="checkbox" :value="mision.id+'<->'+mision.nombre" v-model="checkMisiones" @change="consultarPilaresXmisionSeleccionada()">
@@ -175,7 +175,7 @@ if(isset($_SESSION['nombre'])){
                                                             </div>
 
                                                             <!--Pilares-->
-                                                            {{checkPilares}}
+                                                            
                                                             <div id="div_pilares" class="input-group mb-3 " :class="{'mostrar':checkMisiones.length>0, 'ocultar': checkMisiones.length <= 0}">
                                                                 <span class="input-group-text w-25 text-start">Pilares <br>Estrategicos</span>
                                                                 <div class="w-50" :class="{'nocontestado': respondio === false && checkPilares.length<=0, '': checkPilares.length>0}">
@@ -195,7 +195,7 @@ if(isset($_SESSION['nombre'])){
                                                             </div>
 
                                                              <!--Objetivos-->
-                                                             {{checkObjetivos}}
+                                                             
                                                             <div v-if="checkPilares.length>0" class="input-group mb-3 " :class="{'mostrar':checkPilares.length>0, 'ocultar': checkPilares.length <= 0}">
                                                                 <span class="input-group-text w-25 text-start">Objetivos <br>Estrategicos</span>
                                                                 <div class="w-50" :class="{'nocontestado': respondio === false && checkObjetivos.length<=0, '': checkObjetivos.length>0}">
@@ -216,7 +216,7 @@ if(isset($_SESSION['nombre'])){
                                                             </div>
 
                                                             <!--Impacto Ambiental-->
-                                                            {{checkImpactoAmbiental}}
+                                                           
                                                             <div class="input-group mb-3"> 
                                                                 <span class="input-group-text w-25 text-start">Impacto <br>Ambiental<br><label class="ms-5"><i class="bi bi-question-circle"></label></i></span>
                                                                 <div class="w-50"  :class="{'nocontestado': respondio === false && checkImpactoAmbiental.length<=0, '': checkImpactoAmbiental.length>0}">

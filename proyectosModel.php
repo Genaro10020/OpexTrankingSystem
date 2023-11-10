@@ -17,12 +17,12 @@ include("conexionGhoner.php");
             return array ($resultado,$estado);
     }
 
-    function insertarArea($nueva,$siglas){
+    function insertarProyecto($fecha_alta,$nombre_proyecto,$planta,$area,$departamento,$metodologia,$responsable,$misiones,$pilares,$objetivos,$impacto_ambiental,$tons_co2,$ahorro_duro,$ahorro_suave){
         global $conexion;
         $estado = false;
-        $query = "INSERT INTO areas (nombre,siglas) VALUES (?,?)";
+        $query = "INSERT INTO proyectos_creados (fecha, nombre_proyecto, planta, area, departamento, metodologia, responsable, tons_co2, misiones,pilares,objetivos,impacto_ambiental,ahorro_duro, ahorro_suave) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $stmt = $conexion->prepare($query);
-        $stmt->bind_param("ss", $nueva, $siglas);
+        $stmt->bind_param("ssssssssssssss", $fecha_alta,$nombre_proyecto,$planta,$area,$departamento,$metodologia,$responsable,$tons_co2,$misiones,$pilares,$objetivos,$impacto_ambiental,$ahorro_duro,$ahorro_suave);
         if($stmt->execute()){
             $estado = true;
         }
