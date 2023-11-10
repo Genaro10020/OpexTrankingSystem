@@ -35,10 +35,11 @@ const AltaProyectos = {
       idsPilares:[],
       select_pilar:'',
       select_mision:'',
-      tons_co2:'',
-      ahorro_duro:'',
-      ahorro_suave:'',
+      tons_co2:0,
+      ahorro_duro:0,
+      ahorro_suave:0,
       respondio: true,//utilizo para cambiar el css si no repondio en altas
+      objetivo_estrategico:false,
       /*Planta*/ /*Área*/ /*Departamento*/
       nueva:'',
       nuevoNombre:'',
@@ -1132,34 +1133,43 @@ actualizandoResponsable(){
     guardarAltaProyecto(){
      
       //Comprobando fecha
-      if(this.fecha_alta!=''){ this.respondio = true;}else{this.respondio = false;}
+      if(this.fecha_alta==''){this.respondio = false;}
       //nombre del proyecto
-      if(this.nombre_proyecto!=''){ this.respondio = true;}else{this.respondio = false;}
+      else if(this.nombre_proyecto==''){this.respondio = false;}
       //Planta
-      if(this.selectPlanta!=''){this.respondio=true;}else{this.respondio=false;}
+      else if(this.selectPlanta==''){this.respondio=false;}
       //Area
-      if(this.selectArea!=''){this.respondio=true;}else{this.respondio=false;}
+      else if(this.selectArea==''){this.respondio=false;}
       //Departamento
-      if(this.selectDepartamento!=''){this.respondio=true;}else{this.respondio=false;}
+      else if(this.selectDepartamento==''){this.respondio=false;}
       //Metodologia
-      if(this.selectMetodologia!=''){this.respondio=true;}else{this.respondio=false;}
+      else if(this.selectMetodologia==''){this.respondio=false;}
       //Responsable
-      if(this.selectResponsable!=''){this.respondio=true;}else{this.respondio=false;}
-      //Responsable
-      if(this.selectResponsable!=''){this.respondio=true;}else{this.respondio=false;}
+      else if(this.selectResponsable==''){this.respondio=false;}
       //Misiones
-      if(this.checkMisiones.length>0){this.respondio=true;}else{this.respondio=false;}
+      else if(this.checkMisiones.length<=0){this.respondio=false;}
       //Pilares
-      if(this.checkPilares.length>0){this.respondio=true;}else{this.respondio=false;}
+      else if(this.checkPilares.length<=0){this.respondio=false;}
       //Objetivos
-      if(this.checkPilares.length>0){this.respondio=true;}else{this.respondio=false;}
+      else if(this.checkPilares.length<=0){this.respondio=false;}
       //Objetivos
-      if(this.checkObjetivos.length>0){this.respondio=true;}else{this.respondio=false;}
+      else if(this.checkObjetivos.length<=0){this.respondio=false;}
       //Impacto Ambiental
-      if(this.checkImpactoAmbiental.length>0){this.respondio=true;}else{this.respondio=false;}
+      else if(this.checkImpactoAmbiental.length<=0){this.respondio=false;}
+      //Ahorros
+      else if(this.tons_co2==0 && this.ahorro_duro==0 && this.ahorro_suave==0 && this.objetivo_estrategico==false){this.respondio=false; alert("Minimo uno debe ser distinto a 0")}
       //Si algo no se a contestado
+      else{
+        this.respondio=true
+      }
+ 
+      if(this.respondio===true){
+        console.log("A guardar esto")
+      }else{
+        alert("Verifique los campos marcados en rojo")
+      }
+
       
-      if(this.respondio===false){alert("Existen campos vacios, favor de contestar")}
       //fecha_alta  nombre_proyecto selectPlanta selectArea selectDepartamento selectMetodologia selectResponsable  checkMisiones checkPilares checkObjetivos checkImpactoAmbiental tons_co2 ahorro_duro ahorro_suave      
     },
     modalCatalogos(accion,tipo){//accion: es CREAR, ACTUALIZAR, ELIMINAR y tipo: es Pilares, Misiones, Objetivos.

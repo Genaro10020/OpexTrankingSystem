@@ -212,9 +212,6 @@ if(isset($_SESSION['nombre'])){
                                                                 <div v-if="checkObjetivos.length>0" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                                             </div>
 
-                                                            
-
-                                                           
                                                             <!--Impacto Ambiental-->
                                                             <div class="input-group mb-3"> 
                                                                 <span class="input-group-text w-25 text-start">Impacto <br>Ambiental<br><label class="ms-5"><i class="bi bi-question-circle"></label></i></span>
@@ -235,20 +232,25 @@ if(isset($_SESSION['nombre'])){
                                                             </div>  
                                                             <div class="input-group mb-3">
                                                                 <span class="input-group-text w-50" >Tons CO2 por Evitar (Proyectado)</span>
-                                                                <input type="text" v-model="tons_co2" class="w-25" :class="{'nocontestado': respondio === false && tons_co2!=='', '': tons_co2!==''}">
-                                                                <div v-if="tons_co2!==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                                                <input type="number" v-model="tons_co2" class="w-25" :class="{'nocontestado': respondio === false && tons_co2===0, '': tons_co2!==0 && tons_co2!==''}">
+                                                                <div v-if="tons_co2!==0 && tons_co2!==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                                             </div>
 
                                                             <div class="input-group mb-3">
                                                                 <span class="input-group-text w-50" >Ahorro Duro $MXN/Año (Proyectado )</span>
-                                                                <input type="text" v-model="ahorro_duro" class="w-25" >
-                                                                <div v-if="ahorro_duro!==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                                                <input type="number" v-model="ahorro_duro" class="w-25" :class="{'nocontestado': respondio === false && ahorro_duro===0, '': ahorro_duro!==0 && ahorro_duro!==''}">
+                                                                <div v-if="ahorro_duro!==0 && ahorro_duro!==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                                             </div>
 
                                                             <div class="input-group mb-3">
                                                                 <span class="input-group-text w-50" >Ahorro Suave $MXN/Año (Proyectado)</span>
-                                                                <input type="text" v-model="ahorro_suave" class="w-25" >
-                                                                <div v-if="ahorro_suave!==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                                                <input type="number" v-model="ahorro_suave" class="w-25" :class="{'nocontestado': respondio === false && ahorro_suave===0, '': ahorro_suave!==0 && ahorro_suave!==''}">
+                                                                <div v-if="ahorro_suave!==0 && ahorro_suave!==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                                            </div>
+                                                            <div class="input-group mb-3">
+                                                                <span class="input-group-text w-25 me-2" >Objetivo Estrategico</span>
+                                                                <input type="checkbox" v-model="objetivo_estrategico">
+                                                                <label class="ms-2 mt-1">{{ objetivo_estrategico ? 'Sí' : 'No' }}<label>
                                                             </div>
                                                     <!--Fin Formulario Alta Proyecto--> 
                                                 </div>
