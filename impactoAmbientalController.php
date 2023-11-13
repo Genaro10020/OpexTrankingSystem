@@ -13,10 +13,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
     case 'POST':
         // Manejar solicitud POST (creación)
-        if(isset($arreglo['nueva']) && isset($arreglo['siglas'])){
+        if(isset($arreglo['nueva'])){
             $nueva = $arreglo['nueva'];
-            $siglas =$arreglo['siglas'];
-           $val [] = insertarImpactoAmbiental($nueva,$siglas);     
+           $val [] = insertarImpactoAmbiental($nueva);     
         }else{
             $val [] =  "No existe la variable nueva";
         }

@@ -1,43 +1,32 @@
 <?php
 session_start();
 if(isset($_SESSION['nombre'])){
-include 'objetivosModel.php';
+include 'estandaresCO2Model.php';
 $arreglo = json_decode(file_get_contents('php://input'), true);
 header('Content-Type: application/json');
 $val = [];
 
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
-        // Manejar solicitud GET (consultar)
-        //$lo = array([1,2,3],true);
-
-        $val [] = consultarObjetivos();
-        
+        $val[] = consultarEstandaresCO2();
         break;
     case 'POST':
         // Manejar solicitud POST (creación)
-        if(isset($arreglo['nueva']) && isset($arreglo['siglas']) && isset($arreglo['id_pilar'])){
+        if(isset($arreglo['nueva'])){
             $nueva = $arreglo['nueva'];
-            $siglas = $arreglo['siglas'];
-            $id_pilar = $arreglo['id_pilar'];
-            $val [] = insertarObjetivo($nueva,$siglas,$id_pilar);     
-        }else if(isset($arreglo['idsPilares'])){
-            $idsPilares=$arreglo['idsPilares'];
-            $val[] =consultarObjetivosIDpilares($idsPilares);
+           $val [] = insertarImpactoAmbiental($nueva);     
         }else{
-            $val [] =  "No existe la variable nueva o siglas";
+            $val [] =  "No existe la variable nueva";
         }
         // ...
         break;
 
     case 'PUT':
         // Manejar solicitud PUT (actualización)
-            if(isset($arreglo['id']) && isset($arreglo['nombre']) && isset($arreglo['siglas']) && isset($arreglo['id_pilar'])){
-                $id = $arreglo['id'];
-                $nombre = $arreglo['nombre'];
-                $siglas = $arreglo['siglas'];
-                $id_pilar = $arreglo['id_pilar'];
-                $val[] = actualizarObjetivo($nombre,$siglas,$id_pilar,$id);
+            if(isset($arreglo['id']) && isset($arreglo['nuevo'])){
+                $id=$arreglo['id'];
+                $nuevo=$arreglo['nuevo'];
+                $val[]=actualizarMetodologia($id,$nuevo);
             }else{
                 $val[] = "No existe variable ID o Nuevo";
             }
@@ -48,7 +37,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         // Manejar solicitud DELETE (eliminación)
             if(isset($arreglo['id'])){
                 $id = $arreglo['id'];
-                $val[] = eliminarObjetivo($id);
+                $val[] = eliminarMetodologia($id);
             } else {
                 $val[] = "No llego la varible ID".$arreglo['id'];
             //  http_response_code(400); // Bad Request

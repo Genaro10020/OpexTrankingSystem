@@ -1,10 +1,10 @@
 <?php
 include("conexionGhoner.php");
-    function consultarImpactoAmbiental(){
+    function consultarEstandaresCO2(){
         global $conexion;
         $resultado = [];
         $estado = false;
-            $consulta = "SELECT * FROM impacto_ambiental ORDER BY id DESC";
+            $consulta = "SELECT * FROM estandares_co2 ORDER BY id DESC";
             $query = $conexion->query($consulta);
             if($query){
                 while ($datos=mysqli_fetch_array($query)){

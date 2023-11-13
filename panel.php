@@ -19,7 +19,7 @@ if(isset($_SESSION['nombre'])){
                  
             <!--Bóton-->
             <div  class="text-center">
-                <button class="btn-menu me-3" @click="ventana='Crear',consultarMisiones()"> 
+                <button class="btn-menu me-3" @click="ventana='Crear',consultarMisiones(),consultarPilares(),consultarObjetivos(),consultarImpactoAmbiental(),consultarEstandaresCO2()"> 
                     <i class="bi bi-plus-circle" ></i> Crear Catalogos
                 </button>
 
@@ -562,18 +562,12 @@ if(isset($_SESSION['nombre'])){
                                         <th class=" thmodal w-50">
                                             Nombre  
                                         </th>
-                                        <th class=" thmodal w-50">
-                                            Siglas 
-                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-for="mision in misiones">
                                         <td>
                                            {{mision.nombre}}
-                                        </td>
-                                        <td>
-                                           {{mision.siglas}}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -584,7 +578,7 @@ if(isset($_SESSION['nombre'])){
                                 <div class=" encabezadoTablas">
                                     <div class=" d-flex justify-content-center align-items-center"  > 
                                             <div class="d-none d-lg-block col-lg-4"></div>
-                                            <div class="col-6 col-lg-4 mt-2">Pilares</div>
+                                            <div class="col-6 col-lg-4 mt-2">Pilares Estrategicos</div>
                                             <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
                                                 <button type="button" class=" btn btn-menu " @Click="modalCatalogos('Crear','Pilar')">Crear</button>
                                             </div>
@@ -606,15 +600,15 @@ if(isset($_SESSION['nombre'])){
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                    <tr v-for="pilar in pilares">
                                         <td>
-                                            Pilar 1
+                                            {{pilar.nombre}}
                                         </td>
                                         <td>
-                                            P1
+                                            {{pilar.siglas}}
                                         </td>
                                         <td>
-                                            Mision Relacion
+                                            {{pilar.id_misiones}}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -625,7 +619,7 @@ if(isset($_SESSION['nombre'])){
                                 <div class=" encabezadoTablas">
                                     <div class=" d-flex justify-content-center align-items-center"  > 
                                             <div class="d-none d-lg-block col-lg-4"></div>
-                                            <div class="col-6 col-lg-4 mt-2">Objetivos</div>
+                                            <div class="col-6 col-lg-4 mt-2">Objetivos Estrategicos</div>
                                             <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
                                                 <button type="button" class=" btn btn-menu " @Click="modalCatalogos('Crear','Objetivo')">Crear</button>
                                             </div>
@@ -647,15 +641,15 @@ if(isset($_SESSION['nombre'])){
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                    <tr v-for="objetivo in objetivos">
                                         <td>
-                                            Objetivo 1
+                                            {{objetivo.nombre}}
                                         </td>
                                         <td>
-                                            O1
+                                            {{objetivo.siglas}}
                                         </td>
                                         <td>
-                                            Pilar Relacionado
+                                            {{objetivo.id_pilares}}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -679,18 +673,12 @@ if(isset($_SESSION['nombre'])){
                                         <th class=" thmodal w-50">
                                             Nombre
                                         </th>
-                                        <th class=" thmodal w-50">
-                                            Siglas 
-                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                    <tr v-for="impacto in impactoAmbiental ">
                                         <td>
-                                            Nombre 1
-                                        </td>
-                                        <td>
-                                            N1
+                                            {{impacto.nombre}}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -714,7 +702,7 @@ if(isset($_SESSION['nombre'])){
                                             Nombre
                                         </th>
                                         <th class="thmodal">
-                                            Siglas 
+                                            Cantidad
                                         </th>
                                         <th class="thmodal">
                                             unidad de medida  
@@ -722,15 +710,15 @@ if(isset($_SESSION['nombre'])){
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                    <tr v-for="estandar in estandares ">
                                         <td>
-                                            Objetivo 1
+                                            {{estandar.nombre}}
                                         </td>
                                         <td>
-                                            O1
+                                            {{estandar.cantidad}}
                                         </td>
                                         <td>
-                                            unidad de medida
+                                            {{estandar.unidad_medida}}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -749,8 +737,6 @@ if(isset($_SESSION['nombre'])){
                                             <div class="modal-body input-group mb-3">
                                                 <span class="input-group-text w-25 mt-3" >Nombre:</span>
                                                 <input type="text" class="w-75 mt-3" v-model="nueva">
-                                                <span class="input-group-text w-25 mt-3" >Siglas:</span>
-                                                <input type="text" class="w-75 mt-3" v-model="siglas">
                                             </div>
                                         </div> 
                                         <!--Cuerpo de MODAL PILARES-->
@@ -761,18 +747,18 @@ if(isset($_SESSION['nombre'])){
                                                 <span class="input-group-text w-25 mt-3" >Siglas:</span>
                                                 <input type="text" class="w-75 mt-3" v-model="siglas">
                                                 <span class="input-group-text w-25 mt-3" >Mision:</span>
-                                                <input type="text" class="w-75 mt-3" >
-                                                </div>
+                                                <select class="w-75 mt-3" v-model="select_mision"><option v-for="mision in misiones" :value="mision.id">{{mision.nombre}}</option></select>
+                                            </div>
                                         </div> 
                                         <!--Cuerpo de MODAL OBJETIVO-->
                                             <div v-if="tipo=='Objetivo'">
                                                 <div class="modal-body input-group mb-3">
                                                         <span class="input-group-text w-25 mt-3" >Nombre:</span>
-                                                        <input type="text" class="w-75 mt-3" >
+                                                        <input type="text" class="w-75 mt-3" v-model="nueva" >
                                                         <span class="input-group-text w-25 mt-3" >Siglas:</span>
-                                                        <input type="text" class="w-75 mt-3" >
+                                                        <input type="text" class="w-75 mt-3" v-model="siglas">
                                                         <span class="input-group-text w-25 mt-3" >Pilar:</span>
-                                                        <input type="text" class="w-75 mt-3" >
+                                                        <select v-model="select_pilar" class="w-75 mt-3"><option v-for="pilar in pilares" :value="pilar.id">{{pilar.nombre}}</option></select>
                                                  </div>
                                             </div>
                                         <!--Cuerpo de MODAL IMPACTO AMBIENTAL-->
@@ -780,10 +766,7 @@ if(isset($_SESSION['nombre'])){
                                             <div>
                                                 <div class="modal-body input-group mb-3">
                                                         <span class="input-group-text w-25 mt-3" >Nombre:</span>
-                                                        <input type="text" class="w-75 mt-3" >
-                                                        <span class="input-group-text w-25 mt-3" >Siglas:</span>
-                                                        <input type="text" class="w-75 mt-3" >
-                                                        
+                                                        <input v-model="nueva" type="text" class="w-75 mt-3" >  
                                                  </div>
                                             </div>
                                         </div>
@@ -794,9 +777,9 @@ if(isset($_SESSION['nombre'])){
                                                 <div class="modal-body input-group mb-3">
                                                         <span class="input-group-text w-25 mt-3" >Nombre:</span>
                                                         <input type="text" class="w-75 mt-3" >
-                                                        <span class="input-group-text w-25 mt-3" >Siglas:</span>
-                                                        <input type="text" class="w-75 mt-3" >
-                                                        <span class="input-group-text w-25 mt-3" >Unidad Medida:</span>
+                                                        <span class="input-group-text w-25 mt-3" >Cantidad:</span>
+                                                        <input type="number" class="w-75 mt-3" >
+                                                        <span class="input-group-text w-25 mt-3" >Unidad De Medida:</span>
                                                         <input type="text" class="w-75 mt-3" >
                                                  </div>
                                             </div>
@@ -805,8 +788,8 @@ if(isset($_SESSION['nombre'])){
                                         <div class="modal-footer">
                                         <button type="button" class="boton-cancelar" data-bs-dismiss="modal">Cerrar</button>
                                         <button type="button" class="boton-aceptar" v-if="tipo=='Mision'" @click="insertarMision()">Crear</button>
-                                        <button type="button" class="boton-aceptar" v-if="tipo=='Pilar'" @click="">Crear</button>
-                                        <button type="button" class="boton-aceptar" v-if="tipo=='Objetivo'" @click="insertarMision()">Crear</button>
+                                        <button type="button" class="boton-aceptar" v-if="tipo=='Pilar'" @click="insertarPilar()">Crear</button>
+                                        <button type="button" class="boton-aceptar" v-if="tipo=='Objetivo'" @click="insertarObjetivo()">Crear</button>
                                         <button type="button" class="boton-aceptar" v-if="tipo=='Impacto Ambiental'" @click="insertarImpactoAmbiental()">Crear</button>
                                         <button type="button" class="boton-aceptar" v-if="tipo=='Estandar'" @click="insertarMision()">Crear</button>
 
