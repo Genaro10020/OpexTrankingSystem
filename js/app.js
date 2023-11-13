@@ -55,7 +55,9 @@ const AltaProyectos = {
      
       /*Impacto Ambiental */
       //general
-      id:''// utilizado y reseteado despues de usar.
+      id:'',// utilizado y reseteado despues de usar.
+      /*Variabes Estandares co2*/
+      estandares:[]
     }
   },
   mounted(){
@@ -262,7 +264,7 @@ const AltaProyectos = {
     consultarObjetivos(){
       axios.get('objetivosController.php',{
       }).then(response =>{
-          console.log(response.data[0])
+          console.log(response.data)
           if (response.data[0][1]==true){
               if (response.data[0][0].length>0) {
                 this.objetivos = response.data[0][0]
@@ -394,14 +396,34 @@ const AltaProyectos = {
 
       })
     },
+     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PLANTAS*/
+     consultarEstandaresCO2(){
+      axios.get('estandaresCO2Controller.php',{
+      }).then(response =>{
+          console.log(response.data[0])
+          if (response.data[0][1]==true){
+            console.log('soy true')
+              if (response.data[0][0].length>0) {
+                console.log('soy un arreglo')
+                this.estandares = response.data[0][0]
+              }
+          }else{
+             alert("La consulta  plantas no se realizo correctamente.")
+          }
+  
+      }).catch(error =>{
+        console.log('Erro :-('+error)
+      }).finally(() =>{
+
+      })
+    },
+    /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR AREAS*/
     /*/////////////////////////////////////////////////////////////////////////////////INSERTAR PLANTA*/
     insertarImpactoAmbiental(){
       axios.post('impactoAmbientalController.php',{
-        nueva:this.nueva,
-        siglas:this.siglas
+        nueva:this.nueva
       }).then(response =>{
           this.nueva = ''
-          this.siglas=''
           console.log(response.data)
           if (!response.data[0]==false){
             // this.myModalCRUD.hide()
@@ -512,6 +534,7 @@ const AltaProyectos = {
         },
            /*/////////////////////////////////////////////////////////////////////////////////INSERTAR OBJETIVO*/
         insertarObjetivo(){
+          console.log(this.nueva)
           if(this.nueva!='' && this.siglas!='' && this.select_pilar!=''){
               axios.post('objetivosController.php',{
                 nueva:this.nueva,
@@ -520,9 +543,10 @@ const AltaProyectos = {
               }).then(response =>{
                   console.log(response.data)
                   if (response.data[0]==true){
-                    this.myModalCRUD.hide()
+                    // this.myModalCRUD.hide()
                     this.consultarObjetivos()
                     this.siglas=''
+                    this.nueva=''
                   }else{
                       alert("La inserción, no se realizo correctamente.")
                   }
@@ -546,7 +570,7 @@ const AltaProyectos = {
             }).then(response =>{
                 console.log(response.data)
                 if (response.data[0]==true){
-                  this.myModalCRUD.hide()
+                  //this.myModalCRUD.hide()
                   this.consultarPilares()
                   this.nueva = ''
                   this.siglas=''
@@ -566,10 +590,9 @@ const AltaProyectos = {
     },
        /*/////////////////////////////////////////////////////////////////////////////////INSERTAR PILAR*/
        insertarMision(){
-        if(this.nueva!='' && this.siglas!=''){
+        if(this.nueva!=''){
             axios.post('misionesController.php',{
               nueva:this.nueva,
-              siglas:this.siglas
             }).then(response =>{
                 console.log(response.data)
                 if (response.data[0]==true){
@@ -577,7 +600,6 @@ const AltaProyectos = {
                   alert("Alta exitosa..")
                   this.consultarMisiones()
                   this.nueva = ''
-                  this.siglas = ''
                 }else{
                     alert("La inserción Mision, no se realizo correctamente.")
                 }
