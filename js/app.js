@@ -33,6 +33,7 @@ const AltaProyectos = {
       misiones:[],
       allMisiones:[],
       idsPilares:[],
+      proyectos:[],
       select_pilar:'',
       select_mision:'',
       tons_co2:0,
@@ -60,14 +61,51 @@ const AltaProyectos = {
   },
   mounted(){
   //  this.consultarUsuarios()
+  this.consultarProyectos()
   },
   methods: {
     toggleDiv(){
       this.showDiv = !this.showDiv;
       console.log(this.showDiv);
   },
+        /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PROYECTOS*/
+        consultarProyectos(){
+          axios.get('proyectosController.php',{
+          }).then(response =>{
+              console.log(response.data[0])
+              if (!response.data[0][1]==false){
+                  if (response.data[0][0].length>0) {
+                    this.proyectos = response.data[0][0]
+                  }
+              }else{
+                alert("La consulta de proyectos no se realizo correctamente.")
+              }
+          }).catch(error =>{
+            console.log('Erro :-('+error)
+          }).finally(() =>{
+
+          })
+        },
         /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PLANTAS*/
         consultarPlantas(){
+          axios.get('plantasController.php',{
+          }).then(response =>{
+              console.log(response.data[0])
+              if (!response.data[0][1]==false){
+                  if (response.data[0][0].length>0) {
+                    this.plantas = response.data[0][0]
+                  }
+              }else{
+                 alert("La consulta  plantas no se realizo correctamente.")
+              }
+      
+          }).catch(error =>{
+            console.log('Erro :-('+error)
+          }).finally(() =>{
+
+          })
+        },
+          consultarPlantas(){
           axios.get('plantasController.php',{
           }).then(response =>{
               console.log(response.data[0])
@@ -1144,41 +1182,37 @@ actualizandoResponsable(){
     verificarAltaProyecto(){
      
       //Comprobando fecha
-      if(this.fecha_alta==''){this.respondio = false;}
+      if(this.fecha_alta==''){this.respondio = false;  alert("Coloque una fecha");}
+    
       //nombre del proyecto
-      else if(this.nombre_proyecto==''){this.respondio = false;}
+      else if(this.nombre_proyecto==''){this.respondio = false; alert("Agregue un nombre al proyecto");}
       //Planta
-      else if(this.selectPlanta==''){this.respondio=false;}
+      else if(this.selectPlanta==''){this.respondio=false; alert("Seleccione un Planta");}
       //Area
-      else if(this.selectArea==''){this.respondio=false;}
+      else if(this.selectArea==''){this.respondio=false; alert("Seleccione una Área")}
       //Departamento
-      else if(this.selectDepartamento==''){this.respondio=false;}
+      else if(this.selectDepartamento==''){this.respondio=false; alert("Seleccione el Departamento")}
       //Metodologia
-      else if(this.selectMetodologia==''){this.respondio=false;}
+      else if(this.selectMetodologia==''){this.respondio=false; alert("Seleccione la Metodología")}
       //Responsable
-      else if(this.selectResponsable==''){this.respondio=false;}
+      else if(this.selectResponsable==''){this.respondio=false;  alert("Seleccione un Responsable")}
       //Misiones
-      else if(this.checkMisiones.length<=0){this.respondio=false;}
+      else if(this.checkMisiones.length<=0){this.respondio=false;  alert("Seleccione minimo una Misión")}
       //Pilares
-      else if(this.checkPilares.length<=0){this.respondio=false;}
+      else if(this.checkPilares.length<=0){this.respondio=false;  alert("Seleccione Pilar, para visualizarlos seleccione Mision")}
       //Objetivos
-      else if(this.checkPilares.length<=0){this.respondio=false;}
-      //Objetivos
-      else if(this.checkObjetivos.length<=0){this.respondio=false;}
+      else if(this.checkObjetivos.length<=0){this.respondio=false; alert("Seleccione Objetivo, para visualizarlos, seleccione Mision y Objetivo")}
       //Impacto Ambiental
-      else if(this.checkImpactoAmbiental.length<=0){this.respondio=false;}
+      else if(this.checkImpactoAmbiental.length<=0){this.respondio=false; alert("Seleccione minimo una Impacto Ambiental")}
       //Ahorros
-      else if(this.tons_co2==0 && this.ahorro_duro==0 && this.ahorro_suave==0 && this.objetivo_estrategico==false){this.respondio=false; alert("Minimo uno debe ser distinto a 0")}
+      else if(this.tons_co2==0 && this.ahorro_duro==0 && this.ahorro_suave==0 && (this.objetivo_estrategico==false || this.objetivo_estrategico==true)){this.respondio=false; alert("Minimo uno debe ser distinto a 0")}
       //Si algo no se a contestado
       else{
         this.respondio=true
       }
  
       if(this.respondio===true){
-        
         this.guardarAltaProyecto()
-      }else{
-        alert("Verifique los campos marcados en rojo")
       }
 
          
@@ -1197,7 +1231,7 @@ actualizandoResponsable(){
       var departamento = separandoDepartamento[1];
       
       const separandoResponsable = this.selectResponsable.split('<->');
-      var responsable = separandoResponsable[1];
+      var responsable_id = separandoResponsable[0];
 
       //Utilizo para tomar todos los nombres.
       console.log(this.checkMisiones)
@@ -1242,7 +1276,7 @@ actualizandoResponsable(){
         select_area:area,
         select_departamento:departamento,
         select_metodologia:metodologia,
-        select_responsable:responsable,
+        responsable_id:responsable_id,
         misiones:misiones_nombres,
         pilares:pilares_nombres,
         objetivos:objetivos_nombres,
@@ -1253,7 +1287,8 @@ actualizandoResponsable(){
       }).then(response=>{
           console.log(response.data)
           if(response.data[0]==true){
-             
+             this.myModal.hide()
+             this.consultarProyectos()
           }else{
             alert("No se dio de alta el proyecto.")
           }

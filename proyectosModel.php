@@ -1,10 +1,10 @@
 <?php
 include("conexionGhoner.php");
-    function consultarAreas(){
+    function consultarProyectos(){
         global $conexion;
         $resultado = [];
         $estado = false;
-            $consulta = "SELECT * FROM areas ORDER BY id DESC";
+            $consulta = "SELECT * FROM proyectos_creados ORDER BY id ASC";
             $query = $conexion->query($consulta);
             if($query){
                 while ($datos=mysqli_fetch_array($query)){
@@ -17,16 +17,31 @@ include("conexionGhoner.php");
             return array ($resultado,$estado);
     }
 
-    function insertarProyecto($fecha_alta,$nombre_proyecto,$planta,$area,$departamento,$metodologia,$responsable,$misiones,$pilares,$objetivos,$impacto_ambiental,$tons_co2,$ahorro_duro,$ahorro_suave){
+    function insertarProyecto($fecha_alta,$nombre_proyecto,$planta,$area,$departamento,$metodologia,$responsable_id,$misiones,$pilares,$objetivos,$impacto_ambiental,$tons_co2,$ahorro_duro,$ahorro_suave){
         global $conexion;
-        $estado = false;
-        $query = "INSERT INTO proyectos_creados (fecha, nombre_proyecto, planta, area, departamento, metodologia, responsable, tons_co2, misiones,pilares,objetivos,impacto_ambiental,ahorro_duro, ahorro_suave) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        $stmt = $conexion->prepare($query);
-        $stmt->bind_param("ssssssssssssss", $fecha_alta,$nombre_proyecto,$planta,$area,$departamento,$metodologia,$responsable,$tons_co2,$misiones,$pilares,$objetivos,$impacto_ambiental,$ahorro_duro,$ahorro_suave);
-        if($stmt->execute()){
-            $estado = true;
+
+        $consulta = "SELECT * FROM responsables WHERE id = $responsable_id";
+        $query = $conexion->query($consulta);
+        if($query->num_rows>0){
+            $fila = $query->fetch_assoc();
+            $nombre_responsable = $fila['nombre'];
+            $correo_responsable =  $fila['correo'];
+            $telefono_responsable =  $fila['telefono'];
+            $estado  = true;
+            //Recuperado el responsable inserto
+                    $query = "INSERT INTO proyectos_creados (fecha, nombre_proyecto, planta, area, departamento, metodologia, responsable,correo,telefono, tons_co2, misiones,pilares,objetivos,impacto_ambiental,ahorro_duro, ahorro_suave) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    $stmt = $conexion->prepare($query);
+                    $stmt->bind_param("ssssssssssssssss", $fecha_alta,$nombre_proyecto,$planta,$area,$departamento,$metodologia, $nombre_responsable,$correo_responsable,$telefono_responsable,$tons_co2,$misiones,$pilares,$objetivos,$impacto_ambiental,$ahorro_duro,$ahorro_suave);
+                    if($stmt->execute()){
+                        $estado = true;
+                    }
+                    $stmt->close();
+
+        }else{
+            $estado  = false;
         }
-        $stmt->close();
+
+       
         return $estado;
     }
 

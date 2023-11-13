@@ -484,25 +484,24 @@ if(isset($_SESSION['nombre'])){
                                                                         <th>Tons De CO2 Por Evitar</th>
                                                                         <th>Ahorro Duro</th>
                                                                         <th>Ahorro Suave</th>
-                                                                        
                                                                 </thead>
                                                                 <tbody class=" border:1px solid black" style="text-align: center">
-                                                                    <tr style="vertical-align: middle ">
+                                                                    <tr style="vertical-align: middle " v-for="proyecto in proyectos">
                                                                         <td><input type="date"></input></td>
-                                                                        <td>Nombre De Proyecto</td>
-                                                                        <td>Planta</td>
-                                                                        <td>Área</td>
-                                                                        <td>Departamento</td>
-                                                                        <td>Metodología</td>
-                                                                        <td>Responsable</td>
-                                                                        <td>Correo</td>
-                                                                        <td>Telefono</td>
-                                                                        <td>Pilar Estrategico</td>
-                                                                        <td>Impacto Ambiental</td>
-                                                                        <td>Tons De CO2 Por Evitar</td>
-                                                                        <td>Ahorro Duro</td>
-                                                                        <td>Ahorro Suave</td>
-                                                                            
+                                                                        <td>{{proyecto.nombre_proyecto}}</td>
+                                                                        <td>{{proyecto.planta}}</td>
+                                                                        <td>{{proyecto.area}}</td>
+                                                                        <td>{{proyecto.departamento}}</td>
+                                                                        <td>{{proyecto.metodologia}}</td>
+                                                                        <td>{{proyecto.responsable}}</td>
+                                                                        <td>{{proyecto.correo}}</td>
+                                                                        <td>{{proyecto.telefono}}</td>
+                                                                        <td>{{proyecto.pilares}}</td>
+                                                                        <td>{{proyecto.impacto_ambiental}}</td>
+                                                                        <td>{{proyecto.tons_co2}}</td>
+                                                                        <td>{{proyecto.duro}}</td>
+                                                                        <td>{{proyecto.ahorro_suave}}</td>
+                                                                 </tr>       
                                                         </table>
                                         <!---->
                     </div>

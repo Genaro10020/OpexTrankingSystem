@@ -1,6 +1,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EAD System</title>
+<title>Opex Tracking System</title>
  <!--VUE 3-->
  <script src="https://unpkg.com/vue@3.2.36/dist/vue.global.js"></script>
 <!--AXIOS--> 
