@@ -27,11 +27,14 @@ include("conexionGhoner.php");
             $nombre_responsable = $fila['nombre'];
             $correo_responsable =  $fila['correo'];
             $telefono_responsable =  $fila['telefono'];
+
+            $separando = explode("-", $fecha_alta);
+            $fecha_invertida = $separando[2] . "-" . $separando[1] . "-" . $separando[0];
             $estado  = true;
             //Recuperado el responsable inserto
                     $query = "INSERT INTO proyectos_creados (fecha, nombre_proyecto, planta, area, departamento, metodologia, responsable,correo,telefono, tons_co2, misiones,pilares,objetivos,impacto_ambiental,ahorro_duro, ahorro_suave) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                     $stmt = $conexion->prepare($query);
-                    $stmt->bind_param("ssssssssssssssss", $fecha_alta,$nombre_proyecto,$planta,$area,$departamento,$metodologia, $nombre_responsable,$correo_responsable,$telefono_responsable,$tons_co2,$misiones,$pilares,$objetivos,$impacto_ambiental,$ahorro_duro,$ahorro_suave);
+                    $stmt->bind_param("ssssssssssssssss", $fecha_invertida,$nombre_proyecto,$planta,$area,$departamento,$metodologia, $nombre_responsable,$correo_responsable,$telefono_responsable,$tons_co2,$misiones,$pilares,$objetivos,$impacto_ambiental,$ahorro_duro,$ahorro_suave);
                     if($stmt->execute()){
                         $estado = true;
                     }

@@ -487,7 +487,7 @@ if(isset($_SESSION['nombre'])){
                                                                 </thead>
                                                                 <tbody class=" border:1px solid black" style="text-align: center">
                                                                     <tr style="vertical-align: middle " v-for="proyecto in proyectos">
-                                                                        <td><input type="date"></input></td>
+                                                                        <td>{{proyecto.fecha}}</td>
                                                                         <td>{{proyecto.nombre_proyecto}}</td>
                                                                         <td>{{proyecto.planta}}</td>
                                                                         <td>{{proyecto.area}}</td>
