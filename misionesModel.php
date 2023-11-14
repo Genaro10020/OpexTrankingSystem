@@ -45,10 +45,10 @@ include("conexionGhoner.php");
         return $estado;
     }
 
-    function eliminarMetodologia($id){
+    function eliminarMision($id){
         global $conexion;
         $estado = false;
-        $delete = "DELETE FROM metodologias WHERE id=?";
+        $delete = "DELETE FROM misiones WHERE id=?";
         $stmt = $conexion->prepare($delete);
         $stmt->bind_param("i", $id);
         if($stmt->execute()){

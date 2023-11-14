@@ -58,7 +58,9 @@ const AltaProyectos = {
       //general
       id:'',// utilizado y reseteado despues de usar.
       /*Variabes Estandares co2*/
-      estandares:[]
+      estandares:[],
+      cantidad:'',
+      unidadMedida:''
     }
   },
   mounted(){
@@ -424,6 +426,30 @@ const AltaProyectos = {
           if (!response.data[0]==false){
             this.myModalCRUD.hide()
             this.consultarPlantas()
+          }else{
+              alert("La inserción de Planta, no se realizo correctamente.")
+          }
+  
+      }).catch(error =>{
+        //console.log('Erro :-('+error)
+      }).finally(() =>{
+
+      })
+    },
+     /*/////////////////////////////////////////////////////////////////////////////////INSERTAR ESTANDARES CO2*/
+     insertarEstandaresCO2(){
+      axios.post('estandaresCO2Controller.php',{
+        nueva:this.nueva,
+        cantidad:this.cantidad,
+        unidadMedida:this.unidadMedida
+      }).then(response =>{
+          this.nueva = ''
+          this.cantidad=''
+          this.unidadMedida=''
+          console.log(response.data)
+          if (!response.data[0]==false){
+            // this.myModalCRUD.hide()
+            this.consultarEstandaresCO2()
           }else{
               alert("La inserción de Planta, no se realizo correctamente.")
           }
@@ -822,6 +848,36 @@ actualizandoResponsable(){
             alert("Todos los campos son requeridos para poder actualizar.")
           }
       },
+        /*/////////////////////////////////////////////////////////////////////////////////ACTUALIZAR OBJETIVO*/
+        actualizarImpactoAmbiental(){
+          if(this.nuevoNombre!='' && this.siglas!='' && this.select_pilar !=''){
+             axios.put('objetivosController.php',{
+                id:this.id,
+                nombre:this.nuevoNombre,
+                siglas:this.siglas,
+                id_pilar:this.select_pilar,
+              }).then(response =>{
+                  console.log(response.data)
+                  if (response.data[0]==true){
+                    this.myModalCRUD.hide();
+                    this.consultarObjetivos()
+                    this.nuevoNombre=''
+                    this.siglas=''
+                    this.id=''
+                    this.select_pilar = ''
+                    this.checkObjetivos = []
+                  }else{
+                      alert("No se actualizo el Objetivo.")
+                  }
+              }).catch(error =>{
+                //console.log('Erro :-('+error)
+              }).finally(() =>{
+  
+              })
+            }else{
+              alert("Todos los campos son requeridos para poder actualizar.")
+            }
+        },
      /*/////////////////////////////////////////////////////////////////////////////////ELIMINAR PLANTA*/
      eliminarPlanta(){
         const id_nombre_planta = this.selectPlanta.split('<->');
@@ -856,6 +912,58 @@ actualizandoResponsable(){
           alert("Selecione la planta a eliminar")
         }
       },
+      /*/////////////////////////////////////////////////////////////////////////////////ELIMINAR PLANTA*/
+     eliminarMision(id){
+        if(confirm("¿Desea eliminar la mision?"))
+        {
+          axios.delete('misionesController.php',{
+            data:{
+              id:id
+            }
+          }).then(response =>{
+              console.log(response.data)
+              if (response.data[0]==true){
+                // this.myModalCRUD.hide()
+                this.consultarMisiones()
+                this.id=''
+              }else{
+                  alert("No se elimino.")
+              }
+      
+          }).catch(error =>{
+            //console.log('Erro :-('+error)
+          }).finally(() =>{
+    
+          })
+        }
+  
+    },
+    /*/////////////////////////////////////////////////////////////////////////////////ELIMINAR PLANTA*/
+    eliminarPilar(id){
+      if(confirm("¿Desea eliminar el Pilar?"))
+      {
+        axios.delete('pilaresController.php',{
+          data:{
+            id:id
+          }
+        }).then(response =>{
+            console.log(response.data)
+            if (response.data[0]==true){
+              // this.myModalCRUD.hide()
+              this.consultarPilares()
+              this.id=''
+            }else{
+                alert("No se elimino.")
+            }
+    
+        }).catch(error =>{
+          //console.log('Erro :-('+error)
+        }).finally(() =>{
+  
+        })
+      }
+
+  },
       /*/////////////////////////////////////////////////////////////////////////////////ELIMINAR AREA*/
      eliminarArea(){
       const id_nombre_area = this.selectArea.split('<->');
@@ -997,87 +1105,20 @@ actualizandoResponsable(){
         alert("Selecione la planta a eliminar")
       }
     },
-     /*/////////////////////////////////////////////////////////////////////////////////ELIMINAR PILAR*/
-     eliminarPilar(){
-      if(this.checkPilares.length==1){
-        this.id=this.checkPilares[0]
-        if(confirm("Desea eliminar el Pilar seleccionado?")){
-              axios.delete('pilaresController.php',{
-                data:{
-                  id:this.id
-                }
-              }).then(response =>{
-                  console.log(response.data)
-                  if (response.data[0]==true){
-                    this.consultarPilares()
-                    this.checkPilares = [] 
-                    this.id=''
-                  }else{
-                      alert("No se elimino el Pilar.")
-                  }
-          
-              }).catch(error =>{
-                //console.log('Erro :-('+error)
-              }).finally(() =>{
-        
-              })
-        }
-      }else{
-        alert("Solamente debe estar marcado un Pilar a eliminar, no varios.")
-      }
-      /*const id_nombre_area = this.selectMetodologia.split('<->');
-      this.id=id_nombre_area[0]
-      var nombre=id_nombre_area[1]
-      console.log(this.selectMetodologia)
-      if(this.selectMetodologia!=""){
-        if(confirm("¿Desea eliminar la Metodología: " + nombre+"?"))
-        {
-          axios.delete('metodologiasController.php',{
-            data:{
-              id:this.id
-            }
-          }).then(response =>{
-              console.log(response.data)
-              if (response.data[0]==true){
-                this.selectMetodologia="";
-                this.myModalCRUD.hide()
-                this.consultarMetodologias()
-                this.id=''
-              }else{
-                  alert("No se elimino la Metodología.")
-              }
-      
-          }).catch(error =>{
-            //console.log('Erro :-('+error)
-          }).finally(() =>{
-    
-          })
-        }
-      }else{ 
-        alert("Selecione la planta a eliminar")
-      }*/
-    },
+  
     /*/////////////////////////////////////////////////////////////////////////////////ELIMINAR RESPONSABLE*/
-    eliminarObjetivo(){
-      if(this.checkObjetivos.length>0){
-
-      const id_nombre_responsable = this.checkObjetivos[0].split('<->');
-      this.id=id_nombre_responsable[0]
-      var nombre=id_nombre_responsable[1]
-      console.log(this.id)
-
-       if(confirm("¿Desea eliminar el Objetivo: " + nombre+"?"))
+    eliminarObjetivo(id){
+       if(confirm("¿Desea eliminar el Objetivo?"))
         {
           axios.delete('objetivosController.php',{
             data:{
-              id:this.id
+              id:id
             }
           }).then(response =>{
               console.log(response.data)
               if (response.data[0]==true){
                 this.consultarObjetivos()
                 this.id=''
-                this.checkObjetivos = [] 
               }else{
                   alert("No se elimino al Responsable.")
               }
@@ -1087,10 +1128,54 @@ actualizandoResponsable(){
     
           })
         }
-      }else{
-        alert("Selecione el objetivo a eliminar a eliminar")
-      }
     },
+     /*/////////////////////////////////////////////////////////////////////////////////ELIMINAR RESPONSABLE*/
+     eliminarImpactoAmbiental(id){
+      if(confirm("¿Desea eliminar el Impacto Ambiental?"))
+       {
+         axios.delete('impactoAmbientalController.php',{
+           data:{
+             id:id
+           }
+         }).then(response =>{
+             console.log(response.data)
+             if (response.data[0]==true){
+               this.consultarImpactoAmbiental()
+               this.id=''
+             }else{
+                 alert("No se elimino al Responsable.")
+             }
+         }).catch(error =>{
+           //console.log('Erro :-('+error)
+         }).finally(() =>{
+   
+         })
+       }
+   },
+   /*/////////////////////////////////////////////////////////////////////////////////ELIMINAR RESPONSABLE*/
+   eliminarEstandares(id){
+    if(confirm("¿Desea eliminar el Estandar ?"))
+     {
+       axios.delete('estandaresCO2Controller.php',{
+         data:{
+           id:id
+         }
+       }).then(response =>{
+           console.log(response.data)
+           if (response.data[0]==true){
+             this.consultarEstandaresCO2()
+             this.id=''
+           }else{
+               alert("No se elimino al Responsable.")
+           }
+       }).catch(error =>{
+         //console.log('Erro :-('+error)
+       }).finally(() =>{
+ 
+       })
+     }
+ },
+   /*////////////////////////////////////////////////////////////////////////////////////////////////*/
     crearResponsable(){
       this.nuevoResponsable = true;
       this.actualizarResponsable=false;
@@ -1318,11 +1403,17 @@ actualizandoResponsable(){
 
       })
     },
-    modalCatalogos(accion,tipo){//accion: es CREAR, ACTUALIZAR, ELIMINAR y tipo: es Pilares, Misiones, Objetivos.
+    modalCatalogos(accion,tipo,nombre){//accion: es CREAR, ACTUALIZAR, ELIMINAR y tipo: es Pilares, Misiones, Objetivos.
       this.accion = accion
       this.tipo = tipo
       this.myModal = new bootstrap.Modal(document.getElementById("modalCrearCatalogos"))
       this.myModal.show()
+
+      if(accion=='Actualizar'){
+          if(tipo=='Impacto Ambiental'){
+              this.nuevoNombre = nombre;
+          }
+      }
       }
   }
 };

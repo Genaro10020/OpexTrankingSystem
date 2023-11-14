@@ -85,7 +85,7 @@ table,.btn-actualizar,.btn-eliminar, .btn-guardar{
 
 .scroll{
     overflow: auto;
-    height:80vh;
+    height:20vh;
     /* Establece la altura máxima del div con scroll */
 }
 

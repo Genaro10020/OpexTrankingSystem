@@ -45,10 +45,10 @@ include("conexionGhoner.php");
         return $estado;
     }
 
-    function eliminarMetodologia($id){
+    function eliminarImpactoAmbiental($id){
         global $conexion;
         $estado = false;
-        $delete = "DELETE FROM metodologias WHERE id=?";
+        $delete = "DELETE FROM impacto_ambiental WHERE id=?";
         $stmt = $conexion->prepare($delete);
         $stmt->bind_param("i", $id);
         if($stmt->execute()){

@@ -38,7 +38,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         // Manejar solicitud DELETE (eliminación)
             if(isset($arreglo['id'])){
                 $id = $arreglo['id'];
-                $val[] = eliminarMetodologia($id);
+                $val[] = eliminarMision($id);
             } else {
                 $val[] = "No llego la varible ID".$arreglo['id'];
             //  http_response_code(400); // Bad Request
