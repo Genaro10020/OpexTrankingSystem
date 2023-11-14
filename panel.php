@@ -545,148 +545,195 @@ if(isset($_SESSION['nombre'])){
                                 </div>
                             </div>
                         <!--TABLA DE LA MISION-->
-                        <div class= "col-12  col-lg-6 offset-lg-3 col-xl-6 offset-xl-3 text-center align-content">
-                                <div class=" encabezadoTablas">
-                                    <div class=" d-flex justify-content-center align-items-center"  > 
-                                            <div class="d-none d-lg-block col-lg-4"></div>
-                                            <div class="col-6 col-lg-4 mt-2">Misiones</div>
-                                            <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
-                                                <button type="button" class=" btn btn-menu " @Click="modalCatalogos('Crear','Mision')">Crear</button>
-                                            </div>
-                                                
+                        <div class="col-12 col-lg-6 mb-5">
+                                <div  class="col-12  text-center align-content">
+                                        <div class=" encabezadoTablas">
+                                            <div class="  d-flex justify-content-center align-items-center">
+                                                    <div class="d-none d-lg-block col-lg-4"></div> 
+                                                    <div class="col-6 col-lg-4 mt-2">Misiones</div>
+                                                    <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
+                                                        <button type="button" class=" btn btn-menu " @Click="modalCatalogos('Crear','Mision')">Crear</button>
+                                                    </div>
+                                                        
+                                                </div>
+                                        </div>
+                                        <div class="scroll">
+                                            <table class=" table table-bordered table-striped border-dark">
+                                                <thead>
+                                                    <tr>
+                                                        <th class=" sticky-top thmodal w-50">
+                                                            Nombre  
+                                                        </th>
+                                                        <th class=" sticky-top thmodal w-50">
+                                                        Eliminar
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="mision in misiones">
+                                                        <td>
+                                                        {{mision.nombre}}
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-danger" @click="eliminarMision(mision.id)">Eliminar</button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                        </table>
                                         </div>
                                 </div>
-                           <table class="table table-bordered table-striped border-dark">
-                                <thead>
-                                    <tr>
-                                        <th class=" thmodal w-50">
-                                            Nombre  
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="mision in misiones">
-                                        <td>
-                                           {{mision.nombre}}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                           </table>
-                        </div>
-                        <!--TABLA DE LA PILARES-->
-                        <div class= "col-12 col-xl-6 col-lg-6 offset-lg-3 offset-xl-3 text-center align-content">
-                                <div class=" encabezadoTablas">
-                                    <div class=" d-flex justify-content-center align-items-center"  > 
-                                            <div class="d-none d-lg-block col-lg-4"></div>
-                                            <div class="col-6 col-lg-4 mt-2">Pilares Estrategicos</div>
-                                            <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
-                                                <button type="button" class=" btn btn-menu " @Click="modalCatalogos('Crear','Pilar')">Crear</button>
-                                            </div>
-                                                
+                            </div>
+                                <!--TABLA DE LA PILARES-->
+                            <div class="col-12 col-lg-6">
+                                <div class= "col-12 text-center align-content">
+                                        <div class=" encabezadoTablas">
+                                            <div class=" d-flex justify-content-center align-items-center"  > 
+                                                    <div class="d-none d-lg-block col-lg-4"></div>
+                                                    <div class="col-6 col-lg-4 mt-2">Pilares Estrategicos</div>
+                                                    <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
+                                                        <button type="button" class=" btn btn-menu " @Click="modalCatalogos('Crear','Pilar')">Crear</button>
+                                                    </div>
+                                                        
+                                                </div>
+                                        </div>
+                                        <div class="scroll mb-5">
+                                            <table class="table table-bordered table-striped border-dark">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class=" sticky-top thmodal">
+                                                                Nombre
+                                                            </th>
+                                                            <th class=" sticky-top thmodal">
+                                                                Siglas 
+                                                            </th>
+                                                            <th class=" sticky-top thmodal">
+                                                                Mision
+                                                            </th>
+                                                            <th class=" sticky-top thmodal">
+                                                                Eliminar
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr v-for="pilar in pilares">
+                                                            <td>
+                                                                {{pilar.nombre}}
+                                                            </td>
+                                                            <td>
+                                                                {{pilar.siglas}}
+                                                            </td>
+                                                            <td>
+                                                                {{pilar.id_misiones}}
+                                                            </td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-danger" @click="eliminarPilar(pilar.id)">Eliminar</button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                            </table>
                                         </div>
                                 </div>
-                           <table class="table table-bordered table-striped border-dark">
-                                <thead>
-                                    <tr>
-                                        <th class="thmodal">
-                                            Nombre
-                                        </th>
-                                        <th class="thmodal">
-                                            Siglas 
-                                        </th>
-                                        <th class="thmodal">
-                                            Mision
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="pilar in pilares">
-                                        <td>
-                                            {{pilar.nombre}}
-                                        </td>
-                                        <td>
-                                            {{pilar.siglas}}
-                                        </td>
-                                        <td>
-                                            {{pilar.id_misiones}}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                           </table>
                         </div>
                         <!--TABLA DE LA OBJETIVOS-->
-                        <div class= "col-12 col-xl-6 col-lg-6 offset-lg-3 offset-xl-3 text-center align-content">
-                                <div class=" encabezadoTablas">
-                                    <div class=" d-flex justify-content-center align-items-center"  > 
-                                            <div class="d-none d-lg-block col-lg-4"></div>
-                                            <div class="col-6 col-lg-4 mt-2">Objetivos Estrategicos</div>
-                                            <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
-                                                <button type="button" class=" btn btn-menu " @Click="modalCatalogos('Crear','Objetivo')">Crear</button>
-                                            </div>
-                                                
+                        <div class="col-6">
+                                <div class= "col-12 text-center align-content">
+                                        <div class=" encabezadoTablas">
+                                            <div class=" d-flex justify-content-center align-items-center"  > 
+                                                    <div class="d-none d-lg-block col-lg-4"></div>
+                                                    <div class="col-6 col-lg-4 mt-2">Objetivos Estrategicos</div>
+                                                    <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
+                                                        <button type="button" class=" btn btn-menu " @Click="modalCatalogos('Crear','Objetivo')">Crear</button>
+                                                    </div>
+                                                        
+                                                </div>
+                                        </div>
+                                        <div class="scroll">
+                                            <table class="table table-bordered table-striped border-dark">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class=" sticky-top thmodal">
+                                                                Nombre
+                                                            </th>
+                                                            <th class=" sticky-top thmodal">
+                                                                Siglas 
+                                                            </th>
+                                                            <th class=" sticky-top thmodal">
+                                                                Pílar  
+                                                            </th>
+                                                            <th class=" sticky-top thmodal">
+                                                                Eliminar  
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr v-for="objetivo in objetivos">
+                                                            <td>
+                                                                {{objetivo.nombre}}
+                                                            </td>
+                                                            <td>
+                                                                {{objetivo.siglas}}
+                                                            </td>
+                                                            <td>
+                                                                {{objetivo.id_pilares}}
+                                                            </td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-danger" @click="eliminarObjetivo(objetivo.id)">Eliminar</button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                            </table>
                                         </div>
                                 </div>
-                           <table class="table table-bordered table-striped border-dark">
-                                <thead>
-                                    <tr>
-                                        <th class="thmodal">
-                                            Nombre
-                                        </th>
-                                        <th class="thmodal">
-                                            Siglas 
-                                        </th>
-                                        <th class="thmodal">
-                                            Pílar  
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="objetivo in objetivos">
-                                        <td>
-                                            {{objetivo.nombre}}
-                                        </td>
-                                        <td>
-                                            {{objetivo.siglas}}
-                                        </td>
-                                        <td>
-                                            {{objetivo.id_pilares}}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                           </table>
                         </div>
                         <!--TABLA DE IMPACTO AMBIENTAL-->
-                        <div class= "col-12  col-lg-6 offset-lg-3 col-xl-6 offset-xl-3 text-center align-content">
-                                <div class=" encabezadoTablas">
-                                    <div class=" d-flex justify-content-center align-items-center"  > 
-                                            <div class="d-none d-lg-block col-lg-4"></div>
-                                            <div class="col-6 col-lg-4 mt-2">Impacto Ambiental</div>
-                                            <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
-                                                <button type="button" class=" btn btn-menu " @Click="modalCatalogos('Crear','Impacto Ambiental')">Crear</button>
-                                            </div>
-                                                
+                        <div class="col-12 col-lg-6">
+                                <div class= "col-12  text-center align-content">
+                                        <div class=" encabezadoTablas">
+                                            <div class=" d-flex justify-content-center align-items-center"  > 
+                                                    <div class="d-none d-lg-block col-lg-4"></div>
+                                                    <div class="col-6 col-lg-4 mt-2">Impacto Ambiental</div>
+                                                    <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
+                                                        <button type="button" class=" btn btn-menu " @Click="modalCatalogos('Crear','Impacto Ambiental')">Crear</button>
+                                                    </div>
+                                                        
+                                                </div>
+                                        </div>
+                                        <div class="scroll">
+                                            <table class=" table table-bordered table-striped border-dark">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="sticky-top thmodal w-50">
+                                                                Nombre
+                                                            </th>
+                                                            <th class="sticky-top thmodal w-50">
+                                                                Eliminar
+                                                            </th>
+                                                            <th class="sticky-top thmodal w-50">
+                                                                Actualizar
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr v-for="impacto in impactoAmbiental ">
+                                                            <td>
+                                                                {{impacto.nombre}}
+                                                            </td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-danger" @click="eliminarImpactoAmbiental(impacto.id)">Eliminar</button>
+                                                            </td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-warning" @Click="modalCatalogos('Actualizar','Impacto Ambiental',impacto.nombre)">Actualizar</button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                            </table>
                                         </div>
                                 </div>
-                           <table class=" table table-bordered table-striped border-dark">
-                                <thead>
-                                    <tr>
-                                        <th class=" thmodal w-50">
-                                            Nombre
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="impacto in impactoAmbiental ">
-                                        <td>
-                                            {{impacto.nombre}}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                           </table>
                         </div>
+                        <!-- INICIO TABLA ESTANDARES CO2 -->
                         <div class= "col-12 col-xl-6 col-lg-6 offset-lg-3 offset-xl-3 text-center">
                             <div class=" encabezadoTablas">
-                                   <div class=" d-flex justify-content-center align-items-center"  > 
+                                   <div class=" d-flex justify-content-center align-items-center mt-5"  > 
                                         <div class="d-none d-lg-block col-lg-4"></div>
                                         <div class="col-6 col-lg-4 mt-2">Estandares de CO2</div>
                                         <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
@@ -698,14 +745,17 @@ if(isset($_SESSION['nombre'])){
                            <table class="  table table-bordered border-dark">
                                 <thead>
                                     <tr>
-                                        <th class="thmodal">
+                                        <th class=" sticky-top thmodal">
                                             Nombre
                                         </th>
-                                        <th class="thmodal">
+                                        <th class=" sticky-top thmodal">
                                             Cantidad
                                         </th>
-                                        <th class="thmodal">
+                                        <th class=" sticky-top thmodal">
                                             unidad de medida  
+                                        </th>
+                                        <th class=" sticky-top thmodal">
+                                            Eliminar  
                                         </th>
                                     </tr>
                                 </thead>
@@ -720,6 +770,9 @@ if(isset($_SESSION['nombre'])){
                                         <td>
                                             {{estandar.unidad_medida}}
                                         </td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger" @click="eliminarEstandares(estandar.id)">Eliminar</button>
+                                        </td>
                                     </tr>
                                 </tbody>
                            </table>
@@ -732,66 +785,81 @@ if(isset($_SESSION['nombre'])){
                                     <h1 class="modal-title fs-5" id="exampleModalLabel">{{accion}} {{tipo}}</h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-                                     <!--Cuerpo de MODAL MISIN-->
-                                        <div v-if="tipo=='Mision'">
-                                            <div class="modal-body input-group mb-3">
-                                                <span class="input-group-text w-25 mt-3" >Nombre:</span>
-                                                <input type="text" class="w-75 mt-3" v-model="nueva">
-                                            </div>
-                                        </div> 
-                                        <!--Cuerpo de MODAL PILARES-->
-                                        <div v-if="tipo=='Pilar'">
-                                            <div class="modal-body input-group mb-3">
-                                                <span class="input-group-text w-25 mt-3" >Nombre:</span>
-                                                <input type="text" class="w-75 mt-3"  v-model="nueva">
-                                                <span class="input-group-text w-25 mt-3" >Siglas:</span>
-                                                <input type="text" class="w-75 mt-3" v-model="siglas">
-                                                <span class="input-group-text w-25 mt-3" >Mision:</span>
-                                                <select class="w-75 mt-3" v-model="select_mision"><option v-for="mision in misiones" :value="mision.id">{{mision.nombre}}</option></select>
-                                            </div>
-                                        </div> 
-                                        <!--Cuerpo de MODAL OBJETIVO-->
-                                            <div v-if="tipo=='Objetivo'">
-                                                <div class="modal-body input-group mb-3">
+                                        <div v-if="accion=='Crear'">
+                                            <!--Cuerpo de MODAL MISION-->
+                                                <div v-if="tipo=='Mision'">
+                                                    <div class="modal-body input-group mb-3">
                                                         <span class="input-group-text w-25 mt-3" >Nombre:</span>
-                                                        <input type="text" class="w-75 mt-3" v-model="nueva" >
+                                                        <input type="text" class="w-75 mt-3" v-model="nueva">
+                                                    </div>
+                                                </div> 
+                                                <!--Cuerpo de MODAL PILARES-->
+                                                <div v-if="tipo=='Pilar'">
+                                                    <div class="modal-body input-group mb-3">
+                                                        <span class="input-group-text w-25 mt-3" >Nombre:</span>
+                                                        <input type="text" class="w-75 mt-3"  v-model="nueva">
                                                         <span class="input-group-text w-25 mt-3" >Siglas:</span>
                                                         <input type="text" class="w-75 mt-3" v-model="siglas">
-                                                        <span class="input-group-text w-25 mt-3" >Pilar:</span>
-                                                        <select v-model="select_pilar" class="w-75 mt-3"><option v-for="pilar in pilares" :value="pilar.id">{{pilar.nombre}}</option></select>
-                                                 </div>
-                                            </div>
-                                        <!--Cuerpo de MODAL IMPACTO AMBIENTAL-->
-                                        <div v-if="tipo=='Impacto Ambiental'">
-                                            <div>
-                                                <div class="modal-body input-group mb-3">
-                                                        <span class="input-group-text w-25 mt-3" >Nombre:</span>
-                                                        <input v-model="nueva" type="text" class="w-75 mt-3" >  
-                                                 </div>
-                                            </div>
-                                        </div>
+                                                        <span class="input-group-text w-25 mt-3" >Mision:</span>
+                                                        <select class="w-75 mt-3" v-model="select_mision"><option v-for="mision in misiones" :value="mision.id">{{mision.nombre}}</option></select>
+                                                    </div>
+                                                </div> 
+                                                <!--Cuerpo de MODAL OBJETIVO-->
+                                                    <div v-if="tipo=='Objetivo'">
+                                                        <div class="modal-body input-group mb-3">
+                                                                <span class="input-group-text w-25 mt-3" >Nombre:</span>
+                                                                <input type="text" class="w-75 mt-3" v-model="nueva" >
+                                                                <span class="input-group-text w-25 mt-3" >Siglas:</span>
+                                                                <input type="text" class="w-75 mt-3" v-model="siglas">
+                                                                <span class="input-group-text w-25 mt-3" >Pilar:</span>
+                                                                <select v-model="select_pilar" class="w-75 mt-3"><option v-for="pilar in pilares" :value="pilar.id">{{pilar.nombre}}</option></select>
+                                                        </div>
+                                                    </div>
+                                                <!--Cuerpo de MODAL IMPACTO AMBIENTAL-->
+                                                <div v-if="tipo=='Impacto Ambiental'">
+                                                    <div>
+                                                        <div class="modal-body input-group mb-3">
+                                                                <span class="input-group-text w-25 mt-3" >Nombre:</span>
+                                                                <input v-model="nueva" type="text" class="w-75 mt-3" >  
+                                                        </div>
+                                                    </div>
+                                                </div>
 
-                                        <!--Cuerpo de MODAL ESTANDARES CO2 -->
-                                        <div v-if="tipo=='Estandar'">
-                                            <div>
-                                                <div class="modal-body input-group mb-3">
-                                                        <span class="input-group-text w-25 mt-3" >Nombre:</span>
-                                                        <input type="text" class="w-75 mt-3" >
-                                                        <span class="input-group-text w-25 mt-3" >Cantidad:</span>
-                                                        <input type="number" class="w-75 mt-3" >
-                                                        <span class="input-group-text w-25 mt-3" >Unidad De Medida:</span>
-                                                        <input type="text" class="w-75 mt-3" >
-                                                 </div>
+                                                <!--Cuerpo de MODAL ESTANDARES CO2 -->
+                                                <div v-if="tipo=='Estandar'">
+                                                    <div>
+                                                        <div class="modal-body input-group mb-3">
+                                                                <span class="input-group-text w-25 mt-3" >Nombre:</span>
+                                                                <input v-model="nueva" type="text" class="w-75 mt-3" >
+                                                                <span class="input-group-text w-25 mt-3" >Cantidad:</span>
+                                                                <input v-model="cantidad" type="number" class="w-75 mt-3" >
+                                                                <span class="input-group-text w-25 mt-3" >Unidad De Medida:</span>
+                                                                <input v-model="unidadMedida" type="text" class="w-75 mt-3" >
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
+                                                <!-- MODAL ACTUALIZAR -->
+                                            <div v-if="accion=='Actualizar'">
+                                                 <!--Cuerpo de MODAL IMPACTO AMBIENTAL-->
+                                                 <div v-if="tipo=='Impacto Ambiental'">
+                                                    <div>
+                                                        <div class="modal-body input-group mb-3">
+                                                                <span class="input-group-text w-25 mt-3" >Nombre:</span>
+                                                                <input v-model="nuevoNombre" type="text" class="w-75 mt-3" >  
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         <!--BOTONES MODAL CREAR CATALOGO-->
                                         <div class="modal-footer">
                                         <button type="button" class="boton-cancelar" data-bs-dismiss="modal">Cerrar</button>
-                                        <button type="button" class="boton-aceptar" v-if="tipo=='Mision'" @click="insertarMision()">Crear</button>
-                                        <button type="button" class="boton-aceptar" v-if="tipo=='Pilar'" @click="insertarPilar()">Crear</button>
-                                        <button type="button" class="boton-aceptar" v-if="tipo=='Objetivo'" @click="insertarObjetivo()">Crear</button>
-                                        <button type="button" class="boton-aceptar" v-if="tipo=='Impacto Ambiental'" @click="insertarImpactoAmbiental()">Crear</button>
-                                        <button type="button" class="boton-aceptar" v-if="tipo=='Estandar'" @click="insertarMision()">Crear</button>
+                                        <button type="button" class="boton-aceptar" v-if="tipo=='Mision' && accion=='Crear'" @click="insertarMision()">Crear</button>
+                                        <button type="button" class="boton-aceptar" v-if="tipo=='Pilar'  && accion=='Crear'" @click="insertarPilar()">Crear</button>
+                                        <button type="button" class="boton-aceptar" v-if="tipo=='Objetivo'  && accion=='Crear'" @click="insertarObjetivo()">Crear</button>
+                                        <button type="button" class="boton-aceptar" v-if="tipo=='Impacto Ambiental'  && accion=='Crear'" @click="insertarImpactoAmbiental()">Crear</button>
+                                        <button type="button" class="boton-aceptar" v-if="tipo=='Estandar'  && accion=='Crear'" @click="insertarEstandaresCO2()">Crear</button>
+                                        <button type="button" class="boton-actualizar" v-if="tipo=='Impacto Ambiental'  && accion=='Actualizar'">Actualizar</button>
 
                                        
 

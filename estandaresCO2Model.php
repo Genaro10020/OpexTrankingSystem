@@ -17,11 +17,11 @@ include("conexionGhoner.php");
             return array ($resultado,$estado);
     }
 
-    function insertarImpactoAmbiental($nueva){
+    function insertarEstandaresCO2($nueva,$cantidad,$unidadMedida){
         global $conexion;
-        $query = "INSERT INTO impacto_ambiental (nombre) VALUES (?)";
+        $query = "INSERT INTO estandares_co2 (nombre,cantidad,unidad_medida) VALUES (?,?,?)";
         $stmt = $conexion->prepare($query);
-        $stmt->bind_param("s", $nueva);
+        $stmt->bind_param("sis", $nueva,$cantidad,$unidadMedida);
         if($stmt->execute()){
             $estado = true;
         }else{
@@ -45,10 +45,10 @@ include("conexionGhoner.php");
         return $estado;
     }
 
-    function eliminarMetodologia($id){
+    function eliminarEstandares($id){
         global $conexion;
         $estado = false;
-        $delete = "DELETE FROM metodologias WHERE id=?";
+        $delete = "DELETE FROM estandares_co2 WHERE id=?";
         $stmt = $conexion->prepare($delete);
         $stmt->bind_param("i", $id);
         if($stmt->execute()){

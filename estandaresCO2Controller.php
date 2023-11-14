@@ -12,9 +12,11 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
     case 'POST':
         // Manejar solicitud POST (creación)
-        if(isset($arreglo['nueva'])){
+        if(isset($arreglo['nueva']) && isset($arreglo['cantidad']) && isset($arreglo['unidadMedida'])){
             $nueva = $arreglo['nueva'];
-           $val [] = insertarImpactoAmbiental($nueva);     
+            $cantidad = $arreglo['cantidad'];
+            $unidadMedida = $arreglo['unidadMedida'];
+           $val [] = insertarEstandaresCO2($nueva,$cantidad,$unidadMedida);     
         }else{
             $val [] =  "No existe la variable nueva";
         }
@@ -37,7 +39,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         // Manejar solicitud DELETE (eliminación)
             if(isset($arreglo['id'])){
                 $id = $arreglo['id'];
-                $val[] = eliminarMetodologia($id);
+                $val[] = eliminarEstandares($id);
             } else {
                 $val[] = "No llego la varible ID".$arreglo['id'];
             //  http_response_code(400); // Bad Request
