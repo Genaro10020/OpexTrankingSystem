@@ -180,7 +180,7 @@ if(isset($_SESSION['nombre'])){
                                                                 <span class="input-group-text w-25 text-start">Pilares <br>Estrategicos</span>
                                                                 <div class="w-50" :class="{'nocontestado': respondio === false && checkPilares.length<=0, '': checkPilares.length>0}">
                                                                     <div class="form-check border border-1 mt-1" v-for="(pilar, index) in pilares" :key="index">
-                                                                        <input class="form-check-input" type="checkbox" :value="pilar.id+'<->'+pilar.nombre" v-model="checkPilares" @change="consultarObjetivosXpilaresSeleccionados()">
+                                                                        <input class="form-check-input" type="checkbox" :value="pilar.id+'<->'+pilar.nombre+'<->'+pilar.siglas+'<->'+(index+1)" v-model="checkPilares" @change="consultarObjetivosXpilaresSeleccionados()">
                                                                         <label class="form-check-label">
                                                                             {{ pilar.nombre }}
                                                                         </label>
@@ -199,8 +199,8 @@ if(isset($_SESSION['nombre'])){
                                                             <div v-if="checkPilares.length>0" class="input-group mb-3 " :class="{'mostrar':checkPilares.length>0, 'ocultar': checkPilares.length <= 0}">
                                                                 <span class="input-group-text w-25 text-start">Objetivos <br>Estrategicos</span>
                                                                 <div class="w-50" :class="{'nocontestado': respondio === false && checkObjetivos.length<=0, '': checkObjetivos.length>0}">
-                                                                    <div v-for="objetivo in objetivos"class="form-check border border-1 mt-1">
-                                                                        <input class="form-check-input" v-model="checkObjetivos" type="checkbox" id="checkbox1" :value="objetivo.id+'<->'+objetivo.nombre+'<->'+objetivo.id_pilares+'<->'+objetivo.siglas">
+                                                                    <div v-for="(objetivo, index) in objetivos" class="form-check border border-1 mt-1" :key="index">
+                                                                        <input class="form-check-input" v-model="checkObjetivos" type="checkbox" id="checkbox1" :value="objetivo.id+'<->'+objetivo.nombre+'<->'+objetivo.id_pilares+'<->'+objetivo.siglas+'<->'+(index+1)">
                                                                         <label class="form-check-label" for="checkbox1">
                                                                             {{objetivo.nombre}} ({{objetivo.siglas}})
                                                                         </label>

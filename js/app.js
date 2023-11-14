@@ -1327,15 +1327,18 @@ actualizandoResponsable(){
     guardarAltaProyecto(){
       const separandoPlanta= this.selectPlanta.split('<->');//separando
       var planta = separandoPlanta[1];
+      var siglasPlanta = separandoPlanta[2];
       
       const separandoArea = this.selectArea.split('<->');//separando const */
       var area = separandoArea[1];
+      var siglasArea = separandoArea[2]; 
 
       const separandoMetodologia = this.selectMetodologia.split('<->');//separando */
       var metodologia = separandoMetodologia[1];
 
       const separandoDepartamento = this.selectDepartamento.split('<->');//separando*/;
       var departamento = separandoDepartamento[1];
+      var siglasDepartamento = separandoDepartamento[2]; 
       
       const separandoResponsable = this.selectResponsable.split('<->');
       var responsable_id = separandoResponsable[0];
@@ -1352,18 +1355,27 @@ actualizandoResponsable(){
       //Utilizo para tomar todos los nombres.
       console.log(this.checkPilares)
       var pilares_nombres = [];
+      var pilarOrden = '';
       for (let i = 0; i < this.checkPilares.length; i++) {
-         var pilar_nom = this.checkPilares[0].split('<->')[1];
+         var pilar_nom = this.checkPilares[i].split('<->')[1];
+         var orden = this.checkPilares[i].split('<->')[3];
           pilares_nombres.push(pilar_nom)
+          pilarOrden += orden; 
+
       }
       console.log(pilares_nombres);
-      
+      console.log(pilarOrden);
+     
       //Utilizo para tomar todos los nombres.
       console.log(this.checkObjetivos)
       var objetivos_nombres = [];
+      var objetivoOrden = '';
       for (var i = 0; i <this.checkObjetivos.length; i++) {
          var nombre_objetivo = this.checkObjetivos[i].split('<->')[1];//tomo el nombre
          objetivos_nombres.push(nombre_objetivo);
+         var orden = this.checkObjetivos[i].split('<->')[4];
+         objetivoOrden +=orden;
+
       }
       console.log(objetivos_nombres)
       
@@ -1375,7 +1387,11 @@ actualizandoResponsable(){
         impacto_ambiental_nombres.push(nombre_impacto)
       }
       console.log(impacto_ambiental_nombres)
-   
+      //Folio proyecto
+
+      var folio=siglasPlanta+"-"+siglasArea+'-'+siglasDepartamento+'-P'+pilarOrden+'-OB'+objetivoOrden;
+      console.log(folio);
+
       axios.post("proyectosController.php",{
         fecha_alta:this.fecha_alta,  
         nombre_proyecto:this.nombre_proyecto,
