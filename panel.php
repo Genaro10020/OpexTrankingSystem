@@ -579,8 +579,11 @@ if(isset($_SESSION['nombre'])){
                                                         <th class=" sticky-top thmodal w-50">
                                                             Nombre  
                                                         </th>
-                                                        <th class=" sticky-top thmodal w-50">
+                                                        <th class=" sticky-top thmodal w-20">
                                                         Eliminar
+                                                        </th>
+                                                        <th class=" sticky-top thmodal w-20">
+                                                            Actualizar
                                                         </th>
                                                     </tr>
                                                 </thead>
@@ -589,8 +592,11 @@ if(isset($_SESSION['nombre'])){
                                                         <td>
                                                         {{mision.nombre}}
                                                         </td>
+                                                        <td class="">
+                                                            <button type="button" class="boton-eliminar" @click="eliminarMision(mision.id)">Eliminar</button>
+                                                        </td>
                                                         <td>
-                                                            <button type="button" class="btn btn-danger" @click="eliminarMision(mision.id)">Eliminar</button>
+                                                            <button type="button" class="boton-actualizar" @Click="modalCatalogos('Actualizar','Mision',mision.nombre)">Actualizar</button>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -627,6 +633,9 @@ if(isset($_SESSION['nombre'])){
                                                             <th class=" sticky-top thmodal">
                                                                 Eliminar
                                                             </th>
+                                                            <th class=" sticky-top thmodal ">
+                                                                Actualizar
+                                                            </th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -641,7 +650,10 @@ if(isset($_SESSION['nombre'])){
                                                                 {{pilar.id_misiones}}
                                                             </td>
                                                             <td>
-                                                                <button type="button" class="btn btn-danger" @click="eliminarPilar(pilar.id)">Eliminar</button>
+                                                                <button type="button" class="boton-eliminar" @click="eliminarPilar(pilar.id)">Eliminar</button>
+                                                            </td>
+                                                            <td>
+                                                                <button type="button" class="boton-actualizar" @Click="modalCatalogos('Actualizar','Pilar',pilar.nombre)">Actualizar</button>
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -650,7 +662,7 @@ if(isset($_SESSION['nombre'])){
                                 </div>
                         </div>
                         <!--TABLA DE LA OBJETIVOS-->
-                        <div class="col-6">
+                        <div class="col-12 col-lg-6">
                                 <div class= "col-12 text-center align-content">
                                         <div class=" encabezadoTablas">
                                             <div class=" d-flex justify-content-center align-items-center"  > 
@@ -662,7 +674,7 @@ if(isset($_SESSION['nombre'])){
                                                         
                                                 </div>
                                         </div>
-                                        <div class="scroll">
+                                        <div class="scroll mb-5">
                                             <table class="table table-bordered table-striped border-dark">
                                                     <thead>
                                                         <tr>
@@ -678,6 +690,9 @@ if(isset($_SESSION['nombre'])){
                                                             <th class=" sticky-top thmodal">
                                                                 Eliminar  
                                                             </th>
+                                                            <th class=" sticky-top thmodal">
+                                                                Actualizar
+                                                            </th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -692,7 +707,10 @@ if(isset($_SESSION['nombre'])){
                                                                 {{objetivo.id_pilares}}
                                                             </td>
                                                             <td>
-                                                                <button type="button" class="btn btn-danger" @click="eliminarObjetivo(objetivo.id)">Eliminar</button>
+                                                                <button type="button" class="boton-eliminar" @click="eliminarObjetivo(objetivo.id)">Eliminar</button>
+                                                            </td>
+                                                            <td>
+                                                                <button type="button" class="boton-actualizar" @Click="modalCatalogos('Actualizar','Objetivo',objetivo.nombre)">Actualizar</button>
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -717,13 +735,13 @@ if(isset($_SESSION['nombre'])){
                                             <table class=" table table-bordered table-striped border-dark">
                                                     <thead>
                                                         <tr>
-                                                            <th class="sticky-top thmodal w-50">
+                                                            <th class="sticky-top thmodal">
                                                                 Nombre
                                                             </th>
-                                                            <th class="sticky-top thmodal w-50">
+                                                            <th class="sticky-top thmodal">
                                                                 Eliminar
                                                             </th>
-                                                            <th class="sticky-top thmodal w-50">
+                                                            <th class="sticky-top thmodal">
                                                                 Actualizar
                                                             </th>
                                                         </tr>
@@ -734,10 +752,10 @@ if(isset($_SESSION['nombre'])){
                                                                 {{impacto.nombre}}
                                                             </td>
                                                             <td>
-                                                                <button type="button" class="btn btn-danger" @click="eliminarImpactoAmbiental(impacto.id)">Eliminar</button>
+                                                                <button type="button" class="boton-eliminar" @click="eliminarImpactoAmbiental(impacto.id)">Eliminar</button>
                                                             </td>
                                                             <td>
-                                                                <button type="button" class="btn btn-warning" @Click="modalCatalogos('Actualizar','Impacto Ambiental',impacto.nombre)">Actualizar</button>
+                                                                <button type="button" class="boton-actualizar" @Click="modalCatalogos('Actualizar','Impacto Ambiental',impacto.id,impacto.nombre)">Actualizar</button>
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -748,7 +766,7 @@ if(isset($_SESSION['nombre'])){
                         <!-- INICIO TABLA ESTANDARES CO2 -->
                         <div class= "col-12 col-xl-6 col-lg-6 offset-lg-3 offset-xl-3 text-center">
                             <div class=" encabezadoTablas">
-                                   <div class=" d-flex justify-content-center align-items-center mt-5"  > 
+                                   <div class=" d-flex justify-content-center align-items-center"  > 
                                         <div class="d-none d-lg-block col-lg-4"></div>
                                         <div class="col-6 col-lg-4 mt-2">Estandares de CO2</div>
                                         <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
@@ -772,6 +790,9 @@ if(isset($_SESSION['nombre'])){
                                         <th class=" sticky-top thmodal">
                                             Eliminar  
                                         </th>
+                                        <th class=" sticky-top thmodal">
+                                            Actualizar  
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -786,7 +807,10 @@ if(isset($_SESSION['nombre'])){
                                             {{estandar.unidad_medida}}
                                         </td>
                                         <td>
-                                            <button type="button" class="btn btn-danger" @click="eliminarEstandares(estandar.id)">Eliminar</button>
+                                            <button type="button" class="boton-eliminar" @click="eliminarEstandares(estandar.id)">Eliminar</button>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="boton-actualizar" @Click="modalCatalogos('Actualizar','Estandares',estandar.id,estandar.nombre)">Actualizar</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -865,6 +889,54 @@ if(isset($_SESSION['nombre'])){
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <!--cuerpo MODAL ACTUALIZAR Misiones-->
+                                                <!-- <div v-if="tipo=='Mision'">
+                                                    <div>
+                                                        <div class="modal-body input-group mb-3">
+                                                                <span class="input-group-text w-25 mt-3" >Nombre:</span>
+                                                                <input v-model="nuevoNombre" type="text" class="w-75 mt-3" >  
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+                                                 <!--CUERPO MODAL ACTUALIZAR PILARES-->
+                                                 <!-- <div v-if="tipo=='Pilar'">
+                                                    <div>
+                                                        <div class="modal-body input-group mb-3">
+                                                                <span class="input-group-text w-25 mt-3" >Nombre:</span>
+                                                                <input v-model="nuevoNombre" type="text" class="w-75 mt-3" >
+                                                                <span class="input-group-text w-25 mt-3" >Siglas:</span>
+                                                                <input v-model="nuevoNombre" type="text" class="w-75 mt-3" > 
+                                                                <span class="input-group-text w-25 mt-3" >Mision:</span>
+                                                                <input v-model="nuevoNombre" type="text" class="w-75 mt-3" >   
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+                                                <!--CUERPO MODAL ACTUALIZAR OBJETIVOS-->
+                                                <!-- <div v-if="tipo=='Objetivo'">
+                                                    <div>
+                                                        <div class="modal-body input-group mb-3">
+                                                                <span class="input-group-text w-25 mt-3" >Nombre:</span>
+                                                                <input v-model="nuevoNombre" type="text" class="w-75 mt-3" >
+                                                                <span class="input-group-text w-25 mt-3" >Siglas:</span>
+                                                                <input v-model="nuevoNombre" type="text" class="w-75 mt-3" > 
+                                                                <span class="input-group-text w-25 mt-3" >Pilar:</span>
+                                                                <input v-model="nuevoNombre" type="text" class="w-75 mt-3" >   
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+                                                <!--CUERPO MODAL ACTUALIZAR ESTANDARES CO2-->
+                                                <div v-if="tipo=='Estandares'">
+                                                    <div>
+                                                        <div class="modal-body input-group mb-3">
+                                                                <span class="input-group-text w-25 mt-3" >Nombre:</span>
+                                                                <input v-model="nuevoNombre" type="text" class="w-75 mt-3" >
+                                                                <span class="input-group-text w-25 mt-3" >Cantidad:</span>
+                                                                <input v-model="cantidad" type="text" class="w-75 mt-3" > 
+                                                                <span class="input-group-text w-230 mt-3" >Unidad De Medida:</span>
+                                                                <input v-model="unidadMedida" type="text" class="w-75 mt-3" >   
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         <!--BOTONES MODAL CREAR CATALOGO-->
                                         <div class="modal-footer">
@@ -874,7 +946,9 @@ if(isset($_SESSION['nombre'])){
                                         <button type="button" class="boton-aceptar" v-if="tipo=='Objetivo'  && accion=='Crear'" @click="insertarObjetivo()">Crear</button>
                                         <button type="button" class="boton-aceptar" v-if="tipo=='Impacto Ambiental'  && accion=='Crear'" @click="insertarImpactoAmbiental()">Crear</button>
                                         <button type="button" class="boton-aceptar" v-if="tipo=='Estandar'  && accion=='Crear'" @click="insertarEstandaresCO2()">Crear</button>
-                                        <button type="button" class="boton-actualizar" v-if="tipo=='Impacto Ambiental'  && accion=='Actualizar'">Actualizar</button>
+                                        <!-- BOTON PARA ACTUALIZAR INFORMACION  -->
+                                        <button type="button" class="boton-actualizar" v-if="tipo=='Impacto Ambiental' && accion=='Actualizar'" @click="actualizarImpactoAmbiental()">Actualizar</button>
+                                        <button type="button" class="boton-actualizar" v-if="tipo=='Estandares' && accion=='Actualizar'" @click="actualizarEstandaresCO2()">Actualizar</button>
 
                                        
 

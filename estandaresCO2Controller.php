@@ -25,13 +25,17 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
     case 'PUT':
         // Manejar solicitud PUT (actualización)
-            if(isset($arreglo['id']) && isset($arreglo['nuevo'])){
+            if(isset($arreglo['id']) && isset($arreglo['nuevo']) && isset($arreglo['cantidad']) && isset($arreglo['unidadMedida'])){
                 $id=$arreglo['id'];
                 $nuevo=$arreglo['nuevo'];
-                $val[]=actualizarMetodologia($id,$nuevo);
+                $cantidad=$arreglo['cantidad'];
+                $unidadMedida=$arreglo['unidadMedida'];
+                 // $val[]="ENTRE";
+                $val[]=actualizarEstandaresCO2($id,$nuevo,$cantidad,$unidadMedida);
             }else{
                 $val[] = "No existe variable ID o Nuevo";
             }
+          
         // ...
         break;
 

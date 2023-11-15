@@ -684,6 +684,7 @@ const AltaProyectos = {
                 console.log(response.data)
                 if (response.data[0]==true){
                   //this.myModalCRUD.hide
+                  this.myModal.hide()
                   alert("Alta exitosa..")
                   this.consultarMisiones()
                   this.nueva = ''
@@ -871,24 +872,50 @@ actualizandoResponsable(){
             alert("Todos los campos son requeridos para poder actualizar.")
           }
       },
-        /*/////////////////////////////////////////////////////////////////////////////////ACTUALIZAR OBJETIVO*/
+        /*/////////////////////////////////////////////////////////////////////////////////ACTUALIZAR IMPACTO AMBIENTAL*/
         actualizarImpactoAmbiental(){
-          if(this.nuevoNombre!='' && this.siglas!='' && this.select_pilar !=''){
-             axios.put('objetivosController.php',{
+          if(this.nuevoNombre!=''){
+                axios.put('impactoAmbientalController.php',{
                 id:this.id,
-                nombre:this.nuevoNombre,
-                siglas:this.siglas,
-                id_pilar:this.select_pilar,
+                nuevo:this.nuevoNombre
               }).then(response =>{
                   console.log(response.data)
-                  if (response.data[0]==true){
-                    this.myModalCRUD.hide();
-                    this.consultarObjetivos()
-                    this.nuevoNombre=''
-                    this.siglas=''
-                    this.id=''
-                    this.select_pilar = ''
-                    this.checkObjetivos = []
+                   if(response.data[0]==true){
+                    this.myModal.hide();
+                    this.consultarImpactoAmbiental()
+                    this.id = ''
+                    this.nuevoNombre ='' 
+                    alert("Se actualizo correctamente.")
+                  }else{
+                      alert("No se actualizo el Objetivo.")
+                  }
+              }).catch(error =>{
+                //console.log('Erro :-('+error)
+              }).finally(() =>{
+  
+              })
+            }else{
+              alert("Todos los campos son requeridos para poder actualizar.")
+            }
+        },
+        /*/////////////////////////////////////////////////////////////////////////////////ACTUALIZAR IMPACTO AMBIENTAL*/
+        actualizarEstandaresCO2(){
+          if(this.nuevoNombre!='' && this.cantidad!='' && this.unidadMedida!=''){
+                axios.put('estandaresCO2Controller.php',{
+                id:this.id,
+                nuevo:this.nuevoNombre,
+                cantidad:this.cantidad,
+                unidadMedida:this.unidadMedida
+              }).then(response =>{
+                  console.log(response.data)
+                   if(response.data[0]==true){
+                    this.myModal.hide();
+                    this.consultarEstandaresCO2()
+                    this.id = ''
+                    this.nuevoNombre ='' 
+                    this.cantidad=''
+                    this.unidadMedida=''
+                    alert("Se actualizo correctamente.")
                   }else{
                       alert("No se actualizo el Objetivo.")
                   }
@@ -1472,15 +1499,18 @@ actualizandoResponsable(){
 
       })
     },
-    modalCatalogos(accion,tipo,nombre){//accion: es CREAR, ACTUALIZAR, ELIMINAR y tipo: es Pilares, Misiones, Objetivos.
+    modalCatalogos(accion,tipo,id,nombre,cantidad, unidadMedida){//accion: es CREAR, ACTUALIZAR, ELIMINAR y tipo: es Pilares, Misiones, Objetivos.
+      this.id = ''
       this.accion = accion
       this.tipo = tipo
       this.myModal = new bootstrap.Modal(document.getElementById("modalCrearCatalogos"))
       this.myModal.show()
+     
 
       if(accion=='Actualizar'){
           if(tipo=='Impacto Ambiental'){
               this.nuevoNombre = nombre;
+              this.id = id;
           }
       }
       }
