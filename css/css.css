@@ -223,7 +223,7 @@ width: 50px;
 }
 
 .boton-eliminar {
-    width: 130px;
+    width: 100px;
     background-color: #af3636;
     color: white;
     font-size: 0.9em;
@@ -248,7 +248,7 @@ width: 50px;
 
 
 .boton-actualizar {
-    width: 130px;
+    width: 100px;
     background-color: #e6c853;
     color: black;
     font-size: 0.9em;

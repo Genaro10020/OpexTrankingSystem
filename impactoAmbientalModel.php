@@ -32,12 +32,12 @@ include("conexionGhoner.php");
         return $estado;
     }
 
-    function actualizarMetodologia($id,$nuevoNombre){
+    function actualizarImpactoAmbiental($id,$nuevo){
         global $conexion;
         $estado = false;
-        $update = "UPDATE metodologias SET nombre=? WHERE  id=?";
+        $update = "UPDATE impacto_ambiental SET nombre=? WHERE  id=?";
         $stmt = $conexion->prepare($update);
-        $stmt->bind_param("si", $nuevoNombre, $id);
+        $stmt->bind_param("si", $nuevo, $id);
         if($stmt->execute()){
             $estado = true;
         }
