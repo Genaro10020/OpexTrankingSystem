@@ -158,7 +158,7 @@ if(isset($_SESSION['nombre'])){
                                                             
                                                             <div  class="input-group mb-3 mt-3 ">  
                                                                 <span class="input-group-text w-25 text-start">Misión </span>
-                                                                <div class="w-50" :class="{'nocontestado': respondio === false && checkMisiones.length<=0, '': checkMisiones.length>0}">
+                                                                <div class="div-mision-pilares-impacto"  :class="{'nocontestado': respondio === false && checkMisiones.length<=0, '': checkMisiones.length>0}">
                                                                     <div class="form-check border border-1 mt-1" v-for="(mision, index) in misiones" :key="index">
                                                                     <input class="form-check-input" type="checkbox" :value="mision.id+'<->'+mision.nombre" v-model="checkMisiones" @change="consultarPilaresXmisionSeleccionada()">
                                                                         <label class="form-check-label">
@@ -177,15 +177,23 @@ if(isset($_SESSION['nombre'])){
                                                             <!--Pilares-->
                                                             
                                                             <div id="div_pilares" class="input-group mb-3 " :class="{'mostrar':checkMisiones.length>0, 'ocultar': checkMisiones.length <= 0}">
-                                                                <span class="input-group-text w-25 text-start">Pilares <br>Estrategicos</span>
-                                                                <div class="w-50" :class="{'nocontestado': respondio === false && checkPilares.length<=0, '': checkPilares.length>0}">
+                                                                <span class="input-group-text w-25 text-start">Pilares <br>Estrategicos </span>
+                                                                <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkPilares.length<=0, '': checkPilares.length>0}">
                                                                     <div class="form-check border border-1 mt-1" v-for="(pilar, index) in pilares" :key="index">
                                                                         <input class="form-check-input" type="checkbox" :value="pilar.id+'<->'+pilar.nombre+'<->'+pilar.siglas+'<->'+(index+1)" v-model="checkPilares" @change="consultarObjetivosXpilaresSeleccionados()">
-                                                                        <label class="form-check-label">
+                                                                        <label class="form-check-label w-75">
                                                                             {{ pilar.nombre }}
                                                                         </label>
+                                                                        <label class="w-25" v-if="idsPilares.includes(pilar.id) && checkPilares.length>0">
+                                                                                <select v-model="selectPilar[index]" @change="verificarCantidadDirectosPilares()">
+                                                                                    <option value="" disabled selected>Seleccione...</option>
+                                                                                    <option value="directo">Directo</option>
+                                                                                    <option value="inderecto">Indirecto</option>
+                                                                                </select>
+                                                                        </label>  
                                                                     </div>
                                                                 </div>
+                                                               
                                                                 <!--<div class="my-auto">
                                                                     <div class="col-12"><button class="btn-anadir" title="Crear " @click="abrirModal('CRUD','Pilar','Crear')"><i class="bi bi-plus-circle"></i></button></div>
                                                                     <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Pilar','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
@@ -198,12 +206,19 @@ if(isset($_SESSION['nombre'])){
                                                              
                                                             <div v-if="checkPilares.length>0" class="input-group mb-3 " :class="{'mostrar':checkPilares.length>0, 'ocultar': checkPilares.length <= 0}">
                                                                 <span class="input-group-text w-25 text-start">Objetivos <br>Estrategicos</span>
-                                                                <div class="w-50" :class="{'nocontestado': respondio === false && checkObjetivos.length<=0, '': checkObjetivos.length>0}">
+                                                                <div class="div-mision-pilares-impacto"  :class="{'nocontestado': respondio === false && checkObjetivos.length<=0, '': checkObjetivos.length>0}">
                                                                     <div v-for="(objetivo, index) in objetivos" class="form-check border border-1 mt-1" :key="index">
-                                                                        <input class="form-check-input" v-model="checkObjetivos" type="checkbox" id="checkbox1" :value="objetivo.id+'<->'+objetivo.nombre+'<->'+objetivo.id_pilares+'<->'+objetivo.siglas+'<->'+(index+1)">
-                                                                        <label class="form-check-label" for="checkbox1">
+                                                                        <input class="form-check-input" v-model="checkObjetivos" type="checkbox" id="checkbox1" :value="objetivo.id+'<->'+objetivo.nombre+'<->'+objetivo.id_pilares+'<->'+objetivo.siglas+'<->'+(index+1)" @change="checkeandoObjetivos()">
+                                                                        <label class="form-check-label w-75" for="checkbox1">
                                                                             {{objetivo.nombre}} ({{objetivo.siglas}})
                                                                         </label>
+                                                                        <label class="w-25" v-if="idsObjetivos.includes(objetivo.id) && checkPilares.length>0">
+                                                                                <select v-model="selectObjetivo[index]" @change="verificarCantidadDirectosObjetivos()">
+                                                                                    <option value="" disabled selected>Seleccione...</option>
+                                                                                    <option value="directo">Directo</option>
+                                                                                    <option value="inderecto">Indirecto</option>
+                                                                                </select>
+                                                                        </label> 
                                                                     </div>
                                                                 </div>
                                                                
@@ -219,7 +234,7 @@ if(isset($_SESSION['nombre'])){
                                                            
                                                             <div class="input-group mb-3"> 
                                                                 <span class="input-group-text w-25 text-start">Impacto <br>Ambiental<br><label class="ms-5"><i class="bi bi-question-circle"></label></i></span>
-                                                                <div class="w-50"  :class="{'nocontestado': respondio === false && checkImpactoAmbiental.length<=0, '': checkImpactoAmbiental.length>0}">
+                                                                <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkImpactoAmbiental.length<=0, '': checkImpactoAmbiental.length>0}">
                                                                     <div v-for="impacto in impactoAmbiental" class="form-check border border-1  mt-1">
                                                                         <input class="form-check-input" type="checkbox" id="checkbox1" v-model="checkImpactoAmbiental" :value="impacto.id+'<->'+impacto.nombre">
                                                                         <label class="form-check-label" for="checkbox1">

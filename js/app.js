@@ -33,12 +33,17 @@ const AltaProyectos = {
       misiones:[],
       allMisiones:[],
       idsPilares:[],
+      idsObjetivos:[],
       proyectos:[],
+      indexs_pilares:[],
+      selectPilar:[],
+      selectObjetivo:[],
       select_pilar:'',
       select_mision:'',
       tons_co2:0,
       ahorro_duro:0,
       ahorro_suave:0,
+      numero_index:0,
       respondio: true,//utilizo para cambiar el css si no repondio en altas
       objetivo_estrategico:false,
       /*Planta*/ /*Área*/ /*Departamento*/
@@ -53,7 +58,7 @@ const AltaProyectos = {
       correo:'',
       telefono:'',
       responsableID:[],
-     
+
       /*Impacto Ambiental */
       //general
       id:'',// utilizado y reseteado despues de usar.
@@ -273,11 +278,13 @@ const AltaProyectos = {
     if(this.checkPilares.length >0){
       this.checkObjetivos =[]
       var ids_pilares= [];
+      var indexs_pilar = [];
       console.log(this.checkPilares);
       for (let i = 0; i < this.checkPilares.length; i++) {
        var id_pilar = this.checkPilares[i].split('<->')[0];
         ids_pilares.push(id_pilar);
       }
+      this.idsPilares = ids_pilares;
         axios.post('objetivosController.php',{
             idsPilares:ids_pilares
         }).then(response =>{
@@ -298,8 +305,18 @@ const AltaProyectos = {
   }else{
     this.checkObjetivos =[]
     this.objetivos=''
+    this.idsPilares=[]
   }
 },
+  /*VERIFICANDO OBJETIVOS AL CHECKERA */
+  checkeandoObjetivos(){
+    var ids_objetivos= [];
+    for (let i = 0; i < this.checkObjetivos.length; i++) {
+      var id_objetivo = this.checkObjetivos[i].split('<->')[0];
+      ids_objetivos.push(id_objetivo);
+     }
+     this.idsObjetivos = ids_objetivos;
+  },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR OBJETIVOS*/
     consultarObjetivos(){
       axios.get('objetivosController.php',{
@@ -342,6 +359,7 @@ const AltaProyectos = {
      consultarPilaresXmisionSeleccionada(){
       if(this.checkMisiones.length >0){
         console.log(this.checkMisiones);
+
         var misiones_ids = [];
         var id_mision = "";
         for (var i = 0; i <this.checkMisiones.length; i++) {
@@ -350,7 +368,7 @@ const AltaProyectos = {
        }
         this.checkPilares =[]
         this.checkObjetivos=[]
-         
+        this.selectPilar =[]
           axios.post('pilaresController.php',{
               idsMisiones:misiones_ids
           }).then(response =>{
@@ -359,6 +377,10 @@ const AltaProyectos = {
                   if (response.data[0][0].length>0) {
                     this.pilares = response.data[0][0]
                     //this.objetivos = response.data[0][2]
+                    /*inicializo selectPilar en Seleccione*/
+                    for (let i = 0; i < this.pilares.length; i++) {
+                      this.selectPilar.push("")
+                    }
                   }
               }else{
                   alert("La consulta Pilares por Misiones Seleccionadas, no se realizo correctamente.")
@@ -373,6 +395,7 @@ const AltaProyectos = {
       this.objetivos=''
       this.checkPilares =[]
       this.checkObjetivos=[]
+      this.selectPilar =[]
     }
   },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PILARES*/
@@ -1091,7 +1114,6 @@ actualizandoResponsable(){
                 this.actualizarResponsable = false
                 this.nuevoResponsable = false
                 this.selectResponsable = ''
-
               }else{
                   alert("No se elimino al Responsable.")
               }
@@ -1175,6 +1197,38 @@ actualizandoResponsable(){
        })
      }
  },
+    verificarCantidadDirectosPilares(){
+      const directoIndices = [];
+      // Encuentra los índices de los elementos 'directo'
+      this.selectPilar.forEach((item, index) => {
+        if (item === 'directo') {
+          directoIndices.push(index);
+        }
+      });
+
+      if (directoIndices.length > 1) {
+        // Si hay más de un 'directo', deseleccionar el último 'directo'
+        const lastIndex = directoIndices.pop();
+        this.selectPilar[lastIndex] = '';
+        alert("No puedo tener dos Pilares Directos, solo uno");
+      }
+    },
+    verificarCantidadDirectosObjetivos(){
+      const directoIndices = [];
+      // Encuentra los índices de los elementos 'directo'
+      this.selectObjetivo.forEach((item, index) => {
+        if (item === 'directo') {
+          directoIndices.push(index);
+        }
+      });
+
+      if (directoIndices.length > 1) {
+        // Si hay más de un 'directo', deseleccionar el último 'directo'
+        const lastIndex = directoIndices.pop();
+        this.selectObjetivo[lastIndex] = '';
+        alert("No puedo tener dos Objetivos Directos, solo uno");
+      }
+    },
    /*////////////////////////////////////////////////////////////////////////////////////////////////*/
     crearResponsable(){
       this.nuevoResponsable = true;
@@ -1322,7 +1376,6 @@ actualizandoResponsable(){
         this.guardarAltaProyecto()
       }
 
-         
     },
     guardarAltaProyecto(){
       const separandoPlanta= this.selectPlanta.split('<->');//separando
