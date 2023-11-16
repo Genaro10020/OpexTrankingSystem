@@ -21,6 +21,7 @@ const AltaProyectos = {
       departamentos:[],
       metodologias:[],
       pilares:[],
+      pilaresRelacion:[],
       allPilares:[],
       siglas:'',
       objetivos:[],
@@ -65,7 +66,9 @@ const AltaProyectos = {
       /*Variabes Estandares co2*/
       estandares:[],
       cantidad:'',
-      unidadMedida:''
+      unidadMedida:'',
+      /*ACTUALIZAR MISIONES LIGADAS A PILARES */
+      misionLigada:''
     }
   },
   mounted(){
@@ -406,25 +409,25 @@ const AltaProyectos = {
       })
     },
       /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PILARES*/
-      consultarPilares(){
-      axios.get('pilaresController.php',{
-      }).then(response =>{
-          console.log(response.data[0])
-          if (!response.data[0][1]==false){
-              if (response.data[0][0].length>0) {
-                this.pilares = response.data[0][0]
-                this.allPilares = response.data[0][0]
-              }
-          }else{
-              alert("La consulta Pilares, no se realizo correctamente.")
-          }
+       consultarPilares(){
+       axios.get('pilaresController.php',{
+       }).then(response =>{
+           console.log(response.data[0])
+           if (!response.data[0][1]==false){
+               if (response.data[0][0].length>0) {
+                 this.pilares = response.data[0][0]
+                 this.allPilares = response.data[0][0]
+               }
+           }else{
+               alert("La consulta Pilares, no se realizo correctamente.")
+           }
   
-      }).catch(error =>{
-        console.log('Erro :-('+error)
-      }).finally(() =>{
+       }).catch(error =>{
+         console.log('Erro :-('+error)
+       }).finally(() =>{
 
-      })
-    },
+       })
+     },
      /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PILARES POR MISION SELECCIONADA*/
      consultarPilaresXmisionSeleccionada(){
       if(this.checkMisiones.length >0){
@@ -477,6 +480,28 @@ const AltaProyectos = {
               if (response.data[0][0].length>0) {
                 this.misiones = response.data[0][0]
                 this.allMisiones = response.data[0][0]
+              }
+          }else{
+              alert("La consulta Misiones, no se realizo correctamente.")
+          }
+  
+      }).catch(error =>{
+        console.log('Erro :-('+error)
+      }).finally(() =>{
+
+      })
+    },
+     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PILARES*/
+     consultarMisionesRelacional(){
+      axios.get('misionesController.php',{
+        params:{
+            relacional:"relacionada"
+        }
+      }).then(response =>{
+          console.log(response.data)
+          if (response.data[0][1]==true){
+              if (response.data[0][0].length>0) {
+                this.pilaresRelacion = response.data[0][0]
               }
           }else{
               alert("La consulta Misiones, no se realizo correctamente.")
@@ -968,9 +993,10 @@ actualizandoResponsable(){
               alert("Todos los campos son requeridos para poder actualizar.")
             }
         },
-        /*/////////////////////////////////////////////////////////////////////////////////ACTUALIZAR IMPACTO AMBIENTAL*/
+        /*/////////////////////////////////////////////////////////////////////////////////ACTUALIZAR ESTANDARES*/
         actualizarEstandaresCO2(){
           if(this.nuevoNombre!='' && this.cantidad!='' && this.unidadMedida!=''){
+            
                 axios.put('estandaresCO2Controller.php',{
                 id:this.id,
                 nuevo:this.nuevoNombre,
@@ -985,6 +1011,38 @@ actualizandoResponsable(){
                     this.nuevoNombre ='' 
                     this.cantidad=''
                     this.unidadMedida=''
+                    alert("Se actualizo correctamente.")
+                  }else{
+                      alert("No se actualizo el Objetivo.")
+                  }
+              }).catch(error =>{
+                //console.log('Erro :-('+error)
+              }).finally(() =>{
+  
+              })
+            }else{
+              alert("Todos los campos son requeridos para poder actualizar.")
+            }
+        },
+        /*/////////////////////////////////////////////////////////////////////////////////ACTUALIZAR ESTANDARES*/
+        actualizarPilares(){
+          if(this.nuevoNombre!='' && this.cantidad!='' && this.misionLigada!=''){
+            
+                axios.put('estandaresCO2Controller.php',{
+                id:this.id,
+                nuevo:this.nuevoNombre,
+                siglas:this.siglas,
+                misionLigada:this.misionLigada
+              }).then(response =>{
+                  console.log(response.data)
+                   if(response.data[0]==true){
+                    this.myModal.hide();
+                    this.consultarMisionesRelacional()
+                    this.id = ''
+                    this.nuevoNombre ='' 
+                    this.misionLigada=''
+                    this.cantidad=''
+
                     alert("Se actualizo correctamente.")
                   }else{
                       alert("No se actualizo el Objetivo.")
@@ -1261,6 +1319,7 @@ actualizandoResponsable(){
              if (response.data[0]==true){
                this.consultarImpactoAmbiental()
                this.id=''
+               this.nuevoNombre=''
              }else{
                  alert("No se elimino al Responsable.")
              }
@@ -1630,9 +1689,23 @@ actualizandoResponsable(){
           if(tipo=='Impacto Ambiental'){
               this.nuevoNombre = nombre;
               this.id = id;
+          }else if(tipo=='Estandares'){
+              this.id = id;
+              this.nuevoNombre =nombre;
+              this.cantidad = cantidad;
+              this.unidadMedida = unidadMedida;
+          }else if(tipo=='Pilar'){
+            this.id = id;
+            this.nuevoNombre = nombre;
+            this.cantidad = cantidad;
+            this.misionLigada = unidadMedida;
+                 
+          }else{
+            alert ("No existe ese tipo en actualizars")
           }
       }
       }
+      
   }
 };
 

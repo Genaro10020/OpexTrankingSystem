@@ -17,6 +17,23 @@ include("conexionGhoner.php");
             return array ($resultado,$estado);
     }
 
+    function consultarMisionesRelacionadas(){
+        global $conexion;
+        $resultado = [];
+        $estado = false;
+            $consulta = "SELECT * FROM pilares as a LEFT JOIN misiones as b on b.id = a.id_misiones"; //ACOMODAR LA CONSULTA POR QUE TE TRAE TODO REVUELTAO
+            $query = $conexion->query($consulta);
+        if($query){
+            while($datos=mysqli_fetch_array($query)){
+                $resultado [] = $datos;
+            }
+                $estado = true;
+        } else{
+                $estado = false;
+        }
+        return array ($resultado,$estado);
+    }
+
     function insertarMision($nueva){
         global $conexion;
         $query = "INSERT INTO misiones (nombre) VALUES (?)";
