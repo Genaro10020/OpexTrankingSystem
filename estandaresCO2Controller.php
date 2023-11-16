@@ -30,7 +30,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 $nuevo=$arreglo['nuevo'];
                 $cantidad=$arreglo['cantidad'];
                 $unidadMedida=$arreglo['unidadMedida'];
-                 // $val[]="ENTRE";
                 $val[]=actualizarEstandaresCO2($id,$nuevo,$cantidad,$unidadMedida);
             }else{
                 $val[] = "No existe variable ID o Nuevo";
