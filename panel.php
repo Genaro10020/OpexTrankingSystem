@@ -175,7 +175,7 @@ if(isset($_SESSION['nombre'])){
                                                             </div>
 
                                                             <!--Pilares-->
-                                                            
+                                                            {{selectPilar}}
                                                             <div id="div_pilares" class="input-group mb-3 " :class="{'mostrar':checkMisiones.length>0, 'ocultar': checkMisiones.length <= 0}">
                                                                 <span class="input-group-text w-25 text-start">Pilares <br>Estrategicos </span>
                                                                 <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkPilares.length<=0, '': checkPilares.length>0}">
@@ -186,9 +186,9 @@ if(isset($_SESSION['nombre'])){
                                                                         </label>
                                                                         <label class="w-25" v-if="idsPilares.includes(pilar.id) && checkPilares.length>0">
                                                                                 <select v-model="selectPilar[index]" @change="verificarCantidadDirectosPilares()">
-                                                                                    <option value="" disabled selected>Seleccione...</option>
+                                                                                    <option v-if="idsPilares.includes(pilar.id)" value="" disabled selected>Seleccione...</option>
                                                                                     <option value="directo">Directo</option>
-                                                                                    <option value="inderecto">Indirecto</option>
+                                                                                    <option value="indirecto">Indirecto</option>
                                                                                 </select>
                                                                         </label>  
                                                                     </div>
@@ -203,7 +203,6 @@ if(isset($_SESSION['nombre'])){
                                                             </div>
 
                                                              <!--Objetivos-->
-                                                             
                                                             <div v-if="checkPilares.length>0" class="input-group mb-3 " :class="{'mostrar':checkPilares.length>0, 'ocultar': checkPilares.length <= 0}">
                                                                 <span class="input-group-text w-25 text-start">Objetivos <br>Estrategicos</span>
                                                                 <div class="div-mision-pilares-impacto"  :class="{'nocontestado': respondio === false && checkObjetivos.length<=0, '': checkObjetivos.length>0}">
@@ -216,7 +215,7 @@ if(isset($_SESSION['nombre'])){
                                                                                 <select v-model="selectObjetivo[index]" @change="verificarCantidadDirectosObjetivos()">
                                                                                     <option value="" disabled selected>Seleccione...</option>
                                                                                     <option value="directo">Directo</option>
-                                                                                    <option value="inderecto">Indirecto</option>
+                                                                                    <option value="indirecto">Indirecto</option>
                                                                                 </select>
                                                                         </label> 
                                                                     </div>
@@ -231,7 +230,6 @@ if(isset($_SESSION['nombre'])){
                                                             </div>
 
                                                             <!--Impacto Ambiental-->
-                                                           
                                                             <div class="input-group mb-3"> 
                                                                 <span class="input-group-text w-25 text-start">Impacto <br>Ambiental<br><label class="ms-5"><i class="bi bi-question-circle"></label></i></span>
                                                                 <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkImpactoAmbiental.length<=0, '': checkImpactoAmbiental.length>0}">
@@ -494,7 +492,8 @@ if(isset($_SESSION['nombre'])){
                                                                         <th>Responsable</th>
                                                                         <th>Correo</th>
                                                                         <th>Telefono</th>
-                                                                        <th>Pilar Estrategico</th>
+                                                                        <th>Pilares Estrategico</th>
+                                                                        <th>Objetivos Estrategico</th>
                                                                         <th>Impacto Ambiental</th>
                                                                         <th>Tons De CO2 Por Evitar</th>
                                                                         <th>Ahorro Duro</th>
@@ -512,6 +511,7 @@ if(isset($_SESSION['nombre'])){
                                                                         <td>{{proyecto.correo}}</td>
                                                                         <td>{{proyecto.telefono}}</td>
                                                                         <td>{{proyecto.pilares}}</td>
+                                                                        <td>{{proyecto.objetivos}}</td>
                                                                         <td>{{proyecto.impacto_ambiental}}</td>
                                                                         <td>{{proyecto.tons_co2}}</td>
                                                                         <td>{{proyecto.duro}}</td>

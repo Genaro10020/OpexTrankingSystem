@@ -31,10 +31,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
             $tons_co2=$arreglo['tons_co2'];
             $ahorro_duro=$arreglo['ahorro_duro'];
             $ahorro_suave=$arreglo['ahorro_suave'];
-            $misiones = json_encode($misiones);//conviertiendo arreglos en cadena
-            $pilares = json_encode($pilares);//conviertiendo arreglos en cadena
-            $objetivos = json_encode($objetivos);//conviertiendo arreglos en cadena
-            $impacto_ambiental = json_encode($impacto_ambiental);//conviertiendo arreglos en cadena
+            $misiones = json_encode($misiones, JSON_UNESCAPED_UNICODE);//conviertiendo arreglos en cadena
+            $pilares = json_encode($pilares, JSON_UNESCAPED_UNICODE);//conviertiendo arreglos en cadena
+            $objetivos = json_encode($objetivos, JSON_UNESCAPED_UNICODE);//conviertiendo arreglos en cadena
+            $impacto_ambiental = json_encode($impacto_ambiental, JSON_UNESCAPED_UNICODE);//conviertiendo arreglos en cadena
             $val[]= insertarProyecto($fecha_alta,$nombre_proyecto,$planta,$area,$departamento,$metodologia,$responsable_id,$misiones,$pilares,$objetivos,$impacto_ambiental,$tons_co2,$ahorro_duro,$ahorro_suave);
         }else{
             $val[]= "No llegaron tadas la variables";
