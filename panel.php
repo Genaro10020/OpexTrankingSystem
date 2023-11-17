@@ -30,6 +30,9 @@ if(isset($_SESSION['nombre'])){
                 <button class="btn-menu mx-3" @click="ventana='Seguimiento'"> 
                     <i class="bi bi-plus-circle" ></i> Seguimiento
                 </button>
+                <button class="btn-menu mx-3" @click="ventana='Competencia'"> 
+                    <i class="bi bi-plus-circle" ></i> Competencia
+                </button>
                                 <!--Modal Alta Proyectos-->
                                     <div id="modal-alta-proyecto" class="modal text-start"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" >
                                             <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
@@ -175,7 +178,6 @@ if(isset($_SESSION['nombre'])){
                                                             </div>
 
                                                             <!--Pilares-->
-                                                            {{selectPilar}}
                                                             <div id="div_pilares" class="input-group mb-3 " :class="{'mostrar':checkMisiones.length>0, 'ocultar': checkMisiones.length <= 0}">
                                                                 <span class="input-group-text w-25 text-start">Pilares <br>Estrategicos </span>
                                                                 <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkPilares.length<=0, '': checkPilares.length>0}">
@@ -424,7 +426,7 @@ if(isset($_SESSION['nombre'])){
                                                                     </div>
                                                                     <div  class="input-group mb-3">
                                                                         <span class="input-group-text w-50" >Seleccione Mision:</span>
-                                                                    <select v-model="select_mision" class="w-50" >
+                                                                        <select v-model="select_mision" class="w-50" >
                                                                             <option value="" disabled selected> Seleccione.... </option>
                                                                             <option v-for="mision in allMisiones" :value="mision.id" >{{mision.nombre}}</option>
                                                                         </select>
@@ -514,7 +516,7 @@ if(isset($_SESSION['nombre'])){
                                                                         <td>{{proyecto.objetivos}}</td>
                                                                         <td>{{proyecto.impacto_ambiental}}</td>
                                                                         <td>{{proyecto.tons_co2}}</td>
-                                                                        <td>{{proyecto.duro}}</td>
+                                                                        <td>{{proyecto.ahorro_duro}}</td>
                                                                         <td>{{proyecto.ahorro_suave}}</td>
                                                                  </tr>       
                                                         </table>
@@ -1015,6 +1017,72 @@ if(isset($_SESSION['nombre'])){
                                          
                             <!---->
                 </div>
+                <div v-if="ventana=='Competencia'">
+                               
+
+                <div class="container mt-5">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                <tr>
+                    <th>#</th>
+                    <th>EADs</th>
+                    <th>Área</th>
+                    <th>Planta</th>
+                    <th>Nombre EAD</th>
+                    <th>Proyecto</th>
+                    <th>Evaluador 1</th>
+                    <th>Evaluador 2</th>
+                    <th>Evaluador 3</th>
+                    <th>Evaluador 4</th>
+                    <th>Calificacion Final</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th><b>1</b></th>
+                    <td><b>EAD 1</b></td>
+                    <td>Formación</td>
+                    <td>Enerya</td>
+                    <td>Los Rinos</td>
+                    <td>Proyecto A</td>
+                    <td><b>Evaluador A</b></td>
+                    <td><b>Evaluador B</b></td>
+                    <td><b>Evaluador C</b></td>
+                    <td><b>Evaluador D</b></td>
+                    <td>Pendiente</td>
+                </tr>
+                <tr>
+                <th><b>2</b></th>
+                    <td><b>EAD 2</b></td>
+                    <td>Etiquetado</td>
+                    <td>Riasa</td>
+                    <td>Las Maquinas</td>
+                    <td>Proyecto A</td>
+                    <td><b>Evaluador A</b></td>
+                    <td><b>Evaluador B</b></td>
+                    <td><b>Evaluador C</b></td>
+                    <td><b>Evaluador D</b></td>
+                    <td>Pendiente</td>
+                </tr><tr>
+                <th><b>3</b></th>
+                    <td><b>EAD 3</b></td>
+                    <td>Riasa - Enerya</td>
+                    <td>Planta A</td>
+                    <td>Los Pajaros Azules</td>
+                    <td>Proyecto A</td>
+                    <td><b>Evaluador A</b></td>
+                    <td><b>Evaluador B</b></td>
+                    <td><b>Evaluador C</b></td>
+                    <td><b>Evaluador D</b></td>
+                    <td>Pendiente</td>
+                </tr>
+                <!-- Repite las filas para EAD 2 al 14 según sea necesario -->
+                </tbody>
+            </table>
+            </div>
+                                         
+                            
+                    </div><!--FIN DE COMPETENCIA-->
                 
        
     </div><!--cuerpo-->

@@ -17,7 +17,7 @@ include("conexionGhoner.php");
             return array ($resultado,$estado);
     }
 
-    function insertarProyecto($fecha_alta,$nombre_proyecto,$planta,$area,$departamento,$metodologia,$responsable_id,$misiones,$pilares,$objetivos,$impacto_ambiental,$tons_co2,$ahorro_duro,$ahorro_suave){
+    function insertarProyecto($folio,$fecha_alta,$nombre_proyecto,$planta,$area,$departamento,$metodologia,$responsable_id,$misiones,$pilares,$objetivos,$impacto_ambiental,$tons_co2,$ahorro_duro,$ahorro_suave){
         global $conexion;
 
         $consulta = "SELECT * FROM responsables WHERE id = $responsable_id";
@@ -32,9 +32,9 @@ include("conexionGhoner.php");
             $fecha_invertida = $separando[2] . "-" . $separando[1] . "-" . $separando[0];
             $estado  = true;
             //Recuperado el responsable inserto
-                    $query = "INSERT INTO proyectos_creados (fecha, nombre_proyecto, planta, area, departamento, metodologia, responsable,correo,telefono, misiones,pilares,objetivos,impacto_ambiental, tons_co2, ahorro_duro, ahorro_suave) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    $query = "INSERT INTO proyectos_creados (folio,fecha, nombre_proyecto, planta, area, departamento, metodologia, responsable,correo,telefono, misiones,pilares,objetivos,impacto_ambiental, tons_co2, ahorro_duro, ahorro_suave) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                     $stmt = $conexion->prepare($query);
-                    $stmt->bind_param("ssssssssssssssss", $fecha_invertida,$nombre_proyecto,$planta,$area,$departamento,$metodologia, $nombre_responsable,$correo_responsable,$telefono_responsable,$misiones,$pilares,$objetivos,$impacto_ambiental,$tons_co2,$ahorro_duro,$ahorro_suave);
+                    $stmt->bind_param("sssssssssssssssss",$folio, $fecha_invertida,$nombre_proyecto,$planta,$area,$departamento,$metodologia, $nombre_responsable,$correo_responsable,$telefono_responsable,$misiones,$pilares,$objetivos,$impacto_ambiental,$tons_co2,$ahorro_duro,$ahorro_suave);
                     if($stmt->execute()){
                         $estado = true;
                     }
