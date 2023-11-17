@@ -293,6 +293,7 @@ const AltaProyectos = {
               indexs_pilar.push(index);
             }
             this.idsPilares = ids_pilares;
+            console.log(indexs_pilar)
 
             //creo posiciones
             cantidad_pilares = [];
@@ -301,6 +302,17 @@ const AltaProyectos = {
             }
             console.log(cantidad_pilares)
 
+            //insertando indirecto check seleccionado por primera vez y que sean diferentes a Directo o Indirecto
+            for (let i = 0; i < this.pilares.length; i++){
+              for (let j = 0; j < this.pilares.length; j++) {
+                if(indexs_pilar[i]==(j+1)){
+                  if(this.selectPilar[j]==""){
+                    this.selectPilar[j]="indirecto";
+                  } 
+                }
+              }
+            }
+
             // Buscar los números faltantes
             let faltantes = cantidad_pilares.filter(elemento => !indexs_pilar.includes(String(elemento)));
             let separando = faltantes.map(Number);
@@ -308,7 +320,7 @@ const AltaProyectos = {
             for (let i = 0; i < this.pilares.length; i++){
                 for (let j = 0; j < this.pilares.length; j++) {
                   if(separando[i]==(j+1)){
-                    this.selectPilar[j] = "indirecto";
+                    this.selectPilar[j] = "";
                     //console.log("Reseteare"+(j+1)+"La posicion es i:"+i+"y la jota es:"+j)
                   }
                 }
@@ -333,7 +345,7 @@ const AltaProyectos = {
                   this.objetivos = response.data[0][0]
 
                   for (let i = 0; i < this.objetivos.length; i++) {
-                    this.selectObjetivo.push("indirecto")
+                    this.selectObjetivo.push("")
                   }
 
                 }
@@ -371,6 +383,18 @@ const AltaProyectos = {
       posiciones_objetivos.push(index+1);
      }
 
+      //insertando indirecto check seleccionado por primera vez y que sean diferentes a Directo o Indirecto
+      for (let i = 0; i < this.objetivos.length; i++){
+        for (let j = 0; j < this.objetivos.length; j++) {
+          if(indexs_objetivos[i]==(j+1)){
+            if(this.selectObjetivo[j]==""){
+              this.selectObjetivo[j]="indirecto";
+            } 
+          }
+        }
+      }
+
+
      var no_existen_posiciones = posiciones_objetivos.filter(items => !indexs_objetivos.includes(String(items)))//tomo los que no existen en indexs_objetivos.
      var entero_no_existen = no_existen_posiciones.map(Number);//los convierto a valor numerico
      console.log("Los que no existe son:")
@@ -379,7 +403,7 @@ const AltaProyectos = {
      entero_no_existen.forEach(posicion => {
       if (posicion >= 0 && posicion < this.selectObjetivo.length+1) {
         var num =(posicion-1);
-        this.selectObjetivo[num] = "indirecto";
+        this.selectObjetivo[num] = "";
         console.log("resetie:"+num);
       }
     });
@@ -452,7 +476,7 @@ const AltaProyectos = {
                     //this.objetivos = response.data[0][2]
                     /*inicializo selectPilar en Seleccione*/
                     for (let i = 0; i < this.pilares.length; i++) {
-                      this.selectPilar.push("indirecto")
+                      this.selectPilar.push("")
                     }
                   }
               }else{
@@ -534,25 +558,29 @@ const AltaProyectos = {
     },
      /*/////////////////////////////////////////////////////////////////////////////////INSERTAR PLANTA*/
      insertarPlanta(){
-      axios.post('plantasController.php',{
-        nueva:this.nueva,
-        siglas:this.siglas
-      }).then(response =>{
-          this.nueva = ''
-          this.siglas=''
-          console.log(response.data)
-          if (!response.data[0]==false){
-            this.myModalCRUD.hide()
-            this.consultarPlantas()
-          }else{
-              alert("La inserción de Planta, no se realizo correctamente.")
-          }
-  
-      }).catch(error =>{
-        //console.log('Erro :-('+error)
-      }).finally(() =>{
+      if(this.nueva!="" && this.siglas!=""){
+        axios.post('plantasController.php',{
+          nueva:this.nueva,
+          siglas:this.siglas
+        }).then(response =>{
+            this.nueva = ''
+            this.siglas=''
+            console.log(response.data)
+            if (!response.data[0]==false){
+              this.myModalCRUD.hide()
+              this.consultarPlantas()
+            }else{
+                alert("La inserción de Planta, no se realizo correctamente.")
+            }
+    
+        }).catch(error =>{
+          //console.log('Erro :-('+error)
+        }).finally(() =>{
 
-      })
+        })
+      }else{
+        alert("Nombre y Siglas son requeridos")
+      }
     },
      /*/////////////////////////////////////////////////////////////////////////////////INSERTAR ESTANDARES CO2*/
      insertarEstandaresCO2(){
@@ -644,24 +672,28 @@ const AltaProyectos = {
     },
       /*/////////////////////////////////////////////////////////////////////////////////INSERTAR DEPARTAMENTO*/
       insertarDepartamento(){
-        axios.post('departamentosController.php',{
-          nueva:this.nueva,
-          siglas:this.siglas
-        }).then(response =>{
-            console.log(response.data)
-            if (response.data[0]==true){
-              this.myModalCRUD.hide()
-              this.consultarDepartamentos()
-              this.siglas=''
-            }else{
-                alert("La inserción, no se realizo correctamente.")
-            }
-    
-        }).catch(error =>{
-          //console.log('Erro :-('+error)
-        }).finally(() =>{
-  
-        })
+        if(this.nueva!="" && this.siglas!=""){
+            axios.post('departamentosController.php',{
+              nueva:this.nueva,
+              siglas:this.siglas
+            }).then(response =>{
+                console.log(response.data)
+                if (response.data[0]==true){
+                  this.myModalCRUD.hide()
+                  this.consultarDepartamentos()
+                  this.siglas=''
+                }else{
+                    alert("La inserción, no se realizo correctamente.")
+                }
+        
+            }).catch(error =>{
+              //console.log('Erro :-('+error)
+            }).finally(() =>{
+      
+            })
+        }else{
+            alert("Nombre y Siglas son requeridos")
+        }
       },
        /*/////////////////////////////////////////////////////////////////////////////////INSERTAR METODOLOGIA*/
        insertarMetodologia(){
@@ -1594,50 +1626,45 @@ actualizandoResponsable(){
       }
       console.log(objetivos_nombres)
 
-      //combinando checkPilares con selectPilares
-      // Verificamos que ambos arreglos tengan la misma longitud
-    if (this.selectPilar.length === pilares_nombres.length) {
-      // Creamos un nuevo arreglo para almacenar la combinación
-      var combinadoPilar = [];
-      // Recorremos los arreglos
-      for (var i = 0; i < this.selectPilar.length; i++) {
-        // Si la posición en selectPilar no está vacía, combinamos con la correspondiente en checkPilares
-        if (this.selectPilar[i] !== "") {
-          combinadoPilar.push(pilares_nombres[i] + "->" + this.selectPilar[i]);
-        } else {
-          // Si la posición en selectPilar está vacía, simplemente añadimos la correspondiente en checkPilares
-          combinadoPilar.push(pilares_nombres[i]);
+      var pilaresDirectosIndirectos = [];
+      for (let i = 0; i < this.selectPilar.length; i++) {//insertando directo e indirectos de selectPilares
+        if(this.selectPilar[i]!=""){
+          pilaresDirectosIndirectos.push(this.selectPilar[i]);//nuevo arreglo eliminado los "" del arreglo anterior1
         }
       }
-      // Imprimimos el resultado
-      console.log("combinadoPilar")
-      console.log(combinadoPilar);
-    } else {
-      console.log("Los arreglos de Pilares no tienen la misma longitud");
-    }
+      console.log("Pilares Directo e Indirectos")
+      console.log(pilaresDirectosIndirectos);
 
-      //combinando checkPilares con selectPilares
-      // Verificamos que ambos arreglos tengan la misma longitud
-      if (this.selectObjetivo.length === objetivos_nombres.length) {
-        // Creamos un nuevo arreglo para almacenar la combinación
-        var combinadoObjetivo = [];
-        // Recorremos los arreglos
-        for (var i = 0; i < this.selectObjetivo.length; i++) {
-          // Si la posición en selectPilar no está vacía, combinamos con la correspondiente en checkPilares
-          if (this.selectObjetivo[i] !== "") {
-            combinadoObjetivo.push(objetivos_nombres[i] + "->" + this.selectObjetivo[i]);
-          } else {
-            // Si la posición en selectPilar está vacía, simplemente añadimos la correspondiente en checkPilares
-            combinadoObjetivo.push(objetivos_nombres[i]);
+      var combinadoPilar = [];
+      if(pilares_nombres.length==pilaresDirectosIndirectos.length){
+          for (let i = 0; i < pilares_nombres.length; i++) {
+            combinadoPilar.push(pilares_nombres[i] + "->" + pilaresDirectosIndirectos[i]);
           }
-        }
-        // Imprimimos el resultado
-        console.log("combinadoObjetivo")
-        console.log(combinadoObjetivo);
-      } else {
-        console.log("Los arreglos no tienen la misma longitud");
+          console.log("Combinado Pilares")
+          console.log(combinadoPilar)
+      }else{
+        console.log("los nombres del pilar y directos e indirecto de pilar no tienen el mismo tamaño")
       }
-      
+
+      var objetivosDirectosIndirectos = [];
+      for (let i = 0; i < this.selectObjetivo.length; i++) {//insertando directo e indirectos de selectPilares
+        if(this.selectObjetivo[i]!=""){
+          objetivosDirectosIndirectos.push(this.selectObjetivo[i]);//nuevo arreglo eliminado los "" del arreglo anterior1
+        }
+      }
+
+
+      var combinadoObjetivo = [];
+      if(objetivos_nombres.length==objetivosDirectosIndirectos.length){
+          for (let i = 0; i < objetivos_nombres.length; i++) {
+            combinadoObjetivo.push(objetivos_nombres[i] + "->" + objetivosDirectosIndirectos[i]);
+          }
+          console.log("Combinado Objetivos")
+          console.log(combinadoObjetivo)
+      }else{
+        console.log("los nombres del pilar y directos e indirecto de pilar no tienen el mismo tamaño")
+      }
+
       //Utilizo para tomar todos los nombres.
       console.log(this.checkImpactoAmbiental)
       var impacto_ambiental_nombres = [];
@@ -1651,6 +1678,7 @@ actualizandoResponsable(){
       console.log(folio);
 
       axios.post("proyectosController.php",{
+        folio:folio,
         fecha_alta:this.fecha_alta,  
         nombre_proyecto:this.nombre_proyecto,
         select_planta:planta,

@@ -13,10 +13,11 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
     case 'POST':
         // Manejar solicitud POST (creación)
-        if(isset($arreglo['fecha_alta']) && isset($arreglo['nombre_proyecto']) && isset($arreglo['select_planta']) && isset($arreglo['select_area']) 
+        if(isset($arreglo['folio']) && isset($arreglo['fecha_alta']) && isset($arreglo['nombre_proyecto']) && isset($arreglo['select_planta']) && isset($arreglo['select_area']) 
         && isset($arreglo['select_departamento']) && isset($arreglo['select_metodologia']) && isset($arreglo['responsable_id']) && isset($arreglo['misiones']) 
         && isset($arreglo['pilares']) && isset($arreglo['objetivos']) && isset($arreglo['impacto_ambiental']) && isset($arreglo['tons_co2'])
         && isset($arreglo['ahorro_duro']) && isset($arreglo['ahorro_suave'])){
+            $folio = $arreglo['folio'];
             $fecha_alta = $arreglo['fecha_alta'];
             $nombre_proyecto=$arreglo['nombre_proyecto'];
             $planta=$arreglo['select_planta'];
@@ -35,7 +36,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             $pilares = json_encode($pilares, JSON_UNESCAPED_UNICODE);//conviertiendo arreglos en cadena
             $objetivos = json_encode($objetivos, JSON_UNESCAPED_UNICODE);//conviertiendo arreglos en cadena
             $impacto_ambiental = json_encode($impacto_ambiental, JSON_UNESCAPED_UNICODE);//conviertiendo arreglos en cadena
-            $val[]= insertarProyecto($fecha_alta,$nombre_proyecto,$planta,$area,$departamento,$metodologia,$responsable_id,$misiones,$pilares,$objetivos,$impacto_ambiental,$tons_co2,$ahorro_duro,$ahorro_suave);
+            $val[]= insertarProyecto($folio,$fecha_alta,$nombre_proyecto,$planta,$area,$departamento,$metodologia,$responsable_id,$misiones,$pilares,$objetivos,$impacto_ambiental,$tons_co2,$ahorro_duro,$ahorro_suave);
         }else{
             $val[]= "No llegaron tadas la variables";
         }
