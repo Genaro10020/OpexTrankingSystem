@@ -68,7 +68,10 @@ const AltaProyectos = {
       cantidad:'',
       unidadMedida:'',
       /*ACTUALIZAR MISIONES LIGADAS A PILARES */
-      misionLigada:''
+      misionLigada:'',
+      n_mision:'',
+      id_mision_ligada:'',
+      pilar:''
     }
   },
   mounted(){
@@ -279,50 +282,15 @@ const AltaProyectos = {
    /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR OBJETIVOS POR PILARES SELECCIONADA*/
    consultarObjetivosXpilaresSeleccionados(){
     if(this.checkPilares.length >0){
-            this.selectObjetivo=[]
-            this.checkObjetivos =[]
-            var ids_pilares= [];
-            var indexs_pilar = [];
-            console.log(this.checkPilares);
-
-            //tomo los ids de los pilarese seleccionados y los inserto en arrelo ids.pilares y me mostrada los select correspondientes
-            for (let i = 0; i < this.checkPilares.length; i++) {
-            var id_pilar = this.checkPilares[i].split('<->')[0];
-            var index = this.checkPilares[i].split('<->')[3]
-              ids_pilares.push(id_pilar);
-              indexs_pilar.push(index);
-            }
-            this.idsPilares = ids_pilares;
-
-            //creo posiciones
-            cantidad_pilares = [];
-            for (let index = 0; index < this.pilares.length; index++) {
-            cantidad_pilares[index] = (index+1)  
-            }
-            console.log(cantidad_pilares)
-
-            // Buscar los números faltantes
-            let faltantes = cantidad_pilares.filter(elemento => !indexs_pilar.includes(String(elemento)));
-            let separando = faltantes.map(Number);
-            
-            for (let i = 0; i < this.pilares.length; i++){
-                for (let j = 0; j < this.pilares.length; j++) {
-                  if(separando[i]==(j+1)){
-                    this.selectPilar[j] = "indirecto";
-                    //console.log("Reseteare"+(j+1)+"La posicion es i:"+i+"y la jota es:"+j)
-                  }
-                }
-            }
-
-            if (indexs_pilar.length < this.selectPilar.length) {
-              // Calcula la diferencia de longitud
-              const diferencia = this.selectPilar.length - this.idsPilares.length;
-              // Agrega elementos vacíos ("") al final de idsPilares
-              for (let i = 0; i < diferencia; i++) {
-                this.idsPilares.push("");
-              }
-            }
-
+      this.checkObjetivos =[]
+      var ids_pilares= [];
+      var indexs_pilar = [];
+      console.log(this.checkPilares);
+      for (let i = 0; i < this.checkPilares.length; i++) {
+       var id_pilar = this.checkPilares[i].split('<->')[0];
+        ids_pilares.push(id_pilar);
+      }
+      this.idsPilares = ids_pilares;
         axios.post('objetivosController.php',{
             idsPilares:ids_pilares
         }).then(response =>{
@@ -331,13 +299,7 @@ const AltaProyectos = {
                 if (response.data[0][0].length>0) {
                   //this.pilares = response.data[0][0]
                   this.objetivos = response.data[0][0]
-
-                  for (let i = 0; i < this.objetivos.length; i++) {
-                    this.selectObjetivo.push("indirecto")
-                  }
-
                 }
-                this.idsObjetivos=[]
             }else{
                 alert("La consulta Objetivos por Pilares Seleccionados, no se realizo correctamente.")
             }
@@ -346,49 +308,20 @@ const AltaProyectos = {
         }).finally(() =>{
   
         })
-    }else{
-      this.checkObjetivos =[]
-      this.objetivos=''
-      this.idsPilares=[]
-      this.idsObjetivos=[]
-      this.selectObjetivo=[]
-    }
+  }else{
+    this.checkObjetivos =[]
+    this.objetivos=''
+    this.idsPilares=[]
+  }
 },
   /*VERIFICANDO OBJETIVOS AL CHECKERA */
   checkeandoObjetivos(){
     var ids_objetivos= [];
-    var indexs_objetivos= [];
     for (let i = 0; i < this.checkObjetivos.length; i++) {
       var id_objetivo = this.checkObjetivos[i].split('<->')[0];
-      var index_objetivo = this.checkObjetivos[i].split('<->')[4];
       ids_objetivos.push(id_objetivo);
-      indexs_objetivos.push(index_objetivo);
      }
      this.idsObjetivos = ids_objetivos;
-
-     posiciones_objetivos = [];
-     for (let index = 0; index < this.objetivos.length; index++) {//introducciiendo posiciones 0 hasta tamanio
-      posiciones_objetivos.push(index+1);
-     }
-
-     var no_existen_posiciones = posiciones_objetivos.filter(items => !indexs_objetivos.includes(String(items)))//tomo los que no existen en indexs_objetivos.
-     var entero_no_existen = no_existen_posiciones.map(Number);//los convierto a valor numerico
-     console.log("Los que no existe son:")
-     console.log(entero_no_existen)
-
-     entero_no_existen.forEach(posicion => {
-      if (posicion >= 0 && posicion < this.selectObjetivo.length+1) {
-        var num =(posicion-1);
-        this.selectObjetivo[num] = "indirecto";
-        console.log("resetie:"+num);
-      }
-    });
-
-     //let faltantes = cantidad_pilares.filter(elemento => !indexs_pilar.includes(String(elemento)));
-
-     /*for (let i = 0; i < this.objetivos.length; i++) {// utlizo para que aparazca seleccion en selecObjetivos
-      this.selectObjetivo.push("")
-    }*/
   },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR OBJETIVOS*/
     consultarObjetivos(){
@@ -452,7 +385,7 @@ const AltaProyectos = {
                     //this.objetivos = response.data[0][2]
                     /*inicializo selectPilar en Seleccione*/
                     for (let i = 0; i < this.pilares.length; i++) {
-                      this.selectPilar.push("indirecto")
+                      this.selectPilar.push("")
                     }
                   }
               }else{
@@ -556,6 +489,7 @@ const AltaProyectos = {
     },
      /*/////////////////////////////////////////////////////////////////////////////////INSERTAR ESTANDARES CO2*/
      insertarEstandaresCO2(){
+      if(this.nueva!=='' && this.cantidad!=='' && this.unidadMedida!==''){
       axios.post('estandaresCO2Controller.php',{
         nueva:this.nueva,
         cantidad:this.cantidad,
@@ -577,7 +511,10 @@ const AltaProyectos = {
       }).finally(() =>{
 
       })
-    },
+    }else {
+      alert('Todos los campos son obligatorios')
+    }
+  },
      /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PLANTAS*/
      consultarEstandaresCO2(){
       axios.get('estandaresCO2Controller.php',{
@@ -602,6 +539,7 @@ const AltaProyectos = {
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR AREAS*/
     /*/////////////////////////////////////////////////////////////////////////////////INSERTAR PLANTA*/
     insertarImpactoAmbiental(){
+      if(this.nueva!=''){
       axios.post('impactoAmbientalController.php',{
         nueva:this.nueva
       }).then(response =>{
@@ -619,6 +557,9 @@ const AltaProyectos = {
       }).finally(() =>{
 
       })
+    }else {
+      alert('Todos los campos son obligatorios')
+    }
     },
 
 
@@ -1026,13 +967,14 @@ actualizandoResponsable(){
         },
         /*/////////////////////////////////////////////////////////////////////////////////ACTUALIZAR ESTANDARES*/
         actualizarPilares(){
-          if(this.nuevoNombre!='' && this.cantidad!='' && this.misionLigada!=''){
-            
-                axios.put('estandaresCO2Controller.php',{
+          if(this.nuevoNombre!='' && this.siglas!='' && this.misionLigada!=''){
+                axios.put('pilaresController.php',{
                 id:this.id,
                 nuevo:this.nuevoNombre,
                 siglas:this.siglas,
-                misionLigada:this.misionLigada
+                misionLigada:this.misionLigada,
+                n_mision:this.n_mision,
+                id_mision_ligada:this.id_mision_ligada
               }).then(response =>{
                   console.log(response.data)
                    if(response.data[0]==true){
@@ -1041,11 +983,14 @@ actualizandoResponsable(){
                     this.id = ''
                     this.nuevoNombre ='' 
                     this.misionLigada=''
-                    this.cantidad=''
+                    this.siglas=''
+                    this.n_mision=''
+                    this.id_mision_ligada=''
 
                     alert("Se actualizo correctamente.")
                   }else{
-                      alert("No se actualizo el Objetivo.")
+                      alert("No se actualizo el Pilar.")
+                      console.log(misionLigada);
                   }
               }).catch(error =>{
                 //console.log('Erro :-('+error)
@@ -1365,7 +1310,7 @@ actualizandoResponsable(){
       if (directoIndices.length > 1) {
         // Si hay más de un 'directo', deseleccionar el último 'directo'
         const lastIndex = directoIndices.pop();
-        this.selectPilar[lastIndex] = 'indirecto';
+        this.selectPilar[lastIndex] = '';
         alert("No puedo tener dos Pilares Directos, solo uno");
       }
     },
@@ -1381,7 +1326,7 @@ actualizandoResponsable(){
       if (directoIndices.length > 1) {
         // Si hay más de un 'directo', deseleccionar el último 'directo'
         const lastIndex = directoIndices.pop();
-        this.selectObjetivo[lastIndex] = 'indirecto';
+        this.selectObjetivo[lastIndex] = '';
         alert("No puedo tener dos Objetivos Directos, solo uno");
       }
     },
@@ -1519,12 +1464,6 @@ actualizandoResponsable(){
       else if(this.checkPilares.length<=0){this.respondio=false;  alert("Seleccione Pilar, para visualizarlos seleccione Mision")}
       //Objetivos
       else if(this.checkObjetivos.length<=0){this.respondio=false; alert("Seleccione Objetivo, para visualizarlos, seleccione Mision y Objetivo")}
-      //Verificar minimo un directo
-      else if(this.selectPilar.includes("directo")==false){this.respondio=false; alert("Debe de existir minimo un 'Directo' en Pilar, check el Pilar y elija 'Directo'")}
-      //Verificar minimo un directo
-      else if(this.selectPilar.includes("directo")==false){this.respondio=false; alert("Debe de existir minimo un 'Directo' en Pilar, check el Pilar y elija 'Directo'")}
-      //Verificar minimo un directo
-      else if(this.selectObjetivo.includes("directo")==false){this.respondio=false; alert("Debe de existir minimo un 'Directo' en Objetivo, check el Objetivo y elija 'Directo'")}
       //Impacto Ambiental
       else if(this.checkImpactoAmbiental.length<=0){this.respondio=false; alert("Seleccione minimo una Impacto Ambiental")}
       //Ahorros
@@ -1593,50 +1532,6 @@ actualizandoResponsable(){
 
       }
       console.log(objetivos_nombres)
-
-      //combinando checkPilares con selectPilares
-      // Verificamos que ambos arreglos tengan la misma longitud
-    if (this.selectPilar.length === pilares_nombres.length) {
-      // Creamos un nuevo arreglo para almacenar la combinación
-      var combinadoPilar = [];
-      // Recorremos los arreglos
-      for (var i = 0; i < this.selectPilar.length; i++) {
-        // Si la posición en selectPilar no está vacía, combinamos con la correspondiente en checkPilares
-        if (this.selectPilar[i] !== "") {
-          combinadoPilar.push(pilares_nombres[i] + "->" + this.selectPilar[i]);
-        } else {
-          // Si la posición en selectPilar está vacía, simplemente añadimos la correspondiente en checkPilares
-          combinadoPilar.push(pilares_nombres[i]);
-        }
-      }
-      // Imprimimos el resultado
-      console.log("combinadoPilar")
-      console.log(combinadoPilar);
-    } else {
-      console.log("Los arreglos de Pilares no tienen la misma longitud");
-    }
-
-      //combinando checkPilares con selectPilares
-      // Verificamos que ambos arreglos tengan la misma longitud
-      if (this.selectObjetivo.length === objetivos_nombres.length) {
-        // Creamos un nuevo arreglo para almacenar la combinación
-        var combinadoObjetivo = [];
-        // Recorremos los arreglos
-        for (var i = 0; i < this.selectObjetivo.length; i++) {
-          // Si la posición en selectPilar no está vacía, combinamos con la correspondiente en checkPilares
-          if (this.selectObjetivo[i] !== "") {
-            combinadoObjetivo.push(objetivos_nombres[i] + "->" + this.selectObjetivo[i]);
-          } else {
-            // Si la posición en selectPilar está vacía, simplemente añadimos la correspondiente en checkPilares
-            combinadoObjetivo.push(objetivos_nombres[i]);
-          }
-        }
-        // Imprimimos el resultado
-        console.log("combinadoObjetivo")
-        console.log(combinadoObjetivo);
-      } else {
-        console.log("Los arreglos no tienen la misma longitud");
-      }
       
       //Utilizo para tomar todos los nombres.
       console.log(this.checkImpactoAmbiental)
@@ -1647,6 +1542,7 @@ actualizandoResponsable(){
       }
       console.log(impacto_ambiental_nombres)
       //Folio proyecto
+
       var folio=siglasPlanta+"-"+siglasArea+'-'+siglasDepartamento+'-P'+pilarOrden+'-OB'+objetivoOrden;
       console.log(folio);
 
@@ -1659,8 +1555,8 @@ actualizandoResponsable(){
         select_metodologia:metodologia,
         responsable_id:responsable_id,
         misiones:misiones_nombres,
-        pilares:combinadoPilar,
-        objetivos:combinadoObjetivo,
+        pilares:pilares_nombres,
+        objetivos:objetivos_nombres,
         impacto_ambiental:impacto_ambiental_nombres,
         tons_co2:this.tons_co2,
         ahorro_duro:this.ahorro_duro,
@@ -1677,13 +1573,13 @@ actualizandoResponsable(){
 
       })
     },
-    modalCatalogos(accion,tipo,id,nombre,cantidad, unidadMedida){//accion: es CREAR, ACTUALIZAR, ELIMINAR y tipo: es Pilares, Misiones, Objetivos.
+    modalCatalogos(accion,tipo,id,nombre,cantidad,siglas,unidadMedida,misionLigada,n_mision,id_mision_ligada){//accion: es CREAR, ACTUALIZAR, ELIMINAR y tipo: es Pilares, Misiones, Objetivos.
       this.id = ''
       this.accion = accion
       this.tipo = tipo
       this.myModal = new bootstrap.Modal(document.getElementById("modalCrearCatalogos"))
       this.myModal.show()
-     
+
 
       if(accion=='Actualizar'){
           if(tipo=='Impacto Ambiental'){
@@ -1697,8 +1593,11 @@ actualizandoResponsable(){
           }else if(tipo=='Pilar'){
             this.id = id;
             this.nuevoNombre = nombre;
-            this.cantidad = cantidad;
-            this.misionLigada = unidadMedida;
+            this.siglas = siglas;
+            this.misionLigada = misionLigada;
+            this.n_mision = n_mision;
+            this.id_mision_ligada = id_mision_ligada;
+            console.log(n_mision);
                  
           }else{
             alert ("No existe ese tipo en actualizars")

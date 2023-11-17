@@ -21,7 +21,7 @@ include("conexionGhoner.php");
         global $conexion;
         $resultado = [];
         $estado = false;
-            $consulta = "SELECT * FROM pilares as a LEFT JOIN misiones as b on b.id = a.id_misiones"; //ACOMODAR LA CONSULTA POR QUE TE TRAE TODO REVUELTAO
+            $consulta = "SELECT a.id, a.nombre, a.siglas, a.id_misiones, b.nombre AS nombre_mision, b.id AS mision_id FROM pilares as a LEFT JOIN misiones as b on b.id = a.id_misiones"; //ACOMODAR LA CONSULTA POR QUE TE TRAE TODO REVUELTAO
             $query = $conexion->query($consulta);
         if($query){
             while($datos=mysqli_fetch_array($query)){

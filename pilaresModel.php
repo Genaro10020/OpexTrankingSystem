@@ -33,7 +33,20 @@ include("conexionGhoner.php");
         return $estado;
        $stmt->close();
     }
+    function actualizarPilares($id,$nuevo,$siglas,$misionLigada,$n_mision,$id_mision_ligada){
+        global $conexion;
+        $estado = false;
+        $update = "UPDATE pilares SET nombre=?,siglas=?, id_misiones=? WHERE id = ?";
+        $stmt = $conexion->prepare($update);
+        $stmt->bind_param("ssii", $nuevo,$siglas,$misionLigada,$id);
+        if($stmt->execute()){
+                $estado = true;
+        }
+        $stmt->close();
+        return $estado;
 
+    }
+    
     function consultarPilaresIDmisiones($idsMisiones){
         global $conexion;
         $resultado = [];

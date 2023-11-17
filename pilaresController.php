@@ -31,7 +31,24 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
     case 'PUT':
         // Manejar solicitud PUT (actualización)
-        // ...
+
+        if(isset($arreglo['id']) &&
+           isset($arreglo['nuevo']) && 
+           isset($arreglo['siglas']) && 
+           isset($arreglo['misionLigada']) && 
+           isset($arreglo['n_mision']) && 
+           isset($arreglo['id_mision_ligada'])){
+            $id=$arreglo['id'];
+            $nuevo=$arreglo['nuevo'];
+            $siglas=$arreglo['siglas'];
+            $misionLigada=$arreglo['misionLigada'];
+            $n_mision = $arreglo['n_mision'];
+            $id_mision_ligada = $arreglo['id_mision_ligada'];
+
+            $val[]=actualizarPilares($id,$nuevo,$siglas,$misionLigada,$n_mision,$id_mision_ligada);
+        }else{
+            $val[] = "No existe variable ID o Nuevo";
+        }
         break;
 
     case 'DELETE':

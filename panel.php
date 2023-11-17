@@ -465,7 +465,7 @@ if(isset($_SESSION['nombre'])){
                                                         <button type="button" class="boton-actualizar" v-if="tipo=='Departamento' && accion=='Actualizar'" @click="actualizarDepartamento()">Actualizar</button>
                                                         <button type="button" class="boton-actualizar" v-if="tipo=='Metodología' && accion=='Actualizar'" @click="actualizarMetodologia()">Actualizar</button>
                                                         <button type="button" class="boton-actualizar" v-if="tipo=='Objetivo' && accion=='Actualizar'" @click="actualizarObjetivo()">Actualizar</button>
-                                                        <button type="button" class="boton-actualizar" v-if="tipo=='Pilar' && accion=='Actualizar'" @click="actualizarObjetivo()">Actualizar</button>
+                                                        <button type="button" class="boton-actualizar" v-if="tipo=='Pilar' && accion=='Actualizar'" @click="actualizarPilares()">Actualizar</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -649,13 +649,13 @@ if(isset($_SESSION['nombre'])){
                                                                 {{pilar.siglas}}
                                                             </td>
                                                             <td>
-                                                                {{pilar[1]}}
+                                                                {{pilar.nombre_mision}}
                                                             </td>
                                                             <td>
                                                                 <button type="button" class="boton-eliminar" @click="eliminarPilar(pilar.id)">Eliminar</button>
                                                             </td>
                                                             <td>
-                                                                <button type="button" class="boton-actualizar" @Click="modalCatalogos('Actualizar','Pilar',pilar.id,pilar.nombre,pilar.siglas,pilar[1])">Actualizar</button>
+                                                                <button type="button" class="boton-actualizar" @Click="modalCatalogos('Actualizar','Pilar',pilar.id,pilar.nombre,'',pilar.siglas,'',pilar.id_misiones,pilar.nombre_mision,pilar.mision_id)">Actualizar</button>
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -812,7 +812,7 @@ if(isset($_SESSION['nombre'])){
                                             <button type="button" class="boton-eliminar" @click="eliminarEstandares(estandar.id)">Eliminar</button>
                                         </td>
                                         <td>
-                                            <button type="button" class="boton-actualizar" @Click="modalCatalogos('Actualizar','Estandares',estandar.id,estandar.nombre,estandar.cantidad,estandar.unidad_medida,)">Actualizar</button>
+                                            <button type="button" class="boton-actualizar" @Click="modalCatalogos('Actualizar','Estandares',estandar.id,estandar.nombre,estandar.cantidad,'',estandar.unidad_medida)">Actualizar</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -913,12 +913,12 @@ if(isset($_SESSION['nombre'])){
                                                                 </div>
                                                                 <div  class="input-group mb-3">
                                                                     <span class="input-group-text w-25" >Siglas:</span>
-                                                                    <input v-model="cantidad" type="text" class="w-75">
+                                                                    <input v-model="siglas" type="text" class="w-75">
                                                                 </div>
                                                                 <div  class="input-group mb-3">
-                                                                    <span class="input-group-text w-25" >Seleccione Pilar:</span>
+                                                                    <span class="input-group-text w-25" >Seleccione Mision:</span>
                                                                     <select v-model="misionLigada" class="w-75" v-model="misionLigada">
-                                                                        <option v-for="pilar in pilaresRelacion" :value="pilar.id">{{pilar[1]}}</option>
+                                                                        <option v-for="mision in misiones" :value="mision.id">{{mision.nombre}}</option>
                                                                     </select>
                                                                 </div>
 
