@@ -482,11 +482,13 @@ if(isset($_SESSION['nombre'])){
         <div style="min-height: 80vh">
                     <!--AQUI TRABAJA //ALTA DE PROYECTOS-->
                     <div v-if="ventana=='Altas'">
-                                        <table class="mx-2 mt-5  mb-5 table table-hover table-bordered border-dark text-center">
-                                                                <thead class="  border:1px solid black">
+                                <div class="scroll-dos">
+                                        <table class="mx-auto mt-5  mb-5 tabla-proyectos table-hover table-bordered border-dark text-center table-striped">
+                                                                <thead class="border:1px solid black">
                                                                     <tr>
                                                                         <th>Fecha</th>
-                                                                        <th>Nombre De Proyecto</th>
+                                                                        <th>Folio</th>
+                                                                        <th>Nombre Proyecto</th>
                                                                         <th>Planta</th>
                                                                         <th>Área</th>
                                                                         <th>Departamento</th>
@@ -497,13 +499,14 @@ if(isset($_SESSION['nombre'])){
                                                                         <th>Pilares Estrategico</th>
                                                                         <th>Objetivos Estrategico</th>
                                                                         <th>Impacto Ambiental</th>
-                                                                        <th>Tons De CO2 Por Evitar</th>
-                                                                        <th>Ahorro Duro</th>
-                                                                        <th>Ahorro Suave</th>
+                                                                        <th>Tons CO2 por Evitar (Proyectado)</th>
+                                                                        <th>Ahorro Duro $MXN/Año (Proyectado )</th>
+                                                                        <th>Ahorro Suave $MXN/Año (Proyectado)</th>
                                                                 </thead>
                                                                 <tbody class=" border:1px solid black" style="text-align: center">
-                                                                    <tr style="vertical-align: middle " v-for="proyecto in proyectos">
+                                                                    <tr class="cuepo-tabla-creados" style="vertical-align: middle " v-for="proyecto in proyectos">
                                                                         <td>{{proyecto.fecha}}</td>
+                                                                        <td>{{proyecto.folio}}</td>
                                                                         <td>{{proyecto.nombre_proyecto}}</td>
                                                                         <td>{{proyecto.planta}}</td>
                                                                         <td>{{proyecto.area}}</td>
@@ -520,6 +523,7 @@ if(isset($_SESSION['nombre'])){
                                                                         <td>{{proyecto.ahorro_suave}}</td>
                                                                  </tr>       
                                                         </table>
+                                </div>
                                         <!---->
                     </div>
                       <!--CREAR PERFILES, PILARES OBJETIVOS-->

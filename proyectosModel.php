@@ -19,7 +19,34 @@ include("conexionGhoner.php");
 
     function insertarProyecto($folio,$fecha_alta,$nombre_proyecto,$planta,$area,$departamento,$metodologia,$responsable_id,$misiones,$pilares,$objetivos,$impacto_ambiental,$tons_co2,$ahorro_duro,$ahorro_suave){
         global $conexion;
+        $folio_sin_numero = "";
+        $folio_recuperado = "";
+        $igual="";
+        $numero = 1;
+        $ultimoNum = "";
+        $select = "SELECT folio FROM proyectos_creados WHERE folio LIKE '$folio%' ORDER BY id DESC LIMIT 1";
+        $query= $conexion->query($select);
+                if($query){
+                    $estado_folios= true;
+                    if($query->num_rows>0){
+                        $fila = $query->fetch_assoc();
+                        $folio_recuperado = $fila['folio'];   
+                        $partes = explode("#",$folio_recuperado);
+                        $folio_sin_numero = rtrim($partes[0],"-");
 
+                            if($folio==$folio_sin_numero){//comparo el folio recuperado
+                                $ultimoNum = end($partes);
+                                $numero = intval($ultimoNum) + 1;
+                                $igual = "Si";
+                            }else{
+                                $igual = "No";
+                            }
+                    }  
+                }else{
+                    $estado_folios = false;
+                }
+
+        $nuevo_folio=$folio."-#".$numero;//agrego el numero que sigue al folio
         $consulta = "SELECT * FROM responsables WHERE id = $responsable_id";
         $query = $conexion->query($consulta);
         if($query->num_rows>0){
@@ -34,7 +61,7 @@ include("conexionGhoner.php");
             //Recuperado el responsable inserto
                     $query = "INSERT INTO proyectos_creados (folio,fecha, nombre_proyecto, planta, area, departamento, metodologia, responsable,correo,telefono, misiones,pilares,objetivos,impacto_ambiental, tons_co2, ahorro_duro, ahorro_suave) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                     $stmt = $conexion->prepare($query);
-                    $stmt->bind_param("sssssssssssssssss",$folio, $fecha_invertida,$nombre_proyecto,$planta,$area,$departamento,$metodologia, $nombre_responsable,$correo_responsable,$telefono_responsable,$misiones,$pilares,$objetivos,$impacto_ambiental,$tons_co2,$ahorro_duro,$ahorro_suave);
+                    $stmt->bind_param("sssssssssssssssss",$nuevo_folio, $fecha_invertida,$nombre_proyecto,$planta,$area,$departamento,$metodologia, $nombre_responsable,$correo_responsable,$telefono_responsable,$misiones,$pilares,$objetivos,$impacto_ambiental,$tons_co2,$ahorro_duro,$ahorro_suave);
                     if($stmt->execute()){
                         $estado = true;
                     }
@@ -44,8 +71,8 @@ include("conexionGhoner.php");
             $estado  = false;
         }
 
-       
-        return $estado;
+        return array($estado,$estado_folios,$folio_recuperado,$folio_sin_numero,$igual);
+        
     }
 
 

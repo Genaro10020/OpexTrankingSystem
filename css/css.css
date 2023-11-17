@@ -89,6 +89,12 @@ table,.btn-actualizar,.btn-eliminar, .btn-guardar{
     /* Establece la altura máxima del div con scroll */
 }
 
+.scroll-dos{
+    overflow: auto;
+    height:80vh;
+    /* Establece la altura máxima del div con scroll */
+}
+
 thead{
    color: #fff;
     background-color: #848484;
@@ -106,7 +112,13 @@ thead{
     color: #cbc8c8;
 }
 
+.cuepo-tabla-creados{
+    font-size: 0.8em;
+}
 
+.tabla-proyectos{
+    font-size: 0.8em;
+}
 
 
 .btn-anadir{

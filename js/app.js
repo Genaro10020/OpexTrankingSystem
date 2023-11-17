@@ -370,9 +370,12 @@ const AltaProyectos = {
   /*VERIFICANDO OBJETIVOS AL CHECKERA */
   checkeandoObjetivos(){
     var ids_objetivos= [];
+    var indexs_objetivos= [];
     for (let i = 0; i < this.checkObjetivos.length; i++) {
       var id_objetivo = this.checkObjetivos[i].split('<->')[0];
+      var index_objetivo = this.checkObjetivos[i].split('<->')[4];
       ids_objetivos.push(id_objetivo);
+      indexs_objetivos.push(index_objetivo);
      }
      this.idsObjetivos = ids_objetivos;
 
@@ -1407,7 +1410,7 @@ actualizandoResponsable(){
       if (directoIndices.length > 1) {
         // Si hay más de un 'directo', deseleccionar el último 'directo'
         const lastIndex = directoIndices.pop();
-        this.selectPilar[lastIndex] = '';
+        this.selectPilar[lastIndex] = 'indirecto';
         alert("No puedo tener dos Pilares Directos, solo uno");
       }
     },
@@ -1423,7 +1426,7 @@ actualizandoResponsable(){
       if (directoIndices.length > 1) {
         // Si hay más de un 'directo', deseleccionar el último 'directo'
         const lastIndex = directoIndices.pop();
-        this.selectObjetivo[lastIndex] = '';
+        this.selectObjetivo[lastIndex] = 'indirecto';
         alert("No puedo tener dos Objetivos Directos, solo uno");
       }
     },
@@ -1559,8 +1562,12 @@ actualizandoResponsable(){
       else if(this.checkMisiones.length<=0){this.respondio=false;  alert("Seleccione minimo una Misión")}
       //Pilares
       else if(this.checkPilares.length<=0){this.respondio=false;  alert("Seleccione Pilar, para visualizarlos seleccione Mision")}
+    //verificar si existe minimo un directo en Pilar
+      else if (!this.selectPilar.includes("directo")){this.respondio=false;  alert("Minimo un Pilar tiene que ser 'Directo'")}
       //Objetivos
       else if(this.checkObjetivos.length<=0){this.respondio=false; alert("Seleccione Objetivo, para visualizarlos, seleccione Mision y Objetivo")}
+      //verificar si existe minimo un directo en Pilar
+      else if (!this.selectObjetivo.includes("directo")){this.respondio=false;  alert("Minimo un Objetivo tiene que ser 'Directo'")}
       //Impacto Ambiental
       else if(this.checkImpactoAmbiental.length<=0){this.respondio=false; alert("Seleccione minimo una Impacto Ambiental")}
       //Ahorros
@@ -1692,17 +1699,19 @@ actualizandoResponsable(){
         select_metodologia:metodologia,
         responsable_id:responsable_id,
         misiones:misiones_nombres,
-        pilares:pilares_nombres,
-        objetivos:objetivos_nombres,
+        pilares:combinadoPilar,
+        objetivos:combinadoObjetivo,
         impacto_ambiental:impacto_ambiental_nombres,
         tons_co2:this.tons_co2,
         ahorro_duro:this.ahorro_duro,
         ahorro_suave:this.ahorro_suave   
       }).then(response=>{
           console.log(response.data)
-          if(response.data[0]==true){
-             this.myModal.hide()
-             this.consultarProyectos()
+          if(response.data[0][0]==true){
+            if(response.data[0][1]==true){
+              this.myModal.hide()
+              this.consultarProyectos()
+            }
           }else{
             alert("No se dio de alta el proyecto.")
           }
