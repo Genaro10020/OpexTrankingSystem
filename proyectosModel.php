@@ -4,7 +4,7 @@ include("conexionGhoner.php");
         global $conexion;
         $resultado = [];
         $estado = false;
-            $consulta = "SELECT * FROM proyectos_creados ORDER BY id ASC";
+            $consulta = "SELECT * FROM proyectos_creados ORDER BY folio ASC";
             $query = $conexion->query($consulta);
             if($query){
                 while ($datos=mysqli_fetch_array($query)){

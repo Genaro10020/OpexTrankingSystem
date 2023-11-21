@@ -112,9 +112,14 @@ thead{
     color: #cbc8c8;
 }
 
-.cuepo-tabla-creados{
+.cuerpo-tabla-creados-diferente {
+    background-color: rgb(221, 178, 209); /* Cambia el color a tu preferencia */
+}
+
+.cuerpo-tabla-creados{
     font-size: 0.8em;
 }
+
 
 .tabla-proyectos{
     font-size: 0.8em;
@@ -429,7 +434,10 @@ box-shadow: 10px 5px 10px black;
     }
 
 
-    
+    .diferente-color{
+        background-color: rgba(135, 172, 148, 0.941);
+        height: 20px;
+    }
 
 
 /* Small devices (landscape phones, 576px and up)*/

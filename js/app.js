@@ -1719,6 +1719,28 @@ actualizandoResponsable(){
 
       })
     },
+
+    folioAnteriorSinNumeral(nombre,index){
+        // Compara el nombre actual con el anterior y asigna un color diferente si es diferente
+        if (index > 0 && this.obtenerPrefijo(nombre) !== this.obtenerPrefijo(this.proyectos[index - 1].folio)){
+          return this.obtenerPrefijo(nombre)!=this.obtenerPrefijo(this.proyectos[index - 1].folio);// Cambia el color según tus preferencias
+        }
+    },
+ 
+  /*  folioAnteriorSinNumeral(index) {
+      if (index > 0 && index < this.proyectos.length) {
+        return this.obtenerPrefijo(this.proyectos[index - 1].folio);
+      }
+    },
+    folioSinNumeral(index) {
+      if (index < this.proyectos.length - 1) {
+        return this.obtenerPrefijo(this.proyectos[index].folio);
+      }
+    },*/
+    obtenerPrefijo(folioCompleto) {
+      var posicionUltimoGuion = folioCompleto.lastIndexOf("-");
+      return folioCompleto.substring(0, posicionUltimoGuion);
+    },
     modalCatalogos(accion,tipo,id,nombre,cantidad,siglas,unidadMedida,misionLigada,n_mision,id_mision_ligada){//accion: es CREAR, ACTUALIZAR, ELIMINAR y tipo: es Pilares, Misiones, Objetivos.
       this.id = ''
       this.accion = accion

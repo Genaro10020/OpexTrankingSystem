@@ -483,6 +483,7 @@ if(isset($_SESSION['nombre'])){
                     <!--AQUI TRABAJA //ALTA DE PROYECTOS-->
                     <div v-if="ventana=='Altas'">
                                 <div class="scroll-dos">
+                                  
                                         <table class="mx-auto mt-5  mb-5 tabla-proyectos table-hover table-bordered border-dark text-center table-striped">
                                                                 <thead class="border:1px solid black">
                                                                     <tr>
@@ -504,9 +505,13 @@ if(isset($_SESSION['nombre'])){
                                                                         <th>Ahorro Suave $MXN/Año (Proyectado)</th>
                                                                 </thead>
                                                                 <tbody class=" border:1px solid black" style="text-align: center">
-                                                                    <tr class="cuepo-tabla-creados" style="vertical-align: middle " v-for="proyecto in proyectos">
+                                                                <template v-for="(proyecto,index) in proyectos">
+                                                                    <tr v-if="folioAnteriorSinNumeral(proyecto.folio, index)" :class="{ 'diferente-color': folioAnteriorSinNumeral(proyecto.folio, index)==true}"><!--ES DIFERENTE--->
+                                                                        <td colspan="16" v-if="index>0"></td>
+                                                                    </tr>
+                                                                    <tr class="cuerpo-tabla-creados" style="vertical-align: middle;">
                                                                         <td>{{proyecto.fecha}}</td>
-                                                                        <td>{{proyecto.folio}}</td>
+                                                                        <td style="min-width:150px;">{{proyecto.folio}}</td>
                                                                         <td>{{proyecto.nombre_proyecto}}</td>
                                                                         <td>{{proyecto.planta}}</td>
                                                                         <td>{{proyecto.area}}</td>
@@ -521,7 +526,8 @@ if(isset($_SESSION['nombre'])){
                                                                         <td>{{proyecto.tons_co2}}</td>
                                                                         <td>{{proyecto.ahorro_duro}}</td>
                                                                         <td>{{proyecto.ahorro_suave}}</td>
-                                                                 </tr>       
+                                                                     </tr>   
+                                                                </template>
                                                         </table>
                                 </div>
                                         <!---->
