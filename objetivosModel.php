@@ -17,6 +17,23 @@ include("conexionGhoner.php");
             return array ($resultado,$estado);
     }
 
+    function consultarObjetivosRelacional(){
+        global $conexion;
+        $resultado = [];
+        $estado = false;
+            $consulta = "SELECT a.id, a.nombre AS nombre_objetivos, a.siglas, a.id_pilares, b.nombre AS nombre_pilares FROM objetivos AS a INNER JOIN pilares AS b ON a.id_pilares = b.id";
+            $query = $conexion->query($consulta);
+            if($query){
+                while($datos=mysqli_fetch_array($query)){
+                    $resultado [] = $datos;
+                }
+                $estado = true;
+            } else {
+                $estado = false;
+            }
+            return array($resultado,$estado);
+    }
+
 
     
     function consultarObjetivosIDpilares($idsPilares){
@@ -79,6 +96,19 @@ include("conexionGhoner.php");
         $update = "UPDATE objetivos SET nombre=?, siglas=?, id_pilares=? WHERE  id=?";
         $stmt = $conexion->prepare($update);
         $stmt->bind_param("ssii", $nombre, $siglas, $id_pilar,$id);
+        if($stmt->execute()){
+            $estado = true;
+        }
+        $stmt->close();
+        return $estado;
+    }
+
+    function actualizarObjetivos($nombre,$siglas,$select_pilar,$id){
+        global $conexion;
+        $estado = false;
+        $update = "UPDATE objetivos SET nombre=?, siglas=?, id_pilares=? WHERE  id=?";
+        $stmt = $conexion->prepare($update);
+        $stmt->bind_param("ssii", $nombre, $siglas, $select_pilar,$id);
         if($stmt->execute()){
             $estado = true;
         }

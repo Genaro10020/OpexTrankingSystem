@@ -10,9 +10,14 @@ switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
         // Manejar solicitud GET (consultar)
         //$lo = array([1,2,3],true);
-
-        $val [] = consultarObjetivos();
-        
+        if($_GET['relacional']=="relacionada"){
+            $val[] = consultarObjetivosRelacional();
+        } else if($_GET['relacional']=='objetivoNorelacionada') { 
+            $val[] = consultarObjetivos();
+            } else{
+            $val[] = 'No existe la relacional';
+            }
+            
         break;
     case 'POST':
         // Manejar solicitud POST (creación)
@@ -38,7 +43,13 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 $siglas = $arreglo['siglas'];
                 $id_pilar = $arreglo['id_pilar'];
                 $val[] = actualizarObjetivo($nombre,$siglas,$id_pilar,$id);
-            }else{
+            }else if(isset($arreglo['id']) && isset($arreglo['nuevo']) && isset($arreglo['siglas']) && isset($arreglo['select_pilar'])){
+                $id = $arreglo['id'];
+                $nombre = $arreglo['nuevo'];
+                $siglas = $arreglo['siglas'];
+                $select_pilar = $arreglo['select_pilar'];
+                $val[] = actualizarObjetivos($nombre,$siglas,$select_pilar,$id);
+            } else {
                 $val[] = "No existe variable ID o Nuevo";
             }
         // ...
