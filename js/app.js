@@ -418,10 +418,14 @@ const AltaProyectos = {
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR OBJETIVOS*/
     consultarObjetivos(){
       axios.get('objetivosController.php',{
+        param:{
+          relacional: 'objetivoNorelacionada'
+        }
       }).then(response =>{
           console.log(response.data)
           if (response.data[0][1]==true){
               if (response.data[0][0].length>0) {
+                this.consultarObjetivosRelacional();
                 this.objetivos = response.data[0][0]
               }
           }else{
@@ -516,7 +520,7 @@ const AltaProyectos = {
 
       })
     },
-     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PILARES*/
+     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR MISIONES RELACIONADAS A PILARES*/
      consultarMisionesRelacional(){
       axios.get('misionesController.php',{
         params:{
@@ -530,6 +534,29 @@ const AltaProyectos = {
               }
           }else{
               alert("La consulta Misiones, no se realizo correctamente.")
+          }
+  
+      }).catch(error =>{
+        console.log('Erro :-('+error)
+      }).finally(() =>{
+
+      })
+    },
+    /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR OBJETIVOS RELACIONADOS A PILARES*/
+    consultarObjetivosRelacional(){
+      axios.get('objetivosController.php',{
+        params:{
+            relacional:"relacionada"
+        }
+      }).then(response =>{
+          console.log(response.data)
+          if (response.data[0][1]==true){
+              if (response.data[0][0].length>0) {
+                this.ObjetivosRelacionados = response.data[0][0]
+                this.objetivos = response.data[0][0]
+              }
+          }else{
+              alert("La consulta de Objetivos relacionados, no se realizo correctamente.")
           }
   
       }).catch(error =>{
@@ -598,6 +625,8 @@ const AltaProyectos = {
           if (!response.data[0]==false){
             // this.myModalCRUD.hide()
             this.consultarEstandaresCO2()
+            alert('Alta exitosa..');
+            this.myModal.hide();
           }else{
               alert("La inserción de Planta, no se realizo correctamente.")
           }
@@ -644,6 +673,8 @@ const AltaProyectos = {
           if (!response.data[0]==false){
             // this.myModalCRUD.hide()
             this.consultarImpactoAmbiental()
+            this.myModal.hide();
+            alert('Alta exitosa..');
           }else{
               alert("La inserción de Planta, no se realizo correctamente.")
           }
@@ -768,6 +799,8 @@ const AltaProyectos = {
                   if (response.data[0]==true){
                     // this.myModalCRUD.hide()
                     this.consultarObjetivos()
+                    alert('Alta exitosa..');
+                    this.myModal.hide();
                     this.siglas=''
                     this.nueva=''
                   }else{
@@ -794,7 +827,9 @@ const AltaProyectos = {
                 console.log(response.data)
                 if (response.data[0]==true){
                   //this.myModalCRUD.hide()
-                  this.consultarPilares()
+                  this.consultarMisionesRelacional()
+                  alert('Alta exitosa..');
+                  this.myModal.hide();
                   this.nueva = ''
                   this.siglas=''
                   this.select_mision=''
@@ -1065,7 +1100,7 @@ actualizandoResponsable(){
               alert("Todos los campos son requeridos para poder actualizar.")
             }
         },
-        /*/////////////////////////////////////////////////////////////////////////////////ACTUALIZAR ESTANDARES*/
+        /*/////////////////////////////////////////////////////////////////////////////////ACTUALIZAR PILARES*/
         actualizarPilares(){
           if(this.nuevoNombre!='' && this.siglas!='' && this.misionLigada!=''){
                 axios.put('pilaresController.php',{
@@ -1079,6 +1114,7 @@ actualizandoResponsable(){
                   console.log(response.data)
                    if(response.data[0]==true){
                     this.myModal.hide();
+
                     this.consultarMisionesRelacional()
                     this.id = ''
                     this.nuevoNombre ='' 
@@ -1090,7 +1126,37 @@ actualizandoResponsable(){
                     alert("Se actualizo correctamente.")
                   }else{
                       alert("No se actualizo el Pilar.")
-                      console.log(misionLigada);
+                  }
+              }).catch(error =>{
+                //console.log('Erro :-('+error)
+              }).finally(() =>{
+  
+              })
+            }else{
+              alert("Todos los campos son requeridos para poder actualizar.")
+            }
+        },
+        /*/////////////////////////////////////////////////////////////////////////////////ACTUALIZAR PILARES*/
+        actualizarObjetivos(){
+          if(this.nuevoNombre!='' && this.siglas!='' && this.select_pilar!=''){
+           // console.log("ID: "+this.id+"Nombre: "+this.nuevoNombre+"Siglas: "+this.siglas+"ID_Pilar"+this.select_pilar)
+                axios.put('objetivosController.php',{
+                id:this.id,
+                nuevo:this.nuevoNombre,
+                siglas:this.siglas,
+                select_pilar:this.select_pilar
+              }).then(response =>{
+                  console.log(response.data)
+                   if(response.data[0]==true){
+                    this.myModal.hide();
+                    this.consultarMisionesRelacional()
+                    this.id = ''
+                    this.nuevoNombre ='' 
+                    this.siglas=''
+                    this.cantidad=''
+                    alert("Se actualizo correctamente.")
+                  }else{
+                      alert("No se actualizo el Objetivo.")
                   }
               }).catch(error =>{
                 //console.log('Erro :-('+error)
@@ -1148,6 +1214,7 @@ actualizandoResponsable(){
               if (response.data[0]==true){
                 // this.myModalCRUD.hide()
                 this.consultarMisiones()
+                this.consultarMisionesRelacional();
                 this.id=''
               }else{
                   alert("No se elimino.")
@@ -1745,9 +1812,15 @@ actualizandoResponsable(){
       this.id = ''
       this.accion = accion
       this.tipo = tipo
+      this.nueva = '';
       this.myModal = new bootstrap.Modal(document.getElementById("modalCrearCatalogos"))
       this.myModal.show()
-
+      console.log(id);
+      console.log(nombre);
+      console.log(siglas);
+      console.log(misionLigada);
+      console.log(cantidad);
+      
 
       if(accion=='Actualizar'){
           if(tipo=='Impacto Ambiental'){
@@ -1767,7 +1840,13 @@ actualizandoResponsable(){
             this.id_mision_ligada = id_mision_ligada;
             console.log(n_mision);
                  
-          }else{
+          }else if(tipo=='Objetivo'){
+            this.nuevoNombre = nombre;
+            this.siglas = siglas;
+            this.id = id;
+            this.select_pilar = cantidad;
+            
+          }else { 
             alert ("No existe ese tipo en actualizars")
           }
       }
