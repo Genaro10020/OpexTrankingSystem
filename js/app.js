@@ -509,6 +509,9 @@ const AltaProyectos = {
               if (response.data[0][0].length>0) {
                 this.misiones = response.data[0][0]
                 this.allMisiones = response.data[0][0]
+              } else {
+                this.allMisiones = []
+                this.misiones = []
               }
           }else{
               alert("La consulta Misiones, no se realizo correctamente.")
@@ -529,8 +532,10 @@ const AltaProyectos = {
       }).then(response =>{
           console.log(response.data)
           if (response.data[0][1]==true){
-              if (response.data[0][0].length>0) {
+              if (response.data[0][0].length>0){
                 this.pilaresRelacion = response.data[0][0]
+              }else{
+                this.pilaresRelacion = [];
               }
           }else{
               alert("La consulta Misiones, no se realizo correctamente.")
@@ -552,8 +557,9 @@ const AltaProyectos = {
           console.log(response.data)
           if (response.data[0][1]==true){
               if (response.data[0][0].length>0) {
-                this.ObjetivosRelacionados = response.data[0][0]
                 this.objetivos = response.data[0][0]
+              }else{
+                this.objetivos = [];
               }
           }else{
               alert("La consulta de Objetivos relacionados, no se realizo correctamente.")
@@ -573,6 +579,8 @@ const AltaProyectos = {
           if (response.data[0][1]==true){
               if (response.data[0][0].length>0) {
                 this.impactoAmbiental = response.data[0][0]
+              } else {
+                this.impactoAmbiental = []
               }
           }else{
               alert("La consulta Objetivos, no se realizo correctamente.")
@@ -646,10 +654,10 @@ const AltaProyectos = {
       }).then(response =>{
           console.log(response.data[0])
           if (response.data[0][1]==true){
-            console.log('soy true')
               if (response.data[0][0].length>0) {
-                console.log('soy un arreglo')
                 this.estandares = response.data[0][0]
+              } else {
+                this.estandares = []
               }
           }else{
              alert("La consulta  plantas no se realizo correctamente.")
@@ -798,11 +806,12 @@ const AltaProyectos = {
                   console.log(response.data)
                   if (response.data[0]==true){
                     // this.myModalCRUD.hide()
-                    this.consultarObjetivos()
+                    this.consultarObjetivosRelacional()
                     alert('Alta exitosa..');
                     this.myModal.hide();
                     this.siglas=''
                     this.nueva=''
+                    this.select_pilar=''
                   }else{
                       alert("La inserción, no se realizo correctamente.")
                   }
@@ -1069,6 +1078,33 @@ actualizandoResponsable(){
               alert("Todos los campos son requeridos para poder actualizar.")
             }
         },
+         /*/////////////////////////////////////////////////////////////////////////////////ACTUALIZAR MISION*/
+         actualizarMision(){
+          if(this.nueva!=''){
+                axios.put('misionesController.php',{
+                id:this.id,
+                nuevo:this.nueva
+              }).then(response =>{
+                  console.log(response.data)
+                   if(response.data[0]==true){
+                    this.myModal.hide();
+                    this.consultarMisiones()
+                    this.consultarMisionesRelacional()
+                    this.id = ''
+                    this.nueva ='' 
+                    alert("Se actualizo correctamente.")
+                  }else{
+                      alert("No se actualizo la Mision.")
+                  }
+              }).catch(error =>{
+                //console.log('Erro :-('+error)
+              }).finally(() =>{
+  
+              })
+            }else{
+              alert("Todos los campos son requeridos para poder actualizar.")
+            }
+        },
         /*/////////////////////////////////////////////////////////////////////////////////ACTUALIZAR ESTANDARES*/
         actualizarEstandaresCO2(){
           if(this.nuevoNombre!='' && this.cantidad!='' && this.unidadMedida!=''){
@@ -1114,7 +1150,7 @@ actualizandoResponsable(){
                   console.log(response.data)
                    if(response.data[0]==true){
                     this.myModal.hide();
-
+                    this.consultarObjetivosRelacional()
                     this.consultarMisionesRelacional()
                     this.id = ''
                     this.nuevoNombre ='' 
@@ -1149,7 +1185,7 @@ actualizandoResponsable(){
                   console.log(response.data)
                    if(response.data[0]==true){
                     this.myModal.hide();
-                    this.consultarMisionesRelacional()
+                    this.consultarObjetivosRelacional()
                     this.id = ''
                     this.nuevoNombre ='' 
                     this.siglas=''
@@ -1203,7 +1239,7 @@ actualizandoResponsable(){
       },
       /*/////////////////////////////////////////////////////////////////////////////////ELIMINAR PLANTA*/
      eliminarMision(id){
-        if(confirm("¿Desea eliminar la mision?"))
+        if(confirm("¿Desea eliminar la mision? \n Se eliminara pilares y objetivos ligados"))
         {
           axios.delete('misionesController.php',{
             data:{
@@ -1213,8 +1249,10 @@ actualizandoResponsable(){
               console.log(response.data)
               if (response.data[0]==true){
                 // this.myModalCRUD.hide()
-                this.consultarMisiones()
+                console.log('se elimino correctamente')
+                this.consultarMisiones();
                 this.consultarMisionesRelacional();
+                this.consultarObjetivosRelacional();
                 this.id=''
               }else{
                   alert("No se elimino.")
@@ -1240,7 +1278,8 @@ actualizandoResponsable(){
             console.log(response.data)
             if (response.data[0]==true){
               // this.myModalCRUD.hide()
-              this.consultarPilares()
+              this.consultarMisionesRelacional()
+              this.consultarObjetivosRelacional()
               this.id=''
             }else{
                 alert("No se elimino.")
@@ -1406,7 +1445,7 @@ actualizandoResponsable(){
           }).then(response =>{
               console.log(response.data)
               if (response.data[0]==true){
-                this.consultarObjetivos()
+                this.consultarObjetivosRelacional();
                 this.id=''
               }else{
                   alert("No se elimino al Responsable.")
@@ -1870,12 +1909,6 @@ actualizandoResponsable(){
       this.nueva = '';
       this.myModal = new bootstrap.Modal(document.getElementById("modalCrearCatalogos"))
       this.myModal.show()
-      console.log(id);
-      console.log(nombre);
-      console.log(siglas);
-      console.log(misionLigada);
-      console.log(cantidad);
-      
 
       if(accion=='Actualizar'){
           if(tipo=='Impacto Ambiental'){
@@ -1901,7 +1934,10 @@ actualizandoResponsable(){
             this.id = id;
             this.select_pilar = cantidad;
             
-          }else { 
+          }else if(tipo=='Mision'){
+            this.id = id;
+            this.nueva = nombre;
+          } else { 
             alert ("No existe ese tipo en actualizars")
           }
       }

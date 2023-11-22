@@ -534,7 +534,7 @@ if(isset($_SESSION['nombre'])){
                     </div>
                       <!--------------------------CREAR PERFILES, PILARES OBJETIVOS---------------------------------->
                      <div class="row" v-if="ventana=='Crear'">
-                        <div class=" bg-secondary mt-3 text-white align-items-center ">
+                        <!-- <div class=" bg-secondary mt-3 text-white align-items-center ">
                             <div class=" text-center">
                                 RELACIONES
                             </div>
@@ -570,9 +570,9 @@ if(isset($_SESSION['nombre'])){
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
+                            </div> -->
                         <!------------------------------TABLA DE LA MISION-------------------------->
-                        <div class="col-12 col-lg-6 mb-5">
+                        <div class="col-12 col-lg-6 mt-3 mb-5">
                                 <div  class="col-12  text-center align-content">
                                         <div class=" encabezadoTablas">
                                             <div class="  d-flex justify-content-center align-items-center">
@@ -608,7 +608,7 @@ if(isset($_SESSION['nombre'])){
                                                             <button type="button" class="boton-eliminar" @click="eliminarMision(mision.id)">Eliminar</button>
                                                         </td>
                                                         <td>
-                                                            <button type="button" class="boton-actualizar" @Click="modalCatalogos('Actualizar','Mision',mision.nombre)">Actualizar</button>
+                                                            <button type="button" class="boton-actualizar" @Click="modalCatalogos('Actualizar','Mision',mision.id,mision.nombre)">Actualizar</button>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -617,7 +617,7 @@ if(isset($_SESSION['nombre'])){
                                 </div>
                             </div>
                                 <!---------------------------TABLA DE LA PILARES---------------------------->
-                            <div class="col-12 col-lg-6">
+                            <div class="col-12 col-lg-6 mt-3">
                                 <div class= "col-12 text-center align-content">
                                         <div class=" encabezadoTablas">
                                             <div class=" d-flex justify-content-center align-items-center"  > 
@@ -904,14 +904,14 @@ if(isset($_SESSION['nombre'])){
                                                     </div>
                                                 </div>
                                                 <!--cuerpo MODAL ACTUALIZAR Misiones-->
-                                                <!-- <div v-if="tipo=='Mision'">
+                                                    <div v-if="tipo=='Mision'">
                                                     <div>
                                                         <div class="modal-body input-group mb-3">
                                                                 <span class="input-group-text w-25 mt-3" >Nombre:</span>
-                                                                <input v-model="nuevoNombre" type="text" class="w-75 mt-3" >  
+                                                                <input v-model="nueva" type="text" class="w-75 mt-3" >  
                                                         </div>
                                                     </div>
-                                                </div> -->
+                                                </div> 
                                                  <!--CUERPO MODAL ACTUALIZAR PILARES-->
                                                  <div v-if="tipo=='Pilar'">
                                                     <div>
@@ -975,6 +975,7 @@ if(isset($_SESSION['nombre'])){
                                         <button type="button" class="boton-actualizar" v-if="tipo=='Estandares' && accion=='Actualizar'" @click="actualizarEstandaresCO2()">Actualizar</button>
                                         <button type="button" class="boton-actualizar" v-if="tipo=='Pilar' && accion=='Actualizar'" @click="actualizarPilares()">Actualizar</button>
                                         <button type="button" class="boton-actualizar" v-if="tipo=='Objetivo' && accion=='Actualizar'" @click="actualizarObjetivos()">Actualizar</button>
+                                        <button type="button" class="boton-actualizar" v-if="tipo=='Mision' && accion=='Actualizar'" @click="actualizarMision()">Actualizar</button>
                                         
 
                                        

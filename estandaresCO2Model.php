@@ -37,7 +37,7 @@ include("conexionGhoner.php");
         $estado = false;
         $update = "UPDATE estandares_co2 SET nombre=?,cantidad=?,unidad_medida=? WHERE  id=?";
         $stmt = $conexion->prepare($update);
-        $stmt->bind_param("ssii", $nuevo, $unidadMedida, $cantidad, $id);
+        $stmt->bind_param("ssss", $nuevo, $cantidad, $unidadMedida, $id);
         if($stmt->execute()){
             $estado = true;
         }

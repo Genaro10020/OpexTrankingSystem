@@ -49,10 +49,10 @@ include("conexionGhoner.php");
         return $estado;
     }
 
-    function actualizarMetodologia($id,$nuevoNombre){
+    function actualizarMision($id,$nuevoNombre){
         global $conexion;
         $estado = false;
-        $update = "UPDATE metodologias SET nombre=? WHERE  id=?";
+        $update = "UPDATE misiones SET nombre=? WHERE  id=?";
         $stmt = $conexion->prepare($update);
         $stmt->bind_param("si", $nuevoNombre, $id);
         if($stmt->execute()){
@@ -61,6 +61,10 @@ include("conexionGhoner.php");
         $stmt->close();
         return $estado;
     }
+
+
+
+
 
     function eliminarMision($id){
         global $conexion;

@@ -32,8 +32,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
             if(isset($arreglo['id']) && isset($arreglo['nuevo'])){
                 $id=$arreglo['id'];
                 $nuevo=$arreglo['nuevo'];
-                $val[]=actualizarMetodologia($id,$nuevo);
-            }else{
+                $val[]=actualizarMision($id,$nuevo);
+            } else {
                 $val[] = "No existe variable ID o Nuevo";
             }
         // ...
