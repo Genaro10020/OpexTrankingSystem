@@ -252,8 +252,8 @@ if(isset($_SESSION['nombre'])){
                                                                
                                                             <div class="input-group mb-3">
                                                                 <span class="input-group-text w-50" >Tons CO2 por Evitar (Proyectado)</span>
-                                                                <input type="number" v-model="tons_co2" min="0" class="w-25" :class="{'nocontestado': respondio === false && tons_co2===0, '': tons_co2!==0 && tons_co2!==''}">
-                                                                <div v-if="tons_co2!==0 && tons_co2!==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                                                <input id="tons_co2" type="text" v-model="tons_co2"  min="0" class="w-25" :class="{'nocontestado': respondio === false && tons_co2===0, '': tons_co2!==0 && tons_co2!==''}" @click="formatoNumero($event)" @keyUp="formatoNumero($event)">
+                                                                <div v-if="tons_co2!==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                                             </div>
 
                                                             <div class="input-group mb-3">
@@ -264,7 +264,7 @@ if(isset($_SESSION['nombre'])){
 
                                                             <div class="input-group mb-3">
                                                                 <span class="input-group-text w-50" >Ahorro Suave $MXN/Año (Proyectado)</span>
-                                                                <input type="number" v-model="ahorro_suave" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_suave===0, '': ahorro_suave!==0 && ahorro_suave!==''}">
+                                                                <input type="number" v-model="ahorro_suave"  min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_suave===0, '': ahorro_suave!==0 && ahorro_suave!==''}">
                                                                 <div v-if="ahorro_suave!==0 && ahorro_suave!==''"  class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                                             </div>
                                                             <div class="input-group mb-3">

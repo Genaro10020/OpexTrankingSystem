@@ -1523,6 +1523,10 @@ actualizandoResponsable(){
           //this.consultarPilares()
           this.consultarImpactoAmbiental()
           this.consultarMisiones()
+          // Simulando un evento keyup
+          var eventoSimulado = new Event('keyUp');
+          // Llamando a la función formatoNumero con el evento simulado
+          this.formatoNumero(eventoSimulado);
           
       }else if(modal=="CRUD"){
         this.myModalCRUD = new bootstrap.Modal(document.getElementById("modal-alta-crud"))
@@ -1793,8 +1797,59 @@ actualizandoResponsable(){
           return this.obtenerPrefijo(nombre)!=this.obtenerPrefijo(this.proyectos[index - 1].folio);// Cambia el color según tus preferencias
         }
     },
- 
-  /*  folioAnteriorSinNumeral(index) {
+    formatoNumero(event) {
+     var valor = document.getElementById('tons_co2').value;
+     var input = document.getElementById('tons_co2');
+      if (event.key === 'Backspace' && (valor===null || valor==='')) {
+        valor = document.getElementById('tons_co2').value = "$";
+      }
+      if (event.key !== 'Backspace') {
+      
+          const options2 = { style: 'currency', currency: 'USD', minimumFractionDigits: 2 };
+          const numberFormat2 = new Intl.NumberFormat('en-US', options2);
+  
+          // Obtener la posición actual del cursor
+          const cursorPos = document.getElementById('tons_co2').selectionStart;
+          // Obtener el valor actual del campo y eliminar caracteres no deseados
+
+
+          let valorCampo = valor.replace(/[^\d.]/g, '');
+         var stringIzquiedaDelPunto= valorCampo.substring(0,valor.indexOf(".")-1);
+          console.log(stringIzquiedaDelPunto);
+          console.log(stringIzquiedaDelPunto.length);
+
+          // Formatear el valor como un número
+          let numeroFormateado = parseFloat(valorCampo).toFixed(2);
+  
+          // Aplicar el formato de número
+          
+          input.value = numberFormat2.format(numeroFormateado);
+
+          // Restaurar la posición del cursor
+          input.setSelectionRange(cursorPos, cursorPos);
+
+          // Si la longitud de la parte izquierda del punto es un múltiplo de 3 más 1, restar 1 al cursor
+          if (stringIzquiedaDelPunto.length % 4 === 0) {
+            input.setSelectionRange(cursorPos + 1, cursorPos + 1);
+          }
+      }
+    },
+    /*formatoNumero(event){
+      const options2 = { style: 'currency', currency: 'USD' };
+      const numberFormat2 = new Intl.NumberFormat('en-US', options2);
+     
+
+       
+  if (event && event.key !== 'Backspace' && this.tons_co2 !== '' && event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') {
+    var numero=this.tons_co2.replace("$","");
+    numero=numero.replace(",","");
+      if(!isNaN(numero)){
+        console.log(numberFormat2.format(numero));
+        this.tons_co2=numberFormat2.format(numero)
+      }
+  }
+    },
+    folioAnteriorSinNumeral(index) {
       if (index > 0 && index < this.proyectos.length) {
         return this.obtenerPrefijo(this.proyectos[index - 1].folio);
       }
