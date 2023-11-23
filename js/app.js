@@ -59,7 +59,7 @@ const AltaProyectos = {
       nombre: '',
       numero_nomina: '',
       correo: '',
-      telefono: '',
+      telefono: '', 
       responsableID: [],
 
       /*Impacto Ambiental */
@@ -73,7 +73,11 @@ const AltaProyectos = {
       misionLigada: '',
       n_mision: '',
       id_mision_ligada: '',
-      pilar: ''
+      pilar: '',
+      objetivos_ligados: '',
+      /*SEGUIMIENTO DE PORYECTO*/
+      id_proyecto: '',
+      arregloID: []
     }
   },
   mounted() {
@@ -93,6 +97,43 @@ const AltaProyectos = {
         if (response.data[0][1] == true) {
           if (response.data[0][0].length > 0) {
             this.proyectos = response.data[0][0];
+          }
+        } else {
+          alert("La consulta de proyectos no se realizo correctamente.")
+        }
+      }).catch(error => {
+        console.log('Erro :-(' + error)
+      }).finally(() => {
+
+      })
+    },
+    /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PROYECTOS POR ID PARA QUE TRAEGA DATOS DE CADA PROYECTO*/
+    consultarProyectoID(){
+      axios.post('proyectosController.php', {
+          id_proyecto: this.id_proyecto //ID PROYECTO
+      }).then(response => {
+        console.log(response.data)
+        if (response.data[0][1] == true) {
+          if (response.data[0][0].length > 0) {
+            this.arregloID = response.data[0][0];
+          }
+        } else {
+          alert("La consulta de proyectos no se realizo correctamente.")
+        }
+      }).catch(error => {
+        console.log('Erro :-(' + error)
+      }).finally(() => {
+
+      })
+    },
+    /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PROYECTOS POR NOMBRE*/
+    consultarProyectosPorNombre() {
+      axios.get('proyectosController.php', {
+      }).then(response => {
+        console.log(response.data)
+        if (response.data[0][1] == true) {
+          if (response.data[0][0].length > 0) {
+            this.proyectoNombre = response.data[0][0];
           }
         } else {
           alert("La consulta de proyectos no se realizo correctamente.")
@@ -420,7 +461,7 @@ const AltaProyectos = {
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR OBJETIVOS*/
     consultarObjetivos() {
       axios.get('objetivosController.php', {
-        param: {
+        params: {
           relacional: 'objetivoNorelacionada'
         }
       }).then(response => {
@@ -559,9 +600,10 @@ const AltaProyectos = {
         console.log(response.data)
         if (response.data[0][1] == true) {
           if (response.data[0][0].length > 0) {
-            this.objetivos = response.data[0][0]
+            this.objetivos_ligados = response.data[0][0]
+
           } else {
-            this.objetivos = [];
+            this.objetivos_ligados = [];
           }
         } else {
           alert("La consulta de Objetivos relacionados, no se realizo correctamente.")
@@ -2045,7 +2087,6 @@ const AltaProyectos = {
         }
       }
     }
-
   }
 };
 

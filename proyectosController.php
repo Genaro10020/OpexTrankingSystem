@@ -9,7 +9,8 @@ $val = [];
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
         // Manejar solicitud GET (consultar)
-            $val[] = consultarProyectos();
+                $val[] = consultarProyectos();
+            break;
         break;
     case 'POST':
         // Manejar solicitud POST (creación)
@@ -37,7 +38,11 @@ switch ($_SERVER['REQUEST_METHOD']) {
             $objetivos = json_encode($objetivos, JSON_UNESCAPED_UNICODE);//conviertiendo arreglos en cadena
             $impacto_ambiental = json_encode($impacto_ambiental, JSON_UNESCAPED_UNICODE);//conviertiendo arreglos en cadena
             $val[]= insertarProyecto($folio,$fecha_alta,$nombre_proyecto,$planta,$area,$departamento,$metodologia,$responsable_id,$misiones,$pilares,$objetivos,$impacto_ambiental,$tons_co2,$ahorro_duro,$ahorro_suave);
-        }else{
+        }else if(isset($arreglo['id_proyecto'])){
+            
+            $id_proyecto = $arreglo['id_proyecto'];
+            $val[] = consultarProyectosID($id_proyecto); 
+        }{
             $val[]= "No llegaron tadas la variables";
         }
         // ...

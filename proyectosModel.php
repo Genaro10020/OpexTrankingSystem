@@ -17,6 +17,23 @@ include("conexionGhoner.php");
             return array ($resultado,$estado);
     }
 
+    function consultarProyectosID($id_proyecto){
+        global $conexion;
+        $resultado = [];
+        $estado= false;
+            $consulta = "SELECT * FROM proyectos_creados WHERE id ='$id_proyecto'";
+            $query = $conexion->query($consulta);
+            if($query){
+                while($datos=mysqli_fetch_array($query)){
+                    $resultado [] = $datos;
+                }
+                    $estado = true;
+            } else {
+                    $estado = false;
+            }
+            return array ($resultado,$estado);
+    }
+
     function insertarProyecto($folio,$fecha_alta,$nombre_proyecto,$planta,$area,$departamento,$metodologia,$responsable_id,$misiones,$pilares,$objetivos,$impacto_ambiental,$tons_co2,$ahorro_duro,$ahorro_suave){
         global $conexion;
         $folio_sin_numero = "";
