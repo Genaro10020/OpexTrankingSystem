@@ -87,10 +87,10 @@ const AltaProyectos = {
         consultarProyectos(){
           axios.get('proyectosController.php',{
           }).then(response =>{
-              console.log(response.data[0])
-              if (!response.data[0][1]==false){
+              console.log(response.data)
+              if (response.data[0][1]==true){
                   if (response.data[0][0].length>0) {
-                    this.proyectos = response.data[0][0]
+                    this.proyectos = response.data[0][0];
                   }
               }else{
                 alert("La consulta de proyectos no se realizo correctamente.")
