@@ -41,8 +41,8 @@ const AltaProyectos = {
       selectObjetivo:[],
       select_pilar:'',
       select_mision:'',
-      tons_co2:0,
-      ahorro_duro:0,
+      tons_co2:0.00,
+      ahorro_duro:0.00,
       ahorro_suave:0,
       numero_index:0,
       respondio: true,//utilizo para cambiar el css si no repondio en altas
@@ -1562,10 +1562,6 @@ actualizandoResponsable(){
           //this.consultarPilares()
           this.consultarImpactoAmbiental()
           this.consultarMisiones()
-          // Simulando un evento keyup
-          var eventoSimulado = new Event('keyUp');
-          // Llamando a la función formatoNumero con el evento simulado
-          this.formatoNumero(eventoSimulado);
           
       }else if(modal=="CRUD"){
         this.myModalCRUD = new bootstrap.Modal(document.getElementById("modal-alta-crud"))
@@ -1836,67 +1832,159 @@ actualizandoResponsable(){
           return this.obtenerPrefijo(nombre)!=this.obtenerPrefijo(this.proyectos[index - 1].folio);// Cambia el color según tus preferencias
         }
     },
-    formatoNumero(event) {
-     var valor = document.getElementById('tons_co2').value;
-     var input = document.getElementById('tons_co2');
-      if (event.key === 'Backspace' && (valor===null || valor==='')) {
-        valor = document.getElementById('tons_co2').value = "$";
+    formatoMoneda(convertir){
+      var input;
+      var valor;
+      if(convertir=='toneladas'){
+        valor = this.tons_co2;
+          if(valor==="0" || valor===0){
+            valor=document.getElementById('tons_co2').value="$.00";
+          }
+        input= document.getElementById('tons_co2');
+        cursorPos = document.getElementById('tons_co2').selectionStart;
       }
-      if (event.key !== 'Backspace') {
+      if(convertir=='ahorro duro'){
+        valor = this.tons_co2;
+        if(valor==="0" || valor===0){
+          valor=document.getElementById('tons_co2').value="$.00";
+        }
+        input= document.getElementById('ahorro_duro');
+        cursorPos = document.getElementById('ahorro_duro').selectionStart;
+      }
+      if(convertir=='ahorro suave'){
+        if(valor==="0" || valor===0){
+          valor=document.getElementById('tons_co2').value="$.00";
+        }
+        input= document.getElementById('ahorro_suave');
+        cursorPos = document.getElementById('ahorro_duro').selectionStart;
+      }
+     
+      // Obtener el valor actual del campo y eliminar caracteres no deseados
+      var valorCampo = input.value.replace(/[^\d.]/g, '');
+      console.log("valorCampo"+valorCampo);
+       //punto
+       puntoPosicion = valorCampo.indexOf(".");
+      //buscando el punto
+      var stringIzquiedaDelPunto= valorCampo.substring(0,valorCampo.indexOf("."));
+      // Formatear el valor como un número
+      let numeroFormateado = parseFloat(valorCampo).toFixed(2);
+  
+      // Aplicar el formato de moneda
+      const options = { style: 'currency', currency: 'USD', minimumFractionDigits: 2 };
+      const numberFormat = new Intl.NumberFormat('en-US', options);
+  
+      // Asignar el valor formateado al campo de entrada
+      valor = numberFormat.format(numeroFormateado);
+
+      console.log("valorCampo: "+valorCampo+"largoCampo: "+valorCampo.length+"puntoPosicion"+puntoPosicion+"puntoPosicion"+puntoPosicion);
+
+      if(valorCampo==="0" || valorCampo===0 || stringIzquiedaDelPunto==0){
+        console.log("es igual a cero");
+        valor = "$.00";
+        input.setSelectionRange(cursorPos-3, cursorPos-3);
+      }
+      if(valorCampo.length>3){
+        if (stringIzquiedaDelPunto.length % 4 === 0) {
+          console.log("multiplo");
+          cursorPos = document.getElementById('tons_co2').selectionStart;
+          input.setSelectionRange(cursorPos +1, cursorPos +1);
+        }
+      }
+
+      if(convertir=='toneladas'){
+         this.tons_co2=valor;
+      }
+      if(convertir=='ahorro duro'){
+        this.ahorro_duro = valor;
+      }
+      if(convertir=='ahorro suave'){
+        this.ahorro_suave  = valor;
+      }
       
+      /*if(valorCampo.length>3){
+        if (stringIzquiedaDelPunto.length % 4 === 0) {
+          console.log("multiplo");
+          input.setSelectionRange(cursorPos + 1, cursorPos + 1);
+        }else{
+          console.log("no es multiplo de 4");
+          input.setSelectionRange(cursorPos, cursorPos);
+        }
+        }else if(valorCampo.length<=0){
+            input.value = "$.00";
+            input.setSelectionRange(cursorPos, cursorPos);
+        } else{
+        if(valorCampo==="0" || valorCampo===0){
+          console.log("es igual a cero");
+          input.value = "$.00";
+          input.setSelectionRange(cursorPos, cursorPos);
+        }else if(valorCampo==="1" || valorCampo===1){
+          console.log("es igual a uno");
+          input.setSelectionRange(cursorPos, cursorPos);
+        }*/
+  },
+    /*formatoNumero(event,queInput) {//tons
+      var cursorPos; 
+      var valor;
+      var input;
+
+      if(queInput=="toneladas"){
+        valor = document.getElementById('tons_co2').value;
+        input= document.getElementById('tons_co2');
+        cursorPos = document.getElementById('tons_co2').selectionStart;
+      }
+     
+      if(queInput=="duro"){
+        valor = document.getElementById('ahorro_duro').value;
+        input= document.getElementById('ahorro_duro');
+        cursorPos = document.getElementById('ahorro_duro').selectionStart;
+      }
+
+      if(queInput=="suave"){
+        valor = document.getElementById('suave').value;
+        input= document.getElementById('suave');
+        cursorPos = document.getElementById('suave').selectionStart;
+      }
+      
+    
+      if (event.key === 'Backspace' && (valor===null || valor===''|| valor==='0' || valor===0 || valor==='$')) {
+        valor =  input.value = "$.00";
+
+      }else if(event.key !== 'Backspace' && (valor!==null || valor!=='') && event.key !== 'ArrowUp' && event.key !== 'ArrowDown' && event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') {
           const options2 = { style: 'currency', currency: 'USD', minimumFractionDigits: 2 };
           const numberFormat2 = new Intl.NumberFormat('en-US', options2);
-  
-          // Obtener la posición actual del cursor
-          const cursorPos = document.getElementById('tons_co2').selectionStart;
           // Obtener el valor actual del campo y eliminar caracteres no deseados
-
-
-          let valorCampo = valor.replace(/[^\d.]/g, '');
-         var stringIzquiedaDelPunto= valorCampo.substring(0,valor.indexOf(".")-1);
-          console.log(stringIzquiedaDelPunto);
-          console.log(stringIzquiedaDelPunto.length);
-
+          var valorCampo = valor.replace(/[^\d.]/g, '');
+          var stringIzquiedaDelPunto= valorCampo.substring(0,valor.indexOf(".")-1);
           // Formatear el valor como un número
           let numeroFormateado = parseFloat(valorCampo).toFixed(2);
-  
           // Aplicar el formato de número
-          
           input.value = numberFormat2.format(numeroFormateado);
-
-          // Restaurar la posición del cursor
-          input.setSelectionRange(cursorPos, cursorPos);
-
           // Si la longitud de la parte izquierda del punto es un múltiplo de 3 más 1, restar 1 al cursor
-          if (stringIzquiedaDelPunto.length % 4 === 0) {
-            input.setSelectionRange(cursorPos + 1, cursorPos + 1);
+          // Restaurar la posición del cursor
+          if(valorCampo.length>3){
+                if (stringIzquiedaDelPunto.length % 4 === 0) {
+                  console.log("multiplo");
+                  input.setSelectionRange(cursorPos + 1, cursorPos + 1);
+                }else{
+                  console.log("no es multiplo de 4");
+                  input.setSelectionRange(cursorPos, cursorPos);
+                }
+          }else if(valorCampo.length<=0){
+              valor = input.value = "$.00";
+              input.setSelectionRange(cursorPos, cursorPos);
+          } else{
+                if(valorCampo==="0" || valorCampo===0){
+                  console.log("es igual a cero");
+                  valor = input.value = "$.00";
+                  input.setSelectionRange(cursorPos, cursorPos);
+                }else if(valorCampo==="1" || valorCampo===1){
+                  console.log("es igual a uno");
+                  input.setSelectionRange(cursorPos, cursorPos);
+                }
           }
       }
-    },
-    /*formatoNumero(event){
-      const options2 = { style: 'currency', currency: 'USD' };
-      const numberFormat2 = new Intl.NumberFormat('en-US', options2);
-     
-
-       
-  if (event && event.key !== 'Backspace' && this.tons_co2 !== '' && event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') {
-    var numero=this.tons_co2.replace("$","");
-    numero=numero.replace(",","");
-      if(!isNaN(numero)){
-        console.log(numberFormat2.format(numero));
-        this.tons_co2=numberFormat2.format(numero)
-      }
-  }
-    },
-    folioAnteriorSinNumeral(index) {
-      if (index > 0 && index < this.proyectos.length) {
-        return this.obtenerPrefijo(this.proyectos[index - 1].folio);
-      }
-    },
-    folioSinNumeral(index) {
-      if (index < this.proyectos.length - 1) {
-        return this.obtenerPrefijo(this.proyectos[index].folio);
-      }
+      event.stopPropagation();
+         
     },*/
     obtenerPrefijo(folioCompleto) {
       var posicionUltimoGuion = folioCompleto.lastIndexOf("-");
