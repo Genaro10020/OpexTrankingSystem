@@ -41,12 +41,14 @@ const AltaProyectos = {
       selectObjetivo: [],
       select_pilar: '',
       select_mision: '',
+      imagenes:[],
       tons_co2: '$.00',
       ahorro_duro: '$.00',
       ahorro_suave: '$.00',
       numero_index: 0,
       respondio: true,//utilizo para cambiar el css si no repondio en altas
       objetivo_estrategico: false,
+      existeImagenSeleccionada:false, 
       /*Planta*/ /*Área*/ /*Departamento*/
       nueva: '',
       nuevoNombre: '',
@@ -1552,6 +1554,7 @@ const AltaProyectos = {
         //this.consultarPilares()
         this.consultarImpactoAmbiental()
         this.consultarMisiones()
+        this.buscarDocumentos()
 
       } else if (modal == "CRUD") {
         this.myModalCRUD = new bootstrap.Modal(document.getElementById("modal-alta-crud"))
@@ -1637,6 +1640,67 @@ const AltaProyectos = {
       this.nuevoResponsable = false;
       this.actualizarResponsable = false;
     },
+    varificandoSelecion(){
+      var imagen_seleccion = document.getElementById('input_file_subir').value;
+      if(imagen_seleccion!=null){
+        this.existeImagenSeleccionada = true;
+      }
+    },
+    buscarDocumentos(){
+      this.imagenes=[]
+      axios.post("buscar_documentos.php",{
+      })
+      .then(response => {
+                          this.imagenes = response.data
+                          if(this.imagenes.length>0){
+                              console.log(this.imagenes + "Archivos encontrados.")
+                          }else{
+                            console.log(this.imagenes + "Sin imagen encontrada.")
+                          }
+      })
+      .catch(error => {
+          console.log(error);
+      });
+  },
+    uploadFile(){
+      //this.mensaje_boton = "Espere, estamos subiendo su archivo...."
+      let formData = new FormData();
+      var files = this.$refs.ref_imagen.files;
+      var totalfiles = this.$refs.ref_imagen.files.length;
+
+      for (var index = 0; index < totalfiles; index++) {
+       formData.append("files[]", files[index]);//arreglo de documentos
+      }
+      /*formData.append("subarea", this.subarea);
+      formData.append("nombre_ayuda_visual", this.nombre_ayuda_visual);
+      formData.append("id_concentrado", this.id_concentrado);*/
+      axios.post("subir_imagen.php", formData,
+          {
+          headers: {"Content-Type": "multipart/form-data"}
+          })
+          .then(response => {
+              console.log(response.data);
+               this.imagenes = response.data;
+             if(this.imagenes.length>0){
+                  //this.mensaje_boton = "Subir Archivo"
+                  document.getElementById("input_file_subir").value=""
+                  this.random = Math.random()
+                 // alert(random)
+                 // this.buscarDocumentos()
+              }else{
+                  //this.mensaje_boton = "Subir Archivo"
+                  //this.random = Math.random()
+                  alert("Verifique la extension del archivo o Intente nuevamente.")
+              }
+          })
+          .catch(error => {
+              this.mensaje_boton = "Subir Archivo"
+              console.log(error);
+          }).finally(() => {
+              this.mensaje_boton = "Subir Archivo"
+          
+          });
+      },
     verificarAltaProyecto() {
 
       //Comprobando fecha
@@ -1659,7 +1723,7 @@ const AltaProyectos = {
       //Pilares
       else if (this.checkPilares.length <= 0) { this.respondio = false; alert("Seleccione Pilar, para visualizarlos seleccione Mision") }
       //verificar si existe minimo un directo en Pilar
-      else if (!this.selectPilar.includes("directo")) { this.respondio = false; alert("Minimo un Pilar tiene que ser 'Directo'") }
+      /*else if (!this.selectPilar.includes("directo")) { this.respondio = false; alert("Minimo un Pilar tiene que ser 'Directo'") }*/
       //Objetivos
       else if (this.checkObjetivos.length <= 0) { this.respondio = false; alert("Seleccione Objetivo, para visualizarlos, seleccione Mision y Objetivo") }
       //verificar si existe minimo un directo en Pilar
@@ -1725,7 +1789,7 @@ const AltaProyectos = {
       var objetivos_nombres = [];
       var objetivoOrden = '';
       for (var i = 0; i < this.checkObjetivos.length; i++) {
-        var nombre_objetivo = this.checkObjetivos[i].split('<->')[1];//tomo el nombre
+        var nombre_objetivo = this.checkObjetivos[i].split('<->')[1];//tomo el nombre 
         objetivos_nombres.push(nombre_objetivo);
         var orden = this.checkObjetivos[i].split('<->')[4];
         objetivoOrden += orden;
@@ -1733,7 +1797,7 @@ const AltaProyectos = {
       }
       console.log(objetivos_nombres)
 
-      var pilaresDirectosIndirectos = [];
+      /*var pilaresDirectosIndirectos = [];
       for (let i = 0; i < this.selectPilar.length; i++) {//insertando directo e indirectos de selectPilares
         if (this.selectPilar[i] != "") {
           pilaresDirectosIndirectos.push(this.selectPilar[i]);//nuevo arreglo eliminado los "" del arreglo anterior1
@@ -1751,7 +1815,7 @@ const AltaProyectos = {
         console.log(combinadoPilar)
       } else {
         console.log("los nombres del pilar y directos e indirecto de pilar no tienen el mismo tamaño")
-      }
+      }*/
 
       var objetivosDirectosIndirectos = [];
       for (let i = 0; i < this.selectObjetivo.length; i++) {//insertando directo e indirectos de selectPilares
@@ -1795,7 +1859,7 @@ const AltaProyectos = {
         select_metodologia: metodologia,
         responsable_id: responsable_id,
         misiones: misiones_nombres,
-        pilares: combinadoPilar,
+        pilares: objetivos_nombres,
         objetivos: combinadoObjetivo,
         impacto_ambiental: impacto_ambiental_nombres,
         tons_co2: this.tons_co2,
@@ -1807,6 +1871,23 @@ const AltaProyectos = {
           if (response.data[0][1] == true) {
             this.myModal.hide()
             this.consultarProyectos()
+            this.fecha_alta=''
+            this.nombre_proyecto=''
+            this.selectPlanta= ''
+            this.selectArea = ''
+            this.selectDepartamento = ''
+            this.selectMetodologia = ''
+            this.selectResponsable = ''
+            this.checkMisiones = []
+            this.checkPilares = []
+            this.selectPilar = []
+            this.checkObjetivos = []
+            this.selectObjetivo = []
+            this.checkImpactoAmbiental = []
+            this.tons_co2 = "$.00"
+            this.ahorro_duro = "$.00"
+            this.ahorro_suave = "$.00"
+            this.objetivo_estrategico= false
           }
         } else {
           alert("No se dio de alta el proyecto.")
@@ -1822,76 +1903,6 @@ const AltaProyectos = {
         return this.obtenerPrefijo(nombre) != this.obtenerPrefijo(this.proyectos[index - 1].folio);// Cambia el color según tus preferencias
       }
     },
-    /*formatoNumero(queInput, event) {
-       var valor;
-       var puntoLugar;
-       var valorCampo = "";
- 
- 
-       if (queInput === 'tons_co2') {
- 
-         cursorPos = document.getElementById('tons_co2').selectionStart;
-         dom = document.getElementById('tons_co2');
- 
- 
-         if (event.key === 'Backspace') {
-           return console.log('retrososo'); // No ejecutar la función si la tecla no es un dígito
-         }
- 
-         var contieneLetras = /[a-zA-Z]/.test(this.tons_co2);
-         const isDigitKey = event.key === 'click' || contieneLetras === false // Verifica si es click o si la tecla es un dígito
- 
-         if (!isDigitKey) {
-           return console.log('sin ejecutar'); // No ejecutar la función si la tecla no es un dígito
-         }
- 
-         if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-           return; // No ejecutar el código adicional
-         }
-         valor = document.getElementById('tons_co2').value;
-         if (this.tons_co2 == 0 || this.tons_co2 == '0' || this.tons_co2 == '') {
-           this.tons_co2 = "$.00";
-         } else {
-           const options2 = { style: 'currency', currency: 'USD', minimumFractionDigits: 2 };
-           const numberFormat2 = new Intl.NumberFormat('en-US', options2);
-           valorCampo = valor.replace(/[^\d.]/g, '');
-           let numeroFormateado = parseFloat(valorCampo).toFixed(2);
-           valor = numberFormat2.format(numeroFormateado);
-           this.tons_co2 = valor;
-         }
- 
-         var stringIzquiedaDelPunto = valorCampo.substring(0, this.tons_co2.indexOf(".") - 1);
-         console.log(valor);
-         puntoLugar = valor.indexOf('.');
-         console.log(puntoLugar);
-         console.log("campo tiene" + valorCampo);
-         console.log("campo largo" + valorCampo.length);
-         console.log("stringIzquiedaDelPunto" + stringIzquiedaDelPunto);
-         console.log("stringIzquiedaDelPunto largo" + stringIzquiedaDelPunto.length);
- 
-         if (this.tons_co2 == 0 || this.tons_co2 == '0' || this.tons_co2 == '') {
-           dom.setSelectionRange(puntoLugar, puntoLugar);
-         }
- 
-         if (stringIzquiedaDelPunto.length > 3) {
-           if (stringIzquiedaDelPunto.length % 4 === 0) {
-             console.log("multiplo");
-             dom.setSelectionRange(puntoLugar + 1, puntoLugar + 1);
-           } else {
-             dom.setSelectionRange(puntoLugar, puntoLugar);
-           }
-         }
- 
- 
-       } else if (queInput == 'ahorro_duro') {
- 
-       } else if (queInput == 'ahorro_suave') {
- 
-       } else {
-         console.log("No existe ese input para formater numero")
-       }
- 
-     },*/
     colocarCursor(input) {
 
       var val = document.getElementById('tons_co2').value;
