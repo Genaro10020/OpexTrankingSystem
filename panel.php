@@ -187,7 +187,7 @@ if (isset($_SESSION['nombre'])) {
                                                         <div class="form-check border border-1 mt-1" v-for="(pilar, index) in pilares" :key="index">
                                                             <input class="form-check-input" type="checkbox" :value="pilar.id+'<->'+pilar.nombre+'<->'+pilar.siglas+'<->'+(index+1)" v-model="checkPilares" @change="consultarObjetivosXpilaresSeleccionados()">
                                                             <label class="form-check-label w-75">
-                                                                {{ pilar.nombre }}
+                                                                {{ pilar.nombre }} ({{pilar.siglas}})
                                                             </label>
                                                             <!--<label class="w-25" v-if="idsPilares.includes(pilar.id) && checkPilares.length>0">
                                                                 <select v-model="selectPilar[index]" @change="verificarCantidadDirectosPilares()">
@@ -245,18 +245,18 @@ if (isset($_SESSION['nombre'])) {
                                                             </label>
                                                         </div>
                                                     </div>
-                                                    <!--<div>
-                                                                                <div class="col-12"><button class="btn-anadir" title="Crear "><i class="bi bi-plus-circle"></i></button></div>
-                                                                                <div class="col-12"><button class="btn-up" title="Actualizar"><i class="bi bi-arrow-up-circle"></i></button></div>
-                                                                                <div class="col-12"><button class="btn-delete" title="Eliminar"><i class="bi bi-x-circle"></i></button></div>
-                                                                            </div>-->
+                                                                    <!--<div>
+                                                                        <div class="col-12"><button class="btn-anadir" title="Crear "><i class="bi bi-plus-circle"></i></button></div>
+                                                                        <div class="col-12"><button class="btn-up" title="Actualizar"><i class="bi bi-arrow-up-circle"></i></button></div>
+                                                                        <div class="col-12"><button class="btn-delete" title="Eliminar"><i class="bi bi-x-circle"></i></button></div>
+                                                                    </div>-->
                                                     <div v-if="checkImpactoAmbiental.length>0" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                                 </div>
 
                                                 <div class="input-group mb-3">
                                                     <span class="input-group-text w-50">Tons CO2 por Evitar (Proyectado)</span>
-                                                    <input id="tons_co2" type="text" v-model="tons_co2" min="0" class="w-25" :class="{'nocontestado': !respondio && tons_co2 === 0, '': tons_co2 !== 0 && tons_co2 !== ''}" @click="colocarCursor('tons_co2')" @blur="asignarValor('tons_co2')" @keyUp="formatoNumero('tons_co2',$event)">
-                                                    <div v-if="tons_co2 !== '' && tons_co2 !== '$0.00' && tons_co2 !== '$.00' && tons_co2 !== '$.0' && tons_co2 !== '$.'  && tons_co2 !== '$'" class="text-center my-auto ms-3">
+                                                    <input id="tons_co2" type="text" v-model="tons_co2" min="0" class="w-25" :class="{'nocontestado': !respondio && tons_co2 === 0, '': tons_co2 !== 0 && tons_co2 !== ''}">
+                                                    <div v-if="tons_co2 !== '' && tons_co2 !== '0'" class="text-center my-auto ms-3">
                                                         <i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i>
                                                     </div>
                                                 </div>
@@ -280,12 +280,13 @@ if (isset($_SESSION['nombre'])) {
                                         <div class="col-3 my-auto mx-auto "><!--bloque imagen de la modal-->
                                                  <form @submit.prevent="uploadFile()">
                                                         <!--Subir Documento Sugerencia-->
+
                                                         <div class="row mx-auto">
-                                                                <input type="file" id="input_file_subir" @change="varificandoSelecion()" ref="ref_imagen" accept=".jpg"  class="btn-success py-1" required/>
+                                                                <input type="file" id="input_file_subir" @change="varificandoSelecion()" ref="ref_imagen" accept="*.jpg/*.png"  class="btn-success py-1" required/>
                                                         </div> 
-                                                        <div class="row">
+                                                        <div v-if="imagenes.length>0" class="row">
                                                                 <div class="col-12 d-flex justify-content-center">
-                                                                            <img  :src="imagenes[0]" style=" width:250px; height:200px;"></img>
+                                                                            <img  :src="imagenes[0]+'?'+random" style=" width:250px; height:200px;"></img>
                                                                 </div> 
                                                         </div>
                                                         <div v-if="existeImagenSeleccionada==true" class="row mx-auto">

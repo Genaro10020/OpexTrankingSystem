@@ -35,7 +35,7 @@ if (!file_exists($path)) {
                             $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
                             // Validar extensiones permitidas
-                            $valid_ext = array("jpeg","jpg");//entension valida para 
+                            $valid_ext = array("jpeg","jpg","png");//entension valida para 
                          
                             // Revisar extension
                             if(in_array($ext, $valid_ext)){

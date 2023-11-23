@@ -42,7 +42,7 @@ const AltaProyectos = {
       select_pilar: '',
       select_mision: '',
       imagenes:[],
-      tons_co2: '$.00',
+      tons_co2: '0',
       ahorro_duro: '$.00',
       ahorro_suave: '$.00',
       numero_index: 0,
@@ -61,7 +61,7 @@ const AltaProyectos = {
       correo: '',
       telefono: '', 
       responsableID: [],
-
+      random:'',
       /*Impacto Ambiental */
       //general
       id: '',// utilizado y reseteado despues de usar.
@@ -1726,6 +1726,7 @@ const AltaProyectos = {
              if(this.imagenes.length>0){
                   //this.mensaje_boton = "Subir Archivo"
                   document.getElementById("input_file_subir").value=""
+                  this.existeImagenSeleccionada = false;
                   this.random = Math.random()
                  // alert(random)
                  // this.buscarDocumentos()
@@ -1901,7 +1902,7 @@ const AltaProyectos = {
         select_metodologia: metodologia,
         responsable_id: responsable_id,
         misiones: misiones_nombres,
-        pilares: objetivos_nombres,
+        pilares: pilares_nombres,
         objetivos: combinadoObjetivo,
         impacto_ambiental: impacto_ambiental_nombres,
         tons_co2: this.tons_co2,
@@ -1926,10 +1927,12 @@ const AltaProyectos = {
             this.checkObjetivos = []
             this.selectObjetivo = []
             this.checkImpactoAmbiental = []
-            this.tons_co2 = "$.00"
+            this.tons_co2 = "0"
             this.ahorro_duro = "$.00"
             this.ahorro_suave = "$.00"
             this.objetivo_estrategico= false
+            alert("El proyecto se creó con éxito..")
+            
           }
         } else {
           alert("No se dio de alta el proyecto.")
