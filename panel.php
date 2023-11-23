@@ -31,9 +31,9 @@ if (isset($_SESSION['nombre'])) {
                     <button class="btn-menu mx-3" @click="ventana='Seguimiento'">
                         <i class="bi bi-plus-circle"></i> Seguimiento
                     </button>
-                    <button class="btn-menu mx-3" @click="ventana='Competencia'">
+                    <!-- <button class="btn-menu mx-3" @click="ventana='Competencia'">
                         <i class="bi bi-plus-circle"></i> Competencia
-                    </button>
+                    </button> -->
                     <!--Modal Alta Proyectos-->
                     <div id="modal-alta-proyecto" class="modal text-start" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
                         <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
@@ -712,7 +712,7 @@ if (isset($_SESSION['nombre'])) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="objetivo in objetivos">
+                                        <tr v-for="objetivo in objetivos_ligados">
                                             <td>
                                                 {{objetivo.nombre_objetivos}}
                                             </td>
@@ -780,7 +780,7 @@ if (isset($_SESSION['nombre'])) {
                         </div>
                     </div>
                     <!-- INICIO TABLA ESTANDARES CO2 -->
-                    <div class="col-12 col-xl-6 col-lg-6 offset-lg-3 offset-xl-3 text-center">
+                    <div class="col-12 col-xl-6 col-lg-6 offset-lg-3 offset-xl-3 text-center mt-5">
                         <div class=" encabezadoTablas">
                             <div class=" d-flex justify-content-center align-items-center">
                                 <div class="d-none d-lg-block col-lg-4"></div>
@@ -996,43 +996,39 @@ if (isset($_SESSION['nombre'])) {
                 <div v-if="ventana=='Seguimiento'">
                     <div class="input-group mt-5 mx-2 ">
                         <span class="input-group-text w-5">Seleccione Proyecto</span>
-                        <select class="w-5">
-                            <option value="" disabled selected>Seleccione..</option>
-                            <option>Proyecto 1</option>
-                            <option>Proyecto 2</option>
+                        <select class="w-5" @change="consultarProyectoID()" v-model="id_proyecto">
+                            <option value="">Seleccione...</option>
+                            <option v-for="proyecto in proyectos" :value="proyecto.id">{{proyecto.nombre_proyecto}}</option>
                         </select>
                     </div>
 
                     <table class="mx-2 mt-5  mb-5 table table-hover table-bordered border-dark text-center">
                         <thead class="  border:1px solid black">
                             <tr>
-                                <th>Fecha</th>
-                                <th>Consumo de Electricidad</th>
-                                <th>Consumo de Agua</th>
+                                <th>Actualizar</th>
+                                <<th>Fecha</th>
                                 <th>Tons de CO2 por Evitar</th>
                                 <th>Ahorro Duro</th>
-                                <th>Ahorro Suave </th>
+                                <th>Ahorro Suave </th> 
                                 <th>Estatus</th>
 
                         </thead>
                         <tbody class=" border:1px solid black" style="text-align: center">
-                            <tr style="vertical-align: middle ">
+                            <tr style="vertical-align: middle " v-for="proyecto in arregloID">
                                 <td>
-                                    <input type="date">
-                                    </input>
+                                    <button type="button" class="boton-actualizar">Actualizar</button>
                                 </td>
-                                <td>kwh</td>
-                                <td>Metros cubicos</td>
-                                <td>Tons de CO2 por Evitar</td>
-                                <td>Ahorro Duro (Proyectado)</td>
-                                <td>Ahorro Suave (Proyectado)</td>
-                                <td>Estatus</td>
+                                <td>{{proyecto.fecha}}</td>
+                                <td>{{proyecto.tons_co2}}</td>
+                                <td>{{proyecto.ahorro_duro}}</td>
+                                <td>{{proyecto.ahorro_duro}}</td>
+                                <td>{{proyecto.correo}}</td>
 
                     </table>
 
                     <!---->
                 </div>
-                <div v-if="ventana=='Competencia'">
+                <!-- <div v-if="ventana=='Competencia'">
 
 
                     <div class="container mt-5">
@@ -1092,13 +1088,13 @@ if (isset($_SESSION['nombre'])) {
                                     <td><b>Evaluador D</b></td>
                                     <td>Pendiente</td>
                                 </tr>
-                                <!-- Repite las filas para EAD 2 al 14 según sea necesario -->
+                                 Repite las filas para EAD 2 al 14 según sea necesario 
                             </tbody>
                         </table>
                     </div>
 
 
-                </div><!--FIN DE COMPETENCIA-->
+                </div>FIN DE COMPETENCIA -->
 
 
             </div><!--cuerpo-->
