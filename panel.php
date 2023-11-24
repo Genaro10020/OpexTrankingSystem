@@ -255,7 +255,7 @@ if (isset($_SESSION['nombre'])) {
 
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-50">Tons CO2 por Evitar (Proyectado)</span>
-                                                <input id="tons_co2" type="text" v-model="tons_co2" min="0" class="w-25" :class="{'nocontestado': !respondio && tons_co2 === 0, '': tons_co2 !== 0 && tons_co2 !== ''}">
+                                                <input id="tons_co2" type="text" v-model="tons_co2" min="0" class="w-25" :class="{'nocontestado': respondio === false && (tons_co2 == 0 || tons_co2 == '' ), '': tons_co2 !== 0 && tons_co2 !== ''}">
                                                 <div v-if="tons_co2 !== '' && tons_co2 !== '0'" class="text-center my-auto ms-3">
                                                     <i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i>
                                                 </div>
@@ -263,13 +263,13 @@ if (isset($_SESSION['nombre'])) {
 
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-50">Ahorro Duro $MXN/Año (Proyectado )</span>
-                                                <input id="ahorro_duro" type="text" v-model="ahorro_duro" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_duro===0, '': ahorro_duro!==0 && ahorro_duro!==''}" @click="colocarCursor('ahorro_duro')" @blur="asignarValor('ahorro_duro')" @keyUp=" formatoNumero('ahorro_duro', $event)">
+                                                <input id="ahorro_duro" type="text" v-model="ahorro_duro" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_duro==='$.00', '': ahorro_duro!==0 && ahorro_duro!==''}" @click="colocarCursor('ahorro_duro')" @blur="asignarValor('ahorro_duro')" @keyUp=" formatoNumero('ahorro_duro', $event)">
                                                 <div v-if="ahorro_duro!=='' && ahorro_duro !== '$0.00' && ahorro_duro !== '$.00' && ahorro_duro !== '$.0' && ahorro_duro !== '$.'  && ahorro_duro !== '$'" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
 
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-50">Ahorro Suave $MXN/Año (Proyectado)</span>
-                                                <input id="ahorro_suave" type="text" v-model="ahorro_suave" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_suave===0, '': ahorro_suave!==0 && ahorro_suave!==''}" @click="colocarCursor('ahorro_suave')" @blur="asignarValor('ahorro_suave')" @keyUp=" formatoNumero( 'ahorro_suave',$event)">
+                                                <input id="ahorro_suave" type="text" v-model="ahorro_suave" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_suave==='$.00', '': ahorro_suave!==0 && ahorro_suave!==''}" @click="colocarCursor('ahorro_suave')" @blur="asignarValor('ahorro_suave')" @keyUp=" formatoNumero( 'ahorro_suave',$event)">
                                                 <div v-if="ahorro_suave!=='' && ahorro_suave !== '$0.00' && ahorro_suave !== '$.00' && ahorro_suave !== '$.0' && ahorro_suave !== '$.'  && ahorro_suave !== '$'" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
                                             <div class="input-group mb-3">
@@ -507,8 +507,7 @@ if (isset($_SESSION['nombre'])) {
                 <!--AQUI TRABAJA //ALTA DE PROYECTOS-->
                 <div v-if="ventana=='Altas'">
                     <div class="scroll-dos">
-
-                        <table class="mx-auto mt-5  mb-5 tabla-proyectos table-hover table-bordered border-dark text-center table-striped">
+                        <table class="mx-auto mt-5  mb-5 tabla-proyectos table-hover  border-dark text-center table-striped">
                             <thead class="border:1px solid black">
                                 <tr>
                                     <th>Fecha</th>
@@ -533,7 +532,7 @@ if (isset($_SESSION['nombre'])) {
                                     <tr v-if="folioAnteriorSinNumeral(proyecto.folio, index)" :class="{ 'diferente-color': folioAnteriorSinNumeral(proyecto.folio, index)==true}"><!--ES DIFERENTE--->
                                         <td colspan="16" v-if="index>0"></td>
                                     </tr>
-                                    <tr class="cuerpo-tabla-creados" style="vertical-align: middle;">
+                                    <tr class=""  class="cuerpo-tabla-creados" style="vertical-align: middle;" :class="{ 'fila-ultimo-proyecto': buscandoUltimoProyectoCreado(proyecto.nombre_proyecto) }">
                                         <td>{{proyecto.fecha}}</td>
                                         <td style="min-width:150px;">{{proyecto.folio}}</td>
                                         <td>{{proyecto.nombre_proyecto}}</td>

@@ -31,7 +31,7 @@ if (!file_exists($path)) {
                             // Nombre del archivo
                             $filename = $_FILES['files']['name'][$index];
                             
-                            // Obtener la extensi贸n del archivo
+                            // Obtener la extención del archivo
                             $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
                             // Validar extensiones permitidas
@@ -40,7 +40,7 @@ if (!file_exists($path)) {
                             // Revisar extension
                             if(in_array($ext, $valid_ext)){
 
-                            $ruta_y_doc= $path."imagen.".$ext;
+                            $ruta_y_doc= $path."imagen.jpg";
 
                             // Subir archivos
                             if(move_uploaded_file($_FILES['files']['tmp_name'][$index],$ruta_y_doc)){

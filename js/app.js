@@ -42,7 +42,7 @@ const AltaProyectos = {
       select_pilar: '',
       select_mision: '',
       imagenes: [],
-      tons_co2: '0',
+      tons_co2: '',
       ahorro_duro: '$.00',
       ahorro_suave: '$.00',
       numero_index: 0,
@@ -1585,6 +1585,7 @@ const AltaProyectos = {
       this.telefono = ''
     },
     abrirModal(modal, tipo, accion) {
+      this.nombre_proyecto=''
       this.respondio = true;
       this.nueva = ''
       this.tipo = tipo
@@ -1779,7 +1780,7 @@ const AltaProyectos = {
       //Impacto Ambiental
       else if (this.checkImpactoAmbiental.length <= 0) { this.respondio = false; alert("Seleccione minimo una Impacto Ambiental") }
       //Ahorros
-      else if (this.tons_co2 == 0 && this.ahorro_duro == 0 && this.ahorro_suave == 0 && (this.objetivo_estrategico == false || this.objetivo_estrategico == true)) { this.respondio = false; alert("Minimo uno debe ser distinto a 0") }
+      else if ((this.tons_co2 == "0" || this.tons_co2 == "") && this.ahorro_duro == "$.00" && this.ahorro_suave == "$.00" && (this.objetivo_estrategico == false || this.objetivo_estrategico == true)) { this.respondio = false; alert("Minimo uno debe ser distinto a 0") }
       //Si algo no se a contestado
       else {
         this.respondio = true
@@ -1822,12 +1823,14 @@ const AltaProyectos = {
       console.log(this.checkPilares)
       var pilares_nombres = [];
       var pilarOrden = '';
+      var siglasPilaresConcatenado = '';
       for (let i = 0; i < this.checkPilares.length; i++) {
         var pilar_nom = this.checkPilares[i].split('<->')[1];
+        var siglas = this.checkPilares[i].split('<->')[2];
         var orden = this.checkPilares[i].split('<->')[3];
-        pilares_nombres.push(pilar_nom)
-        pilarOrden += orden;
-
+        pilares_nombres.push(pilar_nom+' ('+siglas+')')
+        pilarOrden += orden
+        siglasPilaresConcatenado += '-'+siglas
       }
       console.log(pilares_nombres);
       console.log(pilarOrden);
@@ -1836,12 +1839,14 @@ const AltaProyectos = {
       console.log(this.checkObjetivos)
       var objetivos_nombres = [];
       var objetivoOrden = '';
+      var siglasObjetivosConcatenado = ""
       for (var i = 0; i < this.checkObjetivos.length; i++) {
         var nombre_objetivo = this.checkObjetivos[i].split('<->')[1];//tomo el nombre 
-        objetivos_nombres.push(nombre_objetivo);
+        var siglas =  this.checkObjetivos[i].split('<->')[3];
         var orden = this.checkObjetivos[i].split('<->')[4];
+        objetivos_nombres.push(nombre_objetivo+' ('+siglas+')');
         objetivoOrden += orden;
-
+        siglasObjetivosConcatenado += '-'+siglas 
       }
       console.log(objetivos_nombres)
 
@@ -1894,7 +1899,7 @@ const AltaProyectos = {
       console.log(impacto_ambiental_nombres)
       //Folio proyecto
 
-      var folio = siglasPlanta + "-" + siglasArea + '-' + siglasDepartamento + '-P' + pilarOrden + '-OB' + objetivoOrden;
+      var folio = siglasPlanta + "-" + siglasArea + '-' + siglasDepartamento + '-P' + siglasPilaresConcatenado + '-O' + siglasObjetivosConcatenado;
       console.log(folio);
 
       axios.post("proyectosController.php", {
@@ -1919,8 +1924,8 @@ const AltaProyectos = {
           if (response.data[0][1] == true) {
             this.myModal.hide()
             this.consultarProyectos()
+            alert("El proyecto "+this.nombre_proyecto+" se creó con éxito..")
             this.fecha_alta = ''
-            this.nombre_proyecto = ''
             this.selectPlanta = ''
             this.selectArea = ''
             this.selectDepartamento = ''
@@ -1932,12 +1937,10 @@ const AltaProyectos = {
             this.checkObjetivos = []
             this.selectObjetivo = []
             this.checkImpactoAmbiental = []
-            this.tons_co2 = "0"
+            this.tons_co2 = ""
             this.ahorro_duro = "$.00"
             this.ahorro_suave = "$.00"
             this.objetivo_estrategico = false
-            alert("El proyecto se creó con éxito..")
-
           }
         } else {
           alert("No se dio de alta el proyecto.")
@@ -1946,7 +1949,12 @@ const AltaProyectos = {
 
       })
     },
-
+    buscandoUltimoProyectoCreado(nombres) {
+      //Buscar y comparar si es igual
+      if(nombres === this.nombre_proyecto){
+        return true
+      }
+  },
     folioAnteriorSinNumeral(nombre, index) {
       // Compara el nombre actual con el anterior y asigna un color diferente si es diferente
       if (index > 0 && this.obtenerPrefijo(nombre) !== this.obtenerPrefijo(this.proyectos[index - 1].folio)) {

@@ -405,7 +405,7 @@ box-shadow: 10px 5px 10px black;
     }
 
     .mostrar {
-        animation: fadeIn 2s;
+    animation: fadeIn 2s;
     position: relative; /* Cambia la posición a relativa para volver a colocar el elemento en su posición original */
     height: auto; /* Ajusta la altura según el contenido real del elemento */
     opacity: 1;
@@ -438,8 +438,20 @@ box-shadow: 10px 5px 10px black;
 
 
     .diferente-color{
-        background-color: rgba(135, 172, 148, 0.941);
+        background-color: rgba(217, 232, 222, 0.941);
         height: 20px;
+    }
+
+    .fila-ultimo-proyecto {
+        animation: colores 5s;
+        background: #0a720f;
+        color: white; 
+        /* Cambia el color de fondo según tus preferencias */
+        /* Otros estilos que desees aplicar */
+    }
+    @keyframes colores {
+        from {background: #1b4598;color: white; }
+        to{background: #1b9823;color: white; }
     }
 
 
