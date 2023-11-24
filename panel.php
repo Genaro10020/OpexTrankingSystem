@@ -909,8 +909,12 @@ if (isset($_SESSION['nombre'])) {
                                             <div class="modal-body input-group mb-3">
                                                 <span class="input-group-text w-25 mt-3">Nombre:</span>
                                                 <input v-model="nueva" type="text" class="w-75 mt-3">
-                                                <span class="input-group-text w-25 mt-3">Cantidad:</span>
-                                                <input v-model="cantidad" type="number" class="w-75 mt-3">
+                                                <div class="d-flex input-group">
+                                                    <span class="input-group-text w-25  mt-3">Cantidad</span>
+                                                    <input v-model="cantidad" type="text"class="w-25 mt-3">
+                                                    <span class="input-group-text w-25 mt-3">Descripcion</span>
+                                                    <input v-model="descripcionCa" type="text" class="w-25 mt-3">
+                                                </div>
                                                 <span class="input-group-text w-25 mt-3">Unidad De Medida:</span>
                                                 <input v-model="unidadMedida" type="text" class="w-75 mt-3">
                                             </div>
@@ -1030,7 +1034,7 @@ if (isset($_SESSION['nombre'])) {
                                 <th v-for="(impacto,index) in columnaImpactoAmbiental" :key="index">{{impacto}}</th>
                                 <th>Ahorro Duro</th>
                                 <th>Ahorro Suave </th>
-                                <th>Estatus</th>
+                                <th>Estatus</th>    
 
                         </thead>
                         <tbody class=" border:1px solid black" style="text-align: center">

@@ -669,11 +669,12 @@ const AltaProyectos = {
     },
     /*/////////////////////////////////////////////////////////////////////////////////INSERTAR ESTANDARES CO2*/
     insertarEstandaresCO2() {
-      if (this.nueva !== '' && this.cantidad !== '' && this.unidadMedida !== ''  && this.descripcionCa !== ''  && this.descripcionUM !== '') {
+      if (this.nueva !== '' && this.cantidad !== '' && this.unidadMedida !== ''  && this.descripcionCa !== '') { //&& this.descripcionUM !== ''
         axios.post('estandaresCO2Controller.php', {
           nueva: this.nueva,
           cantidad: this.cantidad+' '+this.descripcionCa,
-          unidadMedida: this.unidadMedida+' '+this.descripcionUM
+          //unidadMedida: this.unidadMedida+' '+this.descripcionUM
+          unidadMedida: this.unidadMedida
         }).then(response => {
           this.nueva = ''
           this.cantidad = ''
