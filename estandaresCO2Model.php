@@ -21,7 +21,7 @@ include("conexionGhoner.php");
         global $conexion;
         $query = "INSERT INTO estandares_co2 (nombre,cantidad,unidad_medida) VALUES (?,?,?)";
         $stmt = $conexion->prepare($query);
-        $stmt->bind_param("sis", $nueva,$cantidad,$unidadMedida);
+        $stmt->bind_param("sss", $nueva,$cantidad,$unidadMedida);
         if($stmt->execute()){
             $estado = true;
         }else{

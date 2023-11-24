@@ -69,6 +69,8 @@ const AltaProyectos = {
       estandares: [],
       cantidad: '',
       unidadMedida: '',
+      descripcionCa: '',
+      descripcionUM: '',
       /*ACTUALIZAR MISIONES LIGADAS A PILARES */
       misionLigada: '',
       n_mision: '',
@@ -79,6 +81,7 @@ const AltaProyectos = {
       id_proyecto: '',
       arregloID: [],
       columnaImpactoAmbiental: [],
+      actualizatabla: false
     }
   },
   mounted() {
@@ -118,9 +121,6 @@ const AltaProyectos = {
           if (response.data[0][0].length > 0) {
             this.arregloID = response.data[0][0];
             this.columnaImpactoAmbiental = JSON.parse(response.data[0][0][0].impacto_ambiental);
-
-            console.log(this.columnaImpactoAmbiental)
-            console.log("IMPACTO AMBIENTAL LARGO" + this.columnaImpactoAmbiental.length)
           }
         } else {
           alert("La consulta de proyectos no se realizo correctamente.")
@@ -669,15 +669,17 @@ const AltaProyectos = {
     },
     /*/////////////////////////////////////////////////////////////////////////////////INSERTAR ESTANDARES CO2*/
     insertarEstandaresCO2() {
-      if (this.nueva !== '' && this.cantidad !== '' && this.unidadMedida !== '') {
+      if (this.nueva !== '' && this.cantidad !== '' && this.unidadMedida !== ''  && this.descripcionCa !== ''  && this.descripcionUM !== '') {
         axios.post('estandaresCO2Controller.php', {
           nueva: this.nueva,
-          cantidad: this.cantidad,
-          unidadMedida: this.unidadMedida
+          cantidad: this.cantidad+' '+this.descripcionCa,
+          unidadMedida: this.unidadMedida+' '+this.descripcionUM
         }).then(response => {
           this.nueva = ''
           this.cantidad = ''
           this.unidadMedida = ''
+          this.descripcionCa = ''
+          this.descripcionUM = ''
           console.log(response.data)
           if (!response.data[0] == false) {
             // this.myModalCRUD.hide()
@@ -2102,7 +2104,8 @@ const AltaProyectos = {
           alert("No existe ese tipo en actualizars")
         }
       }
-    }
+    },
+  
   }
 };
 
