@@ -911,8 +911,12 @@ if (isset($_SESSION['nombre'])) {
                                             <div class="modal-body input-group mb-3">
                                                 <span class="input-group-text w-25 mt-3">Nombre:</span>
                                                 <input v-model="nueva" type="text" class="w-75 mt-3">
-                                                <span class="input-group-text w-25 mt-3">Cantidad:</span>
-                                                <input v-model="cantidad" type="number" class="w-75 mt-3">
+                                                <div class="d-flex input-group">
+                                                    <span class="input-group-text w-25  mt-3">Cantidad</span>
+                                                    <input v-model="cantidad" type="text"class="w-25 mt-3">
+                                                    <span class="input-group-text w-25 mt-3">Descripcion</span>
+                                                    <input v-model="descripcionCa" type="text" class="w-25 mt-3">
+                                                </div>
                                                 <span class="input-group-text w-25 mt-3">Unidad De Medida:</span>
                                                 <input v-model="unidadMedida" type="text" class="w-75 mt-3">
                                             </div>
@@ -1022,13 +1026,13 @@ if (isset($_SESSION['nombre'])) {
                             <option v-for="proyecto in proyectos" :value="proyecto.id">{{proyecto.nombre_proyecto}}</option>
                         </select>
                     </div>
-
+                    <div class="scroll-dos">
                     <table class="mx-2 mt-5  mb-5 table table-hover table-bordered border-dark text-center">
                         <thead class="  border:1px solid black">
                             <tr>
-                                <th>Actualizar</th>
+                                <th>Actualizar{{actualizatabla}}</th>
                                 <th>Fecha</th>
-                                <th>Tons de CO2 por Evitar</th>
+                                <th style="min-width:150px">Tons de CO2 por Evitar</th>
                                 <th v-for="(impacto,index) in columnaImpactoAmbiental" :key="index">{{impacto}}</th>
                                 <th>Ahorro Duro</th>
                                 <th>Ahorro Suave </th>
@@ -1036,19 +1040,28 @@ if (isset($_SESSION['nombre'])) {
 
                         </thead>
                         <tbody class=" border:1px solid black" style="text-align: center">
-                            <tr style="vertical-align: middle " v-for="proyecto in arregloID">
+                            <tr style="vertical-align: middle " v-for="(proyecto,posicion) in arregloID" :key="posicion">
                                 <td>
-                                    <button type="button" class="boton-actualizar">Actualizar</button>
+                                    <button type="button" class="boton-actualizar" v-if="actualizatabla == false" @Click="actualizatabla=!actualizatabla">Actualizar</button>
+                                    <div class="d-flex">
+                                    <button type="button" v-if="actualizatabla == true" class="boton-eliminar mx-2" @Click="actualizatabla=!actualizatabla">Cancelar</button>
+                                    <button type="button" v-if="actualizatabla == true" class="boton-aceptar" @Click="actualizatabla=!actualizatabla">Guardar</button>
+                                    </div>
                                 </td>
-                                <td>{{proyecto.fecha}}</td>
+                                <td><input type="date"></input></td> 
                                 <td>{{proyecto.tons_co2}}</td>
-                                <td v-for="(impacto,index) in columnaImpactoAmbiental" class="bg-warning" :key="index">CREADA POR COLUMAN</td>
+                                    <td  v-for="(impacto,index) in columnaImpactoAmbiental" class="bg-warning" :key="index">
+                                        <label v-if="actualizatabla == false">CREADA POR COLUMAN</label>
+                                        <input v-else ></input>
+                                    </td>
+                                    
                                 <td>{{proyecto.ahorro_duro}}</td>
                                 <td>{{proyecto.ahorro_suave}}</td>
 
                                 <td></td>
 
                     </table>
+                    </div>
 
                     <!---->
                 </div>
