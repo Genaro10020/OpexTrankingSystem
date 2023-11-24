@@ -102,7 +102,6 @@ thead{
 }
 
 
-
 .table thead th, button {
     font-weight: normal;
 }
@@ -117,7 +116,9 @@ thead{
 }
 
 .cuerpo-tabla-creados{
-    font-size: 0.8em;
+    background: #d6eaf8;
+
+    font-size: 0.9em;
 }
 
 .letraTablas{
@@ -437,8 +438,9 @@ box-shadow: 10px 5px 10px black;
     }
 
 
-    .diferente-color{
-        background-color: rgba(217, 232, 222, 0.941);
+    .divisor-tr-creados{
+        background: rgb(61,60,74);
+        background: linear-gradient(180deg, rgba(61,60,74,1) 0%, rgba(255,255,255,1) 15%, rgba(255,255,255,1) 100%); 
         height: 20px;
     }
 

@@ -507,9 +507,8 @@ if (isset($_SESSION['nombre'])) {
                 <!--AQUI TRABAJA //ALTA DE PROYECTOS-->
                 <div v-if="ventana=='Altas'">
                     <div class="scroll-dos">
-                        <table class="mx-auto mt-5  mb-5 tabla-proyectos table-hover  border-dark text-center table-striped">
-                            <thead class="border:1px solid black">
-                                <tr>
+                        <table class="ms-1 me-1 mx-auto mt-5  mb-5 tabla-proyectos  text-center">
+                            <thead class="sticky-top"  >
                                     <th>Fecha</th>
                                     <th>Folio</th>
                                     <th>Nombre Proyecto</th>
@@ -529,26 +528,26 @@ if (isset($_SESSION['nombre'])) {
                             </thead>
                             <tbody class=" border:1px solid black" style="text-align: center">
                                 <template v-for="(proyecto,index) in proyectos">
-                                    <tr v-if="folioAnteriorSinNumeral(proyecto.folio, index)" :class="{ 'diferente-color': folioAnteriorSinNumeral(proyecto.folio, index)==true}"><!--ES DIFERENTE--->
+                                    <tr v-if="folioAnteriorSinNumeral(proyecto.folio, index)" :class="{ 'divisor-tr-creados': folioAnteriorSinNumeral(proyecto.folio, index)==true}"><!--ES DIFERENTE--->
                                         <td colspan="16" v-if="index>0"></td>
                                     </tr>
-                                    <tr class=""  class="cuerpo-tabla-creados" style="vertical-align: middle;" :class="{ 'fila-ultimo-proyecto': buscandoUltimoProyectoCreado(proyecto.nombre_proyecto) }">
-                                        <td>{{proyecto.fecha}}</td>
-                                        <td style="min-width:150px;">{{proyecto.folio}}</td>
-                                        <td>{{proyecto.nombre_proyecto}}</td>
-                                        <td>{{proyecto.planta}}</td>
-                                        <td>{{proyecto.area}}</td>
-                                        <td>{{proyecto.departamento}}</td>
-                                        <td>{{proyecto.metodologia}}</td>
-                                        <td>{{proyecto.responsable}}</td>
-                                        <td>{{proyecto.correo}}</td>
-                                        <td>{{proyecto.telefono}}</td>
-                                        <td>{{proyecto.pilares}}</td>
-                                        <td>{{proyecto.objetivos}}</td>
-                                        <td>{{proyecto.impacto_ambiental}}</td>
-                                        <td>{{proyecto.tons_co2}}</td>
-                                        <td>{{proyecto.ahorro_duro}}</td>
-                                        <td>{{proyecto.ahorro_suave}}</td>
+                                    <tr class="cuerpo-tabla-creados border border-secondary" style="vertical-align: middle;" :class="{ 'fila-ultimo-proyecto': buscandoUltimoProyectoCreado(proyecto.nombre_proyecto) }">
+                                        <td class="border border-secondary">{{proyecto.fecha}}</td>
+                                        <td class="border border-secondary" style="min-width:150px;">{{proyecto.folio}}</td>
+                                        <td class="border border-secondary">{{proyecto.nombre_proyecto}}</td>
+                                        <td class="border border-secondary">{{proyecto.planta}}</td>
+                                        <td class="border border-secondary">{{proyecto.area}}</td>
+                                        <td class="border border-secondary">{{proyecto.departamento}}</td>
+                                        <td class="border border-secondary">{{proyecto.metodologia}}</td>
+                                        <td class="border border-secondary">{{proyecto.responsable}}</td>
+                                        <td class="border border-secondary">{{proyecto.correo}}</td>
+                                        <td class="border border-secondary">{{proyecto.telefono}}</td>
+                                        <td class="border border-secondary">{{proyecto.pilares}}</td>
+                                        <td class="border border-secondary">{{proyecto.objetivos}}</td>
+                                        <td class="border border-secondary">{{proyecto.impacto_ambiental}}</td>
+                                        <td class="border border-secondary">{{proyecto.tons_co2}}</td>
+                                        <td class="border border-secondary">{{proyecto.ahorro_duro}}</td>
+                                        <td class="border border-secondary">{{proyecto.ahorro_suave}}</td>
                                     </tr>
                                 </template>
                         </table>
@@ -910,12 +909,8 @@ if (isset($_SESSION['nombre'])) {
                                             <div class="modal-body input-group mb-3">
                                                 <span class="input-group-text w-25 mt-3">Nombre:</span>
                                                 <input v-model="nueva" type="text" class="w-75 mt-3">
-                                                <div class="d-flex input-group">
-                                                    <span class="input-group-text w-25  mt-3">Cantidad</span>
-                                                    <input v-model="cantidad" type="text"class="w-25 mt-3">
-                                                    <span class="input-group-text w-25 mt-3">Descripcion</span>
-                                                    <input v-model="descripcionCa" type="text" class="w-25 mt-3">
-                                                </div>
+                                                <span class="input-group-text w-25 mt-3">Cantidad:</span>
+                                                <input v-model="cantidad" type="number" class="w-75 mt-3">
                                                 <span class="input-group-text w-25 mt-3">Unidad De Medida:</span>
                                                 <input v-model="unidadMedida" type="text" class="w-75 mt-3">
                                             </div>
@@ -1025,13 +1020,13 @@ if (isset($_SESSION['nombre'])) {
                             <option v-for="proyecto in proyectos" :value="proyecto.id">{{proyecto.nombre_proyecto}}</option>
                         </select>
                     </div>
-                    <div class="scroll-dos">
+
                     <table class="mx-2 mt-5  mb-5 table table-hover table-bordered border-dark text-center">
                         <thead class="  border:1px solid black">
                             <tr>
-                                <th>Actualizar{{actualizatabla}}</th>
+                                <th>Actualizar</th>
                                 <th>Fecha</th>
-                                <th style="min-width:150px">Tons de CO2 por Evitar</th>
+                                <th>Tons de CO2 por Evitar</th>
                                 <th v-for="(impacto,index) in columnaImpactoAmbiental" :key="index">{{impacto}}</th>
                                 <th>Ahorro Duro</th>
                                 <th>Ahorro Suave </th>
@@ -1039,28 +1034,19 @@ if (isset($_SESSION['nombre'])) {
 
                         </thead>
                         <tbody class=" border:1px solid black" style="text-align: center">
-                            <tr style="vertical-align: middle " v-for="(proyecto,posicion) in arregloID" :key="posicion">
+                            <tr style="vertical-align: middle " v-for="proyecto in arregloID">
                                 <td>
-                                    <button type="button" class="boton-actualizar" v-if="actualizatabla == false" @Click="actualizatabla=!actualizatabla">Actualizar</button>
-                                    <div class="d-flex">
-                                    <button type="button" v-if="actualizatabla == true" class="boton-eliminar mx-2" @Click="actualizatabla=!actualizatabla">Cancelar</button>
-                                    <button type="button" v-if="actualizatabla == true" class="boton-aceptar" @Click="actualizatabla=!actualizatabla">Guardar</button>
-                                    </div>
+                                    <button type="button" class="boton-actualizar">Actualizar</button>
                                 </td>
-                                <td><input type="date"></input></td> 
+                                <td>{{proyecto.fecha}}</td>
                                 <td>{{proyecto.tons_co2}}</td>
-                                    <td  v-for="(impacto,index) in columnaImpactoAmbiental" class="bg-warning" :key="index">
-                                        <label v-if="actualizatabla == false">CREADA POR COLUMAN</label>
-                                        <input v-else ></input>
-                                    </td>
-                                    
+                                <td v-for="(impacto,index) in columnaImpactoAmbiental" class="bg-warning" :key="index">CREADA POR COLUMAN</td>
                                 <td>{{proyecto.ahorro_duro}}</td>
                                 <td>{{proyecto.ahorro_suave}}</td>
 
                                 <td></td>
 
                     </table>
-                    </div>
 
                     <!---->
                 </div>
