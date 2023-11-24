@@ -43,259 +43,259 @@ if (isset($_SESSION['nombre'])) {
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                   <div class="d-flex col-12"> 
-                                    <div class="col-9 "><!--bloque imagen-->
-                                                <!--Formulario Alta Proyecto-->
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text w-25">Fecha</span>
-                                                    <input type="date" class="w-50" v-model="fecha_alta" :class="{'nocontestado': respondio === false && fecha_alta === '', '': fecha_alta !== ''}">
-                                                    <div v-show="fecha_alta !==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                    <div class="d-flex col-12">
+                                        <div class="col-9 "><!--bloque imagen-->
+                                            <!--Formulario Alta Proyecto-->
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text w-25">Fecha</span>
+                                                <input type="date" class="w-50" v-model="fecha_alta" :class="{'nocontestado': respondio === false && fecha_alta === '', '': fecha_alta !== ''}">
+                                                <div v-show="fecha_alta !==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                            </div>
+
+
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text w-25">Nombre Proyecto</span>
+                                                <input type="text" class="w-50" v-model="nombre_proyecto" :class="{'nocontestado': respondio === false && nombre_proyecto === '', '':nombre_proyecto !== ''}">
+                                                <div v-if="nombre_proyecto !==''" class=" text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                            </div>
+
+                                            <!---Planta-->
+                                            <div class="input-group mb-3 ">
+                                                <span class="input-group-text w-25">Planta</span>
+                                                <select v-model="selectPlanta" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectPlanta === '', '': selectPlanta !== ''}">
+                                                    <option value="" selected disabled>Seleccione..</option>
+                                                    <option v-for="planta in plantas" :value="planta.id +'<->'+ planta.nombre+'<->'+planta.siglas">{{planta.nombre}} ({{planta.siglas}})</option>
+                                                </select>
+                                                <div class="flex-column">
+                                                    <div class="col-12"><button class="btn-anadir" title="Crear " @click="abrirModal('CRUD','Planta','Crear')"><i class="bi bi-plus-circle"></i></button></div>
+                                                    <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Planta','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
+                                                    <div class="col-12"><button class="btn-delete" title="Eliminar" @click="eliminarPlanta()"><i class="bi bi-x-circle"></i></button></div>
                                                 </div>
+                                                <div v-if="selectPlanta !==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                            </div>
 
-
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text w-25">Nombre Proyecto</span>
-                                                    <input type="text" class="w-50" v-model="nombre_proyecto" :class="{'nocontestado': respondio === false && nombre_proyecto === '', '':nombre_proyecto !== ''}">
-                                                    <div v-if="nombre_proyecto !==''" class=" text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                            <!---Área-->
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text w-25">Área</span>
+                                                <select v-model="selectArea" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectArea === '', '': selectArea !== ''}">
+                                                    <option selected disabled>Seleccione..</option>
+                                                    <option v-for="area in areas" :value="area.id +'<->'+ area.nombre+'<->'+ area.siglas">{{area.nombre}} ({{area.siglas}})</option>
+                                                </select>
+                                                <div>
+                                                    <div class="col-12"><button class="btn-anadir" title="Crear" @click="abrirModal('CRUD','Área','Crear')"><i class="bi bi-plus-circle"></i></button></div>
+                                                    <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Área','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
+                                                    <div class="col-12"><button class="btn-delete" title="Eliminar" @click="eliminarArea()"><i class="bi bi-x-circle"></i></button></div>
                                                 </div>
+                                                <div v-if="selectArea !==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                            </div>
 
-                                                <!---Planta-->
-                                                <div class="input-group mb-3 ">
-                                                    <span class="input-group-text w-25">Planta</span>
-                                                    <select v-model="selectPlanta" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectPlanta === '', '': selectPlanta !== ''}">
-                                                        <option value="" selected disabled>Seleccione..</option>
-                                                        <option v-for="planta in plantas" :value="planta.id +'<->'+ planta.nombre+'<->'+planta.siglas">{{planta.nombre}} ({{planta.siglas}})</option>
-                                                    </select>
-                                                    <div class="flex-column">
-                                                        <div class="col-12"><button class="btn-anadir" title="Crear " @click="abrirModal('CRUD','Planta','Crear')"><i class="bi bi-plus-circle"></i></button></div>
-                                                        <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Planta','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
-                                                        <div class="col-12"><button class="btn-delete" title="Eliminar" @click="eliminarPlanta()"><i class="bi bi-x-circle"></i></button></div>
+                                            <!---Departamentos-->
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text w-25">Departamento</span>
+                                                <select v-model="selectDepartamento" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectDepartamento === '', '': selectDepartamento !== ''}">
+                                                    <option selected disabled>Seleccione..</option>
+                                                    <option v-for="departamento in departamentos" :value="departamento.id+'<->'+departamento.nombre+'<->'+departamento.siglas">{{departamento.nombre}} ({{departamento.siglas}})</option>
+                                                </select>
+                                                <div>
+                                                    <div class="col-12"><button class="btn-anadir" title="Crear" @click="abrirModal('CRUD','Departamento','Crear')"><i class="bi bi-plus-circle"></i></button></div>
+                                                    <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Departamento','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
+                                                    <div class="col-12"><button class="btn-delete" title="Eliminar" @click="eliminarDepartamento()"><i class="bi bi-x-circle"></i></button></div>
+                                                </div>
+                                                <div v-if="selectDepartamento !==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                            </div>
+                                            <!---Metodologías-->
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text w-25">Metodología</span>
+                                                <select v-model="selectMetodologia" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectMetodologia === '', '': selectMetodologia !== ''}">
+                                                    <option selected disabled>Seleccione..</option>
+                                                    <option v-for="metodologia in metodologias" :value="metodologia.id+'<->'+metodologia.nombre">{{metodologia.nombre}}</option>
+                                                </select>
+                                                <div>
+                                                    <div class="col-12"><button class="btn-anadir" title="Crear " @click="abrirModal('CRUD','Metodología','Crear')"><i class="bi bi-plus-circle"></i></button></div>
+                                                    <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Metodología','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
+                                                    <div class="col-12"><button class="btn-delete" title="Eliminar" @click="eliminarMetodologia()"><i class="bi bi-x-circle"></i></button></div>
+                                                </div>
+                                                <div v-if="selectMetodologia !==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                            </div>
+                                            <!---Responsables-->
+                                            <div class="d-flex d-flex-row justify-content-center">
+                                                <div><button class="btn-anadir" title="Crear " @click="crearResponsable()"><i class="bi bi-plus-circle"></i></button></div>
+                                                <div><button class="btn-up" title="Actualizar" @click="consultarResponsableID()"><i class="bi bi-arrow-up-circle"></i></button></div>
+                                                <div><button class="btn-delete" title="Eliminar" @click="eliminarResponsable()"><i class="bi bi-x-circle"></i></button></div>
+                                            </div>
+
+                                            <div class="input-group">
+                                                <span class="input-group-text w-25">Responsable</span>
+                                                <select v-model="selectResponsable" class="w-50" :class="{'nocontestado': respondio === false && selectResponsable === '', '': selectResponsable !== ''}">
+                                                    <option value="" disabled selected>Seleccione..</option>
+                                                    <option v-for="responsable in responsables" :value="responsable.id+'<->'+responsable.nombre">{{responsable.nombre}}</option>
+                                                </select>
+                                                <div v-if="selectResponsable !==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                            </div>
+                                            <!--Campos Responsable-->
+                                            <div class="row pt-2 mt-3 ocultar" :class="{'nuevo_responsable mostrar': nuevoResponsable, 'actualizar_responsable mostrar': actualizarResponsable}">
+                                                <div class="col-10">
+                                                    <div class="input-group mb-3">
+                                                        <span class="input-group-text w-25">Nombre</span>
+                                                        <input type="text" v-model="nombre" class="w-75" :disabled="!nuevoResponsable">
                                                     </div>
-                                                    <div v-if="selectPlanta !==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                                    <div class="input-group mb-3">
+                                                        <span class="input-group-text w-25">No. de Nómina</span>
+                                                        <input type="text" v-model="numero_nomina" class="w-75">
+                                                    </div>
+                                                    <div class="input-group mb-3">
+                                                        <span class="input-group-text w-25">Correo</span>
+                                                        <input type="text" v-model="correo" class="w-75" :disabled="!nuevoResponsable">
+                                                    </div>
+                                                    <div class="input-group mb-3">
+                                                        <span class="input-group-text w-25">Teléfono</span>
+                                                        <input type="text" v-model="telefono" class="w-75" :disabled="!nuevoResponsable">
+                                                    </div>
+                                                </div>
+                                                <div class="col-2 my-auto text-center">
+                                                    <button type="button" v-if="nuevoResponsable==true && actualizarResponsable==false" class="btn-nuevo-responsable" @click="insertarResponsable()">Crear</button>
+                                                    <button type="button" v-if="actualizarResponsable" class="btn-actualizar-responsable" @click="actualizandoResponsable()">Actualiazar</button>
+                                                    <button type="button" class="btn-cancelar-responsable mt-3" @click="cancelar()">Cancelar</button>
                                                 </div>
 
-                                                <!---Área-->
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text w-25">Área</span>
-                                                    <select v-model="selectArea" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectArea === '', '': selectArea !== ''}">
-                                                        <option selected disabled>Seleccione..</option>
-                                                        <option v-for="area in areas" :value="area.id +'<->'+ area.nombre+'<->'+ area.siglas">{{area.nombre}} ({{area.siglas}})</option>
-                                                    </select>
-                                                    <div>
-                                                        <div class="col-12"><button class="btn-anadir" title="Crear" @click="abrirModal('CRUD','Área','Crear')"><i class="bi bi-plus-circle"></i></button></div>
-                                                        <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Área','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
-                                                        <div class="col-12"><button class="btn-delete" title="Eliminar" @click="eliminarArea()"><i class="bi bi-x-circle"></i></button></div>
-                                                    </div>
-                                                    <div v-if="selectArea !==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
-                                                </div>
+                                            </div>
 
-                                                <!---Departamentos-->
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text w-25">Departamento</span>
-                                                    <select v-model="selectDepartamento" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectDepartamento === '', '': selectDepartamento !== ''}">
-                                                        <option selected disabled>Seleccione..</option>
-                                                        <option v-for="departamento in departamentos" :value="departamento.id+'<->'+departamento.nombre+'<->'+departamento.siglas">{{departamento.nombre}} ({{departamento.siglas}})</option>
-                                                    </select>
-                                                    <div>
-                                                        <div class="col-12"><button class="btn-anadir" title="Crear" @click="abrirModal('CRUD','Departamento','Crear')"><i class="bi bi-plus-circle"></i></button></div>
-                                                        <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Departamento','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
-                                                        <div class="col-12"><button class="btn-delete" title="Eliminar" @click="eliminarDepartamento()"><i class="bi bi-x-circle"></i></button></div>
-                                                    </div>
-                                                    <div v-if="selectDepartamento !==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
-                                                </div>
-                                                <!---Metodologías-->
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text w-25">Metodología</span>
-                                                    <select v-model="selectMetodologia" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectMetodologia === '', '': selectMetodologia !== ''}">
-                                                        <option selected disabled>Seleccione..</option>
-                                                        <option v-for="metodologia in metodologias" :value="metodologia.id+'<->'+metodologia.nombre">{{metodologia.nombre}}</option>
-                                                    </select>
-                                                    <div>
-                                                        <div class="col-12"><button class="btn-anadir" title="Crear " @click="abrirModal('CRUD','Metodología','Crear')"><i class="bi bi-plus-circle"></i></button></div>
-                                                        <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Metodología','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
-                                                        <div class="col-12"><button class="btn-delete" title="Eliminar" @click="eliminarMetodologia()"><i class="bi bi-x-circle"></i></button></div>
-                                                    </div>
-                                                    <div v-if="selectMetodologia !==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
-                                                </div>
-                                                <!---Responsables-->
-                                                <div class="d-flex d-flex-row justify-content-center">
-                                                    <div><button class="btn-anadir" title="Crear " @click="crearResponsable()"><i class="bi bi-plus-circle"></i></button></div>
-                                                    <div><button class="btn-up" title="Actualizar" @click="consultarResponsableID()"><i class="bi bi-arrow-up-circle"></i></button></div>
-                                                    <div><button class="btn-delete" title="Eliminar" @click="eliminarResponsable()"><i class="bi bi-x-circle"></i></button></div>
-                                                </div>
+                                            <!--Misiones-->
 
-                                                <div class="input-group">
-                                                    <span class="input-group-text w-25">Responsable</span>
-                                                    <select v-model="selectResponsable" class="w-50" :class="{'nocontestado': respondio === false && selectResponsable === '', '': selectResponsable !== ''}">
-                                                        <option value="" disabled selected>Seleccione..</option>
-                                                        <option v-for="responsable in responsables" :value="responsable.id+'<->'+responsable.nombre">{{responsable.nombre}}</option>
-                                                    </select>
-                                                    <div v-if="selectResponsable !==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                            <div class="input-group mb-3 mt-3 ">
+                                                <span class="input-group-text w-25 text-start">Misión </span>
+                                                <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkMisiones.length<=0, '': checkMisiones.length>0}">
+                                                    <div class="form-check border border-1 mt-1" v-for="(mision, index) in misiones" :key="index">
+                                                        <input class="form-check-input" type="checkbox" :value="mision.id+'<->'+mision.nombre" v-model="checkMisiones" @change="consultarPilaresXmisionSeleccionada()">
+                                                        <label class="form-check-label">
+                                                            {{ mision.nombre }}
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                                <!--Campos Responsable-->
-                                                <div class="row pt-2 mt-3 ocultar" :class="{'nuevo_responsable mostrar': nuevoResponsable, 'actualizar_responsable mostrar': actualizarResponsable}">
-                                                    <div class="col-10">
-                                                        <div class="input-group mb-3">
-                                                            <span class="input-group-text w-25">Nombre</span>
-                                                            <input type="text" v-model="nombre" class="w-75" :disabled="!nuevoResponsable">
-                                                        </div>
-                                                        <div class="input-group mb-3">
-                                                            <span class="input-group-text w-25">No. de Nómina</span>
-                                                            <input type="text" v-model="numero_nomina" class="w-75">
-                                                        </div>
-                                                        <div class="input-group mb-3">
-                                                            <span class="input-group-text w-25">Correo</span>
-                                                            <input type="text" v-model="correo" class="w-75" :disabled="!nuevoResponsable">
-                                                        </div>
-                                                        <div class="input-group mb-3">
-                                                            <span class="input-group-text w-25">Teléfono</span>
-                                                            <input type="text" v-model="telefono" class="w-75" :disabled="!nuevoResponsable">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-2 my-auto text-center">
-                                                        <button type="button" v-if="nuevoResponsable==true && actualizarResponsable==false" class="btn-nuevo-responsable" @click="insertarResponsable()">Crear</button>
-                                                        <button type="button" v-if="actualizarResponsable" class="btn-actualizar-responsable" @click="actualizandoResponsable()">Actualiazar</button>
-                                                        <button type="button" class="btn-cancelar-responsable mt-3" @click="cancelar()">Cancelar</button>
-                                                    </div>
-
-                                                </div>
-
-                                                <!--Misiones-->
-
-                                                <div class="input-group mb-3 mt-3 ">
-                                                    <span class="input-group-text w-25 text-start">Misión </span>
-                                                    <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkMisiones.length<=0, '': checkMisiones.length>0}">
-                                                        <div class="form-check border border-1 mt-1" v-for="(mision, index) in misiones" :key="index">
-                                                            <input class="form-check-input" type="checkbox" :value="mision.id+'<->'+mision.nombre" v-model="checkMisiones" @change="consultarPilaresXmisionSeleccionada()">
-                                                            <label class="form-check-label">
-                                                                {{ mision.nombre }}
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                    <!--<div class="my-auto">
+                                                <!--<div class="my-auto">
                                                                                 <div class="col-12"><button class="btn-anadir" title="Crear "><i class="bi bi-plus-circle"></i></button></div>
                                                                                 <div class="col-12"><button class="btn-up" title="Actualizar"><i class="bi bi-arrow-up-circle"></i></button></div>
                                                                                 <div class="col-12"><button class="btn-delete" title="Eliminar"><i class="bi bi-x-circle"></i></button></div>
                                                                             </div>-->
-                                                    <div v-if="checkMisiones.length>0" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
-                                                </div>
+                                                <div v-if="checkMisiones.length>0" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                            </div>
 
-                                                <!--Pilares-->
-                                                <div id="div_pilares" class="input-group mb-3 " :class="{'mostrar':checkMisiones.length>0, 'ocultar': checkMisiones.length <= 0}">
-                                                    <span class="input-group-text w-25 text-start">Pilares <br>Estrategicos </span>
-                                                    <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkPilares.length<=0, '': checkPilares.length>0}">
-                                                        <div class="form-check border border-1 mt-1" v-for="(pilar, index) in pilares" :key="index">
-                                                            <input class="form-check-input" type="checkbox" :value="pilar.id+'<->'+pilar.nombre+'<->'+pilar.siglas+'<->'+(index+1)" v-model="checkPilares" @change="consultarObjetivosXpilaresSeleccionados()">
-                                                            <label class="form-check-label w-75">
-                                                                {{ pilar.nombre }} ({{pilar.siglas}})
-                                                            </label>
-                                                            <!--<label class="w-25" v-if="idsPilares.includes(pilar.id) && checkPilares.length>0">
+                                            <!--Pilares-->
+                                            <div id="div_pilares" class="input-group mb-3 " :class="{'mostrar':checkMisiones.length>0, 'ocultar': checkMisiones.length <= 0}">
+                                                <span class="input-group-text w-25 text-start">Pilares <br>Estrategicos </span>
+                                                <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkPilares.length<=0, '': checkPilares.length>0}">
+                                                    <div class="form-check border border-1 mt-1" v-for="(pilar, index) in pilares" :key="index">
+                                                        <input class="form-check-input" type="checkbox" :value="pilar.id+'<->'+pilar.nombre+'<->'+pilar.siglas+'<->'+(index+1)" v-model="checkPilares" @change="consultarObjetivosXpilaresSeleccionados()">
+                                                        <label class="form-check-label w-75">
+                                                            {{ pilar.nombre }} ({{pilar.siglas}})
+                                                        </label>
+                                                        <!--<label class="w-25" v-if="idsPilares.includes(pilar.id) && checkPilares.length>0">
                                                                 <select v-model="selectPilar[index]" @change="verificarCantidadDirectosPilares()">
                                                                     <option v-if="idsPilares.includes(pilar.id)" value="" disabled selected>Seleccione...</option>
                                                                     <option value="directo">Directo</option>
                                                                     <option value="indirecto">Indirecto</option>
                                                                 </select>
                                                             </label>-->
-                                                        </div>
                                                     </div>
+                                                </div>
 
-                                                    <!--<div class="my-auto">
+                                                <!--<div class="my-auto">
                                                                                 <div class="col-12"><button class="btn-anadir" title="Crear " @click="abrirModal('CRUD','Pilar','Crear')"><i class="bi bi-plus-circle"></i></button></div>
                                                                                 <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Pilar','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
                                                                                 <div class="col-12"><button class="btn-delete" title="Eliminar" @click="eliminarPilar()"><i class="bi bi-x-circle"></i></button></div>
                                                                             </div>-->
-                                                    <div v-if="checkPilares.length>0" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                                <div v-if="checkPilares.length>0" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                            </div>
+
+                                            <!--Objetivos-->
+                                            <div v-if="checkPilares.length>0" class="input-group mb-3 " :class="{'mostrar':checkPilares.length>0, 'ocultar': checkPilares.length <= 0}">
+                                                <span class="input-group-text w-25 text-start">Objetivos <br>Estrategicos</span>
+                                                <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkObjetivos.length<=0, '': checkObjetivos.length>0}">
+                                                    <div v-for="(objetivo, index) in objetivos" class="form-check border border-1 mt-1" :key="index">
+                                                        <input class="form-check-input" v-model="checkObjetivos" type="checkbox" id="checkbox1" :value="objetivo.id+'<->'+objetivo.nombre+'<->'+objetivo.id_pilares+'<->'+objetivo.siglas+'<->'+(index+1)" @change="checkeandoObjetivos()">
+                                                        <label class="form-check-label w-75" for="checkbox1">
+                                                            {{objetivo.nombre}} ({{objetivo.siglas}})
+                                                        </label>
+                                                        <label class="w-25" v-if="idsObjetivos.includes(objetivo.id) && checkPilares.length>0">
+                                                            <select v-model="selectObjetivo[index]" @change="verificarCantidadDirectosObjetivos()">
+                                                                <option value="" disabled selected>Seleccione...</option>
+                                                                <option value="directo">Directo</option>
+                                                                <option value="indirecto">Indirecto</option>
+                                                            </select>
+                                                        </label>
+                                                    </div>
                                                 </div>
 
-                                                <!--Objetivos-->
-                                                <div v-if="checkPilares.length>0" class="input-group mb-3 " :class="{'mostrar':checkPilares.length>0, 'ocultar': checkPilares.length <= 0}">
-                                                    <span class="input-group-text w-25 text-start">Objetivos <br>Estrategicos</span>
-                                                    <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkObjetivos.length<=0, '': checkObjetivos.length>0}">
-                                                        <div v-for="(objetivo, index) in objetivos" class="form-check border border-1 mt-1" :key="index">
-                                                            <input class="form-check-input" v-model="checkObjetivos" type="checkbox" id="checkbox1" :value="objetivo.id+'<->'+objetivo.nombre+'<->'+objetivo.id_pilares+'<->'+objetivo.siglas+'<->'+(index+1)" @change="checkeandoObjetivos()">
-                                                            <label class="form-check-label w-75" for="checkbox1">
-                                                                {{objetivo.nombre}} ({{objetivo.siglas}})
-                                                            </label>
-                                                            <label class="w-25" v-if="idsObjetivos.includes(objetivo.id) && checkPilares.length>0">
-                                                                <select v-model="selectObjetivo[index]" @change="verificarCantidadDirectosObjetivos()">
-                                                                    <option value="" disabled selected>Seleccione...</option>
-                                                                    <option value="directo">Directo</option>
-                                                                    <option value="indirecto">Indirecto</option>
-                                                                </select>
-                                                            </label>
-                                                        </div>
-                                                    </div>
-
-                                                    <!--<div>
+                                                <!--<div>
                                                                                 <div class="col-12"><button class="btn-anadir" title="Crear" @click="abrirModal('CRUD','Objetivo','Crear')"><i class="bi bi-plus-circle"></i></button></div>
                                                                                 <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Objetivo','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
                                                                                 <div class="col-12"><button class="btn-delete" title="Eliminar"  @click="eliminarObjetivo()"><i class="bi bi-x-circle"></i></button></div>
                                                                             </div>-->
-                                                    <div v-if="checkObjetivos.length>0" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
-                                                </div>
+                                                <div v-if="checkObjetivos.length>0" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                            </div>
 
-                                                <!--Impacto Ambiental-->
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text w-25 text-start">Impacto <br>Ambiental<br><label class="ms-5"><i class="bi bi-question-circle"></label></i></span>
-                                                    <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkImpactoAmbiental.length<=0, '': checkImpactoAmbiental.length>0}">
-                                                        <div v-for="impacto in impactoAmbiental" class="form-check border border-1  mt-1">
-                                                            <input class="form-check-input" type="checkbox" id="checkbox1" v-model="checkImpactoAmbiental" :value="impacto.id+'<->'+impacto.nombre">
-                                                            <label class="form-check-label" for="checkbox1">
-                                                                {{impacto.nombre}}
-                                                            </label>
-                                                        </div>
+                                            <!--Impacto Ambiental-->
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text w-25 text-start">Impacto <br>Ambiental<br><label class="ms-5"><i class="bi bi-question-circle"></label></i></span>
+                                                <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkImpactoAmbiental.length<=0, '': checkImpactoAmbiental.length>0}">
+                                                    <div v-for="impacto in impactoAmbiental" class="form-check border border-1  mt-1">
+                                                        <input class="form-check-input" type="checkbox" id="checkbox1" v-model="checkImpactoAmbiental" :value="impacto.id+'<->'+impacto.nombre">
+                                                        <label class="form-check-label" for="checkbox1">
+                                                            {{impacto.nombre}}
+                                                        </label>
                                                     </div>
-                                                                    <!--<div>
+                                                </div>
+                                                <!--<div>
                                                                         <div class="col-12"><button class="btn-anadir" title="Crear "><i class="bi bi-plus-circle"></i></button></div>
                                                                         <div class="col-12"><button class="btn-up" title="Actualizar"><i class="bi bi-arrow-up-circle"></i></button></div>
                                                                         <div class="col-12"><button class="btn-delete" title="Eliminar"><i class="bi bi-x-circle"></i></button></div>
                                                                     </div>-->
-                                                    <div v-if="checkImpactoAmbiental.length>0" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
-                                                </div>
+                                                <div v-if="checkImpactoAmbiental.length>0" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                            </div>
 
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text w-50">Tons CO2 por Evitar (Proyectado)</span>
-                                                    <input id="tons_co2" type="text" v-model="tons_co2" min="0" class="w-25" :class="{'nocontestado': !respondio && tons_co2 === 0, '': tons_co2 !== 0 && tons_co2 !== ''}">
-                                                    <div v-if="tons_co2 !== '' && tons_co2 !== '0'" class="text-center my-auto ms-3">
-                                                        <i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i>
-                                                    </div>
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text w-50">Tons CO2 por Evitar (Proyectado)</span>
+                                                <input id="tons_co2" type="text" v-model="tons_co2" min="0" class="w-25" :class="{'nocontestado': !respondio && tons_co2 === 0, '': tons_co2 !== 0 && tons_co2 !== ''}">
+                                                <div v-if="tons_co2 !== '' && tons_co2 !== '0'" class="text-center my-auto ms-3">
+                                                    <i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i>
                                                 </div>
+                                            </div>
 
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text w-50">Ahorro Duro $MXN/Año (Proyectado )</span>
-                                                    <input id="ahorro_duro" type="text" v-model="ahorro_duro" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_duro===0, '': ahorro_duro!==0 && ahorro_duro!==''}" @click="colocarCursor('ahorro_duro')" @blur="asignarValor('ahorro_duro')" @keyUp=" formatoNumero('ahorro_duro', $event)">
-                                                    <div v-if="ahorro_duro!=='' && ahorro_duro !== '$0.00' && ahorro_duro !== '$.00' && ahorro_duro !== '$.0' && ahorro_duro !== '$.'  && ahorro_duro !== '$'" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
-                                                </div>
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text w-50">Ahorro Duro $MXN/Año (Proyectado )</span>
+                                                <input id="ahorro_duro" type="text" v-model="ahorro_duro" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_duro===0, '': ahorro_duro!==0 && ahorro_duro!==''}" @click="colocarCursor('ahorro_duro')" @blur="asignarValor('ahorro_duro')" @keyUp=" formatoNumero('ahorro_duro', $event)">
+                                                <div v-if="ahorro_duro!=='' && ahorro_duro !== '$0.00' && ahorro_duro !== '$.00' && ahorro_duro !== '$.0' && ahorro_duro !== '$.'  && ahorro_duro !== '$'" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                            </div>
 
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text w-50">Ahorro Suave $MXN/Año (Proyectado)</span>
-                                                    <input id="ahorro_suave" type="text" v-model="ahorro_suave" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_suave===0, '': ahorro_suave!==0 && ahorro_suave!==''}" @click="colocarCursor('ahorro_suave')" @blur="asignarValor('ahorro_suave')" @keyUp=" formatoNumero( 'ahorro_suave',$event)">
-                                                    <div v-if="ahorro_suave!=='' && ahorro_suave !== '$0.00' && ahorro_suave !== '$.00' && ahorro_suave !== '$.0' && ahorro_suave !== '$.'  && ahorro_suave !== '$'" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
-                                                </div>
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text w-25 me-2">Objetivo Estrategico</span>
-                                                    <input type="checkbox" v-model="objetivo_estrategico">
-                                                </div>
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text w-50">Ahorro Suave $MXN/Año (Proyectado)</span>
+                                                <input id="ahorro_suave" type="text" v-model="ahorro_suave" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_suave===0, '': ahorro_suave!==0 && ahorro_suave!==''}" @click="colocarCursor('ahorro_suave')" @blur="asignarValor('ahorro_suave')" @keyUp=" formatoNumero( 'ahorro_suave',$event)">
+                                                <div v-if="ahorro_suave!=='' && ahorro_suave !== '$0.00' && ahorro_suave !== '$.00' && ahorro_suave !== '$.0' && ahorro_suave !== '$.'  && ahorro_suave !== '$'" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                            </div>
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text w-25 me-2">Objetivo Estrategico</span>
+                                                <input type="checkbox" v-model="objetivo_estrategico">
+                                            </div>
                                         </div>
                                         <div class="col-3 my-auto mx-auto "><!--bloque imagen de la modal-->
-                                                 <form @submit.prevent="uploadFile()">
-                                                        <!--Subir Documento Sugerencia-->
+                                            <form @submit.prevent="uploadFile()">
+                                                <!--Subir Documento Sugerencia-->
 
-                                                        <div class="row mx-auto">
-                                                                <input type="file" id="input_file_subir" @change="varificandoSelecion()" ref="ref_imagen" accept="*.jpg/*.png"  class="btn-success py-1" required/>
-                                                        </div> 
-                                                        <div v-if="imagenes.length>0" class="row">
-                                                                <div class="col-12 d-flex justify-content-center">
-                                                                            <img  :src="imagenes[0]+'?'+random" style=" width:250px; height:200px;"></img>
-                                                                </div> 
-                                                        </div>
-                                                        <div v-if="existeImagenSeleccionada==true" class="row mx-auto">
-                                                                <input class="btn-success" type="submit" value="Subir"/>
-                                                        </div>
-                                                       
-                                                    </form>
-                                         </div>
-                                    </div>   
+                                                <div class="row mx-auto">
+                                                    <input type="file" id="input_file_subir" @change="varificandoSelecion()" ref="ref_imagen" accept="*.jpg/*.png" class="btn-success py-1" required />
+                                                </div>
+                                                <div v-if="imagenes.length>0" class="row">
+                                                    <div class="col-12 d-flex justify-content-center">
+                                                        <img :src="imagenes[0]+'?'+random" style=" width:250px; height:200px;"></img>
+                                                    </div>
+                                                </div>
+                                                <div v-if="existeImagenSeleccionada==true" class="row mx-auto">
+                                                    <input class="btn-success" type="submit" value="Subir" />
+                                                </div>
+
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="boton-cancelar" data-bs-dismiss="modal">Salir</button>
@@ -1027,10 +1027,11 @@ if (isset($_SESSION['nombre'])) {
                         <thead class="  border:1px solid black">
                             <tr>
                                 <th>Actualizar</th>
-                                <<th>Fecha</th>
+                                <th>Fecha</th>
                                 <th>Tons de CO2 por Evitar</th>
+                                <th v-for="(impacto,index) in columnaImpactoAmbiental" :key="index">{{impacto}}</th>
                                 <th>Ahorro Duro</th>
-                                <th>Ahorro Suave </th> 
+                                <th>Ahorro Suave </th>
                                 <th>Estatus</th>
 
                         </thead>
@@ -1041,9 +1042,11 @@ if (isset($_SESSION['nombre'])) {
                                 </td>
                                 <td>{{proyecto.fecha}}</td>
                                 <td>{{proyecto.tons_co2}}</td>
+                                <td v-for="(impacto,index) in columnaImpactoAmbiental" class="bg-warning" :key="index">CREADA POR COLUMAN</td>
                                 <td>{{proyecto.ahorro_duro}}</td>
-                                <td>{{proyecto.ahorro_duro}}</td>
-                                <td>{{proyecto.correo}}</td>
+                                <td>{{proyecto.ahorro_suave}}</td>
+
+                                <td></td>
 
                     </table>
 

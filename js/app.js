@@ -41,14 +41,14 @@ const AltaProyectos = {
       selectObjetivo: [],
       select_pilar: '',
       select_mision: '',
-      imagenes:[],
+      imagenes: [],
       tons_co2: '0',
       ahorro_duro: '$.00',
       ahorro_suave: '$.00',
       numero_index: 0,
       respondio: true,//utilizo para cambiar el css si no repondio en altas
       objetivo_estrategico: false,
-      existeImagenSeleccionada:false, 
+      existeImagenSeleccionada: false,
       /*Planta*/ /*Área*/ /*Departamento*/
       nueva: '',
       nuevoNombre: '',
@@ -59,9 +59,9 @@ const AltaProyectos = {
       nombre: '',
       numero_nomina: '',
       correo: '',
-      telefono: '', 
+      telefono: '',
       responsableID: [],
-      random:'',
+      random: '',
       /*Impacto Ambiental */
       //general
       id: '',// utilizado y reseteado despues de usar.
@@ -77,7 +77,8 @@ const AltaProyectos = {
       objetivos_ligados: '',
       /*SEGUIMIENTO DE PORYECTO*/
       id_proyecto: '',
-      arregloID: []
+      arregloID: [],
+      columnaImpactoAmbiental: [],
     }
   },
   mounted() {
@@ -108,14 +109,18 @@ const AltaProyectos = {
       })
     },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PROYECTOS POR ID PARA QUE TRAEGA DATOS DE CADA PROYECTO*/
-    consultarProyectoID(){
+    consultarProyectoID() {
       axios.post('proyectosController.php', {
-          id_proyecto: this.id_proyecto //ID PROYECTO
+        id_proyecto: this.id_proyecto //ID PROYECTO
       }).then(response => {
         console.log(response.data)
         if (response.data[0][1] == true) {
           if (response.data[0][0].length > 0) {
             this.arregloID = response.data[0][0];
+            this.columnaImpactoAmbiental = JSON.parse(response.data[0][0][0].impacto_ambiental);
+
+            console.log(this.columnaImpactoAmbiental)
+            console.log("IMPACTO AMBIENTAL LARGO" + this.columnaImpactoAmbiental.length)
           }
         } else {
           alert("La consulta de proyectos no se realizo correctamente.")
@@ -1682,68 +1687,68 @@ const AltaProyectos = {
       this.nuevoResponsable = false;
       this.actualizarResponsable = false;
     },
-    varificandoSelecion(){
+    varificandoSelecion() {
       var imagen_seleccion = document.getElementById('input_file_subir').value;
-      if(imagen_seleccion!=null){
+      if (imagen_seleccion != null) {
         this.existeImagenSeleccionada = true;
       }
     },
-    buscarDocumentos(){
-      this.imagenes=[]
-      axios.post("buscar_documentos.php",{
+    buscarDocumentos() {
+      this.imagenes = []
+      axios.post("buscar_documentos.php", {
       })
-      .then(response => {
-                          this.imagenes = response.data
-                          if(this.imagenes.length>0){
-                              console.log(this.imagenes + "Archivos encontrados.")
-                          }else{
-                            console.log(this.imagenes + "Sin imagen encontrada.")
-                          }
-      })
-      .catch(error => {
+        .then(response => {
+          this.imagenes = response.data
+          if (this.imagenes.length > 0) {
+            console.log(this.imagenes + "Archivos encontrados.")
+          } else {
+            console.log(this.imagenes + "Sin imagen encontrada.")
+          }
+        })
+        .catch(error => {
           console.log(error);
-      });
-  },
-    uploadFile(){
+        });
+    },
+    uploadFile() {
       //this.mensaje_boton = "Espere, estamos subiendo su archivo...."
       let formData = new FormData();
       var files = this.$refs.ref_imagen.files;
       var totalfiles = this.$refs.ref_imagen.files.length;
 
       for (var index = 0; index < totalfiles; index++) {
-       formData.append("files[]", files[index]);//arreglo de documentos
+        formData.append("files[]", files[index]);//arreglo de documentos
       }
       /*formData.append("subarea", this.subarea);
       formData.append("nombre_ayuda_visual", this.nombre_ayuda_visual);
       formData.append("id_concentrado", this.id_concentrado);*/
       axios.post("subir_imagen.php", formData,
-          {
-          headers: {"Content-Type": "multipart/form-data"}
-          })
-          .then(response => {
-              console.log(response.data);
-               this.imagenes = response.data;
-             if(this.imagenes.length>0){
-                  //this.mensaje_boton = "Subir Archivo"
-                  document.getElementById("input_file_subir").value=""
-                  this.existeImagenSeleccionada = false;
-                  this.random = Math.random()
-                 // alert(random)
-                 // this.buscarDocumentos()
-              }else{
-                  //this.mensaje_boton = "Subir Archivo"
-                  //this.random = Math.random()
-                  alert("Verifique la extension del archivo o Intente nuevamente.")
-              }
-          })
-          .catch(error => {
-              this.mensaje_boton = "Subir Archivo"
-              console.log(error);
-          }).finally(() => {
-              this.mensaje_boton = "Subir Archivo"
-          
-          });
-      },
+        {
+          headers: { "Content-Type": "multipart/form-data" }
+        })
+        .then(response => {
+          console.log(response.data);
+          this.imagenes = response.data;
+          if (this.imagenes.length > 0) {
+            //this.mensaje_boton = "Subir Archivo"
+            document.getElementById("input_file_subir").value = ""
+            this.existeImagenSeleccionada = false;
+            this.random = Math.random()
+            // alert(random)
+            // this.buscarDocumentos()
+          } else {
+            //this.mensaje_boton = "Subir Archivo"
+            //this.random = Math.random()
+            alert("Verifique la extension del archivo o Intente nuevamente.")
+          }
+        })
+        .catch(error => {
+          this.mensaje_boton = "Subir Archivo"
+          console.log(error);
+        }).finally(() => {
+          this.mensaje_boton = "Subir Archivo"
+
+        });
+    },
     verificarAltaProyecto() {
 
       //Comprobando fecha
@@ -1914,9 +1919,9 @@ const AltaProyectos = {
           if (response.data[0][1] == true) {
             this.myModal.hide()
             this.consultarProyectos()
-            this.fecha_alta=''
-            this.nombre_proyecto=''
-            this.selectPlanta= ''
+            this.fecha_alta = ''
+            this.nombre_proyecto = ''
+            this.selectPlanta = ''
             this.selectArea = ''
             this.selectDepartamento = ''
             this.selectMetodologia = ''
@@ -1930,9 +1935,9 @@ const AltaProyectos = {
             this.tons_co2 = "0"
             this.ahorro_duro = "$.00"
             this.ahorro_suave = "$.00"
-            this.objetivo_estrategico= false
+            this.objetivo_estrategico = false
             alert("El proyecto se creó con éxito..")
-            
+
           }
         } else {
           alert("No se dio de alta el proyecto.")
