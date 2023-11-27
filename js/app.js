@@ -2106,6 +2106,10 @@ const AltaProyectos = {
         }
       }
     },
+    cancelarEvento(e){
+      e.preventDefault();
+      console.log('Evento cancelado:', e.key);
+    }
   
   }
 };
