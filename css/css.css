@@ -418,15 +418,23 @@ box-shadow: 10px 5px 10px black;
         to {opacity: 1; }
     }
 
+    .tablaSeguimiento{
+        border:#080808;
+        color:#1b4598;
+        /* background-color: red; */
+
+    }
+
     .thmodal{
-        color:#080808 !important;
-        background-color: #ccc6c6 !important;
+        color:#080808;
+        background-color: #ccc6c6;
     }
 
     .encabezadoTablas{
         height: 50px;
-        background-color: gray !important;
+        background-color: gray;
         color: white;
+        
     }
 
     .titulotabla{
