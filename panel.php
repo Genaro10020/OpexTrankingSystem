@@ -24,8 +24,8 @@ if (isset($_SESSION['nombre'])) {
                         <i class="bi bi-plus-circle"></i> Crear Catalogos
                     </button>
 
-                    <button class="btn-menu" @click="abrirModal('Alta'), ventana='Altas'">
-                        <i class="bi bi-plus-circle"></i> Alta Proyectos
+                    <button class="btn-menu" @click="ventana='Altas'">
+                        <i class="bi bi-plus-circle"></i>Proyectos Creados
                     </button>
 
                     <button class="btn-menu mx-3" @click="ventana='Seguimiento'">
@@ -505,7 +505,10 @@ if (isset($_SESSION['nombre'])) {
             <!--Cuerpo-->
             <div style="min-height: 80vh">
                 <!--AQUI TRABAJA //ALTA DE PROYECTOS-->
-                <div v-if="ventana=='Altas'">
+                <div class="text-center mt-3" v-if="ventana=='Altas'">
+                        <button class="btn-menu align-items-center" @click="abrirModal('Alta')">
+                            <i class="bi bi-plus-circle"></i> Crear Proyecto
+                        </button>
                     <div class="scroll-dos">
                         <table class="ms-1 me-1 mx-auto mt-5  mb-5 tabla-proyectos  text-center">
                             <thead class="sticky-top"  >
