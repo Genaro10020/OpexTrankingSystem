@@ -332,6 +332,7 @@ const AltaProyectos = {
       if (this.checkPilares.length > 0) {
         this.selectObjetivo = []
         this.checkObjetivos = []
+        this.objetivos = []
         var ids_pilares = [];
         var indexs_pilar = [];
         console.log(this.checkPilares);
@@ -358,7 +359,7 @@ const AltaProyectos = {
           for (let j = 0; j < this.pilares.length; j++) {
             if (indexs_pilar[i] == (j + 1)) {
               if (this.selectPilar[j] == "") {
-                this.selectPilar[j] = "indirecto";
+                this.selectPilar[j] = "indirecto"; 
               }
             }
           }
@@ -411,7 +412,8 @@ const AltaProyectos = {
         })
       } else {
         this.checkObjetivos = []
-        this.objetivos = ''
+        this.selectObjetivo = []
+        this.objetivos = []
         this.idsPilares = []
       }
     },
@@ -474,7 +476,7 @@ const AltaProyectos = {
         if (response.data[0][1] == true) {
           if (response.data[0][0].length > 0) {
             this.consultarObjetivosRelacional();
-            this.objetivos = response.data[0][0]
+           // this.objetivos = response.data[0][0]
           }
         } else {
           alert("La consulta Objetivos, no se realizo correctamente.")
@@ -494,6 +496,9 @@ const AltaProyectos = {
           if (response.data[0][0].length > 0) {
             this.pilares = response.data[0][0]
             this.allPilares = response.data[0][0]
+            this.selectPilar = []  //reseteando
+            this.idsPilares = []   //reseteando
+            this.checkPilares = []  //reseteando
           }
         } else {
           alert("La consulta Pilares, no se realizo correctamente.")
@@ -580,6 +585,7 @@ const AltaProyectos = {
       }).then(response => {
         console.log(response.data)
         if (response.data[0][1] == true) {
+          this.consultarPilares() //todas las acciones sobre pilar que me consulte nuevamente pilares
           if (response.data[0][0].length > 0) {
             this.pilaresRelacion = response.data[0][0]
           } else {
@@ -858,7 +864,7 @@ const AltaProyectos = {
           console.log(response.data)
           if (response.data[0] == true) {
             // this.myModalCRUD.hide()
-            this.consultarObjetivosRelacional()
+            this.consultarObjetivosRelacional();
             alert('Alta exitosa..');
             this.myModal.hide();
             this.siglas = ''
@@ -889,6 +895,7 @@ const AltaProyectos = {
           if (response.data[0] == true) {
             //this.myModalCRUD.hide()
             this.consultarMisionesRelacional()
+           
             alert('Alta exitosa..');
             this.myModal.hide();
             this.nueva = ''
@@ -1086,7 +1093,7 @@ const AltaProyectos = {
           console.log(response.data)
           if (response.data[0] == true) {
             this.myModalCRUD.hide();
-            this.consultarObjetivos()
+            this.consultarObjetivosRelacional();
             this.nuevoNombre = ''
             this.siglas = ''
             this.id = ''
@@ -1237,7 +1244,8 @@ const AltaProyectos = {
           console.log(response.data)
           if (response.data[0] == true) {
             this.myModal.hide();
-            this.consultarObjetivosRelacional()
+            this.consultarObjetivos()
+            //this.consultarObjetivosRelacional()
             this.id = ''
             this.nuevoNombre = ''
             this.siglas = ''
