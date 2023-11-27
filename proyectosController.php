@@ -33,6 +33,7 @@ if (isset($_SESSION['nombre'])) {
                 $objetivos = $arreglo['objetivos'];
                 $impacto_ambiental = $arreglo['impacto_ambiental'];
                 $tons_co2 = $arreglo['tons_co2'];
+                if($tons_co2==""){$tons_co2 = 0; }
                 $ahorro_duro = $arreglo['ahorro_duro'];
                 $ahorro_suave = $arreglo['ahorro_suave'];
                 $misiones = json_encode($misiones, JSON_UNESCAPED_UNICODE); //conviertiendo arreglos en cadena

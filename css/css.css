@@ -427,7 +427,7 @@ box-shadow: 10px 5px 10px black;
 
     .thmodal{
         color:#080808;
-        background-color: #ccc6c6;
+        background-color: #ccc6c6 !important;
     }
 
     .encabezadoTablas{
@@ -435,6 +435,11 @@ box-shadow: 10px 5px 10px black;
         background-color: gray;
         color: white;
         
+    }
+
+    .fija{
+        position: sticky;
+        z-index: 0;
     }
 
     .titulotabla{

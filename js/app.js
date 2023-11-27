@@ -1892,7 +1892,11 @@ const AltaProyectos = {
       var combinadoObjetivo = [];
       if (objetivos_nombres.length == objetivosDirectosIndirectos.length) {
         for (let i = 0; i < objetivos_nombres.length; i++) {
-          combinadoObjetivo.push(objetivos_nombres[i] + "->" + objetivosDirectosIndirectos[i]);
+           if(objetivosDirectosIndirectos[i]=="directo"){
+              combinadoObjetivo.push(objetivos_nombres[i] + "->" + objetivosDirectosIndirectos[i]);// solo insertar el que es directo
+           }else{
+              combinadoObjetivo.push(objetivos_nombres[i]);// si son indirecto no agregar indirecto 
+           }
         }
         console.log("Combinado Objetivos")
         console.log(combinadoObjetivo)

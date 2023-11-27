@@ -25,7 +25,7 @@ if (isset($_SESSION['nombre'])) {
                     </button>
 
                     <button class="btn-menu" @click="ventana='Altas'">
-                        <i class="bi bi-plus-circle"></i>Proyectos Creados
+                        <i class="bi bi-plus-circle"></i> Proyectos Creados
                     </button>
 
                     <button class="btn-menu mx-3" @click="ventana='Seguimiento'">
@@ -39,7 +39,7 @@ if (isset($_SESSION['nombre'])) {
                         <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Alta Proyecto</h5>
+                                    <h5 class="modal-title"> Alta Proyecto</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
@@ -208,6 +208,7 @@ if (isset($_SESSION['nombre'])) {
                                             </div>
 
                                             <!--Objetivos-->
+                                          
                                             <div v-if="checkPilares.length>0" class="input-group mb-3 " :class="{'mostrar':checkPilares.length>0, 'ocultar': checkPilares.length <= 0}">
                                                 <span class="input-group-text w-25 text-start">Objetivos <br>Estrategicos</span>
                                                 <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkObjetivos.length<=0, '': checkObjetivos.length>0}">
@@ -610,16 +611,16 @@ if (isset($_SESSION['nombre'])) {
                                 </div>
                             </div>
                             <div class="scroll">
-                                <table class=" table table-bordered table-striped border-dark ">
+                                <table class=" table table-bordered table-striped  border border-3 border-secondary">
                                     <thead>
-                                        <tr class="thmodal">
-                                            <th class=" sticky-top  w-50 ">
+                                        <tr class="border border-3 border-secondary">
+                                            <th class=" sticky-top thmodal w-50">
                                                 Nombre
                                             </th>
-                                            <th class=" sticky-top  w-20">
+                                            <th class=" sticky-top thmodal w-20">
                                                 Eliminar
                                             </th>
-                                            <th class=" sticky-top  w-20">
+                                            <th class=" sticky-top thmodal w-20">
                                                 Actualizar
                                             </th>
                                         </tr>
@@ -655,22 +656,23 @@ if (isset($_SESSION['nombre'])) {
                                 </div>
                             </div>
                             <div class="scroll mb-5">
-                                <table class="table table-bordered table-striped border-dark">
+                                {{}}
+                                <table class="table table-bordered table-striped border border-3 border-secondary">
                                     <thead>
-                                        <tr class="thmodal">
-                                            <th class=" sticky-top">
+                                        <tr class="border border-3 border-secondary">
+                                            <th class=" sticky-top thmodal">
                                                 Nombre
                                             </th>
-                                            <th class=" sticky-top">
+                                            <th class=" sticky-top thmodal">
                                                 Siglas
                                             </th>
-                                            <th class=" sticky-top">
+                                            <th class=" sticky-top thmodal">
                                                 Mision
                                             </th>
-                                            <th class=" sticky-top">
+                                            <th class=" sticky-top thmodal">
                                                 Eliminar
                                             </th>
-                                            <th class=" sticky-top ">
+                                            <th class=" sticky-top thmodal ">
                                                 Actualizar
                                             </th>
                                         </tr>
@@ -712,22 +714,22 @@ if (isset($_SESSION['nombre'])) {
                                 </div>
                             </div>
                             <div class="scroll mb-5">
-                                <table class="table table-bordered border-dark">
+                                <table class="table table-bordered table-striped border border-3 border-secondary">
                                     <thead>
-                                        <tr class="thmodal">
-                                            <th class=" sticky-top ">
+                                    <tr class="border border-3 border-secondary">
+                                            <th class=" sticky-top thmodal">
                                                 Nombre
                                             </th>
-                                            <th class=" sticky-top ">
+                                            <th class=" sticky-top thmodal">
                                                 Siglas
                                             </th>
-                                            <th class=" sticky-top ">
+                                            <th class=" sticky-top thmodal">
                                                 Pílar
                                             </th>
-                                            <th class=" sticky-top ">
+                                            <th class=" sticky-top thmodal">
                                                 Eliminar
                                             </th>
-                                            <th class=" sticky-top ">
+                                            <th class=" sticky-top thmodal">
                                                 Actualizar
                                             </th>
                                         </tr>
@@ -769,16 +771,16 @@ if (isset($_SESSION['nombre'])) {
                                 </div>
                             </div>
                             <div class="scroll">
-                                <table class=" table table-bordered border-dark">
+                                <table class=" table table-bordered table-striped border border-3 border-secondary">
                                     <thead>
-                                        <tr class="thmodal">
-                                            <th class="sticky-top ">
+                                    <tr class="border border-3 border-secondary">
+                                            <th class="sticky-top thmodal">
                                                 Nombre
                                             </th>
-                                            <th class="sticky-top ">
+                                            <th class="sticky-top thmodal">
                                                 Eliminar
                                             </th>
-                                            <th class="sticky-top ">
+                                            <th class="sticky-top thmodal">
                                                 Actualizar
                                             </th>
                                         </tr>
@@ -812,22 +814,22 @@ if (isset($_SESSION['nombre'])) {
 
                             </div>
                         </div>
-                        <table class="  table table-bordered border-dark">
+                        <table class="  table table-bordered border-dark border border-3 border-secondary">
                             <thead>
-                                <tr class="thmodal">
-                                    <th class=" sticky-top ">
+                                <tr class="border border-3 border-secondary">
+                                    <th class=" sticky-top thmodal">
                                         Nombre
                                     </th>
-                                    <th class=" sticky-top ">
+                                    <th class=" sticky-top thmodal">
                                         Cantidad
                                     </th>
-                                    <th class=" sticky-top ">
+                                    <th class=" sticky-top thmodal">
                                         unidad de medida
                                     </th>
-                                    <th class=" sticky-top ">
+                                    <th class=" sticky-top thmodal">
                                         Eliminar
                                     </th>
-                                    <th class=" sticky-top ">
+                                    <th class=" sticky-top thmodal">
                                         Actualizar
                                     </th>
                                 </tr>
@@ -1021,16 +1023,16 @@ if (isset($_SESSION['nombre'])) {
                 <div v-if="ventana=='Seguimiento'">
                     <div class="input-group mt-5 mx-2 ">
                         <span class="input-group-text w-5">Seleccione Proyecto</span>
-                        <select class="w-5" @keydown.up="cancelarEvento" @keydown.down="cancelarEvento" @keydown.left="cancelarEvento" @keydown.right="cancelarEvento" @change="consultarProyectoID()" v-model="id_proyecto">
+                        <select class="w-5" @change="consultarProyectoID()" v-model="id_proyecto">
                             <option value="">Seleccione...</option>
-                            <option  v-for="proyecto in proyectos" :value="proyecto.id">{{proyecto.nombre_proyecto}}</option>
+                            <option v-for="proyecto in proyectos" :value="proyecto.id">{{proyecto.nombre_proyecto}}</option>
                         </select>
                     </div>
                     <div class="scroll-dos">
                     <table class="mx-2 mt-5  mb-5 table table-hover table-bordered border-dark text-center">
-                        <thead>
-                            <tr class=" tablaSeguimiento">
-                                <th>Actualizar</th>
+                        <thead class="  border:1px solid black">
+                            <tr>
+                                <th>Actualizar{{actualizatabla}}</th>
                                 <th>Fecha</th>
                                 <th style="min-width:150px">Tons de CO2 por Evitar</th>
                                 <th v-for="(impacto,index) in columnaImpactoAmbiental" :key="index">{{impacto}}</th>
