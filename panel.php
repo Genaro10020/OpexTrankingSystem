@@ -508,10 +508,10 @@ if (isset($_SESSION['nombre'])) {
                 <!--AQUI TRABAJA //ALTA DE PROYECTOS-->
                 <div class="text-center mt-3" v-if="ventana=='Altas'">
                         <button class="btn-menu align-items-center" @click="abrirModal('Alta')">
-                            <i class="bi bi-plus-circle"></i> Crear Proyecto
+                            <i class="bi bi-plus-circle"></i> Alta Proyecto
                         </button>
-                    <div class="scroll-dos">
-                        <table class="ms-1 me-1 mx-auto mt-5  mb-5 tabla-proyectos  text-center">
+                    <div class="scroll-dos px-2">
+                        <table class="mx-auto mt-5  mb-5 tabla-proyectos">
                             <thead class="sticky-top"  >
                                     <th>Fecha</th>
                                     <th>Folio</th>
@@ -526,9 +526,9 @@ if (isset($_SESSION['nombre'])) {
                                     <th>Pilares Estrategico</th>
                                     <th>Objetivos Estrategico</th>
                                     <th>Impacto Ambiental</th>
-                                    <th>Tons CO2 por Evitar (Proyectado)</th>
-                                    <th>Ahorro Duro $MXN/Año (Proyectado )</th>
-                                    <th>Ahorro Suave $MXN/Año (Proyectado)</th>
+                                    <th>Tons CO2 por Evitar <br>(Proyectado)</th>
+                                    <th>Ahorro Duro $MXN/Año <br>(Proyectado )</th>
+                                    <th>Ahorro Suave $MXN/Año <br>(Proyectado)</th>
                             </thead>
                             <tbody class=" border:1px solid black" style="text-align: center">
                                 <template v-for="(proyecto,index) in proyectos">
@@ -546,9 +546,9 @@ if (isset($_SESSION['nombre'])) {
                                         <td class="border border-secondary">{{proyecto.responsable}}</td>
                                         <td class="border border-secondary">{{proyecto.correo}}</td>
                                         <td class="border border-secondary">{{proyecto.telefono}}</td>
-                                        <td class="border border-secondary">{{proyecto.pilares}}</td>
-                                        <td class="border border-secondary">{{proyecto.objetivos}}</td>
-                                        <td class="border border-secondary">{{proyecto.impacto_ambiental}}</td>
+                                        <td class="border border-secondary text-start"><ul><li v-for="pilar in JSON.parse(proyecto.pilares)">{{pilar}}</li></ul></td>
+                                        <td class="border border-secondary text-start"><ul><li v-for="objetivo in JSON.parse(proyecto.objetivos)">{{objetivo}}</li></ul></td>
+                                        <td class="border border-secondary text-start"><ul><li v-for= "impacto in JSON.parse(proyecto.impacto_ambiental)">{{impacto}}</li></ul></td>
                                         <td class="border border-secondary">{{proyecto.tons_co2}}</td>
                                         <td class="border border-secondary">{{proyecto.ahorro_duro}}</td>
                                         <td class="border border-secondary">{{proyecto.ahorro_suave}}</td>
@@ -1021,27 +1021,27 @@ if (isset($_SESSION['nombre'])) {
                 </div>
                 <!---------------------------VENTANA DE SEGUIMIENTO DE PROYECTO------------------------------->
                 <div v-if="ventana=='Seguimiento'">
-                    <div class="input-group mt-5 mx-2 ">
+                    <div class="input-group mt-3 mx-2 mb-2 ">
                         <span class="input-group-text w-5">Seleccione Proyecto</span>
-                        <select class="w-5" @change="consultarProyectoID()" v-model="id_proyecto">
+                        <select class="w-5" @keydown.up="cancelarEvento" @keydown.down="cancelarEvento" @keydown.left="cancelarEvento" @keydown.right="cancelarEvento" @change="consultarImpactoAmbieltalXProyectoID()" v-model="id_proyecto">
                             <option value="">Seleccione...</option>
                             <option v-for="proyecto in proyectos" :value="proyecto.id">{{proyecto.nombre_proyecto}}</option>
                         </select>
                     </div>
                     <div class="scroll-dos">
-                    <table class="mx-2 mt-5  mb-5 table table-hover table-bordered border-dark text-center">
-                        <thead class="  border:1px solid black">
+                    <table class="mx-2 mb-5 table table-hover table-bordered table-striped text-center" style="font-size: 0.8em;">
+                        <thead style="background: #848484; color:white;">
                             <tr>
-                                <th>Actualizar{{actualizatabla}}</th>
-                                <th>Fecha</th>
-                                <th style="min-width:150px">Tons de CO2 por Evitar</th>
-                                <th v-for="(impacto,index) in columnaImpactoAmbiental" :key="index">{{impacto}}</th>
-                                <th>Ahorro Duro</th>
-                                <th>Ahorro Suave </th>
-                                <th>Estatus</th>    
-
+                                <th style="background: #848484; color:white;">Actualizar</th>
+                                <th style="background: #848484; color:white;">Fecha</th>
+                                <th style="background: #848484; color:white;">Tons de CO2 por Evitar</th>
+                                <th style="background: #848484; color:white;" v-for="(impacto,index) in arregloID" :key="index">{{impacto.impacto}}</th>
+                                <th style="background: #848484; color:white;">Ahorro Duro</th>
+                                <th style="background: #848484; color:white;">Ahorro Suave </th>
+                                <th style="background: #848484; color:white;">Estatus</th>    
+                            </tr>
                         </thead>
-                        <tbody class=" border:1px solid black" style="text-align: center">
+                        <tbody style="font-size: 0.9em;">
                             <tr style="vertical-align: middle " v-for="(proyecto,posicion) in arregloID" :key="posicion">
                                 <td>
                                     <button type="button" class="boton-actualizar" v-if="actualizatabla == false" @Click="actualizatabla=!actualizatabla">Actualizar</button>
@@ -1050,18 +1050,29 @@ if (isset($_SESSION['nombre'])) {
                                     <button type="button" v-if="actualizatabla == true" class="boton-aceptar" @Click="actualizatabla=!actualizatabla">Guardar</button>
                                     </div>
                                 </td>
-                                <td><input type="date"></input></td> 
-                                <td>{{proyecto.tons_co2}}</td>
-                                    <td  v-for="(impacto,index) in columnaImpactoAmbiental" class="bg-warning" :key="index">
-                                        <label v-if="actualizatabla == false">CREADA POR COLUMAN</label>
-                                        <input v-else ></input>
-                                    </td>
-                                    
-                                <td>{{proyecto.ahorro_duro}}</td>
-                                <td>{{proyecto.ahorro_suave}}</td>
-
+                                <td style="min-width: 351px;">
+                                    <label> Desde: </label><input type="date"></input>
+                                    <label class="ms-2"> Hasta: </label><input type="date"></input>
+                            
+                                </td> 
+                                <td>
+                                    <label v-if="actualizatabla == false"> {{proyecto.tons_co2}}</label>
+                                    <input v-else :value="proyecto.tons_co2" type="text"></input>
+                                </td>
+                                <!--<td  v-for="(impacto,index) in columnaImpactoAmbiental" class="bg-warning" :key="index">
+                                    <label v-if="actualizatabla == false"></label>
+                                    <input v-else type="text"></input>
+                                </td>-->
+                                <td>
+                                    <label v-if="actualizatabla == false"> {{proyecto.ahorro_suave}}</label>
+                                    <input v-else :value="proyecto.tons_co2" type="text"></input>
+                                </td>
+                                <td>
+                                    <label v-if="actualizatabla == false"> {{proyecto.ahorro_duro}}</label>
+                                    <input v-else :value="proyecto.tons_co2" type="text"></input>
+                                </td>
                                 <td></td>
-
+                        <tbody>
                     </table>
                     </div>
 

@@ -35,6 +35,10 @@ include("conexionGhoner.php");
     }
 
     function insertarProyecto($folio,$fecha_alta,$nombre_proyecto,$planta,$area,$departamento,$metodologia,$responsable_id,$misiones,$pilares,$objetivos,$impacto_ambiental,$tons_co2,$ahorro_duro,$ahorro_suave){
+
+
+        
+
         global $conexion;
         $folio_sin_numero = "";
         $folio_recuperado = "";
@@ -67,6 +71,7 @@ include("conexionGhoner.php");
         $consulta = "SELECT * FROM responsables WHERE id = $responsable_id";
         $query = $conexion->query($consulta);
         if($query->num_rows>0){
+             //Recuperado el responsable inserto
             $fila = $query->fetch_assoc();
             $nombre_responsable = $fila['nombre'];
             $correo_responsable =  $fila['correo'];
@@ -75,20 +80,30 @@ include("conexionGhoner.php");
             $separando = explode("-", $fecha_alta);
             $fecha_invertida = $separando[2] . "-" . $separando[1] . "-" . $separando[0];
             $estado  = true;
-            //Recuperado el responsable inserto
+             //Inserto el proyecto
                     $query = "INSERT INTO proyectos_creados (folio,fecha, nombre_proyecto, planta, area, departamento, metodologia, responsable,correo,telefono, misiones,pilares,objetivos,impacto_ambiental, tons_co2, ahorro_duro, ahorro_suave) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                     $stmt = $conexion->prepare($query);
                     $stmt->bind_param("sssssssssssssssss",$nuevo_folio, $fecha_invertida,$nombre_proyecto,$planta,$area,$departamento,$metodologia, $nombre_responsable,$correo_responsable,$telefono_responsable,$misiones,$pilares,$objetivos,$impacto_ambiental,$tons_co2,$ahorro_duro,$ahorro_suave);
                     if($stmt->execute()){
                         $estado = true;
+                        //insertado el proyecto, ahora inserto los impactos ambientales en otra tabla
+                                        $insercion_impacto = "Correcto";
+                                        $ultimo_id = $conexion->insert_id;
+                                        $impacto_ambiental_array = json_decode($impacto_ambiental, JSON_UNESCAPED_UNICODE);
+                                            foreach ($impacto_ambiental_array as $impacto) {
+                                                    $consulta = "INSERT INTO impacto_ambiental_proyecto (id_proyecto,impacto_ambiental) VALUES ('$ultimo_id','$impacto')";
+                                                    if ($conexion->query($consulta) !== TRUE) {
+                                                        $insercion_impacto = "Incorreco";
+                                                        break;
+                                                    }
+                                            }
                     }
                     $stmt->close();
-
         }else{
             $estado  = false;
         }
 
-        return array($estado,$estado_folios,$folio_recuperado,$folio_sin_numero,$igual);
+        return array($estado,$estado_folios,$folio_recuperado,$folio_sin_numero,$igual,$insercion_impacto,$impacto_ambiental_array);
         
     }
 

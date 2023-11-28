@@ -81,7 +81,14 @@ const AltaProyectos = {
       id_proyecto: '',
       arregloID: [],
       columnaImpactoAmbiental: [],
-      actualizatabla: false
+      actualizatabla: false,
+      fecha_desde:'',
+      fecha_hasta:'',
+      input_tons_co2:'',
+      datos:[],
+      impacto_ambiental:[],
+      input_ahorro_duro:'',
+      input_ahorro_suave:'',
     }
   },
   mounted() {
@@ -121,6 +128,27 @@ const AltaProyectos = {
           if (response.data[0][0].length > 0) {
             this.arregloID = response.data[0][0];
             this.columnaImpactoAmbiental = JSON.parse(response.data[0][0][0].impacto_ambiental);
+          }
+        } else {
+          alert("La consulta de proyectos no se realizo correctamente.")
+        }
+      }).catch(error => {
+        console.log('Erro :-(' + error)
+      }).finally(() => {
+
+      })
+    },
+    consultarImpactoAmbieltalXProyectoID(){
+      axios.post('impactoAmbientalProyectoController.php', {
+          id_proyecto: this.id_proyecto //ID PROYECTO
+      }).then(response => {
+        console.log(response.data)
+        if (response.data[0][1] == true) {
+          if (response.data[0][0].length > 0) {
+            this.arregloID = response.data[0][0];
+            //this.columnaImpactoAmbiental = JSON.parse(response.data[0][0][0].impacto_ambiental);
+          }else{
+            this.arregloID =[];
           }
         } else {
           alert("La consulta de proyectos no se realizo correctamente.")
@@ -1789,7 +1817,7 @@ const AltaProyectos = {
       //verificar si existe minimo un directo en Pilar
       else if (!this.selectObjetivo.includes("directo")) { this.respondio = false; alert("Minimo un Objetivo tiene que ser 'Directo'") }
       //Impacto Ambiental
-      else if (this.checkImpactoAmbiental.length <= 0) { this.respondio = false; alert("Seleccione minimo una Impacto Ambiental") }
+      /*else if (this.checkImpactoAmbiental.length <= 0) { this.respondio = false; alert("Seleccione minimo una Impacto Ambiental") }*/
       //Ahorros
       else if ((this.tons_co2 == "0" || this.tons_co2 == "") && this.ahorro_duro == "$.00" && this.ahorro_suave == "$.00" && (this.objetivo_estrategico == false || this.objetivo_estrategico == true)) { this.respondio = false; alert("Minimo uno debe ser distinto a 0") }
       //Si algo no se a contestado
@@ -2120,7 +2148,16 @@ const AltaProyectos = {
     },
     cancelarEvento(e){
       e.preventDefault();
-      console.log('Evento cancelado:', e.key);
+    },
+    guardarSeguimiento() {
+      console.log(+"Desde: "+this.fecha_desde+" Hasta: "+this.val+" Toneladas:"+this.input_tons_co2+" Impacto Ambiental:"+this.impacto_ambiental+" Datos: "+this.datos+" Ahorro Duro: "+this.input_ahorro_duro+" Ahorra: "+this.input_ahorro_duro);
+
+      /*
+      datos:[],
+      impacto_ambiental:[],
+      input_ahorro_duro:'',
+      input_ahorro_suave:'',*/
+
     }
   
   }
