@@ -90,6 +90,7 @@ const AltaProyectos = {
       input_ahorro_suave: '',
       actualizar: 0,
       inputImpactoAmbiental: [],
+      seguimientos:0,
     }
   },
   mounted() {
@@ -151,19 +152,28 @@ const AltaProyectos = {
             this.arregloID = response.data[0][0];
             var comparandoImpactoInicial = "";
             var comparandoImpactoDos = "";
-            var arregloImpactoDistintos = [];
+            var impactoAmbiental = [];
 
-            for (let i = 0; i < this.arregloID.length; i++) {
-              comparandoImpactoInicial = this.arregloID[i].impacto_ambiental;
-              // Comparar directamente con comparandoImpacto
-              if (comparandoImpactoInicial !== comparandoImpactoDos) {
-                arregloImpactoDistintos.push(comparandoImpactoInicial);
-                comparandoImpactoDos = comparandoImpactoInicial;
-              }
+            this.seguimientos = response.data[0][0].length;
+            var datos = [];
+            for (let j = 0; j < response.data[0][2][0].length; j++) {
+              impactoAmbiental.push(response.data[0][2][0][j].impacto_ambiental)
             }
+            var no_repetidos = new Set(impactoAmbiental);
+            this.columnaImpactoAmbiental = Array.from(no_repetidos);;//tiene los nombres de impacto ambiental
 
-            this.columnaImpactoAmbiental = arregloImpactoDistintos;
-            this.inputImpactoAmbiental = Array(this.columnaImpactoAmbiental.length);
+            /*var datos = [];
+            for (let j = 0; j < response.data[0][2].length; j++) {
+              datos.push(response.data[0][2][0].dato)
+            }*/
+
+
+     
+            
+            this.inputImpactoAmbiental = response.data[0][2].map(subArray => subArray.map(objeto => objeto.dato));
+      
+
+            //this.inputImpactoAmbiental = Array(this.columnaImpactoAmbiental.length);
             //this.columnaImpactoAmbiental = JSON.parse(response.data[0][0][0].impacto_ambiental);
           } else {
             this.consultarProyectoID() // si no existe seguimientos consultara proyectos para insetarlos primeros registros
@@ -2167,9 +2177,26 @@ const AltaProyectos = {
     cancelarEvento(e) {
       e.preventDefault();
     },
+    asignacion(valor){
+      alert(valor);
+      this.fecha_desde = valor;
+    },
     /*/////////////////////////////////////////////////////////////////////////////////INSERTAR PLANTA*/
-    guardarSeguimiento() {
-      console.log("id Proyecto" + this.id_proyecto + "Desde: " + this.fecha_desde + " Hasta: " + this.fecha_hasta + " Toneladas:" + this.input_tons_co2 + "Impacto Ambielta: " + this.inputImpactoAmbiental + " Ahorro Duro: " + this.input_ahorro_suave + " Ahorra: " + this.input_ahorro_duro);
+    guardarSeguimiento(posicion) {
+
+     /*var inicial = document.getElementById("inicial"+(posicion+1)).value;
+     var hasta = document.getElementById("hasta"+(posicion+1)).value;
+     var toneladas = document.getElementById("toneladas"+(posicion+1)).value;
+     var duro = document.getElementById("duro"+(posicion+1)).value;
+     var suave = document.getElementById("suave"+(posicion+1)).value;
+
+     this.fecha_desde = inicial
+     this.fecha_hasta = hasta
+     this.input_tons_co2 = toneladas
+     this.input_ahorro_suave = duro
+     this.input_ahorro_duro = suave*/
+
+      //console.log("id Proyecto" + this.id_proyecto + "Desde: " + this.fecha_desde + " Hasta: " + this.fecha_hasta + " Toneladas:" + this.input_tons_co2 + "Impacto Ambielta: " + this.inputImpactoAmbiental + " Ahorro Duro: " + this.input_ahorro_suave + " Ahorra: " + this.input_ahorro_duro);
 
       axios.post('seguimientoAmbientalProyectoController.php', {
         id_proyecto: this.id_proyecto,
@@ -2181,18 +2208,19 @@ const AltaProyectos = {
         input_ahorro_duro: this.input_ahorro_duro,
       }).then(response => {
         console.log(response.data)
-        /*  if (!response.data[0] == false) {
-            this.myModalCRUD.hide()
-            this.consultarPlantas()
+          if (response.data[0][0] == true) {
+            this.actualizar=0
+            this.consultarImpactoAmbieltalXProyectoID()
           } else {
             alert("La inserción de Planta, no se realizo correctamente.")
-          }*/
+          }
 
       }).catch(error => {
-        //console.log('Erro :-('+error)
+        console.log('Erro :-('+error)
       }).finally(() => {
 
       })
+      //alert("Esta seccion esta en proceso de subir")
 
     },
 

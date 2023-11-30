@@ -1039,6 +1039,7 @@ if (isset($_SESSION['nombre'])) {
                             <option value="">Seleccione...</option>
                             <option v-for="proyecto in proyectos" :value="proyecto.id">{{proyecto.nombre_proyecto}}</option>
                         </select>
+                        {{inputImpactoAmbiental}}
                     </div>
                     <div class="scroll-dos">
                         <table class="mx-2 mb-5 table table-hover table-bordered table-striped text-center" style="font-size: 0.8em;">
@@ -1056,9 +1057,10 @@ if (isset($_SESSION['nombre'])) {
                             <tbody>
                                 <tr style="vertical-align: middle; font-size: 1.1em;" v-for="(proyecto,posicion) in arregloID" :key="posicion">
                                     <td>
-                                        <button v-if="actualizar==0 || actualizar!=(posicion+1)" type="button" class="boton-actualizar" v-if="actualizatabla == false" @Click="actualizar = (posicion+1)">Actualizar</button>
+                                        <button v-if="actualizar==0 && actualizar!=(posicion+1) && !proyecto.id_registro" type="button" class="boton-aceptar" v-if="actualizatabla == false" @Click="actualizar = (posicion+1)">Primer Mes</button>
+                                        <button v-if="actualizar==0 && proyecto.id_registro" type="button" class="boton-actualizar" v-if="actualizatabla == false" @Click="actualizar = (posicion+1)">Actualizar</button>
                                         <button v-if="actualizar==(posicion+1)" v-if="actualizatabla == true" class="boton-eliminar mx-2" @Click="actualizar = 0">Cancelar</button>
-                                        <button v-if="actualizar==(posicion+1) && !proyecto.id_registro" v-if="actualizatabla == true" class="boton-aceptar" @Click="guardarSeguimiento()">Guardar Seg.</button>
+                                        <button v-if="actualizar==(posicion+1) && !proyecto.id_registro" v-if="actualizatabla == true" class="boton-aceptar" @Click="guardarSeguimiento()">Guardar</button>
                                         <button v-if="actualizar==(posicion+1) && proyecto.id_registro " v-if="actualizatabla == true" class="boton-aceptar" @Click="guardarSeguimiento()">Guardar</button> <!--v-if="proyecto.id_registro"-->
                                     </td>
                                     <!--<td v-else>
@@ -1070,29 +1072,30 @@ if (isset($_SESSION['nombre'])) {
                                     </td>-->
                                     <td style="min-width: 351px;">
                                         <label> De: </label>
-                                        <input class="mx-1" v-if="actualizar==(posicion+1)" type="date" v-model="fecha_desde"></input>
-                                        <label class="mx-1" v-else> {{proyecto.fecha_inicial}}</label>
+                                        <input class="mx-1" v-if="actualizar==(posicion+1)" type="date" v-model="fecha_desde" ></input> <!--:value="proyecto.fecha_inicial"-->
+                                        <label class="mx-1" v-else> </label>
                                         <label> Hasta: </label>
-                                        <input class="mx-1" v-if="actualizar==(posicion+1)" type="date" v-model="fecha_hasta"></input>
-                                        <label class="mx-1" v-else> {{proyecto.fecha_final}}</label>
+                                        <input class="mx-1" v-if="actualizar==(posicion+1)" type="date" v-model="fecha_hasta" ></input> <!--:value="proyecto.fecha_final"-->
+                                        <label class="mx-1" v-else> </label>
                                     </td>
                                     <td>
-                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="input_tons_co2"></input>
-                                        <label v-else> {{proyecto.tons_co2}}</label>
+                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="input_tons_co2"></input><!--:value="proyecto.tons_co2"-->
+                                        <label v-else></label>
                                     </td>
-                                    <td v-for="(impacto,index) in columnaImpactoAmbiental" class="bg-warning" :key="index">
-                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="inputImpactoAmbiental[index]" v-model=""></input>
-                                        <label v-else>{{proyecto.dato}}</label>
-                                    </td>
-                                    <td>
-                                        <input v-if="actualizar==(posicion+1)" v-model="input_ahorro_duro" type="text"></input>
-                                        <label v-else> {{proyecto.ahorro_duro}}</label>
+                                    <td v-for="(cantidad,index) in columnaImpactoAmbiental.length" class="bg-warning" :key="index"><!--:value="proyecto.dato"-->
+                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="inputImpactoAmbiental[posicion][index]"> </input>
+                                        <label v-else></label>
                                     </td>
                                     <td>
-                                        <input v-if="actualizar==(posicion+1)" v-model="input_ahorro_suave" type="text"></input>
-                                        <label v-else>{{proyecto.ahorro_suave}}</label>
+                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="input_ahorro_suave"></input> <!--:value="proyecto.ahorro_duro"-->
+                                        <label v-else></label>
+                                    </td>
+                                    <td>
+                                        <input v-if="actualizar==(posicion+1)" type="text"v-model="input_ahorro_duro" ></input> <!--:value="proyecto.ahorro_suave"-->
+                                        <label v-else></label>
                                     </td>
                                     <td></td>
+                                </tr>
                             <tbody>
                         </table>
                     </div>
