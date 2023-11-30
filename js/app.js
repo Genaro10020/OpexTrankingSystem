@@ -92,7 +92,12 @@ const AltaProyectos = {
       inputImpactoAmbiental: [],
       inputImpactoAmbientalInicial: [],
       seguimientos: 0,
-      idsInputImpactoAmbiental: []
+      idsInputImpactoAmbiental: [],
+      login:false,
+      months:['Enero', 'Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+      years: [2023,2024,2025,2026,2027,2028,2029,2030,2031,2032,2033,2034,2035,2036,2037,2038,2039,2040,2041,2042,2043,2044,2045,2046,2047,2048,2049,2050],
+      mes_select:1,
+      anio_select:2023,
     }
   },
   mounted() {
@@ -1778,6 +1783,7 @@ const AltaProyectos = {
         });
     },
     uploadFile() {
+      this.login = true
       //this.mensaje_boton = "Espere, estamos subiendo su archivo...."
       let formData = new FormData();
       var files = this.$refs.ref_imagen.files;
@@ -1794,27 +1800,25 @@ const AltaProyectos = {
           headers: { "Content-Type": "multipart/form-data" }
         })
         .then(response => {
+          
           console.log(response.data);
           this.imagenes = response.data;
           if (this.imagenes.length > 0) {
-            //this.mensaje_boton = "Subir Archivo"
             document.getElementById("input_file_subir").value = ""
             this.existeImagenSeleccionada = false;
             this.random = Math.random()
-            // alert(random)
-            // this.buscarDocumentos()
           } else {
-            //this.mensaje_boton = "Subir Archivo"
-            //this.random = Math.random()
+            this.login = false
             alert("Verifique la extension del archivo o Intente nuevamente.")
           }
         })
         .catch(error => {
-          this.mensaje_boton = "Subir Archivo"
+          this.login = false
           console.log(error);
         }).finally(() => {
-          this.mensaje_boton = "Subir Archivo"
-
+            setTimeout(()=>{
+              this.login = false
+            },3000)
         });
     },
     verificarAltaProyecto() {
@@ -2181,6 +2185,7 @@ const AltaProyectos = {
       alert(valor);
       this.fecha_desde = valor;
     },
+    
     /*/////////////////////////////////////////////////////////////////////////////////INSERTAR PLANTA*/
     guardarSeguimiento() {
 
@@ -2200,8 +2205,8 @@ const AltaProyectos = {
 
       axios.post('seguimientoAmbientalProyectoController.php', {
         id_proyecto: this.id_proyecto,
-        desde: this.fecha_desde,
-        hasta: this.fecha_hasta,
+        mes: this.mes_select,
+        anio: this.anio_select,//revisando voy aqui
         input_tons_co2: this.input_tons_co2,
         inputImpactoAmbiental: this.inputImpactoAmbientalInicial,
         input_ahorro_suave: this.input_ahorro_suave,

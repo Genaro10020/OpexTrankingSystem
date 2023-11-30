@@ -3,7 +3,9 @@ const app = {
       return {
         usuario: '',
         contrasena: '',
-        incorrecta:0
+        incorrecta:0,
+        random:Math.random(),
+        
       };
     },
     created() {

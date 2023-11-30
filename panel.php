@@ -52,7 +52,6 @@ if (isset($_SESSION['nombre'])) {
                                                 <div v-show="fecha_alta !==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
 
-
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-25">Nombre Proyecto</span>
                                                 <input type="text" class="w-50" v-model="nombre_proyecto" :class="{'nocontestado': respondio === false && nombre_proyecto === '', '':nombre_proyecto !== ''}">
@@ -157,7 +156,6 @@ if (isset($_SESSION['nombre'])) {
                                                     <button type="button" v-if="actualizarResponsable" class="btn-actualizar-responsable" @click="actualizandoResponsable()">Actualiazar</button>
                                                     <button type="button" class="btn-cancelar-responsable mt-3" @click="cancelar()">Cancelar</button>
                                                 </div>
-
                                             </div>
 
                                             <!--Misiones-->
@@ -246,11 +244,11 @@ if (isset($_SESSION['nombre'])) {
                                                         </label>
                                                     </div>
                                                 </div>
-                                                <!--<div>
-                                                                        <div class="col-12"><button class="btn-anadir" title="Crear "><i class="bi bi-plus-circle"></i></button></div>
-                                                                        <div class="col-12"><button class="btn-up" title="Actualizar"><i class="bi bi-arrow-up-circle"></i></button></div>
-                                                                        <div class="col-12"><button class="btn-delete" title="Eliminar"><i class="bi bi-x-circle"></i></button></div>
-                                                                    </div>-->
+                                                    <!--<div>
+                                                        <div class="col-12"><button class="btn-anadir" title="Crear "><i class="bi bi-plus-circle"></i></button></div>
+                                                        <div class="col-12"><button class="btn-up" title="Actualizar"><i class="bi bi-arrow-up-circle"></i></button></div>
+                                                        <div class="col-12"><button class="btn-delete" title="Eliminar"><i class="bi bi-x-circle"></i></button></div>
+                                                    </div>-->
                                                 <div v-if="checkImpactoAmbiental.length>0" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
 
@@ -290,8 +288,13 @@ if (isset($_SESSION['nombre'])) {
                                                         <img :src="imagenes[0]+'?'+random" style=" width:250px; height:200px;" alt="No existe imagen, para mostrar"></img>
                                                     </div>
                                                 </div>
-                                                <div v-if="existeImagenSeleccionada==true" class="row mx-auto">
+                                                <div v-if="existeImagenSeleccionada==true && login!=true" class="row mx-auto">
                                                     <input class="btn-success" type="submit" value="Subir" />
+                                                </div>
+                                                <div v-if="login==true" class="d-flex justify-content-center">
+                                                    <div>
+                                                        <img class="mx-auto" style="width:50px;" src="img/loading.gif"/><label>Subiendo...</label>
+                                                    </div>
                                                 </div>
 
                                             </form>
@@ -1039,6 +1042,7 @@ if (isset($_SESSION['nombre'])) {
                             <option value="">Seleccione...</option>
                             <option v-for="proyecto in proyectos" :value="proyecto.id">{{proyecto.nombre_proyecto}}</option>
                         </select>
+                        {{input_tons_co2}}
                     </div>
                     <div class="scroll-dos">
                         <table class="mx-2 mb-5 table table-hover table-bordered table-striped text-center" style="font-size: 0.8em;">
@@ -1057,7 +1061,7 @@ if (isset($_SESSION['nombre'])) {
                                 <!--CUANDO YA EXISTE MINIMO UN SEGUIMIENTO -->
                                 <tr v-if="seguimientos>0" style="vertical-align: middle; font-size: 1.1em;" v-for="(proyecto,posicion) in arregloID" :key="posicion">
                                     <td>
-                                        <button v-if="actualizar==0 || actualizar!=(posicion+1) " type="button" class="boton-actualizar" v-if="actualizatabla == false" @Click="asiganarDatosActualizar(posicion)">Actualizar</button>
+                                        <button v-if="actualizar==0" type="button" class="boton-actualizar" v-if="actualizatabla == false" @Click="asiganarDatosActualizar(posicion)">Actualizar</button>
                                         <button v-if="actualizar==(posicion+1)" v-if="actualizatabla == true" class="boton-eliminar mx-2" @Click="actualizar = 0">Cancelar</button>
                                         <button v-if="actualizar==(posicion+1) && proyecto.id_registro " v-if="actualizatabla == true" class="boton-aceptar" @Click="actualizarSeguimiento(posicion)">Guardar</button><!--Guardar Actualizacion cuando existe minimo 1-->
                                     </td>
@@ -1095,11 +1099,16 @@ if (isset($_SESSION['nombre'])) {
                                         <button v-if="actualizatabla == true" class="boton-aceptar" @Click="guardarSeguimiento()">Guardar</button><!--Cundo no existe aun ningun registro-->
                                     </td>
                                     <td style="min-width: 351px;">
-                                        <label> De: </label>
-                                        <input class="mx-1" v-if="actualizatabla==true" type="date" v-model="fecha_desde"></input> <!--:value="proyecto.fecha_inicial"-->
-                                        <label> Hasta: </label>
-                                        <input class="mx-1" v-if="actualizatabla==true" type="date" v-model="fecha_hasta"></input> <!--:value="proyecto.fecha_final"-->
-                                        <label class="mx-1" v-else></label>
+                                        
+                                        <select v-if="actualizatabla==true" v-model="mes_select">
+                                            <option v-for="(month,index) in months" :value="(index+1)">{{month}}</option>
+                                        </select>
+                                        <label v-if="actualizatabla==true" class="ms-3"> mes: </label>
+                                        <select v-if="actualizatabla==true" v-model="anio_select">
+                                            <option v-for="(year,index) in years" :value="year">{{year}}</option>
+                                        </select>
+                                        
+                                        <!--<input class="mx-1" v-if="actualizatabla==true" type="date" v-model="fecha_desde"></input>--><!--:value="proyecto.fecha_inicial"-->
                                     </td>
                                     <td>
                                         <input v-if="actualizatabla==true" type="text" v-model="input_tons_co2"></input><!--:value="proyecto.tons_co2"-->

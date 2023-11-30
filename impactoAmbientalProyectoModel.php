@@ -28,7 +28,10 @@ function consultarImpactosXproyectoID($id_proyecto)
     $estado1 = false;
     $estado2 = false;
     //consulta mes_inio distintos solo una fila por registro diferente
-    $query = "SELECT registros.id AS id_registro, impactos.id AS id_impacto, registros.*, impactos.* FROM impacto_ambiental_proyecto impactos INNER JOIN  registros_impacto_ambiental registros  ON  impactos.id = registros.id_impacto_ambiental_proyecto WHERE impactos.id_proyecto = ? GROUP BY mes_anio";
+    $query = "SELECT registros.id AS id_registro, impactos.id AS id_impacto, registros.*, impactos.* FROM impacto_ambiental_proyecto impactos 
+    INNER JOIN  registros_impacto_ambiental registros  
+    ON  impactos.id = registros.id_impacto_ambiental_proyecto 
+    WHERE impactos.id_proyecto = ? GROUP BY mes_anio ORDER BY impactos.id DESC";
     $stmt = $conexion->prepare($query);
 
     if (!$stmt) {
@@ -47,7 +50,10 @@ function consultarImpactosXproyectoID($id_proyecto)
         }
     }
     //obteniendo impactos ambientales con sus datos
-    $query = "SELECT registros.id AS id_registro, impactos.id AS id_impacto, registros.dato, impactos.impacto_ambiental, registros.mes_anio FROM impacto_ambiental_proyecto impactos  JOIN  registros_impacto_ambiental registros  ON  impactos.id = registros.id_impacto_ambiental_proyecto WHERE impactos.id_proyecto = ?";
+    $query = "SELECT registros.id AS id_registro, impactos.id AS id_impacto, registros.dato, impactos.impacto_ambiental, registros.mes_anio FROM impacto_ambiental_proyecto impactos  
+    JOIN  registros_impacto_ambiental registros  
+    ON  impactos.id = registros.id_impacto_ambiental_proyecto
+    WHERE impactos.id_proyecto = ? ORDER BY impactos.id DESC";
     $stmt = $conexion->prepare($query);
     if (!$stmt) {
         return $error = "Error en la consulta impactos ambiental con sus datos " . $conexion->error;;

@@ -18,7 +18,6 @@
 .form-login {
     font-family: 'Almarai', sans-serif;
     border: solid 2px rgb(172, 172, 172);
-    margin-top: -200px;
     background-color: rgb(247, 247, 247);
 
 }
@@ -80,17 +79,10 @@ button[type]:focus,
 }
 
 
-.cuerpo-index {
-    background-image: url('../img/fondo.png');
-    background-size: 700px;
-    /* Ajusta la imagen para que cubra todo el fondo */
-    background-repeat: no-repeat;
-    /* Evita que la imagen se repita */
-    background-attachment: fixed;
-    /* Fija la imagen en su posición */
-    background-position: bottom 20% right;
-}
 
+.imagen-index{
+ width: 100%;
+}
 
 .scroll {
     overflow: auto;
@@ -569,6 +561,8 @@ button {
         padding: 6px 24px;
     }
 
+
+
 }
 
 /* Large devices (desktops, 992px and up)*/
@@ -583,6 +577,7 @@ button {
         font-size: 0.9em;
     }
 
+
 }
 
 /* X-Large devices (large desktops, 1200px and up)*/
@@ -590,6 +585,7 @@ button {
     .formulario {
         width: 70%;
     }
+
 
 }
 
@@ -599,3 +595,4 @@ button {
         width: 70%;
     }
 }
+

@@ -39,7 +39,7 @@ function guardarSeguimietoInicial($id_proyecto, $desde, $hasta, $toneladas, $inp
                     $stmt->execute();
                     $stmt->store_result();
 
-                    if ($stmt->num_rows <= 0) {
+                   /* if ($stmt->num_rows <= 0) {*/
                         $query_insert = "INSERT INTO registros_impacto_ambiental (id_impacto_ambiental_proyecto,fecha_inicial,fecha_final,tons_co2,dato,ahorro_suave,ahorro_duro) VALUES (?,?,?,?,?,?,?)";
                         $stmt_insert = $conexion->prepare($query_insert);
                         if ($stmt_insert) {
@@ -54,9 +54,9 @@ function guardarSeguimietoInicial($id_proyecto, $desde, $hasta, $toneladas, $inp
                         } else {
                             $estado = "Error en la preparación de la consulta de inserción: " . $conexion->error;
                         }
-                    } else {
+                   /* } else {
                         $nuevo = "nuevo"; //aqui insertar los nuevo meses pero debes de cambiar el mes_anio para que se coloque como un nuevo bloque.
-                    }
+                    }*/
 
                     $stmt->close();
                 } else {
