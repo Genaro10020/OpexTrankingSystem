@@ -10,6 +10,7 @@ function guardarSeguimietoInicial($id_proyecto, $desde, $hasta, $toneladas, $inp
     $resultado = [];
     $error = "";
     $largo = 0;
+    $nuevo = "";
     $id = intval($id_proyecto);
     $estado = false;
     $query = "SELECT id FROM impacto_ambiental_proyecto WHERE id_proyecto =?";
@@ -46,13 +47,15 @@ function guardarSeguimietoInicial($id_proyecto, $desde, $hasta, $toneladas, $inp
                             if ($stmt_insert->execute()) {
                                 $estado = true;
                             } else {
-                                $estado = "No se insertó el registro: " . $id_impacto . " Todos los ides" . print_r($ids_impactos) . "ERRR" . $stmt_insert->error;
+                                $estado = "No se inserto el registro: " . $id_impacto . " Todos los ides" . print_r($ids_impactos) . "ERRR" . $stmt_insert->error;
                             }
 
                             $stmt_insert->close();
                         } else {
                             $estado = "Error en la preparación de la consulta de inserción: " . $conexion->error;
                         }
+                    } else {
+                        $nuevo = "nuevo"; //aqui insertar los nuevo meses pero debes de cambiar el mes_anio para que se coloque como un nuevo bloque.
                     }
 
                     $stmt->close();
@@ -62,7 +65,7 @@ function guardarSeguimietoInicial($id_proyecto, $desde, $hasta, $toneladas, $inp
             }
 
             // Después del bucle, puedes devolver solo el estado, ya que el array $ids_impactos no parece ser necesario en este contexto
-            return array($estado, $ids_impactos, $id_impacto);
+            return array($estado, $ids_impactos, $id_impacto, $nuevo);
         } else {
             return $error = "Error en la ejecución de la consulta";
         }
@@ -74,8 +77,30 @@ function insertarProyecto($id_proyecto)
 {
 }
 
-function actualizarArea()
+function actualizarRegistroImpactoAmbiental($id_proyecto, $desde, $hasta, $toneladas, $idsInputImpactoAmbiental, $inputImpactoAmbiental, $suave, $duro)
 {
+    global $conexion;
+    $id = intval($id_proyecto);
+    $estado = false;
+
+    $cantidad_registro = count($idsInputImpactoAmbiental);
+    $vueltas = 0;
+    for ($i = 0; $i < $cantidad_registro; $i++) {
+        $id = $idsInputImpactoAmbiental[$i]; //continen los id de la tabla registros_impacto_ambiental
+        $dato = $inputImpactoAmbiental[$i];
+
+        $update = "UPDATE registros_impacto_ambiental SET fecha_inicial=?,fecha_final=?,tons_co2=?,dato=?,ahorro_suave=?,ahorro_duro=? WHERE  id=?"; //,mes_anio=? pendiente
+        $stmt = $conexion->prepare($update);
+        $stmt->bind_param("ssssssi", $desde, $hasta, $toneladas, $dato, $suave, $duro, $id);
+        if ($stmt->execute()) {
+            $estado = true;
+        } else {
+            return $estado = "No se actualizo el registro: " . $stmt->error;
+        }
+        $stmt->close();
+    }
+
+    return array($estado, $vueltas);
 }
 
 function eliminarArea()

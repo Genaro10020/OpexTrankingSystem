@@ -287,7 +287,7 @@ if (isset($_SESSION['nombre'])) {
                                                 </div>
                                                 <div v-if="imagenes.length>0" class="row">
                                                     <div class="col-12 d-flex justify-content-center">
-                                                        <img :src="imagenes[0]+'?'+random" style=" width:250px; height:200px;"></img>
+                                                        <img :src="imagenes[0]+'?'+random" style=" width:250px; height:200px;" alt="No existe imagen, para mostrar"></img>
                                                     </div>
                                                 </div>
                                                 <div v-if="existeImagenSeleccionada==true" class="row mx-auto">
@@ -1039,7 +1039,6 @@ if (isset($_SESSION['nombre'])) {
                             <option value="">Seleccione...</option>
                             <option v-for="proyecto in proyectos" :value="proyecto.id">{{proyecto.nombre_proyecto}}</option>
                         </select>
-                        {{inputImpactoAmbiental}}
                     </div>
                     <div class="scroll-dos">
                         <table class="mx-2 mb-5 table table-hover table-bordered table-striped text-center" style="font-size: 0.8em;">
@@ -1055,43 +1054,67 @@ if (isset($_SESSION['nombre'])) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr style="vertical-align: middle; font-size: 1.1em;" v-for="(proyecto,posicion) in arregloID" :key="posicion">
+                                <!--CUANDO YA EXISTE MINIMO UN SEGUIMIENTO -->
+                                <tr v-if="seguimientos>0" style="vertical-align: middle; font-size: 1.1em;" v-for="(proyecto,posicion) in arregloID" :key="posicion">
                                     <td>
-                                        <button v-if="actualizar==0 && actualizar!=(posicion+1) && !proyecto.id_registro" type="button" class="boton-aceptar" v-if="actualizatabla == false" @Click="actualizar = (posicion+1)">Primer Mes</button>
-                                        <button v-if="actualizar==0 && proyecto.id_registro" type="button" class="boton-actualizar" v-if="actualizatabla == false" @Click="actualizar = (posicion+1)">Actualizar</button>
+                                        <button v-if="actualizar==0 || actualizar!=(posicion+1) " type="button" class="boton-actualizar" v-if="actualizatabla == false" @Click="asiganarDatosActualizar(posicion)">Actualizar</button>
                                         <button v-if="actualizar==(posicion+1)" v-if="actualizatabla == true" class="boton-eliminar mx-2" @Click="actualizar = 0">Cancelar</button>
-                                        <button v-if="actualizar==(posicion+1) && !proyecto.id_registro" v-if="actualizatabla == true" class="boton-aceptar" @Click="guardarSeguimiento()">Guardar</button>
-                                        <button v-if="actualizar==(posicion+1) && proyecto.id_registro " v-if="actualizatabla == true" class="boton-aceptar" @Click="guardarSeguimiento()">Guardar</button> <!--v-if="proyecto.id_registro"-->
+                                        <button v-if="actualizar==(posicion+1) && proyecto.id_registro " v-if="actualizatabla == true" class="boton-aceptar" @Click="actualizarSeguimiento(posicion)">Guardar</button><!--Guardar Actualizacion cuando existe minimo 1-->
                                     </td>
-                                    <!--<td v-else>
-                                        <button type="button" class="boton-actualizar" v-if="actualizatabla == false" @Click="actualizatabla=!actualizatabla">Actualizar</button>
-                                        <div class="d-flex">
-                                            <button type="button" v-if="actualizatabla == true" class="boton-eliminar mx-2" @Click="actualizatabla=!actualizatabla">Cancelar</button>
-                                            <button type="button" v-if="actualizatabla == true" class="boton-aceptar" @Click="actualizatabla=!actualizatabla">Guardar</button>
-                                        </div>
-                                    </td>-->
                                     <td style="min-width: 351px;">
                                         <label> De: </label>
-                                        <input class="mx-1" v-if="actualizar==(posicion+1)" type="date" v-model="fecha_desde" ></input> <!--:value="proyecto.fecha_inicial"-->
-                                        <label class="mx-1" v-else> </label>
+                                        <input class="mx-1" v-if="actualizar==(posicion+1)" type="date" v-model="fecha_desde"></input> <!--:value="proyecto.fecha_inicial"-->
+                                        <label class="mx-1" v-else> {{proyecto.fecha_inicial}} </label>
                                         <label> Hasta: </label>
-                                        <input class="mx-1" v-if="actualizar==(posicion+1)" type="date" v-model="fecha_hasta" ></input> <!--:value="proyecto.fecha_final"-->
-                                        <label class="mx-1" v-else> </label>
+                                        <input class="mx-1" v-if="actualizar==(posicion+1)" type="date" v-model="fecha_hasta"></input> <!--:value="proyecto.fecha_final"-->
+                                        <label class="mx-1" v-else> {{proyecto.fecha_final}}</label>
                                     </td>
                                     <td>
                                         <input v-if="actualizar==(posicion+1)" type="text" v-model="input_tons_co2"></input><!--:value="proyecto.tons_co2"-->
-                                        <label v-else></label>
+                                        <label v-else>{{proyecto.tons_co2}}</label>
                                     </td>
                                     <td v-for="(cantidad,index) in columnaImpactoAmbiental.length" class="bg-warning" :key="index"><!--:value="proyecto.dato"-->
                                         <input v-if="actualizar==(posicion+1)" type="text" v-model="inputImpactoAmbiental[posicion][index]"> </input>
-                                        <label v-else></label>
+                                        <label v-else>{{inputImpactoAmbiental[posicion][index]}}</label>
                                     </td>
                                     <td>
                                         <input v-if="actualizar==(posicion+1)" type="text" v-model="input_ahorro_suave"></input> <!--:value="proyecto.ahorro_duro"-->
+                                        <label v-else>{{proyecto.ahorro_duro}}</label>
+                                    </td>
+                                    <td>
+                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="input_ahorro_duro"></input> <!--:value="proyecto.ahorro_suave"-->
+                                        <label v-else>{{proyecto.ahorro_suave}}</label>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <!--PRIMER SEGUIMIETO -->
+                                <tr v-if="id_proyecto!=''" style="vertical-align: middle; font-size: 1.1em;">
+                                    <td>
+                                        <button v-if="actualizatabla == false" type="button" class="boton-aceptar" @Click="actualizatabla =!actualizatabla,nuevoLimpiarVariables()">Nuevo</button>
+                                        <button v-if="actualizatabla == true" class="boton-eliminar mx-2" @Click="actualizatabla =!actualizatabla ">Cancelar</button>
+                                        <button v-if="actualizatabla == true" class="boton-aceptar" @Click="guardarSeguimiento()">Guardar</button><!--Cundo no existe aun ningun registro-->
+                                    </td>
+                                    <td style="min-width: 351px;">
+                                        <label> De: </label>
+                                        <input class="mx-1" v-if="actualizatabla==true" type="date" v-model="fecha_desde"></input> <!--:value="proyecto.fecha_inicial"-->
+                                        <label> Hasta: </label>
+                                        <input class="mx-1" v-if="actualizatabla==true" type="date" v-model="fecha_hasta"></input> <!--:value="proyecto.fecha_final"-->
+                                        <label class="mx-1" v-else></label>
+                                    </td>
+                                    <td>
+                                        <input v-if="actualizatabla==true" type="text" v-model="input_tons_co2"></input><!--:value="proyecto.tons_co2"-->
+                                        <label v-else></label>
+                                    </td>
+                                    <td v-for="(cantidad,index) in columnaImpactoAmbiental.length" class="bg-warning" :key="index"><!--:value="proyecto.dato"-->
+                                        <input v-if="actualizatabla==true" type="text" v-model="inputImpactoAmbientalInicial[index]"> </input>
                                         <label v-else></label>
                                     </td>
                                     <td>
-                                        <input v-if="actualizar==(posicion+1)" type="text"v-model="input_ahorro_duro" ></input> <!--:value="proyecto.ahorro_suave"-->
+                                        <input v-if="actualizatabla==true" type="text" v-model="input_ahorro_suave"></input> <!--:value="proyecto.ahorro_duro"-->
+                                        <label v-else></label>
+                                    </td>
+                                    <td>
+                                        <input v-if="actualizatabla==true" type="text" v-model="input_ahorro_duro"></input> <!--:value="proyecto.ahorro_suave"-->
                                         <label v-else></label>
                                     </td>
                                     <td></td>

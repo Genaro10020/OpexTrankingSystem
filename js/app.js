@@ -90,7 +90,9 @@ const AltaProyectos = {
       input_ahorro_suave: '',
       actualizar: 0,
       inputImpactoAmbiental: [],
-      seguimientos:0,
+      inputImpactoAmbientalInicial: [],
+      seguimientos: 0,
+      idsInputImpactoAmbiental: []
     }
   },
   mounted() {
@@ -129,9 +131,9 @@ const AltaProyectos = {
         if (response.data[0][1] == true) {
           if (response.data[0][0].length > 0) {
             this.arregloID = response.data[0][0];
-
             this.columnaImpactoAmbiental = JSON.parse(response.data[0][0][0].impacto_ambiental);
-            this.inputImpactoAmbiental = Array(this.columnaImpactoAmbiental.length);
+            this.inputImpactoAmbientalInicial = Array(this.columnaImpactoAmbiental.length);
+            this.seguimientos = 0;
           }
         } else {
           alert("La consulta de proyectos no se realizo correctamente.")
@@ -143,6 +145,7 @@ const AltaProyectos = {
       })
     },
     consultarImpactoAmbieltalXProyectoID() {
+      this.actualizar = 0
       axios.post('impactoAmbientalProyectoController.php', {
         id_proyecto: this.id_proyecto //ID PROYECTO
       }).then(response => {
@@ -152,26 +155,23 @@ const AltaProyectos = {
             this.arregloID = response.data[0][0];
             var comparandoImpactoInicial = "";
             var comparandoImpactoDos = "";
-            var impactoAmbiental = [];
-
             this.seguimientos = response.data[0][0].length;
+            var impactoAmbiental = [];
             var datos = [];
             for (let j = 0; j < response.data[0][2][0].length; j++) {
               impactoAmbiental.push(response.data[0][2][0][j].impacto_ambiental)
             }
             var no_repetidos = new Set(impactoAmbiental);
             this.columnaImpactoAmbiental = Array.from(no_repetidos);;//tiene los nombres de impacto ambiental
-
+            this.inputImpactoAmbientalInicial = Array(this.columnaImpactoAmbiental.length);
             /*var datos = [];
             for (let j = 0; j < response.data[0][2].length; j++) {
               datos.push(response.data[0][2][0].dato)
             }*/
 
-
-     
-            
             this.inputImpactoAmbiental = response.data[0][2].map(subArray => subArray.map(objeto => objeto.dato));
-      
+            this.idsInputImpactoAmbiental = response.data[0][2].map(subArray => subArray.map(objeto => objeto.id_registro));//los utilizare para actualizar
+
 
             //this.inputImpactoAmbiental = Array(this.columnaImpactoAmbiental.length);
             //this.columnaImpactoAmbiental = JSON.parse(response.data[0][0][0].impacto_ambiental);
@@ -2177,24 +2177,24 @@ const AltaProyectos = {
     cancelarEvento(e) {
       e.preventDefault();
     },
-    asignacion(valor){
+    asignacion(valor) {
       alert(valor);
       this.fecha_desde = valor;
     },
     /*/////////////////////////////////////////////////////////////////////////////////INSERTAR PLANTA*/
-    guardarSeguimiento(posicion) {
+    guardarSeguimiento() {
 
-     /*var inicial = document.getElementById("inicial"+(posicion+1)).value;
-     var hasta = document.getElementById("hasta"+(posicion+1)).value;
-     var toneladas = document.getElementById("toneladas"+(posicion+1)).value;
-     var duro = document.getElementById("duro"+(posicion+1)).value;
-     var suave = document.getElementById("suave"+(posicion+1)).value;
-
-     this.fecha_desde = inicial
-     this.fecha_hasta = hasta
-     this.input_tons_co2 = toneladas
-     this.input_ahorro_suave = duro
-     this.input_ahorro_duro = suave*/
+      /*var inicial = document.getElementById("inicial"+(posicion+1)).value;
+      var hasta = document.getElementById("hasta"+(posicion+1)).value;
+      var toneladas = document.getElementById("toneladas"+(posicion+1)).value;
+      var duro = document.getElementById("duro"+(posicion+1)).value;
+      var suave = document.getElementById("suave"+(posicion+1)).value;
+ 
+      this.fecha_desde = inicial
+      this.fecha_hasta = hasta
+      this.input_tons_co2 = toneladas
+      this.input_ahorro_suave = duro
+      this.input_ahorro_duro = suave*/
 
       //console.log("id Proyecto" + this.id_proyecto + "Desde: " + this.fecha_desde + " Hasta: " + this.fecha_hasta + " Toneladas:" + this.input_tons_co2 + "Impacto Ambielta: " + this.inputImpactoAmbiental + " Ahorro Duro: " + this.input_ahorro_suave + " Ahorra: " + this.input_ahorro_duro);
 
@@ -2203,27 +2203,74 @@ const AltaProyectos = {
         desde: this.fecha_desde,
         hasta: this.fecha_hasta,
         input_tons_co2: this.input_tons_co2,
-        inputImpactoAmbiental: this.inputImpactoAmbiental,
+        inputImpactoAmbiental: this.inputImpactoAmbientalInicial,
         input_ahorro_suave: this.input_ahorro_suave,
         input_ahorro_duro: this.input_ahorro_duro,
       }).then(response => {
         console.log(response.data)
-          if (response.data[0][0] == true) {
-            this.actualizar=0
-            this.consultarImpactoAmbieltalXProyectoID()
-          } else {
-            alert("La inserción de Planta, no se realizo correctamente.")
-          }
+        if (response.data[0][0] == true) {
+          this.actualizar = 0
+          this.actualizatabla = false
+          this.consultarImpactoAmbieltalXProyectoID()
+          alert("Se inserto con éxito")
+        } else {
+          alert("La inserción de Planta, no se realizo correctamente.")
+        }
 
       }).catch(error => {
-        console.log('Erro :-('+error)
+        console.log('Erro :-(' + error)
       }).finally(() => {
 
       })
       //alert("Esta seccion esta en proceso de subir")
 
     },
+    actualizarSeguimiento(posicion) {
 
+      //console.log("id Proyecto" + this.id_proyecto + "Desde: " + this.fecha_desde + " Hasta: " + this.fecha_hasta + " Toneladas:" + this.input_tons_co2 + "Impacto Ambielta: " + this.inputImpactoAmbiental[(posicion)] + " Ahorro Duro: " + this.input_ahorro_suave + " Ahorra: " + this.input_ahorro_duro);
+
+      axios.put('seguimientoAmbientalProyectoController.php', {
+        id_proyecto: this.id_proyecto,
+        desde: this.fecha_desde,
+        hasta: this.fecha_hasta,
+        input_tons_co2: this.input_tons_co2,
+        inputImpactoAmbiental: this.inputImpactoAmbiental[posicion],
+        idsInputImpactoAmbiental: this.idsInputImpactoAmbiental[posicion],
+        input_ahorro_suave: this.input_ahorro_suave,
+        input_ahorro_duro: this.input_ahorro_duro,
+      }).then(response => {
+        console.log(response.data)
+        if (response.data[0][0] == true) {
+          this.actualizar = 0
+          this.consultarImpactoAmbieltalXProyectoID()
+          alert("Se actualizo con éxito")
+          //this.consultarImpactoAmbieltalXProyectoID()
+        } else {
+          alert("La actualizacion, no se realizo correctamente.")
+        }
+
+      }).catch(error => {
+        console.log('Erro :-(' + error)
+      }).finally(() => {
+
+      })
+    },
+    nuevoLimpiarVariables() {
+      this.fecha_desde = ''
+      this.fecha_hasta = ''
+      this.input_tons_co2 = ''
+      this.input_ahorro_duro = ''
+      this.input_ahorro_suave = ''
+    },
+    asiganarDatosActualizar(posicion) {
+      this.actualizar = 0
+      this.actualizar = (posicion + 1)
+      this.fecha_desde = this.arregloID[posicion].fecha_inicial
+      this.fecha_hasta = this.arregloID[posicion].fecha_final
+      this.input_tons_co2 = this.arregloID[posicion].tons_co2
+      this.input_ahorro_duro = this.arregloID[posicion].ahorro_duro
+      this.input_ahorro_suave = this.arregloID[posicion].ahorro_suave
+    }
   }
 };
 
