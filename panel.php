@@ -31,9 +31,9 @@ if (isset($_SESSION['nombre'])) {
                     <button class="btn-menu mx-3" @click="ventana='Seguimiento'">
                         <i class="bi bi-plus-circle"></i> Seguimiento
                     </button>
-                    <!-- <button class="btn-menu mx-3" @click="ventana='Competencia'">
+                    <button class="btn-menu mx-3" @click="ventana='Generar Valor'">
                         <i class="bi bi-plus-circle"></i> Competencia
-                    </button> -->
+                    </button>
                     <!--Modal Alta Proyectos-->
                     <div id="modal-alta-proyecto" class="modal text-start" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
                         <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
@@ -1141,75 +1141,31 @@ if (isset($_SESSION['nombre'])) {
                         </table>
                     </div>
 
-                    <!---->
+                    <!--/////////////////////////////////////////////////////////////GENERAR VALOR////////////////////////////////////////-->
                 </div>
-                <!-- <div v-if="ventana=='Competencia'">
+                <div v-if="ventana=='Generar Valor'">
 
-
-                    <div class="container mt-5">
-                        <table class="table table-bordered table-striped">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th>#</th>
-                                    <th>EADs</th>
-                                    <th>Área</th>
-                                    <th>Planta</th>
-                                    <th>Nombre EAD</th>
-                                    <th>Proyecto</th>
-                                    <th>Evaluador 1</th>
-                                    <th>Evaluador 2</th>
-                                    <th>Evaluador 3</th>
-                                    <th>Evaluador 4</th>
-                                    <th>Calificacion Final</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th><b>1</b></th>
-                                    <td><b>EAD 1</b></td>
-                                    <td>Formación</td>
-                                    <td>Enerya</td>
-                                    <td>Los Rinos</td>
-                                    <td>Proyecto A</td>
-                                    <td><b>Evaluador A</b></td>
-                                    <td><b>Evaluador B</b></td>
-                                    <td><b>Evaluador C</b></td>
-                                    <td><b>Evaluador D</b></td>
-                                    <td>Pendiente</td>
-                                </tr>
-                                <tr>
-                                    <th><b>2</b></th>
-                                    <td><b>EAD 2</b></td>
-                                    <td>Etiquetado</td>
-                                    <td>Riasa</td>
-                                    <td>Las Maquinas</td>
-                                    <td>Proyecto A</td>
-                                    <td><b>Evaluador A</b></td>
-                                    <td><b>Evaluador B</b></td>
-                                    <td><b>Evaluador C</b></td>
-                                    <td><b>Evaluador D</b></td>
-                                    <td>Pendiente</td>
-                                </tr>
-                                <tr>
-                                    <th><b>3</b></th>
-                                    <td><b>EAD 3</b></td>
-                                    <td>Riasa - Enerya</td>
-                                    <td>Planta A</td>
-                                    <td>Los Pajaros Azules</td>
-                                    <td>Proyecto A</td>
-                                    <td><b>Evaluador A</b></td>
-                                    <td><b>Evaluador B</b></td>
-                                    <td><b>Evaluador C</b></td>
-                                    <td><b>Evaluador D</b></td>
-                                    <td>Pendiente</td>
-                                </tr>
-                                 Repite las filas para EAD 2 al 14 según sea necesario 
-                            </tbody>
-                        </table>
+                    <div class=" col-12 col-lg-5 imagenBatery">
+                        <div class="positionBaterycontainer position-absolute top-50 start-50 translate-middle mt-4">
+                            <div>
+                                <table>
+                                    <thead>
+                                        <th>1</th>
+                                        <th>2</th>
+                                        <th>3</th>
+                                    </thead>
+                                    <tbody>
+                                        <td>1</td>
+                                        <td>2</td>
+                                        <td>3</td>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
 
-
-                </div>FIN DE COMPETENCIA -->
+                </div>
+                <!--////////////////////////////////////////////// FIN DE COMPETENCIA -->
 
 
             </div><!--cuerpo-->
