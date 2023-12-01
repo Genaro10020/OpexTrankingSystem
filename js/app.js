@@ -95,7 +95,7 @@ const AltaProyectos = {
       idsInputImpactoAmbiental: [],
       login: false,
       months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-      years: [2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035, 2036, 2037, 2038, 2039, 2040, 2041, 2042, 2043, 2044, 2045, 2046, 2047, 2048, 2049, 2050],
+      years: [2020,2021,2022,2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035, 2036, 2037, 2038, 2039, 2040, 2041, 2042, 2043, 2044, 2045, 2046, 2047, 2048, 2049, 2050],
       mes_select: 1,
       anio_select: 2023,
     }
@@ -117,6 +117,8 @@ const AltaProyectos = {
         if (response.data[0][1] == true) {
           if (response.data[0][0].length > 0) {
             this.proyectos = response.data[0][0];
+          }else{
+            this.proyectos = []
           }
         } else {
           alert("La consulta de proyectos no se realizo correctamente.")
@@ -1615,6 +1617,28 @@ const AltaProyectos = {
         })
       }
     },
+    eliminarProyecto(id) {
+      if (confirm("¿Desea eliminar el Proyecto?")) {
+        axios.delete('proyectosController.php', {
+          data: {
+            id: id
+          }
+        }).then(response => {
+          console.log(response.data)
+          if (response.data[0] == true) {
+            this.consultarProyectos();
+            this.id = ''
+            alert("Se elimino Correctamente.")
+          } else {
+            alert("No se elimino al Responsable.")
+          }
+        }).catch(error => {
+          //console.log('Erro :-('+error)
+        }).finally(() => {
+
+        })
+      }
+    },
     verificarCantidadDirectosPilares() {
       const directoIndices = [];
       // Encuentra los índices de los elementos 'directo'
@@ -2126,17 +2150,43 @@ const AltaProyectos = {
       }
     },
     asignarValor(input) {//asigno el formato a las varitnles
-      if (input === "tons_co2") {
-        this.tons_co2 = document.getElementById('tons_co2').value;
-      } else if (input === "ahorro_duro") {
-        this.ahorro_duro = document.getElementById('ahorro_duro').value;
-      } else if (input === "ahorro_suave") {
-        this.ahorro_suave = document.getElementById('ahorro_suave').value;
-      }
+        if (input === "tons_co2") {
+          this.tons_co2 = document.getElementById('tons_co2').value;
+        } else if (input === "ahorro_duro") {
+          this.ahorro_duro = document.getElementById('ahorro_duro').value;
+        } else if (input === "ahorro_suave") {
+          this.ahorro_suave = document.getElementById('ahorro_suave').value;
+        }
     },
     obtenerPrefijo(folioCompleto) {
       var posicionUltimoGuion = folioCompleto.lastIndexOf("-");
       return folioCompleto.substring(0, posicionUltimoGuion);
+    },
+    formatInputPesos(varvue) {
+      // Llama a la función formatMoneda y actualiza input_tons_co2 con el valor formateado
+    // Llama a la función formatMoneda y actualiza la variable con el valor formateado
+      this[varvue] = this.formatMonedaPesos(this[varvue])
+    },
+    formatMonedaPesos(value) {
+      const options2 = { style: 'currency', currency: 'USD', minimumFractionDigits: 2 };
+      const numberFormat2 = new Intl.NumberFormat('en-US', options2);
+      // Obtener el valor actual del campo y eliminar caracteres no deseados
+      var valorCampo = value.replace(/[^\d.]/g, '');
+      // Formatear el valor como un número
+      let numeroFormateado = parseFloat(valorCampo).toFixed(2);
+      // Aplicar el formato de número
+      return numberFormat2.format(numeroFormateado);
+    },
+    formatInputSinPesos(varvue) {
+      this[varvue] = this.formatMonedaSinPesos(this[varvue]);
+    },
+    formatMonedaSinPesos(value) {
+      // Obtener el valor actual del campo y eliminar caracteres no deseados
+      var valorCampo = value.replace(/[^\d.]/g, '');
+      // Formatear el valor como un número
+      let numeroFormateado = parseFloat(valorCampo).toFixed(2); // Se ajusta para tener dos decimales
+      // Devolver el valor formateado sin el signo de dólar
+      return numeroFormateado.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
     modalCatalogos(accion, tipo, id, nombre, cantidad, siglas, unidadMedida, misionLigada, n_mision, id_mision_ligada) {//accion: es CREAR, ACTUALIZAR, ELIMINAR y tipo: es Pilares, Misiones, Objetivos.
       this.id = ''
@@ -2217,7 +2267,12 @@ const AltaProyectos = {
           this.actualizar = 0
           this.actualizatabla = false
           this.consultarImpactoAmbieltalXProyectoID()
-          alert("Se inserto con éxito")
+          if(response.data[0][3]==true){
+            alert("Ya existe esa fecha")
+          }else{
+            alert("Se inserto con éxito")
+          }
+          
         } else {
           alert("La inserción de Planta, no se realizo correctamente.")
         }

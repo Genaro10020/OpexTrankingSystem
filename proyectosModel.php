@@ -125,11 +125,11 @@ function actualizarArea($id, $nuevo, $siglas)
 }
 
 
-function eliminarArea($id)
+function eliminarProyecto($id)
 {
     global $conexion;
     $estado = false;
-    $delete = "DELETE FROM areas WHERE id=?";
+    $delete = "DELETE FROM proyectos_creados WHERE id=?";
     $stmt = $conexion->prepare($delete);
     $stmt->bind_param("i", $id);
     if ($stmt->execute()) {

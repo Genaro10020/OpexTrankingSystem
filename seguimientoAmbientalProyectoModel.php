@@ -10,7 +10,7 @@ function guardarSeguimietoInicial($id_proyecto, $mes, $anio, $toneladas, $inputI
     $resultado = [];
     $error = "";
     $largo = 0;
-    $nuevo = "";
+    $existe = false;
     $id = intval($id_proyecto);
     $estado = false;
     $query = "SELECT id FROM impacto_ambiental_proyecto WHERE id_proyecto =?";
@@ -28,49 +28,52 @@ function guardarSeguimietoInicial($id_proyecto, $mes, $anio, $toneladas, $inputI
             $stmt->close();
             $largo = count($ids_impactos);
             $id_impacto = 0;
-            for ($i = 0; $i < $largo; $i++) {
-                $id_impacto = $ids_impactos[$i]['id'];
-                $datos = $inputImpactoAmbiental[$i];
-                $query = "SELECT * FROM registros_impacto_ambiental WHERE id_impacto_ambiental_proyecto = ?";
-                $stmt = $conexion->prepare($query);
+            $mes = (int)$mes;
+            $anio = (int)$anio;
+            $mes_anio = $mes . "-" . $anio;
 
-                if ($stmt) {
-                    $stmt->bind_param("i", $id_impacto);
-                    $stmt->execute();
-                    $stmt->store_result();
-
-                    /* if ($stmt->num_rows <= 0) {*/
-                    $mes_anio = $mes . "-" . $anio;
-                    $mes = (int)$mes;
-                    $anio = (int)$anio;
-
-
-                    $query_insert = "INSERT INTO registros_impacto_ambiental (id_impacto_ambiental_proyecto,mes,anio,tons_co2,mes_anio,dato,ahorro_suave,ahorro_duro) VALUES (?,?,?,?,?,?,?,?)";
-                    $stmt_insert = $conexion->prepare($query_insert);
-                    if ($stmt_insert) {
-                        $stmt_insert->bind_param("iiisssss", $id_impacto, $mes, $anio, $toneladas, $mes_anio, $datos, $suave, $duro);
-                        if ($stmt_insert->execute()) {
-                            $estado = true;
-                        } else {
-                            $estado = "No se inserto el registro: " . $id_impacto . " Todos los ides" . print_r($ids_impactos) . "ERRR" . $stmt_insert->error;
-                        }
-
-                        $stmt_insert->close();
-                    } else {
-                        $estado = "Error en la preparación de la consulta de inserción: " . $conexion->error;
-                    }
-                    /* } else {
-                        $nuevo = "nuevo"; //aqui insertar los nuevo meses pero debes de cambiar el mes_anio para que se coloque como un nuevo bloque.
-                    }*/
-
-                    $stmt->close();
-                } else {
-                    $estado = "Error en la preparación de la consulta: " . $conexion->error;
+            $query = "SELECT * FROM registros_impacto_ambiental WHERE mes_anio = ?";
+            $stmt = $conexion->prepare($query);
+            if ($stmt) {
+                $stmt->bind_param("s", $mes_anio);
+                $stmt->execute();
+                $resultados=$stmt->get_result();
+                $arreglo = array();
+                while($row=$resultados->fetch_assoc()) {
+                    $arreglo = $row['mes_anio'];
                 }
+                $cantidad = $stmt->num_rows;
+                if ( $arreglo==$mes_anio){ 
+                    $existe= true;
+                }else{
+                    for ($i = 0; $i < $largo; $i++) {
+                        $id_impacto = $ids_impactos[$i]['id'];
+                        $datos = $inputImpactoAmbiental[$i];
+
+                                        $query_insert = "INSERT INTO registros_impacto_ambiental (id_impacto_ambiental_proyecto,mes,anio,tons_co2,mes_anio,dato,ahorro_suave,ahorro_duro) VALUES (?,?,?,?,?,?,?,?)";
+                                        $stmt_insert = $conexion->prepare($query_insert);
+                                        if ($stmt_insert) {
+                                            $stmt_insert->bind_param("iiisssss", $id_impacto, $mes, $anio, $toneladas, $mes_anio, $datos, $suave, $duro);
+                                            if ($stmt_insert->execute()) {
+                                                $estado = true;
+                                            } else {
+                                                $estado = "No se inserto el registro: " . $id_impacto . " Todos los ides" . print_r($ids_impactos) . "ERRR" . $stmt_insert->error;
+                                            }
+        
+                                            $stmt_insert->close();
+                                        } else {
+                                            $estado = "Error en la preparación de la consulta de inserción: " . $conexion->error;
+                                        }
+                    }
+                }
+
+                $stmt->close();
+            } else {
+                $estado = "Error en la preparación de la consulta: " . $conexion->error;
             }
 
             // Después del bucle, puedes devolver solo el estado, ya que el array $ids_impactos no parece ser necesario en este contexto
-            return array($estado, $ids_impactos, $id_impacto, $nuevo);
+            return array($estado, $ids_impactos, $id_impacto, $existe);
         } else {
             return $error = "Error en la ejecución de la consulta";
         }

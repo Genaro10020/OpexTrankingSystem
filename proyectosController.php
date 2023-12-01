@@ -57,7 +57,13 @@ if (isset($_SESSION['nombre'])) {
             break;
         case 'DELETE':
             // Manejar solicitud DELETE (eliminación)
-
+            if(isset($arreglo['id'])){
+                $id = $arreglo['id'];
+                $val[] = eliminarProyecto($id);
+            } else {
+                $val[] = "No llego la varible ID".$arreglo['id'];
+            //  http_response_code(400); // Bad Request
+            }
             // ...
             // ...
             break;

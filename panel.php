@@ -180,7 +180,7 @@ if (isset($_SESSION['nombre'])) {
 
                                             <!--Pilares-->
                                             <div id="div_pilares" class="input-group mb-3 " :class="{'mostrar':checkMisiones.length>0, 'ocultar': checkMisiones.length <= 0}">
-                                                <span class="input-group-text w-25 text-start">Pilares <br>Estrategicos </span>
+                                                <span class="input-group-text w-25 text-start">Pilares <br>Estratégicos </span>
                                                 <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkPilares.length<=0, '': checkPilares.length>0}">
                                                     <div class="form-check border border-1 mt-1" v-for="(pilar, index) in pilares" :key="index">
                                                         <input class="form-check-input" type="checkbox" :value="pilar.id+'<->'+pilar.nombre+'<->'+pilar.siglas+'<->'+(index+1)" v-model="checkPilares" @change="consultarObjetivosXpilaresSeleccionados()">
@@ -208,7 +208,7 @@ if (isset($_SESSION['nombre'])) {
                                             <!--Objetivos-->
 
                                             <div v-if="checkPilares.length>0" class="input-group mb-3 " :class="{'mostrar':checkPilares.length>0, 'ocultar': checkPilares.length <= 0}">
-                                                <span class="input-group-text w-25 text-start">Objetivos <br>Estrategicos</span>
+                                                <span class="input-group-text w-25 text-start">Objetivos <br>Estratégicos</span>
                                                 <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkObjetivos.length<=0, '': checkObjetivos.length>0}">
                                                     <div v-for="(objetivo, index) in objetivos" class="form-check border border-1 mt-1" :key="index">
                                                         <input class="form-check-input" v-model="checkObjetivos" type="checkbox" id="checkbox1" :value="objetivo.id+'<->'+objetivo.nombre+'<->'+objetivo.id_pilares+'<->'+objetivo.siglas+'<->'+(index+1)" @change="checkeandoObjetivos()">
@@ -254,7 +254,7 @@ if (isset($_SESSION['nombre'])) {
 
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-50">Tons CO2 por Evitar (Proyectado)</span>
-                                                <input id="tons_co2" type="text" v-model="tons_co2" min="0" class="w-25" :class="{'nocontestado': respondio === false && (tons_co2 == 0 || tons_co2 == '' ), '': tons_co2 !== 0 && tons_co2 !== ''}">
+                                                <input id="tons_co2" type="text" v-model="tons_co2" min="0" class="w-25" :class="{'nocontestado': respondio === false && (tons_co2 == 0 || tons_co2 == '' ), '': tons_co2 !== 0 && tons_co2 !== ''}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57)"  @blur="formatInputSinPesos('tons_co2')">
                                                 <div v-if="tons_co2 !== '' && tons_co2 !== '0'" class="text-center my-auto ms-3">
                                                     <i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i>
                                                 </div>
@@ -262,13 +262,14 @@ if (isset($_SESSION['nombre'])) {
 
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-50">Ahorro Duro $MXN/Año (Proyectado )</span>
-                                                <input id="ahorro_duro" type="text" v-model="ahorro_duro" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_duro==='$.00', '': ahorro_duro!==0 && ahorro_duro!==''}" @click="colocarCursor('ahorro_duro')" @blur="asignarValor('ahorro_duro')" @keyUp=" formatoNumero('ahorro_duro', $event)">
+                                                <input id="ahorro_duro" type="text" v-model="ahorro_duro" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_duro==='$.00', '': ahorro_duro!==0 && ahorro_duro!==''}"  onkeypress="return (event.charCode >= 48 && event.charCode <= 57)"  @blur="formatInputPesos('ahorro_duro')">
                                                 <div v-if="ahorro_duro!=='' && ahorro_duro !== '$0.00' && ahorro_duro !== '$.00' && ahorro_duro !== '$.0' && ahorro_duro !== '$.'  && ahorro_duro !== '$'" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
+                                            <!--@click="colocarCursor('ahorro_duro')" @blur="asignarValor('ahorro_duro')" @keyUp=" formatoNumero('ahorro_duro', $event)"-->
 
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-50">Ahorro Suave $MXN/Año (Proyectado)</span>
-                                                <input id="ahorro_suave" type="text" v-model="ahorro_suave" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_suave==='$.00', '': ahorro_suave!==0 && ahorro_suave!==''}" @click="colocarCursor('ahorro_suave')" @blur="asignarValor('ahorro_suave')" @keyUp=" formatoNumero( 'ahorro_suave',$event)">
+                                                <input id="ahorro_suave" type="text" v-model="ahorro_suave" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_suave==='$.00', '': ahorro_suave!==0 && ahorro_suave!==''}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57)"   @blur="formatInputPesos('ahorro_suave')">
                                                 <div v-if="ahorro_suave!=='' && ahorro_suave !== '$0.00' && ahorro_suave !== '$.00' && ahorro_suave !== '$.0' && ahorro_suave !== '$.'  && ahorro_suave !== '$'" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
                                             <div class="input-group mb-3">
@@ -526,17 +527,18 @@ if (isset($_SESSION['nombre'])) {
                                 <th>Responsable</th>
                                 <th>Correo</th>
                                 <th>Telefono</th>
-                                <th>Pilares Estrategico</th>
-                                <th>Objetivos Estrategico</th>
+                                <th>Pilare(s) Estratégico(s)</th>
+                                <th>Objetivo(s) Estratégico(s)</th>
                                 <th>Impacto Ambiental</th>
                                 <th>Tons CO2 por Evitar <br>(Proyectado)</th>
                                 <th>Ahorro Duro $MXN/Año <br>(Proyectado )</th>
                                 <th>Ahorro Suave $MXN/Año <br>(Proyectado)</th>
+                                <th>Eliminar</th>
                             </thead>
                             <tbody class=" border:1px solid black" style="text-align: center">
                                 <template v-for="(proyecto,index) in proyectos">
                                     <tr v-if="folioAnteriorSinNumeral(proyecto.folio, index)" :class="{ 'divisor-tr-creados': folioAnteriorSinNumeral(proyecto.folio, index)==true}"><!--ES DIFERENTE--->
-                                        <td colspan="16" v-if="index>0"></td>
+                                        <td colspan="17" v-if="index>0"></td>
                                     </tr>
                                     <tr class="cuerpo-tabla-creados border border-secondary" style="vertical-align: middle;" :class="{ 'fila-ultimo-proyecto': buscandoUltimoProyectoCreado(proyecto.nombre_proyecto) }">
                                         <td class="border border-secondary">{{proyecto.fecha}}</td>
@@ -567,6 +569,7 @@ if (isset($_SESSION['nombre'])) {
                                         <td class="border border-secondary">{{proyecto.tons_co2}}</td>
                                         <td class="border border-secondary">{{proyecto.ahorro_duro}}</td>
                                         <td class="border border-secondary">{{proyecto.ahorro_suave}}</td>
+                                        <td class="border border-secondary">  <button class="rounded-circle bg-danger border border-secondary btn shadow-sm" @click="eliminarProyecto(proyecto.id)"><i class="bi bi-trash3-fill text-white"></i></button></td>
                                     </tr>
                                 </template>
                         </table>
@@ -1042,7 +1045,6 @@ if (isset($_SESSION['nombre'])) {
                             <option value="">Seleccione...</option>
                             <option v-for="proyecto in proyectos" :value="proyecto.id">{{proyecto.nombre_proyecto}}</option>
                         </select>
-                        {{mes_select}}{{anio_select}}
                     </div>
                     <div class="scroll-dos">
                         <table class="mx-2 mb-5 table table-hover table-bordered table-striped text-center" style="font-size: 0.8em;">
@@ -1079,20 +1081,21 @@ if (isset($_SESSION['nombre'])) {
                                                     <label> {{proyecto.anio}} <label>
                                         </div>
                                     </td>
+                                    
                                     <td>
-                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="input_tons_co2"></input><!--:value="proyecto.tons_co2"-->
+                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="input_tons_co2" onkeypress="return (event.charCode >= 48 && event.charCode <= 57)" @blur="formatInputSinPesos('input_tons_co2')"></input><!--:value="proyecto.tons_co2"-->
                                         <label v-else>{{proyecto.tons_co2}}</label>
                                     </td>
                                     <td v-for="(cantidad,index) in columnaImpactoAmbiental.length" class="bg-warning" :key="index"><!--:value="proyecto.dato"-->
-                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="inputImpactoAmbiental[posicion][index]"> </input>
+                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="inputImpactoAmbiental[posicion][index]" > </input>
                                         <label v-else>{{inputImpactoAmbiental[posicion][index]}}</label>
                                     </td>
                                     <td>
-                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="input_ahorro_duro"></input> <!--:value="proyecto.ahorro_duro"-->
+                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="input_ahorro_duro" onkeypress="return (event.charCode >= 48 && event.charCode <= 57)"  @blur="formatInputPesos('input_ahorro_duro')"></input> <!--:value="proyecto.ahorro_duro"-->
                                         <label v-else>{{proyecto.ahorro_duro}}</label>
                                     </td>
                                     <td>
-                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="input_ahorro_suave"></input> <!--:value="proyecto.ahorro_suave"-->
+                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="input_ahorro_suave" onkeypress="return (event.charCode >= 48 && event.charCode <= 57)"   @blur="formatInputPesos('input_ahorro_suave')"></input> <!--:value="proyecto.ahorro_suave"-->
                                         <label v-else>{{proyecto.ahorro_suave}}</label>
                                     </td>
                                     <td></td>
@@ -1113,11 +1116,10 @@ if (isset($_SESSION['nombre'])) {
                                         <select v-if="actualizatabla==true" v-model="anio_select">
                                             <option v-for="(year,index) in years" :value="year">{{year}}</option>
                                         </select>
-
                                         <!--<input class="mx-1" v-if="actualizatabla==true" type="date" v-model="fecha_desde"></input>--><!--:value="proyecto.fecha_inicial"-->
                                     </td>
                                     <td>
-                                        <input v-if="actualizatabla==true" type="text" v-model="input_tons_co2"></input><!--:value="proyecto.tons_co2"-->
+                                        <input v-if="actualizatabla==true" type="text" v-model="input_tons_co2" onkeypress="return (event.charCode >= 48 && event.charCode <= 57)" @blur="formatInputSinPesos('input_tons_co2')"></input><!--:value="proyecto.tons_co2"-->
                                         <label v-else></label>
                                     </td>
                                     <td v-for="(cantidad,index) in columnaImpactoAmbiental.length" class="bg-warning" :key="index"><!--:value="proyecto.dato"-->
@@ -1125,13 +1127,14 @@ if (isset($_SESSION['nombre'])) {
                                         <label v-else></label>
                                     </td>
                                     <td>
-                                        <input v-if="actualizatabla==true" type="text" v-model="input_ahorro_suave"></input> <!--:value="proyecto.ahorro_duro"-->
+                                        <input v-if="actualizatabla==true" type="text" v-model="input_ahorro_duro" onkeypress="return (event.charCode >= 48 && event.charCode <= 57)"   @blur="formatInputPesos('input_ahorro_duro')" ></input> <!--:value="proyecto.ahorro_suave"-->
                                         <label v-else></label>
                                     </td>
                                     <td>
-                                        <input v-if="actualizatabla==true" type="text" v-model="input_ahorro_duro"></input> <!--:value="proyecto.ahorro_suave"-->
+                                        <input v-if="actualizatabla==true" type="text" v-model="input_ahorro_suave" onkeypress="return (event.charCode >= 48 && event.charCode <= 57)"   @blur="formatInputPesos('input_ahorro_suave')"></input> <!--:value="proyecto.ahorro_duro"-->
                                         <label v-else></label>
                                     </td>
+                                   
                                     <td></td>
                                 </tr>
                             <tbody>
