@@ -4,7 +4,7 @@ function consultarProyectos()
 {
 }
 
-function guardarSeguimietoInicial($id_proyecto, $desde, $hasta, $toneladas, $inputImpactoAmbiental, $suave, $duro)
+function guardarSeguimietoInicial($id_proyecto, $mes, $anio, $toneladas, $inputImpactoAmbiental, $suave, $duro)
 {
     global $conexion;
     $resultado = [];
@@ -39,22 +39,27 @@ function guardarSeguimietoInicial($id_proyecto, $desde, $hasta, $toneladas, $inp
                     $stmt->execute();
                     $stmt->store_result();
 
-                   /* if ($stmt->num_rows <= 0) {*/
-                        $query_insert = "INSERT INTO registros_impacto_ambiental (id_impacto_ambiental_proyecto,fecha_inicial,fecha_final,tons_co2,dato,ahorro_suave,ahorro_duro) VALUES (?,?,?,?,?,?,?)";
-                        $stmt_insert = $conexion->prepare($query_insert);
-                        if ($stmt_insert) {
-                            $stmt_insert->bind_param("issssss", $id_impacto, $desde, $hasta, $toneladas, $datos, $suave, $duro);
-                            if ($stmt_insert->execute()) {
-                                $estado = true;
-                            } else {
-                                $estado = "No se inserto el registro: " . $id_impacto . " Todos los ides" . print_r($ids_impactos) . "ERRR" . $stmt_insert->error;
-                            }
+                    /* if ($stmt->num_rows <= 0) {*/
+                    $mes_anio = $mes . "-" . $anio;
+                    $mes = (int)$mes;
+                    $anio = (int)$anio;
 
-                            $stmt_insert->close();
+
+                    $query_insert = "INSERT INTO registros_impacto_ambiental (id_impacto_ambiental_proyecto,mes,anio,tons_co2,mes_anio,dato,ahorro_suave,ahorro_duro) VALUES (?,?,?,?,?,?,?,?)";
+                    $stmt_insert = $conexion->prepare($query_insert);
+                    if ($stmt_insert) {
+                        $stmt_insert->bind_param("iiisssss", $id_impacto, $mes, $anio, $toneladas, $mes_anio, $datos, $suave, $duro);
+                        if ($stmt_insert->execute()) {
+                            $estado = true;
                         } else {
-                            $estado = "Error en la preparación de la consulta de inserción: " . $conexion->error;
+                            $estado = "No se inserto el registro: " . $id_impacto . " Todos los ides" . print_r($ids_impactos) . "ERRR" . $stmt_insert->error;
                         }
-                   /* } else {
+
+                        $stmt_insert->close();
+                    } else {
+                        $estado = "Error en la preparación de la consulta de inserción: " . $conexion->error;
+                    }
+                    /* } else {
                         $nuevo = "nuevo"; //aqui insertar los nuevo meses pero debes de cambiar el mes_anio para que se coloque como un nuevo bloque.
                     }*/
 
@@ -77,21 +82,24 @@ function insertarProyecto($id_proyecto)
 {
 }
 
-function actualizarRegistroImpactoAmbiental($id_proyecto, $desde, $hasta, $toneladas, $idsInputImpactoAmbiental, $inputImpactoAmbiental, $suave, $duro)
+function actualizarRegistroImpactoAmbiental($id_proyecto, $mes, $anio, $toneladas, $idsInputImpactoAmbiental, $inputImpactoAmbiental, $suave, $duro)
 {
     global $conexion;
     $id = intval($id_proyecto);
     $estado = false;
 
+    $mes = (int)$mes;
+    $anio = (int)$anio;
+    $mes_anio = $mes . "-" . $anio;
     $cantidad_registro = count($idsInputImpactoAmbiental);
     $vueltas = 0;
     for ($i = 0; $i < $cantidad_registro; $i++) {
         $id = $idsInputImpactoAmbiental[$i]; //continen los id de la tabla registros_impacto_ambiental
         $dato = $inputImpactoAmbiental[$i];
 
-        $update = "UPDATE registros_impacto_ambiental SET fecha_inicial=?,fecha_final=?,tons_co2=?,dato=?,ahorro_suave=?,ahorro_duro=? WHERE  id=?"; //,mes_anio=? pendiente
+        $update = "UPDATE registros_impacto_ambiental SET mes=?,anio=?,tons_co2=?,mes_anio=?,dato=?,ahorro_suave=?,ahorro_duro=? WHERE  id=?"; //,mes_anio=? pendiente
         $stmt = $conexion->prepare($update);
-        $stmt->bind_param("ssssssi", $desde, $hasta, $toneladas, $dato, $suave, $duro, $id);
+        $stmt->bind_param("iisssssi", $mes, $anio, $toneladas, $mes_anio, $dato, $suave, $duro, $id);
         if ($stmt->execute()) {
             $estado = true;
         } else {

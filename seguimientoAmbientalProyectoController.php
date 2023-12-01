@@ -15,13 +15,13 @@ if (isset($_SESSION['nombre'])) {
             // Manejar solicitud POST (creación)
             if (isset($arreglo['id_proyecto'])) {
                 $id_proyecto = $arreglo['id_proyecto'];
-                $desde = $arreglo['desde'];
-                $hasta = $arreglo['hasta'];
+                $mes = $arreglo['mes'];
+                $anio = $arreglo['anio'];
                 $toneladas = $arreglo['input_tons_co2'];
                 $inputImpactoAmbiental = $arreglo['inputImpactoAmbiental'];
                 $suave = $arreglo['input_ahorro_suave'];
                 $duro = $arreglo['input_ahorro_duro'];
-                $val[] = guardarSeguimietoInicial($id_proyecto, $desde, $hasta, $toneladas, $inputImpactoAmbiental, $suave, $duro);
+                $val[] = guardarSeguimietoInicial($id_proyecto, $mes, $anio, $toneladas, $inputImpactoAmbiental, $suave, $duro);
             } else {
                 $val[] = "No llegaron todas las variables";
             }
@@ -31,14 +31,14 @@ if (isset($_SESSION['nombre'])) {
             // Manejar solicitud PUT (actualización)
             if (isset($arreglo['id_proyecto'])) {
                 $id_proyecto = $arreglo['id_proyecto'];
-                $desde = $arreglo['desde'];
-                $hasta = $arreglo['hasta'];
+                $mes = $arreglo['mes'];
+                $anio = $arreglo['anio'];
                 $toneladas = $arreglo['input_tons_co2'];
                 $inputImpactoAmbiental = $arreglo['inputImpactoAmbiental'];
                 $idsInputImpactoAmbiental = $arreglo['idsInputImpactoAmbiental'];
                 $suave = $arreglo['input_ahorro_suave'];
                 $duro = $arreglo['input_ahorro_duro'];
-                $val[] = actualizarRegistroImpactoAmbiental($id_proyecto, $desde, $hasta, $toneladas, $idsInputImpactoAmbiental,$inputImpactoAmbiental, $suave, $duro);
+                $val[] = actualizarRegistroImpactoAmbiental($id_proyecto, $mes, $anio, $toneladas, $idsInputImpactoAmbiental, $inputImpactoAmbiental, $suave, $duro);
             } else {
                 $val[] = "No llegaron todas las variables";
             }

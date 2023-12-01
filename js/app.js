@@ -93,11 +93,11 @@ const AltaProyectos = {
       inputImpactoAmbientalInicial: [],
       seguimientos: 0,
       idsInputImpactoAmbiental: [],
-      login:false,
-      months:['Enero', 'Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
-      years: [2023,2024,2025,2026,2027,2028,2029,2030,2031,2032,2033,2034,2035,2036,2037,2038,2039,2040,2041,2042,2043,2044,2045,2046,2047,2048,2049,2050],
-      mes_select:1,
-      anio_select:2023,
+      login: false,
+      months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+      years: [2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035, 2036, 2037, 2038, 2039, 2040, 2041, 2042, 2043, 2044, 2045, 2046, 2047, 2048, 2049, 2050],
+      mes_select: 1,
+      anio_select: 2023,
     }
   },
   mounted() {
@@ -1800,7 +1800,7 @@ const AltaProyectos = {
           headers: { "Content-Type": "multipart/form-data" }
         })
         .then(response => {
-          
+
           console.log(response.data);
           this.imagenes = response.data;
           if (this.imagenes.length > 0) {
@@ -1816,9 +1816,9 @@ const AltaProyectos = {
           this.login = false
           console.log(error);
         }).finally(() => {
-            setTimeout(()=>{
-              this.login = false
-            },3000)
+          setTimeout(() => {
+            this.login = false
+          }, 3000)
         });
     },
     verificarAltaProyecto() {
@@ -2185,7 +2185,7 @@ const AltaProyectos = {
       alert(valor);
       this.fecha_desde = valor;
     },
-    
+
     /*/////////////////////////////////////////////////////////////////////////////////INSERTAR PLANTA*/
     guardarSeguimiento() {
 
@@ -2236,8 +2236,8 @@ const AltaProyectos = {
 
       axios.put('seguimientoAmbientalProyectoController.php', {
         id_proyecto: this.id_proyecto,
-        desde: this.fecha_desde,
-        hasta: this.fecha_hasta,
+        mes: this.mes_select,
+        anio: this.anio_select,
         input_tons_co2: this.input_tons_co2,
         inputImpactoAmbiental: this.inputImpactoAmbiental[posicion],
         idsInputImpactoAmbiental: this.idsInputImpactoAmbiental[posicion],
@@ -2260,6 +2260,11 @@ const AltaProyectos = {
 
       })
     },
+    mostrandoMes(mes) {
+
+      return this.months[(mes - 1)];//mes es 1 -12 y le resto 1 paratomar la poscion del mes
+
+    },
     nuevoLimpiarVariables() {
       this.fecha_desde = ''
       this.fecha_hasta = ''
@@ -2267,11 +2272,11 @@ const AltaProyectos = {
       this.input_ahorro_duro = ''
       this.input_ahorro_suave = ''
     },
-    asiganarDatosActualizar(posicion) {
+    asignarDatosActualizar(posicion) {
       this.actualizar = 0
       this.actualizar = (posicion + 1)
-      this.fecha_desde = this.arregloID[posicion].fecha_inicial
-      this.fecha_hasta = this.arregloID[posicion].fecha_final
+      this.mes_select = this.arregloID[posicion].mes
+      this.anio_select = this.arregloID[posicion].anio
       this.input_tons_co2 = this.arregloID[posicion].tons_co2
       this.input_ahorro_duro = this.arregloID[posicion].ahorro_duro
       this.input_ahorro_suave = this.arregloID[posicion].ahorro_suave

@@ -67,7 +67,7 @@ function consultarImpactosXproyectoID($id_proyecto)
             $posiciones_por_mes_anio = array();
             while ($fila = $recuperando->fetch_assoc()) {
                 $mes_anio = $fila['mes_anio'];
-            
+
                 // Verificar si ya hay una posición para este mes_anio
                 if (isset($posiciones_por_mes_anio[$mes_anio])) {
                     $posicion = $posiciones_por_mes_anio[$mes_anio];
@@ -77,7 +77,7 @@ function consultarImpactosXproyectoID($id_proyecto)
                     $posiciones_por_mes_anio[$mes_anio] = $posicion;
                     $resultado2[$posicion] = array();
                 }
-    
+
                 // Agregar fila al subarreglo correspondiente al mes_anio
                 $resultado2[$posicion][] = $fila;
             }
@@ -89,7 +89,7 @@ function consultarImpactosXproyectoID($id_proyecto)
 
 
 
-    return array($resultado, $estado1, $resultado2, $estado2, $id_proyecto,$error);
+    return array($resultado, $estado1, $resultado2, $estado2, $id_proyecto, $error);
 }
 
 
