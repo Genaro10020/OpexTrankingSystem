@@ -95,7 +95,7 @@ const AltaProyectos = {
       idsInputImpactoAmbiental: [],
       login: false,
       months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-      years: [2020,2021,2022,2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035, 2036, 2037, 2038, 2039, 2040, 2041, 2042, 2043, 2044, 2045, 2046, 2047, 2048, 2049, 2050],
+      years: [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035, 2036, 2037, 2038, 2039, 2040, 2041, 2042, 2043, 2044, 2045, 2046, 2047, 2048, 2049, 2050],
       mes_select: 1,
       anio_select: 2023,
     }
@@ -117,7 +117,7 @@ const AltaProyectos = {
         if (response.data[0][1] == true) {
           if (response.data[0][0].length > 0) {
             this.proyectos = response.data[0][0];
-          }else{
+          } else {
             this.proyectos = []
           }
         } else {
@@ -2150,13 +2150,13 @@ const AltaProyectos = {
       }
     },
     asignarValor(input) {//asigno el formato a las varitnles
-        if (input === "tons_co2") {
-          this.tons_co2 = document.getElementById('tons_co2').value;
-        } else if (input === "ahorro_duro") {
-          this.ahorro_duro = document.getElementById('ahorro_duro').value;
-        } else if (input === "ahorro_suave") {
-          this.ahorro_suave = document.getElementById('ahorro_suave').value;
-        }
+      if (input === "tons_co2") {
+        this.tons_co2 = document.getElementById('tons_co2').value;
+      } else if (input === "ahorro_duro") {
+        this.ahorro_duro = document.getElementById('ahorro_duro').value;
+      } else if (input === "ahorro_suave") {
+        this.ahorro_suave = document.getElementById('ahorro_suave').value;
+      }
     },
     obtenerPrefijo(folioCompleto) {
       var posicionUltimoGuion = folioCompleto.lastIndexOf("-");
@@ -2164,7 +2164,7 @@ const AltaProyectos = {
     },
     formatInputPesos(varvue) {
       // Llama a la función formatMoneda y actualiza input_tons_co2 con el valor formateado
-    // Llama a la función formatMoneda y actualiza la variable con el valor formateado
+      // Llama a la función formatMoneda y actualiza la variable con el valor formateado
       this[varvue] = this.formatMonedaPesos(this[varvue])
     },
     formatMonedaPesos(value) {
@@ -2187,6 +2187,12 @@ const AltaProyectos = {
       let numeroFormateado = parseFloat(valorCampo).toFixed(2); // Se ajusta para tener dos decimales
       // Devolver el valor formateado sin el signo de dólar
       return numeroFormateado.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+    formatInputSinPesosImpactoAmbiental(index) {//Primer y Nuevo Registro
+      this.inputImpactoAmbientalInicial[index] = this.formatMonedaSinPesos(this.inputImpactoAmbientalInicial[index]);
+    },
+    formatInputSinPesosImpactoAmbientalPosicion(posicion, index) {//Actualizacion
+      this.inputImpactoAmbiental[posicion][index] = this.formatMonedaSinPesos(this.inputImpactoAmbiental[posicion][index]);
     },
     modalCatalogos(accion, tipo, id, nombre, cantidad, siglas, unidadMedida, misionLigada, n_mision, id_mision_ligada) {//accion: es CREAR, ACTUALIZAR, ELIMINAR y tipo: es Pilares, Misiones, Objetivos.
       this.id = ''
@@ -2239,20 +2245,6 @@ const AltaProyectos = {
     /*/////////////////////////////////////////////////////////////////////////////////INSERTAR PLANTA*/
     guardarSeguimiento() {
 
-      /*var inicial = document.getElementById("inicial"+(posicion+1)).value;
-      var hasta = document.getElementById("hasta"+(posicion+1)).value;
-      var toneladas = document.getElementById("toneladas"+(posicion+1)).value;
-      var duro = document.getElementById("duro"+(posicion+1)).value;
-      var suave = document.getElementById("suave"+(posicion+1)).value;
- 
-      this.fecha_desde = inicial
-      this.fecha_hasta = hasta
-      this.input_tons_co2 = toneladas
-      this.input_ahorro_suave = duro
-      this.input_ahorro_duro = suave*/
-
-      //console.log("id Proyecto" + this.id_proyecto + "Desde: " + this.fecha_desde + " Hasta: " + this.fecha_hasta + " Toneladas:" + this.input_tons_co2 + "Impacto Ambielta: " + this.inputImpactoAmbiental + " Ahorro Duro: " + this.input_ahorro_suave + " Ahorra: " + this.input_ahorro_duro);
-
       axios.post('seguimientoAmbientalProyectoController.php', {
         id_proyecto: this.id_proyecto,
         mes: this.mes_select,
@@ -2264,15 +2256,17 @@ const AltaProyectos = {
       }).then(response => {
         console.log(response.data)
         if (response.data[0][0] == true) {
-          this.actualizar = 0
-          this.actualizatabla = false
-          this.consultarImpactoAmbieltalXProyectoID()
-          if(response.data[0][3]==true){
+
+
+          if (response.data[0][3] == true) {
             alert("Ya existe esa fecha")
-          }else{
+          } else {
+            this.actualizar = 0
+            this.actualizatabla = false
+            this.consultarImpactoAmbieltalXProyectoID()
             alert("Se inserto con éxito")
           }
-          
+
         } else {
           alert("La inserción de Planta, no se realizo correctamente.")
         }
@@ -2308,7 +2302,6 @@ const AltaProyectos = {
         } else {
           alert("La actualizacion, no se realizo correctamente.")
         }
-
       }).catch(error => {
         console.log('Erro :-(' + error)
       }).finally(() => {
