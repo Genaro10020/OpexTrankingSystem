@@ -12,15 +12,17 @@ function guardarSeguimietoInicial($id_proyecto, $mes, $anio, $toneladas, $inputI
     $largo = 0;
     $existe = false;
     $id = intval($id_proyecto);
-    $estado = false;
+    $estado1 = false;
+    $estado2 = false;
+    $estado3 = false;
     $query = "SELECT id FROM impacto_ambiental_proyecto WHERE id_proyecto =?";
     $stmt = $conexion->prepare($query);
     if (!$stmt) {
-        return $error = "Error en la consulta" . $conexion->error;;
+        return $estado1 = "Error en la consulta" . $conexion->error;;
     } else {
         $stmt->bind_param("i", $id);
         if ($stmt->execute()) {
-            $estado = true;
+            $estado1 = true;
             $recuperando = $stmt->get_result();
             while ($fila = $recuperando->fetch_assoc()) {
                 $ids_impactos[] = $fila;
@@ -35,6 +37,7 @@ function guardarSeguimietoInicial($id_proyecto, $mes, $anio, $toneladas, $inputI
             $query = "SELECT registros_impacto_ambiental.mes_anio FROM  registros_impacto_ambiental JOIN impacto_ambiental_proyecto ON impacto_ambiental_proyecto.id = registros_impacto_ambiental.id_impacto_ambiental_proyecto WHERE impacto_ambiental_proyecto.id_proyecto = ? AND registros_impacto_ambiental.mes_anio = ?";
             $stmt = $conexion->prepare($query);
             if ($stmt) {
+                $estado2 = true; 
                 $stmt->bind_param("is", $id_proyecto, $mes_anio);
                 $stmt->execute();
                 $resultados = $stmt->get_result();
@@ -54,26 +57,27 @@ function guardarSeguimietoInicial($id_proyecto, $mes, $anio, $toneladas, $inputI
                         if ($stmt_insert) {
                             $stmt_insert->bind_param("iiisssss", $id_impacto, $mes, $anio, $toneladas, $mes_anio, $datos, $suave, $duro);
                             if ($stmt_insert->execute()) {
-                                $estado = true;
+                                $estado3 = true;
                             } else {
-                                $estado = "No se inserto el registro: " . $id_impacto . " Todos los ides" . print_r($ids_impactos) . "ERRR" . $stmt_insert->error;
+                              $estado3 = false;
+                              break;
                             }
                             $stmt_insert->close();
                         } else {
-                            $estado = "Error en la preparación de la consulta de inserción: " . $conexion->error;
+                            return $estado3 = "Error en la preparación de la consulta de inserción: " . $conexion->error;
                         }
                     }
                 }
 
                 $stmt->close();
             } else {
-                $estado = "Error en la preparación de la consulta: " . $conexion->error;
+                $estado2 = "Error en la preparación de la consulta: " . $conexion->error;
             }
 
             // Después del bucle, puedes devolver solo el estado, ya que el array $ids_impactos no parece ser necesario en este contexto
-            return array($estado, $ids_impactos, $id_impacto, $existe, $cantidad, $anio_mes_en_tabla, $mes_anio);
+            return array($estado1,$estado2,$estado3, $existe, $ids_impactos, $id_impacto, $cantidad, $anio_mes_en_tabla, $mes_anio);
         } else {
-            return $error = "Error en la ejecución de la consulta";
+            $estado1 = "Error en la ejecución de la consulta";
         }
     }
 }
