@@ -1146,18 +1146,239 @@ if (isset($_SESSION['nombre'])) {
                 <div v-if="ventana=='Generar Valor'">
 
                     <div class=" col-12 col-lg-5 imagenBatery">
-                        <div class="positionBaterycontainer position-absolute top-50 start-50 translate-middle mt-4">
+                        <div class="positionBaterycontainer position-absolute top-50 start-50 translate-middle mt-3">
                             <div>
-                                <table>
+                                <div class="container row col-12">
+                                    <div class="col-8 mt-1 bg-success text-white text-center">
+                                        <span>Generar valor sustentable</span>
+                                    </div>
+                                    <div class="col-4">
+                                        <table class="ms-3 mt-1 text-center w-100 ">
+                                            <thead class="border border-dark">
+                                                <tr scope="col">
+                                                 <th  class="border border-dark ">Valor</th>
+                                                 <td  class="border border-dark">dato1</td>
+                                                </tr>
+                                                <tr scope="row">
+                                                 <th  class="border border-dark">ilegible</th>
+                                                 <td  class="border border-dark">dato2</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    
+                                </div>
+                                <div class="d-flex justify-content-around pt-1 ">
+                                    <div class="bg-success col-3 px-2">
+                                        <div class="d-flex  text-center text-white">
+                                            <span class="col-8 mt-3">Cliente</span>
+                                            <table class="col-4  mt-1  text-center  table-bordered border-dark  ">
+                                                <thead>
+                                                    
+                                                </thead>
+                                                <tbody class="bg-white">
+                                                    <tr>
+                                                        <th scope="row">1</th>
+                                                    </tr> 
+                                                    <tr>
+                                                        <td>2</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <table class=" text-center table table-bordered border-dark  ">
+                                            <thead>
+                                                
+                                            </thead>
+                                            <tbody class="bg-white">
+                                            <tr>
+                                                    <th scope="row">1 </th>
+                                                    <td>2</td>
+                                                </tr>  
+                                                <tr>
+                                                    <th scope="row">1 </th>
+                                                    <td>2</td>
+                                                </tr>  
+                                                <tr>
+                                                    <th scope="row">1 </th>
+                                                    <td>2</td>
+                                                </tr>  
+                                                <tr>
+                                                    <th scope="row">1 </th>
+                                                    <td>2</td>
+                                                </tr> 
+                                                <tr>
+                                                    <th scope="row">1 </th>
+                                                    <td>2</td>
+                                                </tr>  
+                                                
+                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="bg-info col-3 px-2">
+                                        <div class="d-flex text-center text-white">
+                                            <span class="col-8 mt-3">Capital humano</span>
+                                            <table class="col-4 mt-1 text-center  table-bordered border-dark  " style="max-width-50px">
+                                                <thead>
+                                                    
+                                                </thead>
+                                                <tbody class="bg-white">
+                                                    <tr>
+                                                        <th scope="row">1</th>
+                                                    </tr> 
+                                                    <tr>
+                                                        <td>2</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <table class=" text-center table table-bordered border-dark  ">
+                                            <thead>
+                                                
+                                            </thead>
+                                            <tbody class="bg-white">
+                                            <tr>
+                                                    <th scope="row">1 </th>
+                                                    <td>2</td>
+                                                </tr>  
+                                                <tr>
+                                                    <th scope="row">1 </th>
+                                                    <td>2</td>
+                                                </tr>  
+                                                <tr>
+                                                    <th scope="row">1 </th>
+                                                    <td>2</td>
+                                                </tr>  
+                                                <tr>
+                                                    <th scope="row">1 </th>
+                                                    <td>2</td>
+                                                </tr> 
+                                                <tr>
+                                                    <th scope="row">1 </th>
+                                                    <td>2</td>
+                                                </tr>  
+                                                
+                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="bg-warning col-3 px-2">
+                                        <div class="d-flex text-center text-white">
+                                            <span class="col-8 mt-3">Excelencia operativa</span>
+                                            <table class="col-4 mt-1 text-center  table-bordered border-dark  " style="max-width-50px">
+                                                <thead>
+                                                    
+                                                </thead>
+                                                <tbody class="bg-white">
+                                                    <tr>
+                                                        <th scope="row">1</th>
+                                                    </tr> 
+                                                    <tr>
+                                                        <td>2</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <table class=" text-center table table-bordered border-dark  ">
+                                            <thead>
+                                                
+                                            </thead>
+                                            <tbody class="bg-white">
+                                            <tr>
+                                                    <th scope="row">1 </th>
+                                                    <td>2</td>
+                                                </tr>  
+                                                <tr>
+                                                    <th scope="row">1 </th>
+                                                    <td>2</td>
+                                                </tr>  
+                                                <tr>
+                                                    <th scope="row">1 </th>
+                                                    <td>2</td>
+                                                </tr>  
+                                                <tr>
+                                                    <th scope="row">1 </th>
+                                                    <td>2</td>
+                                                </tr> 
+                                                <tr>
+                                                    <th scope="row">1 </th>
+                                                    <td>2</td>
+                                                </tr>  
+                                                
+                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="bg-danger col-3 px-2">
+                                        <div class="d-flex text-center text-white">
+                                            <span class="col-8 mt-2">investigacion y desarrollo</span>
+                                            <table class="col-4 mt-1 text-center  table-bordered border-dark  " style="max-width-50px">
+                                                <thead>
+                                                    
+                                                </thead>
+                                                <tbody class="bg-white">
+                                                    <tr>
+                                                        <th scope="row">1</th>
+                                                    </tr> 
+                                                    <tr>
+                                                        <td>2</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <table class=" text-center table table-bordered border-dark  ">
+                                            <thead>
+                                                
+                                            </thead>
+                                            <tbody class="bg-white">
+                                            <tr>
+                                                    <th scope="row">1 </th>
+                                                    <td>2</td>
+                                                </tr>  
+                                                <tr>
+                                                    <th scope="row">1 </th>
+                                                    <td>2</td>
+                                                </tr>  
+                                                <tr>
+                                                    <th scope="row">1 </th>
+                                                    <td>2</td>
+                                                </tr>  
+                                                <tr>
+                                                    <th scope="row">1 </th>
+                                                    <td>2</td>
+                                                </tr> 
+                                                <tr>
+                                                    <th scope="row">1 </th>
+                                                    <td>2</td>
+                                                </tr>  
+                                                
+                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+
+                                </div>
+                                <!-- <table>
                                     <thead>
-                                        <th></th>
-                                       
+                                        <th>1</th>
+                                        <th>2</th>
+                                        <th>3</th>
                                     </thead>
-                                    <tbody>
-                                        <td>Trabajando..</td>
-                                        
+                                    <tbody> 
+                                        <td>1</td>
+                                        <td>2</td>
+                                        <td>3</td>
                                     </tbody>
-                                </table>
+                                </table> -->
                             </div>
                         </div>
                     </div>
