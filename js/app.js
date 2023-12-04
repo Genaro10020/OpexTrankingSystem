@@ -2171,7 +2171,9 @@ const AltaProyectos = {
       const options2 = { style: 'currency', currency: 'USD', minimumFractionDigits: 2 };
       const numberFormat2 = new Intl.NumberFormat('en-US', options2);
       // Obtener el valor actual del campo y eliminar caracteres no deseados
+      
       var valorCampo = value.replace(/[^\d.]/g, '');
+      if(valorCampo==''){valorCampo =0}
       // Formatear el valor como un número
       let numeroFormateado = parseFloat(valorCampo).toFixed(2);
       // Aplicar el formato de número
@@ -2182,7 +2184,9 @@ const AltaProyectos = {
     },
     formatMonedaSinPesos(value) {
       // Obtener el valor actual del campo y eliminar caracteres no deseados
+      if(value=='' || value== undefined ){value ='0'}
       var valorCampo = value.replace(/[^\d.]/g, '');
+      if(valorCampo==''){valorCampo =0}
       // Formatear el valor como un número
       let numeroFormateado = parseFloat(valorCampo).toFixed(2); // Se ajusta para tener dos decimales
       // Devolver el valor formateado sin el signo de dólar

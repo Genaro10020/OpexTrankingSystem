@@ -20,18 +20,18 @@ if (isset($_SESSION['nombre'])) {
 
                 <!--Bóton-->
                 <div class="text-center">
-                    <button class="btn-menu me-3" @click="ventana='Crear',consultarMisionesRelacional(),consultarObjetivosRelacional(),consultarMisiones(),consultarImpactoAmbiental(),consultarEstandaresCO2()">
+                    <button class="btn-menu " @click="ventana='Crear',consultarMisionesRelacional(),consultarObjetivosRelacional(),consultarMisiones(),consultarImpactoAmbiental(),consultarEstandaresCO2()">
                         <i class="bi bi-plus-circle"></i> Crear Catalogos
                     </button>
 
-                    <button class="btn-menu" @click="ventana='Altas'">
+                    <button class="btn-menu me-0 mx-sm-3" @click="ventana='Altas'">
                         <i class="bi bi-plus-circle"></i> Proyectos Creados
                     </button>
 
-                    <button class="btn-menu mx-3" @click="ventana='Seguimiento'">
+                    <button class="btn-menu me-sm-3" @click="ventana='Seguimiento'">
                         <i class="bi bi-plus-circle"></i> Seguimiento
                     </button>
-                    <button class="btn-menu mx-3" @click="ventana='Generar Valor'">
+                    <button class="btn-menu" @click="ventana='Generar Valor'">
                         <i class="bi bi-plus-circle"></i> Competencia
                     </button>
                     <!--Modal Alta Proyectos-->
@@ -1052,10 +1052,10 @@ if (isset($_SESSION['nombre'])) {
                                 <tr>
                                     <th style="background: #848484; color:white;">Actualizar</th>
                                     <th style="background: #848484; color:white;">Fecha</th>
-                                    <th style="background: #848484; color:white;">Tons de CO2 por Evitar</th>
+                                    <th style="background: #848484; color:white;">Tons CO2 por Evitar </th>
                                     <th style="background: #848484; color:white;" v-for="(impacto,index) in columnaImpactoAmbiental" :key="index">{{impacto}}</th>
-                                    <th style="background: #848484; color:white;">Ahorro Duro</th>
-                                    <th style="background: #848484; color:white;">Ahorro Suave </th>
+                                    <th style="background: #848484; color:white;">Ahorro Duro $MXN/Año</th>
+                                    <th style="background: #848484; color:white;">Ahorro Suave $MXN/Año</th>
                                     <th style="background: #848484; color:white;">Estatus</th>
                                 </tr>
                             </thead>
@@ -1150,14 +1150,12 @@ if (isset($_SESSION['nombre'])) {
                             <div>
                                 <table>
                                     <thead>
-                                        <th>1</th>
-                                        <th>2</th>
-                                        <th>3</th>
+                                        <th></th>
+                                       
                                     </thead>
                                     <tbody>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>3</td>
+                                        <td>Trabajando..</td>
+                                        
                                     </tbody>
                                 </table>
                             </div>
@@ -1166,15 +1164,13 @@ if (isset($_SESSION['nombre'])) {
 
                 </div>
                 <!--////////////////////////////////////////////// FIN DE COMPETENCIA -->
-
-
             </div><!--cuerpo-->
 
             <div class="footer row" style="min-height:10vh;"> <!--pie-->
 
             </div>
         </div><!--div motando js-->
-        <script src="js/app.js"></script>
+        <script src="js/app.js?<?php echo time(); ?>"></script>
 
     </body>
 
