@@ -36,12 +36,8 @@ function consultarProyectosID($id_proyecto)
     return array($resultado, $estado);
 }
 
-function insertarProyecto($folio, $fecha_alta, $nombre_proyecto, $planta, $area, $departamento, $metodologia, $responsable_id, $misiones, $pilares, $objetivos, $impacto_ambiental, $tons_co2, $ahorro_duro, $ahorro_suave)
+function insertarProyecto($folio, $fecha_alta, $nombre_proyecto, $fuente, $planta, $area, $departamento, $metodologia, $responsable_id, $misiones, $pilares, $objetivos, $impacto_ambiental, $tons_co2, $ahorro_duro, $ahorro_suave)
 {
-
-
-
-
     global $conexion;
     $folio_sin_numero = "";
     $folio_recuperado = "";
@@ -84,9 +80,9 @@ function insertarProyecto($folio, $fecha_alta, $nombre_proyecto, $planta, $area,
         $fecha_invertida = $separando[2] . "-" . $separando[1] . "-" . $separando[0];
         $estado  = true;
         //Inserto el proyecto
-        $query = "INSERT INTO proyectos_creados (folio,fecha, nombre_proyecto, planta, area, departamento, metodologia, responsable,correo,telefono, misiones,pilares,objetivos,impacto_ambiental, tons_co2, ahorro_duro, ahorro_suave) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $query = "INSERT INTO proyectos_creados (folio,fecha, fuente, nombre_proyecto, planta, area, departamento, metodologia, responsable,correo,telefono, misiones,pilares,objetivos,impacto_ambiental, tons_co2, ahorro_duro, ahorro_suave) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $stmt = $conexion->prepare($query);
-        $stmt->bind_param("sssssssssssssssss", $nuevo_folio, $fecha_invertida, $nombre_proyecto, $planta, $area, $departamento, $metodologia, $nombre_responsable, $correo_responsable, $telefono_responsable, $misiones, $pilares, $objetivos, $impacto_ambiental, $tons_co2, $ahorro_duro, $ahorro_suave);
+        $stmt->bind_param("ssssssssssssssssss", $nuevo_folio, $fecha_invertida, $fuente, $nombre_proyecto, $planta, $area, $departamento, $metodologia, $nombre_responsable, $correo_responsable, $telefono_responsable, $misiones, $pilares, $objetivos, $impacto_ambiental, $tons_co2, $ahorro_duro, $ahorro_suave);
         if ($stmt->execute()) {
             $estado = true;
             //insertado el proyecto, ahora inserto los impactos ambientales en otra tabla

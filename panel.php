@@ -20,7 +20,7 @@ if (isset($_SESSION['nombre'])) {
 
                 <!--Bóton-->
                 <div class="text-center">
-                    <button class="btn-menu " @click="ventana='Crear',consultarMisionesRelacional(),consultarObjetivosRelacional(),consultarMisiones(),consultarImpactoAmbiental(),consultarEstandaresCO2()">
+                    <button class="btn-menu " @click="ventana='Crear',consultarMisionesRelacional(),consultarObjetivosRelacional(),consultarMisiones(),consultarImpactoAmbiental(),consultarEstandaresCO2(),consultarFuentes()">
                         <i class="bi bi-plus-circle"></i> Crear Catalogos
                     </button>
 
@@ -56,6 +56,14 @@ if (isset($_SESSION['nombre'])) {
                                                 <span class="input-group-text w-25">Nombre Proyecto</span>
                                                 <input type="text" class="w-50" v-model="nombre_proyecto" :class="{'nocontestado': respondio === false && nombre_proyecto === '', '':nombre_proyecto !== ''}">
                                                 <div v-if="nombre_proyecto !==''" class=" text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                            </div>
+
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text w-25">Fuente</span>
+                                                <select v-model="selectFuente" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectFuente === '', '': selectFuente !== ''}">
+                                                    <option value="" selected disabled>Seleccione..</option>
+                                                    <option v-for="fuente in fuentes" :value="fuente.id +'<->'+ fuente.nombre+'<->'+fuente.siglas">{{fuente.nombre}} ({{fuente.siglas}})</option>
+                                                </select>
                                             </div>
 
                                             <!---Planta-->
@@ -522,6 +530,7 @@ if (isset($_SESSION['nombre'])) {
                             <thead class="sticky-top">
                                 <th>Fecha</th>
                                 <th>Folio</th>
+                                <th>Fuente</th>
                                 <th>Nombre Proyecto</th>
                                 <th>Planta</th>
                                 <th>Área</th>
@@ -541,11 +550,12 @@ if (isset($_SESSION['nombre'])) {
                             <tbody class=" border:1px solid black" style="text-align: center">
                                 <template v-for="(proyecto,index) in proyectos">
                                     <tr v-if="folioAnteriorSinNumeral(proyecto.folio, index)" :class="{ 'divisor-tr-creados': folioAnteriorSinNumeral(proyecto.folio, index)==true}"><!--ES DIFERENTE--->
-                                        <td colspan="17" v-if="index>0"></td>
+                                        <td colspan="18" v-if="index>0"></td>
                                     </tr>
                                     <tr class="cuerpo-tabla-creados border border-secondary" style="vertical-align: middle;" :class="{ 'fila-ultimo-proyecto': buscandoUltimoProyectoCreado(proyecto.nombre_proyecto) }">
                                         <td class="border border-secondary">{{proyecto.fecha}}</td>
                                         <td class="border border-secondary" style="min-width:150px;">{{proyecto.folio}}</td>
+                                        <td class="border border-secondary">{{proyecto.fuente}}</td>
                                         <td class="border border-secondary">{{proyecto.nombre_proyecto}}</td>
                                         <td class="border border-secondary">{{proyecto.planta}}</td>
                                         <td class="border border-secondary">{{proyecto.area}}</td>
@@ -824,7 +834,7 @@ if (isset($_SESSION['nombre'])) {
                         </div>
                     </div>
                     <!-- INICIO TABLA ESTANDARES CO2 -->
-                    <div class="col-12 col-xl-6 col-lg-6 offset-lg-3 offset-xl-3 text-center mt-5">
+                    <div class="col-12 col-lg-6">
                         <div class=" encabezadoTablas">
                             <div class=" d-flex justify-content-center align-items-center">
                                 <div class="d-none d-lg-block col-lg-4"></div>
@@ -875,6 +885,57 @@ if (isset($_SESSION['nombre'])) {
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                    <!--TABLA DE FUENTES-->
+                    <div class="col-12 col-lg-6">
+                        <div class="col-12  text-center align-content">
+                            <div class=" encabezadoTablas">
+                                <div class=" d-flex justify-content-center align-items-center">
+                                    <div class="d-none d-lg-block col-lg-4"></div>
+                                    <div class="col-6 col-lg-4 mt-2">Fuentes</div>
+                                    <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
+                                        <button type="button" class=" btn btn-menu " @Click="modalCatalogos('Crear','Fuente')">Crear</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="scroll">
+                                <table class=" table table-bordered table-striped border border-3 border-secondary">
+                                    <thead>
+                                        <tr class="border border-3 border-secondary">
+                                            <th class="sticky-top thmodal">
+                                                Nombre
+                                            </th>
+                                            <th class="sticky-top thmodal">
+                                                Fuentes
+                                            </th>
+                                            <th class="sticky-top thmodal">
+                                                Eliminar
+                                            </th>
+                                            <th class="sticky-top thmodal">
+                                                Actualizar
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="fuente in fuentes ">
+                                            <td>
+                                                {{fuente.nombre}}
+                                            </td>
+                                            <td>
+                                                {{fuente.siglas}}
+                                            </td>
+                                            <td>
+                                                <button type="button" class="boton-eliminar" @click="eliminarFuente(fuente.id)">Eliminar</button>
+                                            </td>
+                                            <td>
+                                                <button type="button" class="boton-actualizar" @Click="modalCatalogos('Actualizar','Fuente',fuente.id,fuente.nombre,'',fuente.siglas)">Actualizar</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                     <!--MODAL MISION-->
                     <div class="modal fade" id="modalCrearCatalogos" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -942,6 +1003,18 @@ if (isset($_SESSION['nombre'])) {
                                                 </div>
                                                 <span class="input-group-text w-25 mt-3">Unidad De Medida:</span>
                                                 <input v-model="unidadMedida" type="text" class="w-75 mt-3">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--Cuerpo de MODAL FUENTE-->
+                                    <div v-if="tipo=='Fuente'">
+                                        <div>
+                                            <div class="modal-body input-group mb-3">
+                                                <span class="input-group-text w-25 mt-3">Nombre:</span>
+                                                <input v-model="nueva" type="text" class="w-75 mt-3">
+                                                <span class="input-group-text w-25 mt-3">Siglas:</span>
+                                                <input type="text" class="w-75 mt-3" v-model="siglas">
                                             </div>
                                         </div>
                                     </div>
@@ -1016,6 +1089,19 @@ if (isset($_SESSION['nombre'])) {
                                             </div>
                                         </div>
                                     </div>
+                                     <!--CUERPO MODAL ACTUALIZAR FUENTE-->
+                                     <div v-if="tipo=='Fuente'">
+                                        <div>
+                                                <div class="input-group mb-3 mt-3  px-3">
+                                                    <span class="input-group-text w-25">Nombre:</span>
+                                                    <input v-model="nuevoNombre" type="text" class="w-75">
+                                                </div>
+                                                <div class="input-group mb-3  px-3" >
+                                                    <span class="input-group-text w-25">Siglas:</span>
+                                                    <input v-model="siglas" type="text" class="w-75">
+                                                </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!--BOTONES MODAL CREAR CATALOGO-->
                                 <div class="modal-footer">
@@ -1025,16 +1111,14 @@ if (isset($_SESSION['nombre'])) {
                                     <button type="button" class="boton-aceptar" v-if="tipo=='Objetivo'  && accion=='Crear'" @click="insertarObjetivo()">Crear</button>
                                     <button type="button" class="boton-aceptar" v-if="tipo=='Impacto Ambiental'  && accion=='Crear'" @click="insertarImpactoAmbiental()">Crear</button>
                                     <button type="button" class="boton-aceptar" v-if="tipo=='Estandar'  && accion=='Crear'" @click="insertarEstandaresCO2()">Crear</button>
+                                    <button type="button" class="boton-aceptar" v-if="tipo=='Fuente'  && accion=='Crear'" @click="insertarFuente()">Crear</button>
                                     <!-- BOTON PARA ACTUALIZAR INFORMACION  -->
                                     <button type="button" class="boton-actualizar" v-if="tipo=='Impacto Ambiental' && accion=='Actualizar'" @click="actualizarImpactoAmbiental()">Actualizar</button>
                                     <button type="button" class="boton-actualizar" v-if="tipo=='Estandares' && accion=='Actualizar'" @click="actualizarEstandaresCO2()">Actualizar</button>
                                     <button type="button" class="boton-actualizar" v-if="tipo=='Pilar' && accion=='Actualizar'" @click="actualizarPilares()">Actualizar</button>
                                     <button type="button" class="boton-actualizar" v-if="tipo=='Objetivo' && accion=='Actualizar'" @click="actualizarObjetivos()">Actualizar</button>
                                     <button type="button" class="boton-actualizar" v-if="tipo=='Mision' && accion=='Actualizar'" @click="actualizarMision()">Actualizar</button>
-
-
-
-
+                                    <button type="button" class="boton-actualizar" v-if="tipo=='Fuente' && accion=='Actualizar'" @click="actualizarFuente()">Actualizar</button>
                                 </div>
                             </div>
                         </div>
@@ -1055,8 +1139,8 @@ if (isset($_SESSION['nombre'])) {
                                 <tr>
                                     <th style="background: #848484; color:white;">Actualizar</th>
                                     <th style="background: #848484; color:white;">Fecha</th>
-                                    <th style="background: #848484; color:white;">Tons CO2 por Evitar </th>
-                                    <th style="background: #848484; color:white;" v-for="(impacto,index) in columnaImpactoAmbiental" :key="index">{{impacto}} (Evitados)</th>
+                                    <th style="background: #848484; color:white;">Tons CO2 (Evitados) </th>
+                                    <th style="background: #848484; color:white;" v-for="(impacto,index) in columnaImpactoAmbiental" :key="index">{{impacto}}</th>
                                     <th style="background: #848484; color:white;">Ahorro Duro $MXN/Año</th>
                                     <th style="background: #848484; color:white;">Ahorro Suave $MXN/Año</th>
                                     <th style="background: #848484; color:white;">Estatus</th>

@@ -7,6 +7,7 @@ const AltaProyectos = {
       myModalCRUD: '',
       tipo: '',
       accion: '',
+      selectFuente: '',
       selectPlanta: '',
       selectArea: '',
       selectDepartamento: '',
@@ -18,6 +19,8 @@ const AltaProyectos = {
       /*Alta Proyectos */
       fecha_alta: '',
       nombre_proyecto: '',
+      nombre_fuente: '',
+      fuentes: [],
       departamentos: [],
       metodologias: [],
       pilares: [],
@@ -205,6 +208,25 @@ const AltaProyectos = {
           }
         } else {
           alert("La consulta de proyectos no se realizo correctamente.")
+        }
+      }).catch(error => {
+        console.log('Erro :-(' + error)
+      }).finally(() => {
+
+      })
+    },
+     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR FUENTES*/
+     consultarFuentes() {
+      axios.get('fuentesController.php', {
+      }).then(response => {
+        if (response.data[0][1] == true) {
+          if (response.data[0][0].length > 0) {
+            this.fuentes = response.data[0][0];
+          } else {
+            this.fuentes = []
+          }
+        } else {
+          alert("La consulta de fuentes no se realizo correctamente.")
         }
       }).catch(error => {
         console.log('Erro :-(' + error)
@@ -818,6 +840,34 @@ const AltaProyectos = {
       }
     },
 
+     /*/////////////////////////////////////////////////////////////////////////////////INSERTAR FUENTE*/
+     insertarFuente() {
+      if (this.nueva != '' && this.siglas != '') {
+        axios.post('fuentesController.php', {
+          nueva: this.nueva,
+          siglas: this.siglas
+        }).then(response => {
+          console.log(response.data)
+          if (response.data[0] == true) {
+            this.nueva = ''
+            this.siglas = ''
+            // this.myModalCRUD.hide()
+            this.consultarFuentes()
+            this.myModal.hide();
+            alert('Alta exitosa..');
+          } else {
+            alert("La inserción de Fuente, no se realizo correctamente.")
+          }
+        }).catch(error => {
+          //console.log('Erro :-('+error)
+        }).finally(() => {
+
+        })
+      } else {
+        alert('Todos los campos son obligatorios')
+      }
+    },
+
 
     /*/////////////////////////////////////////////////////////////////////////////////INSERTAR ÁREAS*/
     insertarArea() {
@@ -1200,6 +1250,34 @@ const AltaProyectos = {
         alert("Todos los campos son requeridos para poder actualizar.")
       }
     },
+       /*/////////////////////////////////////////////////////////////////////////////////ACTUALIZAR IMPACTO AMBIENTAL*/
+       actualizarFuente() {
+        if (this.nuevoNombre != '' && this.siglas != '') {
+          axios.put('fuentesController.php', {
+            id: this.id,
+            nuevo: this.nuevoNombre,
+            siglas: this.siglas
+          }).then(response => {
+            console.log(response.data)
+            if (response.data[0] == true) {
+              this.myModal.hide();
+              this.consultarFuentes()
+              this.id = ''
+              this.nuevoNombre = ''
+              this.siglas = ''
+              alert("Se actualizo correctamente.")
+            } else {
+              alert("No se actualizo la Fuente.")
+            }
+          }).catch(error => {
+            //console.log('Erro :-('+error)
+          }).finally(() => {
+  
+          })
+        } else {
+          alert("Todos los campos son requeridos para poder actualizar.")
+        }
+      },
     /*/////////////////////////////////////////////////////////////////////////////////ACTUALIZAR MISION*/
     actualizarMision() {
       if (this.nueva != '') {
@@ -1230,7 +1308,6 @@ const AltaProyectos = {
     /*/////////////////////////////////////////////////////////////////////////////////ACTUALIZAR ESTANDARES*/
     actualizarEstandaresCO2() {
       if (this.nuevoNombre != '' && this.cantidad != '' && this.unidadMedida != '') {
-
         axios.put('estandaresCO2Controller.php', {
           id: this.id,
           nuevo: this.nuevoNombre,
@@ -1411,7 +1488,6 @@ const AltaProyectos = {
 
         })
       }
-
     },
     /*/////////////////////////////////////////////////////////////////////////////////ELIMINAR AREA*/
     eliminarArea() {
@@ -1510,6 +1586,28 @@ const AltaProyectos = {
         }
       } else {
         alert("Selecione la planta a eliminar")
+      }
+    },
+     /*/////////////////////////////////////////////////////////////////////////////////ELIMINAR FUENTE*/
+     eliminarFuente(id) {
+      if (confirm("¿Desea eliminar la fuente?")) {
+        axios.delete('fuentesController.php', {
+          data: {
+            id: id
+          }
+        }).then(response => {
+          console.log(response.data)
+          if (response.data[0] == true) {
+            this.consultarFuentes()
+          } else {
+            alert("No se elimino.")
+          }
+
+        }).catch(error => {
+          //console.log('Erro :-('+error)
+        }).finally(() => {
+
+        })
       }
     },
     /*/////////////////////////////////////////////////////////////////////////////////ELIMINAR RESPONSABLE*/
@@ -1698,6 +1796,7 @@ const AltaProyectos = {
         //this.consultarPilares()
         this.consultarImpactoAmbiental()
         this.consultarMisiones()
+        this.consultarFuentes()
         this.buscarDocumentos()
 
       } else if (modal == "CRUD") {
@@ -1853,7 +1952,9 @@ const AltaProyectos = {
       //nombre del proyecto
       else if (this.nombre_proyecto == '') { this.respondio = false; alert("Agregue un nombre al proyecto"); }
       //Planta
-      else if (this.selectPlanta == '') { this.respondio = false; alert("Seleccione un Planta"); }
+      else if (this.selectFuente== '') { this.respondio = false; alert("Seleccione una Fuente"); }
+      //Planta
+      else if (this.selectPlanta == '') { this.respondio = false; alert("Seleccione una Planta"); }
       //Area
       else if (this.selectArea == '') { this.respondio = false; alert("Seleccione una Área") }
       //Departamento
@@ -1875,7 +1976,7 @@ const AltaProyectos = {
       //Impacto Ambiental
       /*else if (this.checkImpactoAmbiental.length <= 0) { this.respondio = false; alert("Seleccione minimo una Impacto Ambiental") }*/
       //Ahorros
-      else if ((this.tons_co2 == "0" || this.tons_co2 == "") && this.ahorro_duro == "$.00" && this.ahorro_suave == "$.00" && (this.objetivo_estrategico == false || this.objetivo_estrategico == true)) { this.respondio = false; alert("Minimo uno debe ser distinto a 0") }
+      else if ((this.tons_co2 == "0" || this.tons_co2 == "" || this.tons_co2 == "0.00" ) && this.ahorro_duro == "$.00" && this.ahorro_suave == "$.00" && (this.objetivo_estrategico == false || this.objetivo_estrategico == true)) { this.respondio = false; alert("Minimo uno debe ser distinto a 0") }
       //Si algo no se a contestado
       else {
         this.respondio = true
@@ -1887,6 +1988,12 @@ const AltaProyectos = {
 
     },
     guardarAltaProyecto() {
+
+      const separandoFuente = this.selectFuente.split('<->');//separando
+      var fuente = separandoFuente[1];
+      var siglasFuente = separandoFuente[2];
+      var fuenteConSiglas = fuente + siglasFuente;
+
       const separandoPlanta = this.selectPlanta.split('<->');//separando
       var planta = separandoPlanta[1];
       var siglasPlanta = separandoPlanta[2];
@@ -1999,12 +2106,13 @@ const AltaProyectos = {
       //Folio proyecto
 
       var folio = siglasPlanta + "-" + siglasArea + '-' + siglasDepartamento + '-P' + siglasPilaresConcatenado + '-O' + siglasObjetivosConcatenado;
-      console.log(folio);
+      console.log(fuenteConSiglas);
 
       axios.post("proyectosController.php", {
         folio: folio,
         fecha_alta: this.fecha_alta,
         nombre_proyecto: this.nombre_proyecto,
+        fuente:fuenteConSiglas,
         select_planta: planta,
         select_area: area,
         select_departamento: departamento,
@@ -2023,8 +2131,9 @@ const AltaProyectos = {
           if (response.data[0][1] == true) {
             this.myModal.hide()
             this.consultarProyectos()
-            alert("El proyecto " + this.nombre_proyecto + " se creó con éxito..")
+            alert("El proyecto '" + this.nombre_proyecto + "' se creó con éxito..")
             this.fecha_alta = ''
+            this.selectFuente = ''
             this.selectPlanta = ''
             this.selectArea = ''
             this.selectDepartamento = ''
@@ -2233,7 +2342,11 @@ const AltaProyectos = {
         } else if (tipo == 'Mision') {
           this.id = id;
           this.nueva = nombre;
-        } else {
+        }else if(tipo == 'Fuente'){
+          this.nuevoNombre = nombre;
+          this.siglas = siglas;
+          this.id = id;
+        }else {
           alert("No existe ese tipo en actualizars")
         }
       }
