@@ -2294,14 +2294,19 @@ const AltaProyectos = {
         input_ahorro_duro: this.input_ahorro_duro,
       }).then(response => {
         console.log(response.data)
-        if (response.data[0][0] == true) {
-          this.actualizar = 0
-          this.consultarImpactoAmbieltalXProyectoID()
-          alert("Se actualizo con éxito")
-          //this.consultarImpactoAmbieltalXProyectoID()
+        if (response.data[0][1] == true) {
+          alert("Ese mes ya existe.")
         } else {
-          alert("La actualizacion, no se realizo correctamente.")
+          if (response.data[0][0] == true) {
+            this.actualizar = 0
+            this.consultarImpactoAmbieltalXProyectoID()
+            alert("Se actualizo con éxito")
+            //this.consultarImpactoAmbieltalXProyectoID()
+          } else {
+            alert("La actualizacion, no se realizo correctamente.")
+          }
         }
+
       }).catch(error => {
         console.log('Erro :-(' + error)
       }).finally(() => {

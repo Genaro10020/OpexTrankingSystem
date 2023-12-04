@@ -93,39 +93,43 @@ function actualizarRegistroImpactoAmbiental($id_proyecto, $mes, $anio, $tonelada
     $mes_anio = $mes . "-" . $anio;
     $cantidad_registro = count($idsInputImpactoAmbiental);
     $vueltas = 0;
-    /* $existe = false;
-    $query = "SELECT registros_impacto_ambiental.mes_anio FROM  registros_impacto_ambiental JOIN impacto_ambiental_proyecto ON impacto_ambiental_proyecto.id = registros_impacto_ambiental.id_impacto_ambiental_proyecto WHERE impacto_ambiental_proyecto.id_proyecto = ? AND registros_impacto_ambiental.mes_anio = ?";
+    $existe = false;
+    $query = "SELECT registros_impacto_ambiental.id AS id_registros, registros_impacto_ambiental.mes_anio FROM  registros_impacto_ambiental JOIN impacto_ambiental_proyecto ON impacto_ambiental_proyecto.id = registros_impacto_ambiental.id_impacto_ambiental_proyecto WHERE impacto_ambiental_proyecto.id_proyecto = ?";
     $stmt = $conexion->prepare($query);
     if ($stmt) {
-        $stmt->bind_param("is", $id_proyecto, $mes_anio);
+        $stmt->bind_param("i", $id_proyecto);
         $stmt->execute();
         $resultados = $stmt->get_result();
-        $anio_mes_en_tabla = "";
-        while ($row = $resultados->fetch_assoc()) {
-            $anio_mes_en_tabla = $row['mes_anio'];
+        $ids_que_coinciden = [];
+        while ($row = $resultados->fetch_assoc()) { //recupero columnas id impacto y mes_anio de tabla registros, con anio y  id en consulta
+            if ($mes_anio == $row['mes_anio']) {
+                $ids_que_coinciden[] = $row['id_registros']; // tomo los ids que contiene mismo mes y anio
+            }
         }
-        if ($resultados->num_rows > 0 || $anio_mes_en_tabla == $mes_anio) {
-            $existe = true;
-        } else {*/
-    for ($i = 0; $i < $cantidad_registro; $i++) {
-        $id = $idsInputImpactoAmbiental[$i]; //continen los id de la tabla registros_impacto_ambiental
-        $dato = $inputImpactoAmbiental[$i];
+        $diferencias = array_diff($idsInputImpactoAmbiental, $ids_que_coinciden);
+        if (empty($diferencias) || empty($ids_que_coinciden)) {
+            $existe = false;
+            for ($i = 0; $i < $cantidad_registro; $i++) {
+                $id = $idsInputImpactoAmbiental[$i]; //continen los id de la tabla registros_impacto_ambiental
+                $dato = $inputImpactoAmbiental[$i];
 
-        $update = "UPDATE registros_impacto_ambiental SET mes=?,anio=?,tons_co2=?,mes_anio=?,dato=?,ahorro_suave=?,ahorro_duro=? WHERE  id=?"; //,mes_anio=? pendiente
-        $stmt = $conexion->prepare($update);
-        $stmt->bind_param("iisssssi", $mes, $anio, $toneladas, $mes_anio, $dato, $suave, $duro, $id);
-        if ($stmt->execute()) {
-            $estado = true;
+                $update = "UPDATE registros_impacto_ambiental SET mes=?,anio=?,tons_co2=?,mes_anio=?,dato=?,ahorro_suave=?,ahorro_duro=? WHERE  id=?"; //,mes_anio=? pendiente
+                $stmt = $conexion->prepare($update);
+                $stmt->bind_param("iisssssi", $mes, $anio, $toneladas, $mes_anio, $dato, $suave, $duro, $id);
+                if ($stmt->execute()) {
+                    $estado = true;
+                } else {
+                    return $estado = "No se actualizo el registro: " . $stmt->error;
+                }
+            }
         } else {
-            return $estado = "No se actualizo el registro: " . $stmt->error;
+            $existe = true;
         }
-    }
-    /*   }
-   } else {
+    } else {
         $estado = "Error en la preparación de la consulta: " . $conexion->error;
     }
-    $stmt->close();*/
-    return array($estado, $vueltas);
+    $stmt->close();
+    return array($estado, $existe, $idsInputImpactoAmbiental, $ids_que_coinciden, $diferencias);
 }
 
 function eliminarArea()
