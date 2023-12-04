@@ -2259,22 +2259,26 @@ const AltaProyectos = {
         input_ahorro_duro: this.input_ahorro_duro,
       }).then(response => {
         console.log(response.data)
-        if (response.data[0][0] == true) {
-
-
-          if (response.data[0][3] == true) {
-            alert("Ya existe esa fecha")
-          } else {
-            this.actualizar = 0
-            this.actualizatabla = false
-            this.consultarImpactoAmbieltalXProyectoID()
-            alert("Se inserto con éxito")
-          }
-
+        if (response.data[0][3] == true) {
+          alert("Ya existe esa fecha, favor de cambiarla")
         } else {
-          alert("La inserción de Planta, no se realizo correctamente.")
+          if (response.data[0][0] == true) {
+            if (response.data[0][1] == true) {
+              if (response.data[0][2] == true) {
+                  this.actualizar = 0
+                  this.actualizatabla = false
+                  this.consultarImpactoAmbieltalXProyectoID()
+                  alert("Se inserto con éxito")
+              } else {
+                alert("Verifique que los campos no esten vacios, valor minimo 0 ")
+              }
+            } else {
+              alert("No se realizo correctamente la consulta Relacionada")
+            }
+          } else {
+            alert("No se econtro el ID del Proyecto")
+          }
         }
-
       }).catch(error => {
         console.log('Erro :-(' + error)
       }).finally(() => {
