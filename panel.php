@@ -31,9 +31,9 @@ if (isset($_SESSION['nombre'])) {
                     <button class="btn-menu me-sm-3" @click="ventana='Seguimiento'">
                         <i class="bi bi-plus-circle"></i> Seguimiento
                     </button>
-                    <button class="btn-menu" @click="ventana='Generar Valor'">
-                        <i class="bi bi-plus-circle"></i> Competencia
-                    </button>
+                    <!--<button class="btn-menu" @click="ventana='Generar Valor'">
+                        <i class="bi bi-plus-circle"></i> Generando Valor
+                    </button>-->
                     <!--Modal Alta Proyectos-->
                     <div id="modal-alta-proyecto" class="modal text-start" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
                         <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
@@ -907,7 +907,7 @@ if (isset($_SESSION['nombre'])) {
                                                 Nombre
                                             </th>
                                             <th class="sticky-top thmodal">
-                                                Fuentes
+                                                Siglas
                                             </th>
                                             <th class="sticky-top thmodal">
                                                 Eliminar
@@ -1137,10 +1137,10 @@ if (isset($_SESSION['nombre'])) {
                         <table class="mx-2 mb-5 table table-hover table-bordered table-striped text-center" style="font-size: 0.8em;">
                             <thead style="background: #848484; color:white;">
                                 <tr>
-                                    <th style="background: #848484; color:white;">Actualizar</th>
+                                    <th v-if="seguimiento_status" style="background: #848484; color:white;">Actualizar</th>
                                     <th style="background: #848484; color:white;">Fecha</th>
                                     <th style="background: #848484; color:white;">Tons CO2 (Evitados) </th>
-                                    <th style="background: #848484; color:white;" v-for="(impacto,index) in columnaImpactoAmbiental" :key="index">{{impacto}}</th>
+                                    <th style="background: #848484; color:white;" v-if="sinImpacto!='Sin Impacto'" v-for="(impacto,index) in columnaImpactoAmbiental" :key="index">{{impacto}}</th>
                                     <th style="background: #848484; color:white;">Ahorro Duro $MXN/Año</th>
                                     <th style="background: #848484; color:white;">Ahorro Suave $MXN/Año</th>
                                     <th style="background: #848484; color:white;">Estatus</th>
@@ -1149,16 +1149,18 @@ if (isset($_SESSION['nombre'])) {
                             <tbody>
                                 <!-----------------------------------------------------------------------------CUANDO YA EXISTE MINIMO UN SEGUIMIENTO -->
                                 <tr v-if="seguimientos>0" style="vertical-align: middle; font-size: 1.1em;" v-for="(proyecto,posicion) in arregloID" :key="posicion">
-                                    <td>
+                                    <td v-if="seguimiento_status">
                                         <button v-if="actualizar==0 && actualizatabla == false" type="button" class="boton-actualizar" v-if="actualizatabla == false" @Click="asignarDatosActualizar(posicion)">Actualizar</button>
                                         <button v-if="actualizar==(posicion+1)" v-if="actualizatabla == true" class="boton-eliminar mx-2" @Click="actualizar = 0">Cancelar</button>
                                         <button v-if="actualizar==(posicion+1) && proyecto.id_registro " v-if="actualizatabla == true" class="boton-aceptar" @Click="actualizarSeguimiento(posicion)">Guardar</button><!--Guardar Actualizacion cuando existe minimo 1-->
                                     </td>
                                     <td style="min-width: 351px;">
                                         <div v-if="actualizar==(posicion+1)">
+                                        <label  class="ms-1"> Mes: </label>
                                             <select v-model=" mes_select" class="me-3">
                                                 <option v-for="(month,index) in months" :value="(index+1)">{{month}}</option>
                                             </select>
+                                        <label class="ms-1 "> Año: </label>
                                             <select v-model="anio_select">
                                                 <option v-for="(year,index) in years" :value="year">{{year}}</option>
                                             </select>
@@ -1169,12 +1171,12 @@ if (isset($_SESSION['nombre'])) {
                                         </div>
                                     </td>
 
-                                    <td style="background: #b3d8f0;" >
+                                    <td style="background: #bfe49b;" >
                                         <input v-if="actualizar==(posicion+1)"  type="text" v-model="input_tons_co2" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" 
                                         @blur="formatInputSinPesos('input_tons_co2')"></input><!--:value="proyecto.tons_co2"-->
                                         <label v-else>{{proyecto.tons_co2}}</label>
                                     </td>
-                                    <td v-for="(cantidad,index) in columnaImpactoAmbiental.length"  :key="index"><!--columa v-for"-->
+                                    <td v-if="sinImpacto!='Sin Impacto'" v-for="(cantidad,index) in columnaImpactoAmbiental.length"  :key="index"><!--columa v-for"-->
                                         <input v-if="actualizar==(posicion+1)" type="text" v-model="inputImpactoAmbiental[posicion][index]" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" 
                                         @blur="formatInputSinPesosImpactoAmbientalPosicion(posicion,index)"> </input>
                                         <label v-else>{{inputImpactoAmbiental[posicion][index]}}</label>
@@ -1189,31 +1191,46 @@ if (isset($_SESSION['nombre'])) {
                                         @blur="formatInputPesos('input_ahorro_suave')"></input> <!--:value="proyecto.ahorro_suave"-->
                                         <label v-else>{{proyecto.ahorro_suave}}</label>
                                     </td>
-                                    <td></td>
+                                    <td style="min-width:150px">
+                                                    <!--<div v-if="posicion === (arregloID.length - 1)" class="form-check form-switch">
+                                                        <div class="form-check form-switch">
+                                                            <input
+                                                                class="form-check-input"
+                                                                type="checkbox"
+                                                                id="flexSwitchCheckChecked"
+                                                                :checked="proyecto.status_seguimiento !== 'Cerrado'"
+                                                                @click="toggleSeguimientoStatus"
+                                                            />
+                                                            <label class="form-check-label" for="flexSwitchCheckChecked">
+                                                                {{proyecto.status_seguimiento === 'Cerrado' ? 'false' : 'true' }}
+                                                            </label>
+                                                        </div>
+                                                    </div>-->
+                                    </td>
                                 </tr>
                                 <!------------------------------------------------------------------------------PRIMER SEGUIMIETO --------------------------------------------------->
                                 <tr v-if="id_proyecto!=''" style="vertical-align: middle; font-size: 1.1em;">
-                                    <td>
+                                    <td v-if="seguimiento_status">
                                         <button v-if="actualizatabla == false && actualizar==0 " type="button" class="boton-aceptar" @Click="actualizatabla =!actualizatabla,nuevoLimpiarVariables()">Nuevo</button>
                                         <button v-if="actualizatabla == true" class="boton-eliminar mx-2" @Click="actualizatabla =!actualizatabla ">Cancelar</button>
                                         <button v-if="actualizatabla == true" class="boton-aceptar" @Click="guardarSeguimiento()">Guardar</button><!--Cundo no existe aun ningun registro-->
                                     </td>
                                     <td style="min-width: 351px;">
-                                        <label v-if="actualizatabla==true" class="ms-3"> mes: </label>
+                                        <label v-if="actualizatabla==true" class="ms-3"> Mes: </label>
                                         <select v-if="actualizatabla==true" v-model="mes_select">
                                             <option v-for="(month,index) in months" :value="(index+1)">{{month}}</option>
                                         </select>
-                                        <label v-if="actualizatabla==true" class="ms-3"> año: </label>
+                                        <label v-if="actualizatabla==true" class="ms-3"> Año: </label>
                                         <select v-if="actualizatabla==true" v-model="anio_select">
                                             <option v-for="(year,index) in years" :value="year">{{year}}</option>
                                         </select>
                                         <!--<input class="mx-1" v-if="actualizatabla==true" type="date" v-model="fecha_desde"></input>--><!--:value="proyecto.fecha_inicial"-->
                                     </td>
-                                    <td style="background: #b3d8f0;">
+                                    <td style="background: #bfe49b;">
                                         <input v-if="actualizatabla==true" type="text" v-model="input_tons_co2" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputSinPesos('input_tons_co2')"></input><!--:value="proyecto.tons_co2"-->
                                         <label v-else></label>
                                     </td>
-                                    <td v-for="(cantidad,index) in columnaImpactoAmbiental.length" :key="index"><!--columa v-for"-->
+                                    <td v-if="sinImpacto!='Sin Impacto'" v-for="(cantidad,index) in columnaImpactoAmbiental.length" :key="index"><!--columa v-for"-->
                                         <input v-if="actualizatabla==true" type="text" v-model="inputImpactoAmbientalInicial[index]" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)"  @blur="formatInputSinPesosImpactoAmbiental(index)"> </input>
                                         <label v-else></label>
                                     </td>
@@ -1226,7 +1243,9 @@ if (isset($_SESSION['nombre'])) {
                                         <label v-else></label>
                                     </td>
 
-                                    <td></td>
+                                    <td style="min-width:150px">
+                                          
+                                    </td>
                                 </tr>
                             <tbody>
                         </table>
@@ -1314,7 +1333,7 @@ if (isset($_SESSION['nombre'])) {
                                     <div class="bg-info col-3 px-2">
                                         <div class="d-flex text-center text-white">
                                             <span class="col-8 mt-3">Capital humano</span>
-                                            <table class="col-4 mt-1 text-center  table-bordered border-dark  " style="max-width-50px">
+                                            <table class="col-4 mt-1 text-center  table-bordered border-dark  " style="max-width:50px">
                                                 <thead>
                                                     
                                                 </thead>
@@ -1362,7 +1381,7 @@ if (isset($_SESSION['nombre'])) {
                                     <div class="bg-warning col-3 px-2">
                                         <div class="d-flex text-center text-white">
                                             <span class="col-8 mt-3">Excelencia operativa</span>
-                                            <table class="col-4 mt-1 text-center  table-bordered border-dark  " style="max-width-50px">
+                                            <table class="col-4 mt-1 text-center  table-bordered border-dark  " style="max-width:50px">
                                                 <thead>
                                                     
                                                 </thead>
@@ -1410,7 +1429,7 @@ if (isset($_SESSION['nombre'])) {
                                     <div class="bg-danger col-3 px-2">
                                         <div class="d-flex text-center text-white">
                                             <span class="col-8 mt-2">investigacion y desarrollo</span>
-                                            <table class="col-4 mt-1 text-center  table-bordered border-dark  " style="max-width-50px">
+                                            <table class="col-4 mt-1 text-center  table-bordered border-dark  " style="max-width:50px">
                                                 <thead>
                                                     
                                                 </thead>

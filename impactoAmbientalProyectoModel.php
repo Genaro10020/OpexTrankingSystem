@@ -28,9 +28,9 @@ function consultarImpactosXproyectoID($id_proyecto)
     $estado1 = false;
     $estado2 = false;
     //consulta mes_inio distintos solo una fila por registro diferente
-    $query = "SELECT registros.id AS id_registro, impactos.id AS id_impacto, registros.*, impactos.* FROM impacto_ambiental_proyecto impactos 
-    INNER JOIN  registros_impacto_ambiental registros  
-    ON  impactos.id = registros.id_impacto_ambiental_proyecto 
+    $query = "SELECT registros.id AS id_registro, impactos.id AS id_impacto, registros.*, impactos.*, proyectos_creados.status_seguimiento  FROM impacto_ambiental_proyecto impactos 
+    INNER JOIN proyectos_creados ON impactos.id_proyecto = proyectos_creados.id/*Agregue esta para consultar status_seguimiento*/
+    INNER JOIN registros_impacto_ambiental registros  ON  impactos.id = registros.id_impacto_ambiental_proyecto 
     WHERE impactos.id_proyecto = ? GROUP BY mes_anio ORDER BY registros.anio ASC";
     $stmt = $conexion->prepare($query);
 

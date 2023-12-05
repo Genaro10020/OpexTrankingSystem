@@ -258,6 +258,26 @@ button {
     transition: all 0.3s;
 }
 
+
+.boton-corriendo {
+    width: 100px;
+    background-color: #30717c;
+    color: white;
+    font-size: 0.9em;
+    box-shadow: 5px 5px 5px #151515;
+    border: none;
+    transition: all 0.3s;
+}
+
+.boton-corriendo:hover {
+    background-color: #3b656c;
+    color: white;
+    font-size: 0.9em;
+    box-shadow: 1px 1px 2px #151515;
+    border: none;
+}
+
+
 .boton-eliminar:hover {
     background-color: #af3636;
     color: white;

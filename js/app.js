@@ -101,6 +101,8 @@ const AltaProyectos = {
       years: [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035, 2036, 2037, 2038, 2039, 2040, 2041, 2042, 2043, 2044, 2045, 2046, 2047, 2048, 2049, 2050],
       mes_select: 1,
       anio_select: 2023,
+      seguimiento_status:true,
+      sinImpacto:'',
     }
   },
   mounted() {
@@ -142,8 +144,16 @@ const AltaProyectos = {
           if (response.data[0][0].length > 0) {
             this.arregloID = response.data[0][0];
             this.columnaImpactoAmbiental = JSON.parse(response.data[0][0][0].impacto_ambiental);
-            this.inputImpactoAmbientalInicial = Array(this.columnaImpactoAmbiental.length);
             this.seguimientos = 0;
+            if(this.columnaImpactoAmbiental[0]=='Sin Impacto'){
+              this.inputImpactoAmbientalInicial = Array(1);
+              this.inputImpactoAmbientalInicial[0] = '0.00';
+              this.sinImpacto = 'Sin Impacto'
+            }else{
+              this.inputImpactoAmbientalInicial = Array(this.columnaImpactoAmbiental.length);
+              this.sinImpacto = ''
+            }
+
           }
         } else {
           alert("La consulta de proyectos no se realizo correctamente.")
@@ -155,6 +165,7 @@ const AltaProyectos = {
       })
     },
     consultarImpactoAmbieltalXProyectoID() {
+
       this.actualizar = 0
       axios.post('impactoAmbientalProyectoController.php', {
         id_proyecto: this.id_proyecto //ID PROYECTO
@@ -174,6 +185,18 @@ const AltaProyectos = {
             var no_repetidos = new Set(impactoAmbiental);
             this.columnaImpactoAmbiental = Array.from(no_repetidos);;//tiene los nombres de impacto ambiental
             this.inputImpactoAmbientalInicial = Array(this.columnaImpactoAmbiental.length);
+
+
+            if(this.columnaImpactoAmbiental[0]=='Sin Impacto'){
+              this.inputImpactoAmbientalInicial = Array(1);
+              this.inputImpactoAmbientalInicial[0] = '0.00';
+              this.sinImpacto = 'Sin Impacto'
+            }else{
+              this.inputImpactoAmbientalInicial = Array(this.columnaImpactoAmbiental.length);
+              this.sinImpacto = ''
+            }
+
+
             /*var datos = [];
             for (let j = 0; j < response.data[0][2].length; j++) {
               datos.push(response.data[0][2][0].dato)
@@ -2102,6 +2125,11 @@ const AltaProyectos = {
         var nombre_impacto = this.checkImpactoAmbiental[i].split('<->')[1];
         impacto_ambiental_nombres.push(nombre_impacto)
       }
+      
+      if(impacto_ambiental_nombres.length<=0){
+        impacto_ambiental_nombres.push('Sin Impacto')
+      }
+
       console.log(impacto_ambiental_nombres)
       //Folio proyecto
 
@@ -2361,7 +2389,8 @@ const AltaProyectos = {
 
     /*/////////////////////////////////////////////////////////////////////////////////INSERTAR PLANTA*/
     guardarSeguimiento() {
-
+      console.log("IDsImpacto")
+      console.log(this.inputImpactoAmbientalInicial)
       axios.post('seguimientoAmbientalProyectoController.php', {
         id_proyecto: this.id_proyecto,
         mes: this.mes_select,
@@ -2433,6 +2462,17 @@ const AltaProyectos = {
       }).finally(() => {
 
       })
+    },
+    verificando(variable){
+      if(variable==="Cerrado"){
+        this.seguimiento_status = false
+      }else{
+        this.seguimiento_status = true
+      }
+      console.log(this.seguimiento_status)
+    },
+    toggleSeguimientoStatus(){
+      this.seguimiento_status = !this.seguimiento_status;
     },
     mostrandoMes(mes) {
 
