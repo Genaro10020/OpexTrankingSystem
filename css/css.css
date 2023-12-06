@@ -450,7 +450,57 @@ button {
         opacity: 0;
     }
 }
+.myButton {
+	box-shadow: 0px 0px 6px 0px #000000;
+	background-color:#ce0100;
+	border-radius:33px;
+	border:3px solid #d83526;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:14px;
+	padding:1px 3px;
+	text-decoration:none;
+	text-shadow:0px 0px 0px #b23e35;
+}
+.myButton:hover {
+	background-color:#fe1a00;
+}
 
+.myButton2 {
+	box-shadow: 0px 0px 8px 0px #7a6d07;
+	background-color:rgb(241, 210, 34);
+	border-radius:28px;
+	border:1px solid #ffec60;
+	display:inline-block;
+	cursor:pointer;
+	color:#333333;
+	font-family:Arial;
+	font-size:14px;
+	padding:1px 4px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #ffee66;
+}
+.myButton2:hover {
+	background-color:#fafa2d;
+}
+
+.tablasBatery{
+    background-color: #0149C1;
+}
+
+.tablasBatery2{
+    background-color: #7E07AE;
+}
+
+.tablasBatery3{
+    background-color: #D97100;
+}
+
+.tablasBatery4{
+    background-color: #C40608;
+}
 .imagenBatery{
     width: 100%;
     height: 80vh; 

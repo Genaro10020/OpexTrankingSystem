@@ -31,9 +31,12 @@ if (isset($_SESSION['nombre'])) {
                     <button class="btn-menu me-sm-3" @click="ventana='Seguimiento'">
                         <i class="bi bi-plus-circle"></i> Seguimiento
                     </button>
-                    <!--<button class="btn-menu" @click="ventana='Generar Valor'">
+                    <button class="btn-menu me-sm-3 " @click="ventana='Generar Valor',consultarObjetivosRelacional()">
                         <i class="bi bi-plus-circle"></i> Generando Valor
-                    </button>-->
+                    </button>
+                    <button class="btn-menu" @click="ventana='Reportes',consultarObjetivosRelacional()">
+                        <i class="bi bi-plus-circle"></i> Reportes
+                    </button>
                     <!--Modal Alta Proyectos-->
                     <div id="modal-alta-proyecto" class="modal text-start" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
                         <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
@@ -631,7 +634,7 @@ if (isset($_SESSION['nombre'])) {
                     <div class="col-12 col-lg-6 mt-3 mb-5">
                         <div class="col-12  text-center align-content">
                             <div class=" encabezadoTablas">
-                                <div class="  d-flex justify-content-center align-items-center">
+                                <div class="  d-flex justify-content-center align-items-center" style="font-size: 0.9em;">
                                     <div class="d-none d-lg-block col-lg-4"></div>
                                     <div class="col-6 col-lg-4 mt-2">Misiones</div>
                                     <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
@@ -643,7 +646,7 @@ if (isset($_SESSION['nombre'])) {
                             <div class="scroll">
                                 <table class=" table table-bordered table-striped  border border-3 border-secondary">
                                     <thead>
-                                        <tr class="border border-3 border-secondary">
+                                        <tr class="border border-3 border-secondary" style="font-size: 0.9em;">
                                             <th class=" sticky-top thmodal w-50">
                                                 Nombre
                                             </th>
@@ -656,15 +659,15 @@ if (isset($_SESSION['nombre'])) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="mision in misiones">
+                                        <tr v-for="mision in misiones" style="font-size: 0.7em;">
                                             <td>
                                                 {{mision.nombre}}
                                             </td>
-                                            <td class="">
-                                                <button type="button" class="boton-eliminar" @click="eliminarMision(mision.id)">Eliminar</button>
+                                            <td>
+                                                <button type="button" class="myButton" @click="eliminarMision(mision.id)"><i class="bi bi-trash3-fill"></i></button>
                                             </td>
                                             <td>
-                                                <button type="button" class="boton-actualizar" @Click="modalCatalogos('Actualizar','Mision',mision.id,mision.nombre)">Actualizar</button>
+                                                <button type="button" class="myButton2" @Click="modalCatalogos('Actualizar','Mision',mision.id,mision.nombre)"><i class="bi bi-pencil"></i></button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -676,7 +679,7 @@ if (isset($_SESSION['nombre'])) {
                     <div class="col-12 col-lg-6 mt-3">
                         <div class="col-12 text-center align-content">
                             <div class=" encabezadoTablas">
-                                <div class=" d-flex justify-content-center align-items-center">
+                                <div class=" d-flex justify-content-center align-items-center" style="font-size: 0.9em;">
                                     <div class="d-none d-lg-block col-lg-4"></div>
                                     <div class="col-6 col-lg-4 mt-2">Pilares Estrategicos</div>
                                     <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
@@ -689,7 +692,7 @@ if (isset($_SESSION['nombre'])) {
                                 {{}}
                                 <table class="table table-bordered table-striped border border-3 border-secondary">
                                     <thead>
-                                        <tr class="border border-3 border-secondary">
+                                        <tr class="border border-3 border-secondary" style="font-size: 0.9em;">
                                             <th class=" sticky-top thmodal">
                                                 Nombre
                                             </th>
@@ -708,7 +711,7 @@ if (isset($_SESSION['nombre'])) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="pilar in pilaresRelacion">
+                                        <tr v-for="pilar in pilaresRelacion" style="font-size: 0.7em;">
                                             <td>
                                                 {{pilar.nombre}}
                                             </td>
@@ -719,10 +722,10 @@ if (isset($_SESSION['nombre'])) {
                                                 {{pilar.nombre_mision}}
                                             </td>
                                             <td>
-                                                <button type="button" class="boton-eliminar" @click="eliminarPilar(pilar.id)">Eliminar</button>
+                                                <button type="button" class="myButton" @click="eliminarPilar(pilar.id)"><i class="bi bi-trash3-fill"></i></button>
                                             </td>
                                             <td>
-                                                <button type="button" class="boton-actualizar" @Click="modalCatalogos('Actualizar','Pilar',pilar.id,pilar.nombre,'',pilar.siglas,'',pilar.id_misiones,pilar.nombre_mision,pilar.mision_id)">Actualizar</button>
+                                                <button type="button" class="myButton2" @Click="modalCatalogos('Actualizar','Pilar',pilar.id,pilar.nombre,'',pilar.siglas,'',pilar.id_misiones,pilar.nombre_mision,pilar.mision_id)"><i class="bi bi-pencil"></i></button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -734,7 +737,7 @@ if (isset($_SESSION['nombre'])) {
                     <div class="col-12 col-lg-6">
                         <div class="col-12 text-center align-content">
                             <div class=" encabezadoTablas">
-                                <div class=" d-flex justify-content-center align-items-center">
+                                <div class=" d-flex justify-content-center align-items-center" style="font-size: 0.9em;">
                                     <div class="d-none d-lg-block col-lg-4"></div>
                                     <div class="col-6 col-lg-4 mt-2">Objetivos Estrategicos</div>
                                     <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
@@ -746,7 +749,7 @@ if (isset($_SESSION['nombre'])) {
                             <div class="scroll mb-5">
                                 <table class="table table-bordered table-striped border border-3 border-secondary">
                                     <thead>
-                                        <tr class="border border-3 border-secondary">
+                                        <tr class="border border-3 border-secondary" style="font-size: 0.9em;">
                                             <th class=" sticky-top thmodal">
                                                 Nombre
                                             </th>
@@ -765,7 +768,7 @@ if (isset($_SESSION['nombre'])) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="objetivo in objetivos_ligados">
+                                        <tr v-for="objetivo in objetivos_ligados" style="font-size: 0.7em;">
                                             <td>
                                                 {{objetivo.nombre_objetivos}}
                                             </td>
@@ -776,10 +779,10 @@ if (isset($_SESSION['nombre'])) {
                                                 {{objetivo.nombre_pilares}}
                                             </td>
                                             <td>
-                                                <button type="button" class="boton-eliminar" @click="eliminarObjetivo(objetivo.id)">Eliminar</button>
+                                                <button type="button" class="myButton" @click="eliminarObjetivo(objetivo.id)"><i class="bi bi-trash3-fill"></i></button>
                                             </td>
                                             <td>
-                                                <button type="button" class="boton-actualizar" @Click="modalCatalogos('Actualizar','Objetivo',objetivo.id,objetivo.nombre_objetivos,objetivo.id_pilares,objetivo.siglas,'','','','')">Actualizar</button>
+                                                <button type="button" class="myButton2" @Click="modalCatalogos('Actualizar','Objetivo',objetivo.id,objetivo.nombre_objetivos,objetivo.id_pilares,objetivo.siglas,'','','','')"><i class="bi bi-pencil"></i></button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -788,10 +791,10 @@ if (isset($_SESSION['nombre'])) {
                         </div>
                     </div>
                     <!--TABLA DE IMPACTO AMBIENTAL-->
-                    <div class="col-12 col-lg-6">
-                        <div class="col-12  text-center align-content">
+                    <div class="col-12 col-lg-6 ">
+                        <div class="col-12  text-center ">
                             <div class=" encabezadoTablas">
-                                <div class=" d-flex justify-content-center align-items-center">
+                                <div class=" d-flex justify-content-center " style="font-size: 0.9em;">
                                     <div class="d-none d-lg-block col-lg-4"></div>
                                     <div class="col-6 col-lg-4 mt-2">Impacto Ambiental</div>
                                     <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
@@ -803,7 +806,7 @@ if (isset($_SESSION['nombre'])) {
                             <div class="scroll">
                                 <table class=" table table-bordered table-striped border border-3 border-secondary">
                                     <thead>
-                                        <tr class="border border-3 border-secondary">
+                                        <tr class="border border-3 border-secondary" style="font-size: 0.9em;">
                                             <th class="sticky-top thmodal">
                                                 Nombre
                                             </th>
@@ -816,15 +819,15 @@ if (isset($_SESSION['nombre'])) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="impacto in impactoAmbiental ">
+                                        <tr v-for="impacto in impactoAmbiental" style="font-size: 0.7em;">
                                             <td>
                                                 {{impacto.nombre}}
                                             </td>
                                             <td>
-                                                <button type="button" class="boton-eliminar" @click="eliminarImpactoAmbiental(impacto.id)">Eliminar</button>
+                                                <button type="button" class="myButton" @click="eliminarImpactoAmbiental(impacto.id)"><i class="bi bi-trash3-fill"></i></button>
                                             </td>
                                             <td>
-                                                <button type="button" class="boton-actualizar" @Click="modalCatalogos('Actualizar','Impacto Ambiental',impacto.id,impacto.nombre)">Actualizar</button>
+                                                <button type="button" class="myButton2" @Click="modalCatalogos('Actualizar','Impacto Ambiental',impacto.id,impacto.nombre)"><i class="bi bi-pencil"></i></button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -833,20 +836,22 @@ if (isset($_SESSION['nombre'])) {
                         </div>
                     </div>
                     <!-- INICIO TABLA ESTANDARES CO2 -->
-                    <div class="col-12 col-lg-6">
+                    <div class="col-12 col-lg-6 ">
+                        <div class="col-12 text-center align-content">
                         <div class=" encabezadoTablas">
-                            <div class=" d-flex justify-content-center align-items-center">
+                            <div class=" d-flex justify-content-center align-items-center " style="font-size: 0.9em;">
                                 <div class="d-none d-lg-block col-lg-4"></div>
-                                <div class="col-6 col-lg-4 mt-2">Estandares de CO2</div>
+                                <div class="col-6 col-lg-4 mt-2 ">Estandares de CO2</div>
                                 <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
                                     <button type="button" class=" btn btn-menu " @Click="modalCatalogos('Crear','Estandar')">Crear</button>
                                 </div>
 
                             </div>
                         </div>
-                        <table class="  table table-bordered border-dark border border-3 border-secondary">
+                        <div class="scroll">
+                        <table class="  table table-bordered border-secondary border border-3 border-secondary">
                             <thead>
-                                <tr class="border border-3 border-secondary">
+                                <tr class="border border-3 border-secondary" style="font-size: 0.9em;">
                                     <th class=" sticky-top thmodal">
                                         Nombre
                                     </th>
@@ -865,7 +870,7 @@ if (isset($_SESSION['nombre'])) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="estandar in estandares ">
+                                <tr v-for="estandar in estandares " style="font-size: 0.7em;">
                                     <td>
                                         {{estandar.nombre}}
                                     </td>
@@ -876,20 +881,22 @@ if (isset($_SESSION['nombre'])) {
                                         {{estandar.unidad_medida}}
                                     </td>
                                     <td>
-                                        <button type="button" class="boton-eliminar" @click="eliminarEstandares(estandar.id)">Eliminar</button>
+                                        <button type="button" class="myButton" @click="eliminarEstandares(estandar.id)"><i class="bi bi-trash3-fill"></i></button>
                                     </td>
                                     <td>
-                                        <button type="button" class="boton-actualizar" @Click="modalCatalogos('Actualizar','Estandares',estandar.id,estandar.nombre,estandar.cantidad,'',estandar.unidad_medida)">Actualizar</button>
+                                        <button type="button" class="myButton2" @Click="modalCatalogos('Actualizar','Estandares',estandar.id,estandar.nombre,estandar.cantidad,'',estandar.unidad_medida)"><i class="bi bi-pencil"></i></button>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
+                        </div>  
+                        </div>    
                     </div>
                     <!--TABLA DE FUENTES-->
                     <div class="col-12 col-lg-6">
                         <div class="col-12  text-center align-content">
                             <div class=" encabezadoTablas">
-                                <div class=" d-flex justify-content-center align-items-center">
+                                <div class=" d-flex justify-content-center align-items-center" style="font-size: 0.9em;">
                                     <div class="d-none d-lg-block col-lg-4"></div>
                                     <div class="col-6 col-lg-4 mt-2">Fuentes</div>
                                     <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
@@ -901,7 +908,7 @@ if (isset($_SESSION['nombre'])) {
                             <div class="scroll">
                                 <table class=" table table-bordered table-striped border border-3 border-secondary">
                                     <thead>
-                                        <tr class="border border-3 border-secondary">
+                                        <tr class="border border-3 border-secondary" style="font-size: 0.9em;">
                                             <th class="sticky-top thmodal">
                                                 Nombre
                                             </th>
@@ -917,7 +924,7 @@ if (isset($_SESSION['nombre'])) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="fuente in fuentes ">
+                                        <tr v-for="fuente in fuentes " style="font-size: 0.7em;">
                                             <td>
                                                 {{fuente.nombre}}
                                             </td>
@@ -925,10 +932,10 @@ if (isset($_SESSION['nombre'])) {
                                                 {{fuente.siglas}}
                                             </td>
                                             <td>
-                                                <button type="button" class="boton-eliminar" @click="eliminarFuente(fuente.id)">Eliminar</button>
+                                                <button type="button" class="myButton" @click="eliminarFuente(fuente.id)"><i class="bi bi-trash3-fill"></i></button>
                                             </td>
                                             <td>
-                                                <button type="button" class="boton-actualizar" @Click="modalCatalogos('Actualizar','Fuente',fuente.id,fuente.nombre,'',fuente.siglas)">Actualizar</button>
+                                                <button type="button" class="myButton2" @Click="modalCatalogos('Actualizar','Fuente',fuente.id,fuente.nombre,'',fuente.siglas)"><i class="bi bi-pencil"></i></button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -1258,7 +1265,7 @@ if (isset($_SESSION['nombre'])) {
                                                     <td class="border border-dark">dato1</td>
                                                 </tr>
                                                 <tr scope="row">
-                                                    <th class="border border-dark">ilegible</th>
+                                                    <th class="border border-dark">Sustentable</th>
                                                     <td class="border border-dark">dato2</td>
                                                 </tr>
                                             </thead>
@@ -1270,8 +1277,8 @@ if (isset($_SESSION['nombre'])) {
 
                                 </div>
                                 <div class="d-flex justify-content-around pt-1 ">
-                                    <div class="bg-success col-3 px-2">
-                                        <div class="d-flex  text-center text-white">
+                                    <div class="tablasBatery col-3 px-2">
+                                        <div class="d-flex  text-center text-white pb-2">
                                             <span class="col-8 mt-3">Cliente</span>
                                             <table class="col-4  mt-1  text-center  table-bordered border-dark  ">
                                                 <thead>
@@ -1288,40 +1295,24 @@ if (isset($_SESSION['nombre'])) {
                                             </table>
 
                                         </div>
-                                        <table class=" text-center table table-bordered border-dark  ">
+                                        <table class=" text-center table table-bordered border-dark  " style="font-size: 0.6em;">
                                             <thead>
 
                                             </thead>
                                             <tbody class="bg-white">
-                                                <tr>
-                                                    <th scope="row">1 </th>
-                                                    <td>2</td>
+                                                <tr v-for="objetivos in objetivos_ligados">
+                                                    <th scope="row" v-if="objetivos.nombre_pilares == 'Cliente'">{{objetivos.nombre_objetivos}}</th>
+                                                    <td v-if="objetivos.nombre_pilares == 'Cliente'">543135351</td>
+                                                    <td v-if="objetivos.nombre_pilares == 'Cliente'">543135351</td>
                                                 </tr>
-                                                <tr>
-                                                    <th scope="row">1 </th>
-                                                    <td>2</td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">1 </th>
-                                                    <td>2</td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">1 </th>
-                                                    <td>2</td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">1 </th>
-                                                    <td>2</td>
-                                                </tr>
-
 
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div class="bg-info col-3 px-2">
-                                        <div class="d-flex text-center text-white">
+                                    <div class="tablasBatery2 col-3 px-2">
+                                        <div class="d-flex  text-white pb-2">
                                             <span class="col-8 mt-3">Capital humano</span>
-                                            <table class="col-4 mt-1 text-center  table-bordered border-dark  " style="max-width:50px">
+                                            <table class="col-4 mt-1 text-center  table-bordered border-dark">
                                                 <thead>
 
                                                 </thead>
@@ -1336,40 +1327,23 @@ if (isset($_SESSION['nombre'])) {
                                             </table>
 
                                         </div>
-                                        <table class=" text-center table table-bordered border-dark  ">
+                                        <table class=" text-center table table-bordered border-dark  " style="font-size: 0.6em;">
                                             <thead>
 
                                             </thead>
                                             <tbody class="bg-white">
-                                                <tr>
-                                                    <th scope="row">1 </th>
-                                                    <td>2</td>
+                                                <tr v-for="objetivos in objetivos_ligados">
+                                                    <th scope="row" v-if="objetivos.nombre_pilares == 'Capital Humano'">{{objetivos.nombre_objetivos}}</th>
+                                                    <td v-if="objetivos.nombre_pilares == 'Capital Humano'">543135351</td>
+                                                    <td v-if="objetivos.nombre_pilares == 'Capital Humano'">543135351</td>
                                                 </tr>
-                                                <tr>
-                                                    <th scope="row">1 </th>
-                                                    <td>2</td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">1 </th>
-                                                    <td>2</td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">1 </th>
-                                                    <td>2</td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">1 </th>
-                                                    <td>2</td>
-                                                </tr>
-
-
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div class="bg-warning col-3 px-2">
-                                        <div class="d-flex text-center text-white">
-                                            <span class="col-8 mt-3">Excelencia operativa</span>
-                                            <table class="col-4 mt-1 text-center  table-bordered border-dark  " style="max-width:50px">
+                                    <div class="tablasBatery3 col-3 px-2">
+                                        <div class="d-flex text-center text-white pb-2">
+                                            <span class="col-8 mt-2">Excelencia operativa</span>
+                                            <table class="col-4 mt-1 text-center  table-bordered border-dark">
                                                 <thead>
 
                                                 </thead>
@@ -1384,40 +1358,25 @@ if (isset($_SESSION['nombre'])) {
                                             </table>
 
                                         </div>
-                                        <table class=" text-center table table-bordered border-dark  ">
+                                        <table class=" text-center table table-bordered border-dark  " style="font-size: 0.6em;">
                                             <thead>
 
                                             </thead>
                                             <tbody class="bg-white">
-                                                <tr>
-                                                    <th scope="row">1 </th>
-                                                    <td>2</td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">1 </th>
-                                                    <td>2</td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">1 </th>
-                                                    <td>2</td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">1 </th>
-                                                    <td>2</td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">1 </th>
-                                                    <td>2</td>
+                                                <tr v-for="objetivos in objetivos_ligados">
+                                                    <th scope="row" v-if="objetivos.nombre_pilares == 'Excelencia Operativa'">{{objetivos.nombre_objetivos}}</th>
+                                                    <td v-if="objetivos.nombre_pilares == 'Excelencia Operativa'">543135351</td>
+                                                    <td v-if="objetivos.nombre_pilares == 'Excelencia Operativa'">543135351</td>
                                                 </tr>
 
 
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div class="bg-danger col-3 px-2">
-                                        <div class="d-flex text-center text-white">
+                                    <div class="tablasBatery4 col-3 px-2">
+                                        <div class="d-flex text-center text-white pb-2">
                                             <span class="col-8 mt-2">investigacion y desarrollo</span>
-                                            <table class="col-4 mt-1 text-center  table-bordered border-dark  " style="max-width:50px">
+                                            <table class="col-4 mt-1 text-center  table-bordered border-dark">
                                                 <thead>
 
                                                 </thead>
@@ -1432,30 +1391,15 @@ if (isset($_SESSION['nombre'])) {
                                             </table>
 
                                         </div>
-                                        <table class=" text-center table table-bordered border-dark  ">
+                                        <table class=" table table-bordered border-dark " style="font-size: 0.6em;">
                                             <thead>
 
                                             </thead>
                                             <tbody class="bg-white">
-                                                <tr>
-                                                    <th scope="row">1 </th>
-                                                    <td>2</td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">1 </th>
-                                                    <td>2</td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">1 </th>
-                                                    <td>2</td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">1 </th>
-                                                    <td>2</td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">1 </th>
-                                                    <td>2</td>
+                                                <tr v-for="objetivos in objetivos_ligados">
+                                                    <th scope="row" v-if="objetivos.nombre_pilares == 'Cliente'">{{objetivos.nombre_objetivos}}</th>
+                                                    <td v-if="objetivos.nombre_pilares == 'Cliente'">543135351</td>
+                                                    <td v-if="objetivos.nombre_pilares == 'Cliente'">543135351</td>
                                                 </tr>
 
 
@@ -1481,6 +1425,33 @@ if (isset($_SESSION['nombre'])) {
                         </div>
                     </div>
 
+                </div>
+                <div v-if="ventana == 'Reportes'">
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Enero</th>
+                                <th>Febrero</th>
+                                <th>Marzo</th>
+                                <th>Abril</th>
+                                <th>Mayo</th>
+                                <th>Junio</th>
+                                <th>Julio</th>
+                                <th>Agosto</th>
+                                <th>Septiembre</th>
+                                <th>Octubre</th>
+                                <th>Noviembre</th>
+                                <th>Diciembre</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="objetivo in objetivos_ligados">
+                                <th>{{objetivo.nombre_objetivos}}</th>
+                                <td v-for="x in 12"></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <!--////////////////////////////////////////////// FIN DE COMPETENCIA -->
             </div><!--cuerpo-->
