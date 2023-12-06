@@ -262,8 +262,7 @@ if (isset($_SESSION['nombre'])) {
 
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-50">Tons CO2 por Evitar (Proyectado)</span>
-                                                <input id="tons_co2" type="text" v-model="tons_co2" min="0" class="w-25" :class="{'nocontestado': respondio === false && (tons_co2 == 0 || tons_co2 == '' ), '': tons_co2 !== 0 && tons_co2 !== ''}" 
-                                                onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputSinPesos('tons_co2')">
+                                                <input id="tons_co2" type="text" v-model="tons_co2" min="0" class="w-25" :class="{'nocontestado': respondio === false && (tons_co2 == 0 || tons_co2 == '' ), '': tons_co2 !== 0 && tons_co2 !== ''}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputSinPesos('tons_co2')">
                                                 <div v-if="tons_co2 !== '' && tons_co2 !== '0'" class="text-center my-auto ms-3">
                                                     <i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i>
                                                 </div>
@@ -271,16 +270,14 @@ if (isset($_SESSION['nombre'])) {
 
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-50">Ahorro Duro $MXN/Año (Proyectado )</span>
-                                                <input id="ahorro_duro" type="text" v-model="ahorro_duro" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_duro==='$.00', '': ahorro_duro!==0 && ahorro_duro!==''}" 
-                                                onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('ahorro_duro')">
+                                                <input id="ahorro_duro" type="text" v-model="ahorro_duro" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_duro==='$.00', '': ahorro_duro!==0 && ahorro_duro!==''}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('ahorro_duro')">
                                                 <div v-if="ahorro_duro!=='' && ahorro_duro !== '$0.00' && ahorro_duro !== '$.00' && ahorro_duro !== '$.0' && ahorro_duro !== '$.'  && ahorro_duro !== '$'" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
                                             <!--@click="colocarCursor('ahorro_duro')" @blur="asignarValor('ahorro_duro')" @keyUp=" formatoNumero('ahorro_duro', $event)"-->
 
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-50">Ahorro Suave $MXN/Año (Proyectado)</span>
-                                                <input id="ahorro_suave" type="text" v-model="ahorro_suave" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_suave==='$.00', '': ahorro_suave!==0 && ahorro_suave!==''}" 
-                                                onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('ahorro_suave')">
+                                                <input id="ahorro_suave" type="text" v-model="ahorro_suave" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_suave==='$.00', '': ahorro_suave!==0 && ahorro_suave!==''}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('ahorro_suave')">
                                                 <div v-if="ahorro_suave!=='' && ahorro_suave !== '$0.00' && ahorro_suave !== '$.00' && ahorro_suave !== '$.0' && ahorro_suave !== '$.'  && ahorro_suave !== '$'" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
                                             <div class="input-group mb-3">
@@ -545,12 +542,13 @@ if (isset($_SESSION['nombre'])) {
                                 <th>Tons CO2 por Evitar <br>(Proyectado)</th>
                                 <th>Ahorro Duro $MXN/Año <br>(Proyectado )</th>
                                 <th>Ahorro Suave $MXN/Año <br>(Proyectado)</th>
+                                <th>Estatus</th>
                                 <th>Eliminar</th>
                             </thead>
                             <tbody class=" border:1px solid black" style="text-align: center">
                                 <template v-for="(proyecto,index) in proyectos">
                                     <tr v-if="folioAnteriorSinNumeral(proyecto.folio, index)" :class="{ 'divisor-tr-creados': folioAnteriorSinNumeral(proyecto.folio, index)==true}"><!--ES DIFERENTE--->
-                                        <td colspan="18" v-if="index>0"></td>
+                                        <td colspan="19" v-if="index>0"></td>
                                     </tr>
                                     <tr class="cuerpo-tabla-creados border border-secondary" style="vertical-align: middle;" :class="{ 'fila-ultimo-proyecto': buscandoUltimoProyectoCreado(proyecto.nombre_proyecto) }">
                                         <td class="border border-secondary">{{proyecto.fecha}}</td>
@@ -582,6 +580,7 @@ if (isset($_SESSION['nombre'])) {
                                         <td class="border border-secondary">{{proyecto.tons_co2}}</td>
                                         <td class="border border-secondary">{{proyecto.ahorro_duro}}</td>
                                         <td class="border border-secondary">{{proyecto.ahorro_suave}}</td>
+                                        <td class="border border-secondary"><b>{{proyecto.status_seguimiento}}</b></td>
                                         <td class="border border-secondary"> <button class="rounded-circle bg-danger border border-secondary btn shadow-sm" @click="eliminarProyecto(proyecto.id)"><i class="bi bi-trash3-fill text-white"></i></button></td>
                                     </tr>
                                 </template>
@@ -1089,17 +1088,17 @@ if (isset($_SESSION['nombre'])) {
                                             </div>
                                         </div>
                                     </div>
-                                     <!--CUERPO MODAL ACTUALIZAR FUENTE-->
-                                     <div v-if="tipo=='Fuente'">
+                                    <!--CUERPO MODAL ACTUALIZAR FUENTE-->
+                                    <div v-if="tipo=='Fuente'">
                                         <div>
-                                                <div class="input-group mb-3 mt-3  px-3">
-                                                    <span class="input-group-text w-25">Nombre:</span>
-                                                    <input v-model="nuevoNombre" type="text" class="w-75">
-                                                </div>
-                                                <div class="input-group mb-3  px-3" >
-                                                    <span class="input-group-text w-25">Siglas:</span>
-                                                    <input v-model="siglas" type="text" class="w-75">
-                                                </div>
+                                            <div class="input-group mb-3 mt-3  px-3">
+                                                <span class="input-group-text w-25">Nombre:</span>
+                                                <input v-model="nuevoNombre" type="text" class="w-75">
+                                            </div>
+                                            <div class="input-group mb-3  px-3">
+                                                <span class="input-group-text w-25">Siglas:</span>
+                                                <input v-model="siglas" type="text" class="w-75">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1156,11 +1155,11 @@ if (isset($_SESSION['nombre'])) {
                                     </td>
                                     <td style="min-width: 351px;">
                                         <div v-if="actualizar==(posicion+1)">
-                                        <label  class="ms-1"> Mes: </label>
+                                            <label class="ms-1"> Mes: </label>
                                             <select v-model=" mes_select" class="me-3">
                                                 <option v-for="(month,index) in months" :value="(index+1)">{{month}}</option>
                                             </select>
-                                        <label class="ms-1 "> Año: </label>
+                                            <label class="ms-1 "> Año: </label>
                                             <select v-model="anio_select">
                                                 <option v-for="(year,index) in years" :value="year">{{year}}</option>
                                             </select>
@@ -1171,41 +1170,30 @@ if (isset($_SESSION['nombre'])) {
                                         </div>
                                     </td>
 
-                                    <td style="background: #bfe49b;" >
-                                        <input v-if="actualizar==(posicion+1)"  type="text" v-model="input_tons_co2" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" 
-                                        @blur="formatInputSinPesos('input_tons_co2')"></input><!--:value="proyecto.tons_co2"-->
+                                    <td style="background: #bfe49b;">
+                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="input_tons_co2" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputSinPesos('input_tons_co2')"></input><!--:value="proyecto.tons_co2"-->
                                         <label v-else>{{proyecto.tons_co2}}</label>
                                     </td>
-                                    <td v-if="sinImpacto!='Sin Impacto'" v-for="(cantidad,index) in columnaImpactoAmbiental.length"  :key="index"><!--columa v-for"-->
-                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="inputImpactoAmbiental[posicion][index]" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" 
-                                        @blur="formatInputSinPesosImpactoAmbientalPosicion(posicion,index)"> </input>
+                                    <td v-if="sinImpacto!='Sin Impacto'" v-for="(cantidad,index) in columnaImpactoAmbiental.length" :key="index"><!--columa v-for"-->
+                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="inputImpactoAmbiental[posicion][index]" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputSinPesosImpactoAmbientalPosicion(posicion,index)"> </input>
                                         <label v-else>{{inputImpactoAmbiental[posicion][index]}}</label>
                                     </td>
                                     <td>
-                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="input_ahorro_duro" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" 
-                                        @blur="formatInputPesos('input_ahorro_duro')"></input> <!--:value="proyecto.ahorro_duro"-->
+                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="input_ahorro_duro" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('input_ahorro_duro')"></input> <!--:value="proyecto.ahorro_duro"-->
                                         <label v-else>{{proyecto.ahorro_duro}}</label>
                                     </td>
                                     <td>
-                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="input_ahorro_suave" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" 
-                                        @blur="formatInputPesos('input_ahorro_suave')"></input> <!--:value="proyecto.ahorro_suave"-->
+                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="input_ahorro_suave" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('input_ahorro_suave')"></input> <!--:value="proyecto.ahorro_suave"-->
                                         <label v-else>{{proyecto.ahorro_suave}}</label>
                                     </td>
                                     <td style="min-width:150px">
-                                                    <!--<div v-if="posicion === (arregloID.length - 1)" class="form-check form-switch">
-                                                        <div class="form-check form-switch">
-                                                            <input
-                                                                class="form-check-input"
-                                                                type="checkbox"
-                                                                id="flexSwitchCheckChecked"
-                                                                :checked="proyecto.status_seguimiento !== 'Cerrado'"
-                                                                @click="toggleSeguimientoStatus"
-                                                            />
-                                                            <label class="form-check-label" for="flexSwitchCheckChecked">
-                                                                {{proyecto.status_seguimiento === 'Cerrado' ? 'false' : 'true' }}
-                                                            </label>
-                                                        </div>
-                                                    </div>-->
+                                        <div v-if="posicion === (arregloID.length - 1)" class="form-check form-switch">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" v-model="seguimiento_status" @change="guardarStatus()" style=" background-color: #B3F09B; color:white">
+                                                <label v-if="seguimiento_status" class="form-check-label" for="flexSwitchCheckDefault">Siguiendo</label>
+                                                <label v-else class="form-check-label" for="flexSwitchCheckDefault">Cerrado</label>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                                 <!------------------------------------------------------------------------------PRIMER SEGUIMIETO --------------------------------------------------->
@@ -1231,20 +1219,20 @@ if (isset($_SESSION['nombre'])) {
                                         <label v-else></label>
                                     </td>
                                     <td v-if="sinImpacto!='Sin Impacto'" v-for="(cantidad,index) in columnaImpactoAmbiental.length" :key="index"><!--columa v-for"-->
-                                        <input v-if="actualizatabla==true" type="text" v-model="inputImpactoAmbientalInicial[index]" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)"  @blur="formatInputSinPesosImpactoAmbiental(index)"> </input>
+                                        <input v-if="actualizatabla==true" type="text" v-model="inputImpactoAmbientalInicial[index]" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputSinPesosImpactoAmbiental(index)"> </input>
                                         <label v-else></label>
                                     </td>
                                     <td>
-                                        <input v-if="actualizatabla==true" type="text" v-model="input_ahorro_duro" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)"  @blur="formatInputPesos('input_ahorro_duro')"></input> <!--:value="proyecto.ahorro_suave"-->
+                                        <input v-if="actualizatabla==true" type="text" v-model="input_ahorro_duro" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('input_ahorro_duro')"></input> <!--:value="proyecto.ahorro_suave"-->
                                         <label v-else></label>
                                     </td>
                                     <td>
-                                        <input v-if="actualizatabla==true" type="text" v-model="input_ahorro_suave" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)"  @blur="formatInputPesos('input_ahorro_suave')"></input> <!--:value="proyecto.ahorro_duro"-->
+                                        <input v-if="actualizatabla==true" type="text" v-model="input_ahorro_suave" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('input_ahorro_suave')"></input> <!--:value="proyecto.ahorro_duro"-->
                                         <label v-else></label>
                                     </td>
 
                                     <td style="min-width:150px">
-                                          
+
                                     </td>
                                 </tr>
                             <tbody>
@@ -1266,20 +1254,20 @@ if (isset($_SESSION['nombre'])) {
                                         <table class="ms-3 mt-1 text-center w-100 ">
                                             <thead class="border border-dark">
                                                 <tr scope="col">
-                                                 <th  class="border border-dark ">Valor</th>
-                                                 <td  class="border border-dark">dato1</td>
+                                                    <th class="border border-dark ">Valor</th>
+                                                    <td class="border border-dark">dato1</td>
                                                 </tr>
                                                 <tr scope="row">
-                                                 <th  class="border border-dark">ilegible</th>
-                                                 <td  class="border border-dark">dato2</td>
+                                                    <th class="border border-dark">ilegible</th>
+                                                    <td class="border border-dark">dato2</td>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                
+
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                 </div>
                                 <div class="d-flex justify-content-around pt-1 ">
                                     <div class="bg-success col-3 px-2">
@@ -1287,12 +1275,12 @@ if (isset($_SESSION['nombre'])) {
                                             <span class="col-8 mt-3">Cliente</span>
                                             <table class="col-4  mt-1  text-center  table-bordered border-dark  ">
                                                 <thead>
-                                                    
+
                                                 </thead>
                                                 <tbody class="bg-white">
                                                     <tr>
                                                         <th scope="row">1</th>
-                                                    </tr> 
+                                                    </tr>
                                                     <tr>
                                                         <td>2</td>
                                                     </tr>
@@ -1302,31 +1290,31 @@ if (isset($_SESSION['nombre'])) {
                                         </div>
                                         <table class=" text-center table table-bordered border-dark  ">
                                             <thead>
-                                                
+
                                             </thead>
                                             <tbody class="bg-white">
-                                            <tr>
-                                                    <th scope="row">1 </th>
-                                                    <td>2</td>
-                                                </tr>  
                                                 <tr>
                                                     <th scope="row">1 </th>
                                                     <td>2</td>
-                                                </tr>  
+                                                </tr>
                                                 <tr>
                                                     <th scope="row">1 </th>
                                                     <td>2</td>
-                                                </tr>  
+                                                </tr>
                                                 <tr>
                                                     <th scope="row">1 </th>
                                                     <td>2</td>
-                                                </tr> 
+                                                </tr>
                                                 <tr>
                                                     <th scope="row">1 </th>
                                                     <td>2</td>
-                                                </tr>  
-                                                
-                                                
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">1 </th>
+                                                    <td>2</td>
+                                                </tr>
+
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -1335,12 +1323,12 @@ if (isset($_SESSION['nombre'])) {
                                             <span class="col-8 mt-3">Capital humano</span>
                                             <table class="col-4 mt-1 text-center  table-bordered border-dark  " style="max-width:50px">
                                                 <thead>
-                                                    
+
                                                 </thead>
                                                 <tbody class="bg-white">
                                                     <tr>
                                                         <th scope="row">1</th>
-                                                    </tr> 
+                                                    </tr>
                                                     <tr>
                                                         <td>2</td>
                                                     </tr>
@@ -1350,31 +1338,31 @@ if (isset($_SESSION['nombre'])) {
                                         </div>
                                         <table class=" text-center table table-bordered border-dark  ">
                                             <thead>
-                                                
+
                                             </thead>
                                             <tbody class="bg-white">
-                                            <tr>
-                                                    <th scope="row">1 </th>
-                                                    <td>2</td>
-                                                </tr>  
                                                 <tr>
                                                     <th scope="row">1 </th>
                                                     <td>2</td>
-                                                </tr>  
+                                                </tr>
                                                 <tr>
                                                     <th scope="row">1 </th>
                                                     <td>2</td>
-                                                </tr>  
+                                                </tr>
                                                 <tr>
                                                     <th scope="row">1 </th>
                                                     <td>2</td>
-                                                </tr> 
+                                                </tr>
                                                 <tr>
                                                     <th scope="row">1 </th>
                                                     <td>2</td>
-                                                </tr>  
-                                                
-                                                
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">1 </th>
+                                                    <td>2</td>
+                                                </tr>
+
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -1383,12 +1371,12 @@ if (isset($_SESSION['nombre'])) {
                                             <span class="col-8 mt-3">Excelencia operativa</span>
                                             <table class="col-4 mt-1 text-center  table-bordered border-dark  " style="max-width:50px">
                                                 <thead>
-                                                    
+
                                                 </thead>
                                                 <tbody class="bg-white">
                                                     <tr>
                                                         <th scope="row">1</th>
-                                                    </tr> 
+                                                    </tr>
                                                     <tr>
                                                         <td>2</td>
                                                     </tr>
@@ -1398,31 +1386,31 @@ if (isset($_SESSION['nombre'])) {
                                         </div>
                                         <table class=" text-center table table-bordered border-dark  ">
                                             <thead>
-                                                
+
                                             </thead>
                                             <tbody class="bg-white">
-                                            <tr>
-                                                    <th scope="row">1 </th>
-                                                    <td>2</td>
-                                                </tr>  
                                                 <tr>
                                                     <th scope="row">1 </th>
                                                     <td>2</td>
-                                                </tr>  
+                                                </tr>
                                                 <tr>
                                                     <th scope="row">1 </th>
                                                     <td>2</td>
-                                                </tr>  
+                                                </tr>
                                                 <tr>
                                                     <th scope="row">1 </th>
                                                     <td>2</td>
-                                                </tr> 
+                                                </tr>
                                                 <tr>
                                                     <th scope="row">1 </th>
                                                     <td>2</td>
-                                                </tr>  
-                                                
-                                                
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">1 </th>
+                                                    <td>2</td>
+                                                </tr>
+
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -1431,12 +1419,12 @@ if (isset($_SESSION['nombre'])) {
                                             <span class="col-8 mt-2">investigacion y desarrollo</span>
                                             <table class="col-4 mt-1 text-center  table-bordered border-dark  " style="max-width:50px">
                                                 <thead>
-                                                    
+
                                                 </thead>
                                                 <tbody class="bg-white">
                                                     <tr>
                                                         <th scope="row">1</th>
-                                                    </tr> 
+                                                    </tr>
                                                     <tr>
                                                         <td>2</td>
                                                     </tr>
@@ -1446,31 +1434,31 @@ if (isset($_SESSION['nombre'])) {
                                         </div>
                                         <table class=" text-center table table-bordered border-dark  ">
                                             <thead>
-                                                
+
                                             </thead>
                                             <tbody class="bg-white">
-                                            <tr>
-                                                    <th scope="row">1 </th>
-                                                    <td>2</td>
-                                                </tr>  
                                                 <tr>
                                                     <th scope="row">1 </th>
                                                     <td>2</td>
-                                                </tr>  
+                                                </tr>
                                                 <tr>
                                                     <th scope="row">1 </th>
                                                     <td>2</td>
-                                                </tr>  
+                                                </tr>
                                                 <tr>
                                                     <th scope="row">1 </th>
                                                     <td>2</td>
-                                                </tr> 
+                                                </tr>
                                                 <tr>
                                                     <th scope="row">1 </th>
                                                     <td>2</td>
-                                                </tr>  
-                                                
-                                                
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">1 </th>
+                                                    <td>2</td>
+                                                </tr>
+
+
                                             </tbody>
                                         </table>
                                     </div>

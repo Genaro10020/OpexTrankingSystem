@@ -34,7 +34,9 @@ if (isset($_SESSION['nombre'])) {
                 $objetivos = $arreglo['objetivos'];
                 $impacto_ambiental = $arreglo['impacto_ambiental'];
                 $tons_co2 = $arreglo['tons_co2'];
-                if($tons_co2==""){$tons_co2 = 0; }
+                if ($tons_co2 == "") {
+                    $tons_co2 = 0;
+                }
                 $ahorro_duro = $arreglo['ahorro_duro'];
                 $ahorro_suave = $arreglo['ahorro_suave'];
                 $misiones = json_encode($misiones, JSON_UNESCAPED_UNICODE); //conviertiendo arreglos en cadena
@@ -53,17 +55,21 @@ if (isset($_SESSION['nombre'])) {
             break;
         case 'PUT':
             // Manejar solicitud PUT (actualización)
-
+            if (isset($arreglo['id_proyecto']) && isset($arreglo['status'])) {
+                $id_proyecto=$arreglo['id_proyecto'];
+                $status=$arreglo['status'];
+                $val[] = actualizarStatusCerradoSiguiendo($id_proyecto,$status);
+            }
             // ...
             break;
         case 'DELETE':
             // Manejar solicitud DELETE (eliminación)
-            if(isset($arreglo['id'])){
+            if (isset($arreglo['id'])) {
                 $id = $arreglo['id'];
                 $val[] = eliminarProyecto($id);
             } else {
-                $val[] = "No llego la varible ID".$arreglo['id'];
-            //  http_response_code(400); // Bad Request
+                $val[] = "No llego la varible ID" . $arreglo['id'];
+                //  http_response_code(400); // Bad Request
             }
             // ...
             // ...

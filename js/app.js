@@ -101,8 +101,8 @@ const AltaProyectos = {
       years: [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035, 2036, 2037, 2038, 2039, 2040, 2041, 2042, 2043, 2044, 2045, 2046, 2047, 2048, 2049, 2050],
       mes_select: 1,
       anio_select: 2023,
-      seguimiento_status:true,
-      sinImpacto:'',
+      seguimiento_status: true,
+      sinImpacto: '',
     }
   },
   mounted() {
@@ -145,11 +145,11 @@ const AltaProyectos = {
             this.arregloID = response.data[0][0];
             this.columnaImpactoAmbiental = JSON.parse(response.data[0][0][0].impacto_ambiental);
             this.seguimientos = 0;
-            if(this.columnaImpactoAmbiental[0]=='Sin Impacto'){
+            if (this.columnaImpactoAmbiental[0] == 'Sin Impacto') {
               this.inputImpactoAmbientalInicial = Array(1);
               this.inputImpactoAmbientalInicial[0] = '0.00';
               this.sinImpacto = 'Sin Impacto'
-            }else{
+            } else {
               this.inputImpactoAmbientalInicial = Array(this.columnaImpactoAmbiental.length);
               this.sinImpacto = ''
             }
@@ -182,16 +182,22 @@ const AltaProyectos = {
             for (let j = 0; j < response.data[0][2][0].length; j++) {
               impactoAmbiental.push(response.data[0][2][0][j].impacto_ambiental)
             }
+            if (response.data[0][0][0].status_seguimiento === 'Cerrado') {
+              this.seguimiento_status = false
+            } else {
+              this.seguimiento_status = true
+            }
+
             var no_repetidos = new Set(impactoAmbiental);
             this.columnaImpactoAmbiental = Array.from(no_repetidos);;//tiene los nombres de impacto ambiental
             this.inputImpactoAmbientalInicial = Array(this.columnaImpactoAmbiental.length);
 
 
-            if(this.columnaImpactoAmbiental[0]=='Sin Impacto'){
+            if (this.columnaImpactoAmbiental[0] == 'Sin Impacto') {
               this.inputImpactoAmbientalInicial = Array(1);
               this.inputImpactoAmbientalInicial[0] = '0.00';
               this.sinImpacto = 'Sin Impacto'
-            }else{
+            } else {
               this.inputImpactoAmbientalInicial = Array(this.columnaImpactoAmbiental.length);
               this.sinImpacto = ''
             }
@@ -238,8 +244,8 @@ const AltaProyectos = {
 
       })
     },
-     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR FUENTES*/
-     consultarFuentes() {
+    /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR FUENTES*/
+    consultarFuentes() {
       axios.get('fuentesController.php', {
       }).then(response => {
         if (response.data[0][1] == true) {
@@ -863,8 +869,8 @@ const AltaProyectos = {
       }
     },
 
-     /*/////////////////////////////////////////////////////////////////////////////////INSERTAR FUENTE*/
-     insertarFuente() {
+    /*/////////////////////////////////////////////////////////////////////////////////INSERTAR FUENTE*/
+    insertarFuente() {
       if (this.nueva != '' && this.siglas != '') {
         axios.post('fuentesController.php', {
           nueva: this.nueva,
@@ -1273,34 +1279,34 @@ const AltaProyectos = {
         alert("Todos los campos son requeridos para poder actualizar.")
       }
     },
-       /*/////////////////////////////////////////////////////////////////////////////////ACTUALIZAR IMPACTO AMBIENTAL*/
-       actualizarFuente() {
-        if (this.nuevoNombre != '' && this.siglas != '') {
-          axios.put('fuentesController.php', {
-            id: this.id,
-            nuevo: this.nuevoNombre,
-            siglas: this.siglas
-          }).then(response => {
-            console.log(response.data)
-            if (response.data[0] == true) {
-              this.myModal.hide();
-              this.consultarFuentes()
-              this.id = ''
-              this.nuevoNombre = ''
-              this.siglas = ''
-              alert("Se actualizo correctamente.")
-            } else {
-              alert("No se actualizo la Fuente.")
-            }
-          }).catch(error => {
-            //console.log('Erro :-('+error)
-          }).finally(() => {
-  
-          })
-        } else {
-          alert("Todos los campos son requeridos para poder actualizar.")
-        }
-      },
+    /*/////////////////////////////////////////////////////////////////////////////////ACTUALIZAR IMPACTO AMBIENTAL*/
+    actualizarFuente() {
+      if (this.nuevoNombre != '' && this.siglas != '') {
+        axios.put('fuentesController.php', {
+          id: this.id,
+          nuevo: this.nuevoNombre,
+          siglas: this.siglas
+        }).then(response => {
+          console.log(response.data)
+          if (response.data[0] == true) {
+            this.myModal.hide();
+            this.consultarFuentes()
+            this.id = ''
+            this.nuevoNombre = ''
+            this.siglas = ''
+            alert("Se actualizo correctamente.")
+          } else {
+            alert("No se actualizo la Fuente.")
+          }
+        }).catch(error => {
+          //console.log('Erro :-('+error)
+        }).finally(() => {
+
+        })
+      } else {
+        alert("Todos los campos son requeridos para poder actualizar.")
+      }
+    },
     /*/////////////////////////////////////////////////////////////////////////////////ACTUALIZAR MISION*/
     actualizarMision() {
       if (this.nueva != '') {
@@ -1611,8 +1617,8 @@ const AltaProyectos = {
         alert("Selecione la planta a eliminar")
       }
     },
-     /*/////////////////////////////////////////////////////////////////////////////////ELIMINAR FUENTE*/
-     eliminarFuente(id) {
+    /*/////////////////////////////////////////////////////////////////////////////////ELIMINAR FUENTE*/
+    eliminarFuente(id) {
       if (confirm("¿Desea eliminar la fuente?")) {
         axios.delete('fuentesController.php', {
           data: {
@@ -1975,7 +1981,7 @@ const AltaProyectos = {
       //nombre del proyecto
       else if (this.nombre_proyecto == '') { this.respondio = false; alert("Agregue un nombre al proyecto"); }
       //Planta
-      else if (this.selectFuente== '') { this.respondio = false; alert("Seleccione una Fuente"); }
+      else if (this.selectFuente == '') { this.respondio = false; alert("Seleccione una Fuente"); }
       //Planta
       else if (this.selectPlanta == '') { this.respondio = false; alert("Seleccione una Planta"); }
       //Area
@@ -1999,7 +2005,7 @@ const AltaProyectos = {
       //Impacto Ambiental
       /*else if (this.checkImpactoAmbiental.length <= 0) { this.respondio = false; alert("Seleccione minimo una Impacto Ambiental") }*/
       //Ahorros
-      else if ((this.tons_co2 == "0" || this.tons_co2 == "" || this.tons_co2 == "0.00" ) && this.ahorro_duro == "$.00" && this.ahorro_suave == "$.00" && (this.objetivo_estrategico == false || this.objetivo_estrategico == true)) { this.respondio = false; alert("Minimo uno debe ser distinto a 0") }
+      else if ((this.tons_co2 == "0" || this.tons_co2 == "" || this.tons_co2 == "0.00") && this.ahorro_duro == "$.00" && this.ahorro_suave == "$.00" && (this.objetivo_estrategico == false || this.objetivo_estrategico == true)) { this.respondio = false; alert("Minimo uno debe ser distinto a 0") }
       //Si algo no se a contestado
       else {
         this.respondio = true
@@ -2125,8 +2131,8 @@ const AltaProyectos = {
         var nombre_impacto = this.checkImpactoAmbiental[i].split('<->')[1];
         impacto_ambiental_nombres.push(nombre_impacto)
       }
-      
-      if(impacto_ambiental_nombres.length<=0){
+
+      if (impacto_ambiental_nombres.length <= 0) {
         impacto_ambiental_nombres.push('Sin Impacto')
       }
 
@@ -2140,7 +2146,7 @@ const AltaProyectos = {
         folio: folio,
         fecha_alta: this.fecha_alta,
         nombre_proyecto: this.nombre_proyecto,
-        fuente:fuenteConSiglas,
+        fuente: fuenteConSiglas,
         select_planta: planta,
         select_area: area,
         select_departamento: departamento,
@@ -2308,9 +2314,9 @@ const AltaProyectos = {
       const options2 = { style: 'currency', currency: 'USD', minimumFractionDigits: 2 };
       const numberFormat2 = new Intl.NumberFormat('en-US', options2);
       // Obtener el valor actual del campo y eliminar caracteres no deseados
-      
+
       var valorCampo = value.replace(/[^\d.]/g, '');
-      if(valorCampo==''){valorCampo =0}
+      if (valorCampo == '') { valorCampo = 0 }
       // Formatear el valor como un número
       let numeroFormateado = parseFloat(valorCampo).toFixed(2);
       // Aplicar el formato de número
@@ -2321,9 +2327,9 @@ const AltaProyectos = {
     },
     formatMonedaSinPesos(value) {
       // Obtener el valor actual del campo y eliminar caracteres no deseados
-      if(value=='' || value== undefined ){value ='0'}
+      if (value == '' || value == undefined) { value = '0' }
       var valorCampo = value.replace(/[^\d.]/g, '');
-      if(valorCampo==''){valorCampo =0}
+      if (valorCampo == '') { valorCampo = 0 }
       // Formatear el valor como un número
       let numeroFormateado = parseFloat(valorCampo).toFixed(2); // Se ajusta para tener dos decimales
       // Devolver el valor formateado sin el signo de dólar
@@ -2370,11 +2376,11 @@ const AltaProyectos = {
         } else if (tipo == 'Mision') {
           this.id = id;
           this.nueva = nombre;
-        }else if(tipo == 'Fuente'){
+        } else if (tipo == 'Fuente') {
           this.nuevoNombre = nombre;
           this.siglas = siglas;
           this.id = id;
-        }else {
+        } else {
           alert("No existe ese tipo en actualizars")
         }
       }
@@ -2389,7 +2395,6 @@ const AltaProyectos = {
 
     /*/////////////////////////////////////////////////////////////////////////////////INSERTAR PLANTA*/
     guardarSeguimiento() {
-      console.log("IDsImpacto")
       console.log(this.inputImpactoAmbientalInicial)
       axios.post('seguimientoAmbientalProyectoController.php', {
         id_proyecto: this.id_proyecto,
@@ -2407,10 +2412,10 @@ const AltaProyectos = {
           if (response.data[0][0] == true) {
             if (response.data[0][1] == true) {
               if (response.data[0][2] == true) {
-                  this.actualizar = 0
-                  this.actualizatabla = false
-                  this.consultarImpactoAmbieltalXProyectoID()
-                  alert("Se inserto con éxito")
+                this.actualizar = 0
+                this.actualizatabla = false
+                this.consultarImpactoAmbieltalXProyectoID()
+                alert("Se inserto con éxito")
               } else {
                 alert("Verifique que los campos no esten vacios, valor minimo 0 ")
               }
@@ -2463,16 +2468,37 @@ const AltaProyectos = {
 
       })
     },
-    verificando(variable){
-      if(variable==="Cerrado"){
-        this.seguimiento_status = false
-      }else{
-        this.seguimiento_status = true
+    guardarStatus() {
+      //console.log(this.seguimiento_status + this.id_proyecto);
+      var status = ''
+      if (this.seguimiento_status === true) {
+        status = 'Siguiendo'
+      } else {
+        status = 'Cerrado'
       }
-      console.log(this.seguimiento_status)
-    },
-    toggleSeguimientoStatus(){
-      this.seguimiento_status = !this.seguimiento_status;
+
+      axios.put('proyectosController.php', {
+        id_proyecto: this.id_proyecto,
+        status: status,
+      }).then(response => {
+        console.log(response.data)
+        if (response.data[0] == true) {
+          if (status == 'Cerrado') {
+            alert("El proyecto se ha cerrado.")
+          } else if (status == 'Siguiendo') {
+            alert("Siguiendo proyecto")
+          }
+          this.consultarProyectos()
+        } else {
+          alert("La inserción de Status, no se realizo correctamente.")
+        }
+
+      }).catch(error => {
+        //console.log('Erro :-('+error)
+      }).finally(() => {
+
+      })
+
     },
     mostrandoMes(mes) {
 

@@ -106,13 +106,13 @@ function insertarProyecto($folio, $fecha_alta, $nombre_proyecto, $fuente, $plant
 }
 
 
-function actualizarArea($id, $nuevo, $siglas)
+function actualizarStatusCerradoSiguiendo($id_proyecto, $status)
 {
     global $conexion;
     $estado = false;
-    $update = "UPDATE areas SET nombre=?, siglas =? WHERE  id=?";
+    $update = "UPDATE proyectos_creados SET status_seguimiento=? WHERE  id=?";
     $stmt = $conexion->prepare($update);
-    $stmt->bind_param("ssi", $nuevo, $siglas, $id);
+    $stmt->bind_param("si", $status, $id_proyecto);
     if ($stmt->execute()) {
         $estado = true;
     }
