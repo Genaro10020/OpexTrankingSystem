@@ -31,12 +31,12 @@ if (isset($_SESSION['nombre'])) {
                     <button class="btn-menu me-sm-3" @click="ventana='Seguimiento'">
                         <i class="bi bi-plus-circle"></i> Seguimiento
                     </button>
-                    <button class="btn-menu me-sm-3 " @click="ventana='Generar Valor',consultarObjetivosRelacional()">
+                    <!--<button class="btn-menu me-sm-3 " @click="ventana='Generar Valor',consultarObjetivosRelacional()">
                         <i class="bi bi-plus-circle"></i> Generando Valor
                     </button>
                     <button class="btn-menu" @click="ventana='Reportes',consultarObjetivosRelacional()">
                         <i class="bi bi-plus-circle"></i> Reportes
-                    </button>
+                    </button>-->
                     <!--Modal Alta Proyectos-->
                     <div id="modal-alta-proyecto" class="modal text-start" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
                         <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
@@ -1217,7 +1217,7 @@ if (isset($_SESSION['nombre'])) {
                                         <td></td>
                                     </tr> 
                                 <!------------------------------------------------------------------------------PRIMER SEGUIMIETO --------------------------------------------------->
-                                <tr v-if="id_proyecto!=''" style="vertical-align: middle; font-size: 1.1em;">
+                                <tr v-if="id_proyecto!='' && seguimiento_status==true" style="vertical-align: middle; font-size: 1.1em;">
                                     <td v-if="seguimiento_status">
                                         <button v-if="actualizatabla == false && actualizar==0 " type="button" class="boton-aceptar" @Click="actualizatabla =!actualizatabla,nuevoLimpiarVariables()">Nuevo</button>
                                         <button v-if="actualizatabla == true" class="boton-eliminar mx-2" @Click="actualizatabla =!actualizatabla ">Cancelar</button>
