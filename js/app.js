@@ -103,6 +103,10 @@ const AltaProyectos = {
       anio_select: 2023,
       seguimiento_status: true,
       sinImpacto: '',
+      sumaCO2:0,
+      sumaAhorroDuro:0,
+      sumaAhorroSuave:0,
+      sumaColumnasImpacto:[],
     }
   },
   mounted() {
@@ -202,18 +206,63 @@ const AltaProyectos = {
               this.sinImpacto = ''
             }
 
-
-            /*var datos = [];
-            for (let j = 0; j < response.data[0][2].length; j++) {
-              datos.push(response.data[0][2][0].dato)
-            }*/
-
             this.inputImpactoAmbiental = response.data[0][2].map(subArray => subArray.map(objeto => objeto.dato));
             this.idsInputImpactoAmbiental = response.data[0][2].map(subArray => subArray.map(objeto => objeto.id_registro));//los utilizare para actualizar
 
+            //Sumando Columnas
+            var sumaC02 = 0
+            var sumaAhorroDuro = 0
+            var sumaAhorroSuave = 0
+            //suma CO2
+            for (let i = 0; i < response.data[0][0].length; i++) {
+             var valorC02 = response.data[0][0][i].tons_co2  //tomando los valores de C02
+             var valorAhorroDuro= response.data[0][0][i].ahorro_duro  //tomando los valores de Ahorro Duro
+             var valorAhorroSuave= response.data[0][0][i].ahorro_suave  //tomando los valores de Ahorro Duro
+             valorAhorroDuro= this.formatoSoloNumeros(valorAhorroDuro); //Eliminando pesos 
+             valorAhorroSuave= this.formatoSoloNumeros(valorAhorroSuave); //Eliminando pesos 
+             sumaC02 = parseFloat(sumaC02) + parseFloat(valorC02)
+             sumaAhorroDuro = parseFloat(sumaAhorroDuro) + parseFloat(valorAhorroDuro) // sumando Ahorro duro
+             sumaAhorroSuave = parseFloat(sumaAhorroSuave) + parseFloat(valorAhorroSuave) // sumando Ahorro duro
+            }
+            this.sumaCO2 = sumaC02.toFixed(2);
+            this.sumaAhorroDuro = this.formatoNumeroApesos(sumaAhorroDuro); //convietiendo a pesos
+            this.sumaAhorroSuave = this.formatoNumeroApesos(sumaAhorroSuave); //convietiendo a pesos
+            
+            //Sumando Valores de Columna Impacto Ambiental
+            var sumas = [];
+            for (let i = 0; i < this.inputImpactoAmbiental.length; i++) {
+                for (let j = 0; j < this.inputImpactoAmbiental[i].length; j++) {
+                      valor= this.inputImpactoAmbiental[i][j]
+                      if (i === 0) {
+                        // Inicializar la suma en la primera iteración
+                         sumas['suma' + j] = parseFloat(valor);
+                      } else {
+                          // Sumar en las iteraciones siguientes
+                          sumas['suma' + j] += parseFloat(valor);
+                      }
+                }
+                
+            }
+            
+            // Redondear al mostrar o almacenar para que no aparecans numero con msa de dos decimas .00
+            for (let i in sumas) {
+              sumas[i] = parseFloat(sumas[i]).toFixed(2);  // Convertir a número antes de usar toFixed
+            }
+            this.sumaColumnasImpacto = sumas;
+           
+            /*for (let i = 0; i <this.seguimientos[0][2].length; i++) {
+                for (let j = 0; j < this.seguimientos[0][2][i].length; j++) {
+                  var valor = this.seguimientos[0][2][i][j].dato;
+                  // Utilizar una clave dinámica (suma1, suma2, etc.)
+                  sumas['suma' + j] = (sumas['suma' + j]) + parseFloat(valor);
+                  console.log(sumas['suma' + j] )
+                     //sumando = parseFloat(sumando) + parseFloat(suma);
+                      //this.seguimientos[0][2][i][j].push({['Sumado' + j]: sumando.toFixed(2) });
+                }
+            }*/
 
-            //this.inputImpactoAmbiental = Array(this.columnaImpactoAmbiental.length);
-            //this.columnaImpactoAmbiental = JSON.parse(response.data[0][0][0].impacto_ambiental);
+
+
           } else {
             this.consultarProyectoID() // si no existe seguimientos consultara proyectos para insetarlos primeros registros
           }
@@ -2340,6 +2389,18 @@ const AltaProyectos = {
     },
     formatInputSinPesosImpactoAmbientalPosicion(posicion, index) {//Actualizacion
       this.inputImpactoAmbiental[posicion][index] = this.formatMonedaSinPesos(this.inputImpactoAmbiental[posicion][index]);
+    },
+    formatoSoloNumeros(value) {//formato de pesos limpiar a solo numeros
+      // Obtener el valor actual del campo y eliminar caracteres no deseados
+      var valorCampo = value.replace(/[^\d.]/g, '');
+      let numeroFormateado = parseFloat(valorCampo).toFixed(2);//agregamos los decimales .00
+      return numeroFormateado
+    },
+    formatoNumeroApesos(value) {
+      const options2 = { style: 'currency', currency: 'USD', minimumFractionDigits: 2 };
+      const numberFormat2 = new Intl.NumberFormat('en-US', options2);
+      // Obtener el valor actual del campo y eliminar caracteres no deseados
+      return numberFormat2.format(value);
     },
     modalCatalogos(accion, tipo, id, nombre, cantidad, siglas, unidadMedida, misionLigada, n_mision, id_mision_ligada) {//accion: es CREAR, ACTUALIZAR, ELIMINAR y tipo: es Pilares, Misiones, Objetivos.
       this.id = ''

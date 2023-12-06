@@ -1131,6 +1131,7 @@ if (isset($_SESSION['nombre'])) {
                             <option value="">Seleccione...</option>
                             <option v-for="proyecto in proyectos" :value="proyecto.id">{{proyecto.nombre_proyecto}}</option>
                         </select>
+                       
                     </div>
                     <div class="scroll-dos">
                         <table class="mx-2 mb-5 table table-hover table-bordered table-striped text-center" style="font-size: 0.8em;">
@@ -1147,55 +1148,67 @@ if (isset($_SESSION['nombre'])) {
                             </thead>
                             <tbody>
                                 <!-----------------------------------------------------------------------------CUANDO YA EXISTE MINIMO UN SEGUIMIENTO -->
-                                <tr v-if="seguimientos>0" style="vertical-align: middle; font-size: 1.1em;" v-for="(proyecto,posicion) in arregloID" :key="posicion">
-                                    <td v-if="seguimiento_status">
-                                        <button v-if="actualizar==0 && actualizatabla == false" type="button" class="boton-actualizar" v-if="actualizatabla == false" @Click="asignarDatosActualizar(posicion)">Actualizar</button>
-                                        <button v-if="actualizar==(posicion+1)" v-if="actualizatabla == true" class="boton-eliminar mx-2" @Click="actualizar = 0">Cancelar</button>
-                                        <button v-if="actualizar==(posicion+1) && proyecto.id_registro " v-if="actualizatabla == true" class="boton-aceptar" @Click="actualizarSeguimiento(posicion)">Guardar</button><!--Guardar Actualizacion cuando existe minimo 1-->
-                                    </td>
-                                    <td style="min-width: 351px;">
-                                        <div v-if="actualizar==(posicion+1)">
-                                            <label class="ms-1"> Mes: </label>
-                                            <select v-model=" mes_select" class="me-3">
-                                                <option v-for="(month,index) in months" :value="(index+1)">{{month}}</option>
-                                            </select>
-                                            <label class="ms-1 "> Año: </label>
-                                            <select v-model="anio_select">
-                                                <option v-for="(year,index) in years" :value="year">{{year}}</option>
-                                            </select>
-                                        </div>
-                                        <div v-else>
-                                            <label> {{mostrandoMes(proyecto.mes)}} <label>
-                                                    <label> {{proyecto.anio}} <label>
-                                        </div>
-                                    </td>
 
-                                    <td style="background: #bfe49b;">
-                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="input_tons_co2" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputSinPesos('input_tons_co2')"></input><!--:value="proyecto.tons_co2"-->
-                                        <label v-else>{{proyecto.tons_co2}}</label>
-                                    </td>
-                                    <td v-if="sinImpacto!='Sin Impacto'" v-for="(cantidad,index) in columnaImpactoAmbiental.length" :key="index"><!--columa v-for"-->
-                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="inputImpactoAmbiental[posicion][index]" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputSinPesosImpactoAmbientalPosicion(posicion,index)"> </input>
-                                        <label v-else>{{inputImpactoAmbiental[posicion][index]}}</label>
-                                    </td>
-                                    <td>
-                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="input_ahorro_duro" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('input_ahorro_duro')"></input> <!--:value="proyecto.ahorro_duro"-->
-                                        <label v-else>{{proyecto.ahorro_duro}}</label>
-                                    </td>
-                                    <td>
-                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="input_ahorro_suave" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('input_ahorro_suave')"></input> <!--:value="proyecto.ahorro_suave"-->
-                                        <label v-else>{{proyecto.ahorro_suave}}</label>
-                                    </td>
-                                    <td style="min-width:150px">
-                                        <div v-if="posicion === (arregloID.length - 1)" class="form-check form-switch">
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" v-model="seguimiento_status" @change="guardarStatus()" style=" background-color: #B3F09B; color:white">
-                                                <label v-if="seguimiento_status" class="form-check-label" for="flexSwitchCheckDefault">Siguiendo</label>
-                                                <label v-else class="form-check-label" for="flexSwitchCheckDefault">Cerrado</label>
+                                    <tr v-if="seguimientos>0" style="vertical-align: middle; font-size: 1.1em;" v-for="(proyecto,posicion) in arregloID" :key="posicion">
+                                        <td v-if="seguimiento_status">
+                                            <button v-if="actualizar==0 && actualizatabla == false" type="button" class="boton-actualizar" v-if="actualizatabla == false" @Click="asignarDatosActualizar(posicion)">Actualizar</button>
+                                            <button v-if="actualizar==(posicion+1)" v-if="actualizatabla == true" class="boton-eliminar mx-2" @Click="actualizar = 0">Cancelar</button>
+                                            <button v-if="actualizar==(posicion+1) && proyecto.id_registro " v-if="actualizatabla == true" class="boton-aceptar" @Click="actualizarSeguimiento(posicion)">Guardar</button><!--Guardar Actualizacion cuando existe minimo 1-->
+                                        </td>
+                                        <td style="min-width: 351px;">
+                                            <div v-if="actualizar==(posicion+1)">
+                                                <label class="ms-1"> Mes: </label>
+                                                <select v-model=" mes_select" class="me-3">
+                                                    <option v-for="(month,index) in months" :value="(index+1)">{{month}}</option>
+                                                </select>
+                                                <label class="ms-1 "> Año: </label>
+                                                <select v-model="anio_select">
+                                                    <option v-for="(year,index) in years" :value="year">{{year}}</option>
+                                                </select>
                                             </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                            <div v-else>
+                                                <label> {{mostrandoMes(proyecto.mes)}} <label>
+                                                        <label> {{proyecto.anio}} <label>
+                                            </div>
+                                        </td>
+
+                                        <td style="background: #bfe49b;">
+                                            <input v-if="actualizar==(posicion+1)" type="text" v-model="input_tons_co2" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputSinPesos('input_tons_co2')"></input><!--:value="proyecto.tons_co2"-->
+                                            <label v-else>{{proyecto.tons_co2}}</label>
+                                        </td>
+                                        <td v-if="sinImpacto!='Sin Impacto'" v-for="(cantidad,index) in columnaImpactoAmbiental.length" :key="index"><!--columa v-for"-->
+                                            <input v-if="actualizar==(posicion+1)" type="text" v-model="inputImpactoAmbiental[posicion][index]" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputSinPesosImpactoAmbientalPosicion(posicion,index)"> </input>
+                                            <label v-else>{{inputImpactoAmbiental[posicion][index]}}</label>
+                                        </td>
+                                        <td>
+                                            <input v-if="actualizar==(posicion+1)" type="text" v-model="input_ahorro_duro" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('input_ahorro_duro')"></input> <!--:value="proyecto.ahorro_duro"-->
+                                            <label v-else>{{proyecto.ahorro_duro}}</label>
+                                        </td>
+                                        <td>
+                                            <input v-if="actualizar==(posicion+1)" type="text" v-model="input_ahorro_suave" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('input_ahorro_suave')"></input> <!--:value="proyecto.ahorro_suave"-->
+                                            <label v-else>{{proyecto.ahorro_suave}}</label>
+                                        </td>
+                                        <td style="min-width:150px">
+                                            <div v-if="posicion === (arregloID.length - 1)" class="form-check form-switch">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" v-model="seguimiento_status" @change="guardarStatus()" style=" background-color: #B3F09B; color:white">
+                                                    <label v-if="seguimiento_status" class="form-check-label" for="flexSwitchCheckDefault">Siguiendo</label>
+                                                    <label v-else class="form-check-label" for="flexSwitchCheckDefault">Cerrado</label>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr v-if="seguimientos>0"> <!--Sumatoria y adjuntos-->
+                                        <td v-if="seguimiento_status"></td><!--Se oculta esta columna cuando es cerrado-->
+                                        <td><b>Sumatoria:</b> </td>
+                                        <td><b>{{sumaCO2}}</b></td>
+                                        <td v-if="sinImpacto!='Sin Impacto'" v-for="(cantidad,index) in columnaImpactoAmbiental.length" :key="index"><!--columa v-for"-->
+                                        <b>{{sumaColumnasImpacto['suma'+index]}}<b>
+                                        </td>
+                                        <td><b>{{sumaAhorroDuro}}</b></td>
+                                        <td><b>{{sumaAhorroSuave}}<b></td>
+                                        <td></td>
+                                    </tr> 
                                 <!------------------------------------------------------------------------------PRIMER SEGUIMIETO --------------------------------------------------->
                                 <tr v-if="id_proyecto!=''" style="vertical-align: middle; font-size: 1.1em;">
                                     <td v-if="seguimiento_status">
