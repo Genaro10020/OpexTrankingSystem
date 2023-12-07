@@ -103,10 +103,10 @@ const AltaProyectos = {
       anio_select: 2023,
       seguimiento_status: true,
       sinImpacto: '',
-      sumaCO2:0,
-      sumaAhorroDuro:0,
-      sumaAhorroSuave:0,
-      sumaColumnasImpacto:[],
+      sumaCO2: 0,
+      sumaAhorroDuro: 0,
+      sumaAhorroSuave: 0,
+      sumaColumnasImpacto: [],
     }
   },
   mounted() {
@@ -149,6 +149,7 @@ const AltaProyectos = {
             this.arregloID = response.data[0][0];
             this.columnaImpactoAmbiental = JSON.parse(response.data[0][0][0].impacto_ambiental);
             this.seguimientos = 0;
+            this.seguimiento_status = true
             if (this.columnaImpactoAmbiental[0] == 'Sin Impacto') {
               this.inputImpactoAmbientalInicial = Array(1);
               this.inputImpactoAmbientalInicial[0] = '0.00';
@@ -215,41 +216,41 @@ const AltaProyectos = {
             var sumaAhorroSuave = 0
             //suma CO2
             for (let i = 0; i < response.data[0][0].length; i++) {
-             var valorC02 = response.data[0][0][i].tons_co2  //tomando los valores de C02
-             var valorAhorroDuro= response.data[0][0][i].ahorro_duro  //tomando los valores de Ahorro Duro
-             var valorAhorroSuave= response.data[0][0][i].ahorro_suave  //tomando los valores de Ahorro Duro
-             valorAhorroDuro= this.formatoSoloNumeros(valorAhorroDuro); //Eliminando pesos 
-             valorAhorroSuave= this.formatoSoloNumeros(valorAhorroSuave); //Eliminando pesos 
-             sumaC02 = parseFloat(sumaC02) + parseFloat(valorC02)
-             sumaAhorroDuro = parseFloat(sumaAhorroDuro) + parseFloat(valorAhorroDuro) // sumando Ahorro duro
-             sumaAhorroSuave = parseFloat(sumaAhorroSuave) + parseFloat(valorAhorroSuave) // sumando Ahorro duro
+              var valorC02 = response.data[0][0][i].tons_co2  //tomando los valores de C02
+              var valorAhorroDuro = response.data[0][0][i].ahorro_duro  //tomando los valores de Ahorro Duro
+              var valorAhorroSuave = response.data[0][0][i].ahorro_suave  //tomando los valores de Ahorro Duro
+              valorAhorroDuro = this.formatoSoloNumeros(valorAhorroDuro); //Eliminando pesos 
+              valorAhorroSuave = this.formatoSoloNumeros(valorAhorroSuave); //Eliminando pesos 
+              sumaC02 = parseFloat(sumaC02) + parseFloat(valorC02)
+              sumaAhorroDuro = parseFloat(sumaAhorroDuro) + parseFloat(valorAhorroDuro) // sumando Ahorro duro
+              sumaAhorroSuave = parseFloat(sumaAhorroSuave) + parseFloat(valorAhorroSuave) // sumando Ahorro duro
             }
             this.sumaCO2 = sumaC02.toFixed(2);
             this.sumaAhorroDuro = this.formatoNumeroApesos(sumaAhorroDuro); //convietiendo a pesos
             this.sumaAhorroSuave = this.formatoNumeroApesos(sumaAhorroSuave); //convietiendo a pesos
-            
+
             //Sumando Valores de Columna Impacto Ambiental
             var sumas = [];
             for (let i = 0; i < this.inputImpactoAmbiental.length; i++) {
-                for (let j = 0; j < this.inputImpactoAmbiental[i].length; j++) {
-                      valor= this.inputImpactoAmbiental[i][j]
-                      if (i === 0) {
-                        // Inicializar la suma en la primera iteración
-                         sumas['suma' + j] = parseFloat(valor);
-                      } else {
-                          // Sumar en las iteraciones siguientes
-                          sumas['suma' + j] += parseFloat(valor);
-                      }
+              for (let j = 0; j < this.inputImpactoAmbiental[i].length; j++) {
+                valor = this.inputImpactoAmbiental[i][j]
+                if (i === 0) {
+                  // Inicializar la suma en la primera iteración
+                  sumas['suma' + j] = parseFloat(valor);
+                } else {
+                  // Sumar en las iteraciones siguientes
+                  sumas['suma' + j] += parseFloat(valor);
                 }
-                
+              }
+
             }
-            
+
             // Redondear al mostrar o almacenar para que no aparecans numero con msa de dos decimas .00
             for (let i in sumas) {
               sumas[i] = parseFloat(sumas[i]).toFixed(2);  // Convertir a número antes de usar toFixed
             }
             this.sumaColumnasImpacto = sumas;
-           
+
             /*for (let i = 0; i <this.seguimientos[0][2].length; i++) {
                 for (let j = 0; j < this.seguimientos[0][2][i].length; j++) {
                   var valor = this.seguimientos[0][2][i][j].dato;
