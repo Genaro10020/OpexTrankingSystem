@@ -78,7 +78,9 @@ button[type]:focus,
     border: 2px solid rgb(137, 0, 0);
 }
 
-
+.contenido-bateria{
+    position:absolute; z-index:1;
+}
 
 .imagen-index{
  width: 100%;
@@ -486,36 +488,35 @@ button {
 	background-color:#fafa2d;
 }
 
+
 .tablasBatery{
     background-color: #0149C1;
+   /*  min-width: 300px; */
 }
 
 .tablasBatery2{
     background-color: #7E07AE;
+   /*  min-width: 300px; */
 }
 
 .tablasBatery3{
     background-color: #D97100;
+    /* min-width: 300px; */
 }
 
 .tablasBatery4{
     background-color: #C40608;
-}
-.imagenBatery{
+    /*min-width: 300px;*/
+}*/
+/*.imagenBatery{
     width: 100%;
     height: 80vh; 
     background-image: url('../img/imagenBateriaFondo.jpg');
     background-size: contain;
     background-position: center center;
     background-repeat: no-repeat;
+}*/
 
- 
-}
-.positionBaterycontainer{
-    width: 900px;
-    height: 572px;
-    padding-top: 100px;
-}
 
 .mostrar {
     animation: fadeIn 2s;
@@ -597,6 +598,19 @@ button {
 }
 
 
+
+/*.positionBaterycontainer{
+    width: 900px;
+    height: 572px;
+    padding-top: 100px;
+}*/
+
+.tablasBatery,.tablasBatery2,.tablasBatery3,.tablasBatery4{width: 160px; font-size:0.4em}
+.tablasBateryHead{font-size:0.4em;width: 640px;}
+.imgBateria{width: 750px; height: 700px;}
+.div-color{ background-color:grey;}
+
+
 /* Small devices (landscape phones, 576px and up)*/
 @media (min-width: 576px) {
     .titulo {
@@ -630,7 +644,15 @@ button {
         font-family: 'Almarai', sans-serif;
         font-size: 0.9em;
     }
+
+
+    .tablasBatery,.tablasBatery2,.tablasBatery3,.tablasBatery4{width: 160px; font-size:0.4em}
+    .tablasBateryHead{font-size:0.4em;width: 640px;}
+    .imgBateria{width: 750px; height: 700px;}
+    .div-color{ background-color:black;}
+
 }
+
 
 /* Medium devices (tablets, 768px and up)*/
 @media (min-width: 768px) {
@@ -646,9 +668,11 @@ button {
         min-width: 200px;
         padding: 6px 24px;
     }
-
-
-
+    /*.tablasBateryHead{font-size:0.5em}
+    .tablasBatery,.tablasBatery2,.tablasBatery3,.tablasBatery4{width: 180px; font-size:0.4em}
+    .imgBateria{width: 720px; height: 700px;}
+    .div-color{ background-color:green;}*/
+  
 }
 
 /* Large devices (desktops, 992px and up)*/
@@ -662,8 +686,11 @@ button {
     .btn-guardar {
         font-size: 0.9em;
     }
-
-
+    .tablasBatery,.tablasBatery2,.tablasBatery3,.tablasBatery4{width: 210px; font-size:0.5em}
+    .tablasBateryHead{font-size:0.7em;width: 840px;}
+    .imgBateria{width: 1000px; height: 800px;}
+    .div-color{ background-color:yellow;}
+    
 }
 
 /* X-Large devices (large desktops, 1200px and up)*/
@@ -671,7 +698,11 @@ button {
     .formulario {
         width: 70%;
     }
-
+    
+    .div-color{ background-color:red;}
+    .tablasBatery,.tablasBatery2,.tablasBatery3,.tablasBatery4{width: 250px; font-size:0.6em}
+    .tablasBateryHead{font-size:0.8em; width: 1000px;}
+    .imgBateria{width: 1150px; height: 100%}
 
 }
 
@@ -680,5 +711,9 @@ button {
     .formulario {
         width: 70%;
     }
+    .tablasBatery,.tablasBatery2,.tablasBatery3,.tablasBatery4{width: 300px; font-size:0.7em}
+    .tablasBateryHead{font-size:0.9em; width: 1200px;}
+    .imgBateria{width: 1400px;}
+    .div-color{ background-color:blue;}
 }
 

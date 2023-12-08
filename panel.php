@@ -31,10 +31,10 @@ if (isset($_SESSION['nombre'])) {
                     <button class="btn-menu me-sm-3" @click="ventana='Seguimiento'">
                         <i class="bi bi-plus-circle"></i> Seguimiento
                     </button>
-                    <!--<button class="btn-menu me-sm-3 " @click="ventana='Generar Valor',consultarObjetivosRelacional()">
+                    <button class="btn-menu me-sm-3 " @click="ventana='Generar Valor',consultarObjetivosRelacional()">
                         <i class="bi bi-plus-circle"></i> Generando Valor
                     </button>
-                    <button class="btn-menu" @click="ventana='Reportes',consultarObjetivosRelacional()">
+                    <!--<button class="btn-menu" @click="ventana='Reportes',consultarObjetivosRelacional()">
                         <i class="bi bi-plus-circle"></i> Reportes
                     </button>-->
                     <!--Modal Alta Proyectos-->
@@ -1263,181 +1263,180 @@ if (isset($_SESSION['nombre'])) {
                 </div>
                 <div v-if="ventana=='Generar Valor'">
 
-                    <div class=" col-12 col-lg-5 imagenBatery">
-                        <div class="positionBaterycontainer position-absolute top-50 start-50 translate-middle mt-3">
-                            <div>
-                                <div class="container row col-12">
-                                    <div class="col-8 mt-1 bg-success text-white text-center">
-                                        <span>Generar valor sustentable</span>
-                                    </div>
-                                    <div class="col-4">
-                                        <table class="ms-3 mt-1 text-center w-100 ">
-                                            <thead class="border border-dark">
-                                                <tr scope="col">
-                                                    <th class="border border-dark ">Valor</th>
-                                                    <td class="border border-dark">dato1</td>
-                                                </tr>
-                                                <tr scope="row">
-                                                    <th class="border border-dark">Sustentable</th>
-                                                    <td class="border border-dark">dato2</td>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                </div>
-                                <div class="d-flex justify-content-around pt-1 ">
-                                    <div class="tablasBatery col-3 px-2">
-                                        <div class="d-flex  text-center text-white pb-2">
-                                            <span class="col-8 mt-3">Cliente</span>
-                                            <table class="col-4  mt-1  text-center  table-bordered border-dark  ">
-                                                <thead>
-
-                                                </thead>
-                                                <tbody class="bg-white">
-                                                    <tr>
-                                                        <th scope="row">1</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-
-                                        </div>
-                                        <table class=" text-center table table-bordered border-dark  " style="font-size: 0.6em;">
-                                            <thead>
-
-                                            </thead>
-                                            <tbody class="bg-white">
-                                                <tr v-for="objetivos in objetivos_ligados">
-                                                    <th scope="row" v-if="objetivos.nombre_pilares == 'Cliente'">{{objetivos.nombre_objetivos}}</th>
-                                                    <td v-if="objetivos.nombre_pilares == 'Cliente'">543135351</td>
-                                                    <td v-if="objetivos.nombre_pilares == 'Cliente'">543135351</td>
-                                                </tr>
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="tablasBatery2 col-3 px-2">
-                                        <div class="d-flex  text-white pb-2">
-                                            <span class="col-8 mt-3">Capital humano</span>
-                                            <table class="col-4 mt-1 text-center  table-bordered border-dark">
-                                                <thead>
-
-                                                </thead>
-                                                <tbody class="bg-white">
-                                                    <tr>
-                                                        <th scope="row">1</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-
-                                        </div>
-                                        <table class=" text-center table table-bordered border-dark  " style="font-size: 0.6em;">
-                                            <thead>
-
-                                            </thead>
-                                            <tbody class="bg-white">
-                                                <tr v-for="objetivos in objetivos_ligados">
-                                                    <th scope="row" v-if="objetivos.nombre_pilares == 'Capital Humano'">{{objetivos.nombre_objetivos}}</th>
-                                                    <td v-if="objetivos.nombre_pilares == 'Capital Humano'">543135351</td>
-                                                    <td v-if="objetivos.nombre_pilares == 'Capital Humano'">543135351</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="tablasBatery3 col-3 px-2">
-                                        <div class="d-flex text-center text-white pb-2">
-                                            <span class="col-8 mt-2">Excelencia operativa</span>
-                                            <table class="col-4 mt-1 text-center  table-bordered border-dark">
-                                                <thead>
-
-                                                </thead>
-                                                <tbody class="bg-white">
-                                                    <tr>
-                                                        <th scope="row">1</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-
-                                        </div>
-                                        <table class=" text-center table table-bordered border-dark  " style="font-size: 0.6em;">
-                                            <thead>
-
-                                            </thead>
-                                            <tbody class="bg-white">
-                                                <tr v-for="objetivos in objetivos_ligados">
-                                                    <th scope="row" v-if="objetivos.nombre_pilares == 'Excelencia Operativa'">{{objetivos.nombre_objetivos}}</th>
-                                                    <td v-if="objetivos.nombre_pilares == 'Excelencia Operativa'">543135351</td>
-                                                    <td v-if="objetivos.nombre_pilares == 'Excelencia Operativa'">543135351</td>
-                                                </tr>
-
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="tablasBatery4 col-3 px-2">
-                                        <div class="d-flex text-center text-white pb-2">
-                                            <span class="col-8 mt-2">investigacion y desarrollo</span>
-                                            <table class="col-4 mt-1 text-center  table-bordered border-dark">
-                                                <thead>
-
-                                                </thead>
-                                                <tbody class="bg-white">
-                                                    <tr>
-                                                        <th scope="row">1</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-
-                                        </div>
-                                        <table class=" table table-bordered border-dark " style="font-size: 0.6em;">
-                                            <thead>
-
-                                            </thead>
-                                            <tbody class="bg-white">
-                                                <tr v-for="objetivos in objetivos_ligados">
-                                                    <th scope="row" v-if="objetivos.nombre_pilares == 'Cliente'">{{objetivos.nombre_objetivos}}</th>
-                                                    <td v-if="objetivos.nombre_pilares == 'Cliente'">543135351</td>
-                                                    <td v-if="objetivos.nombre_pilares == 'Cliente'">543135351</td>
-                                                </tr>
-
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-
-                                </div>
-                                <!-- <table>
-                                    <thead>
-                                        <th>1</th>
-                                        <th>2</th>
-                                        <th>3</th>
-                                    </thead>
-                                    <tbody> 
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>3</td>
-                                    </tbody>
-                                </table> -->
+                <div class="scroll-dos">
+                <div style=" min-width: 768px; width: 100%; height: 80vh; position: relative;">
+                            <div class="col-12 text-center" style="z-index: 1; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); ">
+                                <img class="imgBateria" src="img/imagenBateriaFondo.jpg"></img>
                             </div>
-                        </div>
-                    </div>
+                    <!--CONTENIDO BATERIA-->
+                            <div class="row"> 
+                            <div class="col-12 d-flex align-items-center text-center mt-5 justify-content-center mx-auto " style="height: 75vh; position: absolute; z-index: 2;">
+                                        <div class="ms-4 " style="min-width: 800px;">   
+                                            <div class=" tablasBateryHead d-flex  mx-auto" >
+                                                         <div class="col-8 mt-1 bg-success text-white text-center d-flex align-items-center justify-content-center">
+                                                            <span>Generar valor sustentable</span>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <table class="mt-1 text-center w-100 ">
+                                                                <thead class="border border-dark">
+                                                                    <tr scope="col">
+                                                                        <th class="border border-dark ">Valor</th>
+                                                                        <td class="border border-dark">dato1</td>
+                                                                    </tr>
+                                                                    <tr scope="row">
+                                                                        <th class="border border-dark">Sustentable</th>
+                                                                        <td class="border border-dark">dato2</td>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
 
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                            </div>
+                                            <div class="d-flex justify-content-center pt-1 ">
+                                                <div class="tablasBatery col-3 px-1 px-lg-2">
+                                                    <div class="d-flex  text-center text-white pb-2">
+                                                        <span class="col-8 mt-3">Cliente</span>
+                                                        <table class="col-4  mt-1  text-center  table-bordered border-dark  ">
+                                                            <thead>
+
+                                                            </thead>
+                                                            <tbody class="bg-white">
+                                                                <tr>
+                                                                    <th scope="row">1</th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>2</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+                                                    <table class=" text-center table table-bordered border-dark  ">
+                                                        <thead>
+                                                            <th>Objetivo Estrateg</th>
+                                                            <th>Valor</th>
+                                                            <th>Sustentable</th>
+                                                        </thead>
+                                                        <tbody class="bg-white">
+                                                            <tr v-for="objetivos in objetivos_ligados">
+                                                                <th scope="row" v-if="objetivos.nombre_pilares == 'Cliente'">{{objetivos.nombre_objetivos}}</th>
+                                                                <td v-if="objetivos.nombre_pilares == 'Cliente'">543135351</td>
+                                                                <td v-if="objetivos.nombre_pilares == 'Cliente'">543135351</td>
+                                                            </tr>
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="tablasBatery2 col-3 px-1 px-lg-2">
+                                                    <div class="d-flex  text-white pb-2">
+                                                        <span class="col-8 mt-3">Capital humano</span>
+                                                        <table class="col-4 mt-1 text-center  table-bordered border-dark">
+                                                            <thead>
+
+                                                            </thead>
+                                                            <tbody class="bg-white">
+                                                                <tr>
+                                                                    <th scope="row">1</th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>2</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+                                                    <table class=" text-center table table-bordered border-dark  ">
+                                                        <thead>
+
+                                                        </thead>
+                                                        <tbody class="bg-white">
+                                                            <tr v-for="objetivos in objetivos_ligados">
+                                                                <th scope="row" v-if="objetivos.nombre_pilares == 'Capital Humano'">{{objetivos.nombre_objetivos}}</th>
+                                                                <td v-if="objetivos.nombre_pilares == 'Capital Humano'">543135351</td>
+                                                                <td v-if="objetivos.nombre_pilares == 'Capital Humano'">543135351</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="tablasBatery3 col-3 px-1 px-lg-2">
+                                                    <div class="d-flex text-center text-white pb-2">
+                                                        <span class="col-8 mt-2">Excelencia operativa</span>
+                                                        <table class="col-4 mt-1 text-center  table-bordered border-dark">
+                                                            <thead>
+
+                                                            </thead>
+                                                            <tbody class="bg-white">
+                                                                <tr>
+                                                                    <th scope="row">1</th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>2</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+                                                    <table class=" text-center table table-bordered border-dark  ">
+                                                        <thead>
+
+                                                        </thead>
+                                                        <tbody class="bg-white">
+                                                            <tr v-for="objetivos in objetivos_ligados">
+                                                                <th scope="row" v-if="objetivos.nombre_pilares == 'Excelencia Operativa'">{{objetivos.nombre_objetivos}}</th>
+                                                                <td v-if="objetivos.nombre_pilares == 'Excelencia Operativa'">543135351</td>
+                                                                <td v-if="objetivos.nombre_pilares == 'Excelencia Operativa'">543135351</td>
+                                                            </tr>
+
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="tablasBatery4 col-3 px-1 px-lg-2">
+                                                    <div class="d-flex text-center text-white pb-2">
+                                                        <span class="col-8 mt-2">investigacion y desarrollo</span>
+                                                        <table class="col-4 mt-1 text-center  table-bordered border-dark">
+                                                            <thead>
+
+                                                            </thead>
+                                                            <tbody class="bg-white">
+                                                                <tr>
+                                                                    <th scope="row">1</th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>2</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+                                                    <table class=" table table-bordered border-dark ">
+                                                        <thead>
+
+                                                        </thead>
+                                                        <tbody class="bg-white">
+                                                            <tr v-for="objetivos in objetivos_ligados">
+                                                                <th scope="row" v-if="objetivos.nombre_pilares == 'Cliente'">{{objetivos.nombre_objetivos}}</th>
+                                                                <td v-if="objetivos.nombre_pilares == 'Cliente'">543135351</td>
+                                                                <td v-if="objetivos.nombre_pilares == 'Cliente'">543135351</td>
+                                                            </tr>
+
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                         </div> 
+                                    </div> 
+                                </div>
+                      <!----------------------------------FIN CONTENIDO BATERIA--->
+                    </div>
+</div>
+   
+<!--<div class="div-color">
+    estoy en
+</div>-->
                 </div>
                 <div v-if="ventana == 'Reportes'">
                     <table class="table table-bordered table-striped table-hover">
