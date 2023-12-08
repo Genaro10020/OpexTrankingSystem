@@ -838,59 +838,59 @@ if (isset($_SESSION['nombre'])) {
                     <!-- INICIO TABLA ESTANDARES CO2 -->
                     <div class="col-12 col-lg-6 ">
                         <div class="col-12 text-center align-content">
-                        <div class=" encabezadoTablas">
-                            <div class=" d-flex justify-content-center align-items-center " style="font-size: 0.9em;">
-                                <div class="d-none d-lg-block col-lg-4"></div>
-                                <div class="col-6 col-lg-4 mt-2 ">Estandares de CO2</div>
-                                <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
-                                    <button type="button" class=" btn btn-menu " @Click="modalCatalogos('Crear','Estandar')">Crear</button>
-                                </div>
+                            <div class=" encabezadoTablas">
+                                <div class=" d-flex justify-content-center align-items-center " style="font-size: 0.9em;">
+                                    <div class="d-none d-lg-block col-lg-4"></div>
+                                    <div class="col-6 col-lg-4 mt-2 ">Estandares de CO2</div>
+                                    <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
+                                        <button type="button" class=" btn btn-menu " @Click="modalCatalogos('Crear','Estandar')">Crear</button>
+                                    </div>
 
+                                </div>
+                            </div>
+                            <div class="scroll">
+                                <table class="  table table-bordered border-secondary border border-3 border-secondary">
+                                    <thead>
+                                        <tr class="border border-3 border-secondary" style="font-size: 0.9em;">
+                                            <th class=" sticky-top thmodal">
+                                                Nombre
+                                            </th>
+                                            <th class=" sticky-top thmodal">
+                                                Cantidad
+                                            </th>
+                                            <th class=" sticky-top thmodal">
+                                                unidad de medida
+                                            </th>
+                                            <th class=" sticky-top thmodal">
+                                                Eliminar
+                                            </th>
+                                            <th class=" sticky-top thmodal">
+                                                Actualizar
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="estandar in estandares " style="font-size: 0.7em;">
+                                            <td>
+                                                {{estandar.nombre}}
+                                            </td>
+                                            <td>
+                                                {{estandar.cantidad}}
+                                            </td>
+                                            <td>
+                                                {{estandar.unidad_medida}}
+                                            </td>
+                                            <td>
+                                                <button type="button" class="myButton" @click="eliminarEstandares(estandar.id)"><i class="bi bi-trash3-fill"></i></button>
+                                            </td>
+                                            <td>
+                                                <button type="button" class="myButton2" @Click="modalCatalogos('Actualizar','Estandares',estandar.id,estandar.nombre,estandar.cantidad,'',estandar.unidad_medida)"><i class="bi bi-pencil"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-                        <div class="scroll">
-                        <table class="  table table-bordered border-secondary border border-3 border-secondary">
-                            <thead>
-                                <tr class="border border-3 border-secondary" style="font-size: 0.9em;">
-                                    <th class=" sticky-top thmodal">
-                                        Nombre
-                                    </th>
-                                    <th class=" sticky-top thmodal">
-                                        Cantidad
-                                    </th>
-                                    <th class=" sticky-top thmodal">
-                                        unidad de medida
-                                    </th>
-                                    <th class=" sticky-top thmodal">
-                                        Eliminar
-                                    </th>
-                                    <th class=" sticky-top thmodal">
-                                        Actualizar
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="estandar in estandares " style="font-size: 0.7em;">
-                                    <td>
-                                        {{estandar.nombre}}
-                                    </td>
-                                    <td>
-                                        {{estandar.cantidad}}
-                                    </td>
-                                    <td>
-                                        {{estandar.unidad_medida}}
-                                    </td>
-                                    <td>
-                                        <button type="button" class="myButton" @click="eliminarEstandares(estandar.id)"><i class="bi bi-trash3-fill"></i></button>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="myButton2" @Click="modalCatalogos('Actualizar','Estandares',estandar.id,estandar.nombre,estandar.cantidad,'',estandar.unidad_medida)"><i class="bi bi-pencil"></i></button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        </div>  
-                        </div>    
                     </div>
                     <!--TABLA DE FUENTES-->
                     <div class="col-12 col-lg-6">
@@ -1138,7 +1138,6 @@ if (isset($_SESSION['nombre'])) {
                             <option value="">Seleccione...</option>
                             <option v-for="proyecto in proyectos" :value="proyecto.id">{{proyecto.nombre_proyecto}}</option>
                         </select>
-                       
                     </div>
                     <div class="scroll-dos">
                         <table class="mx-2 mb-5 table table-hover table-bordered table-striped text-center" style="font-size: 0.8em;">
@@ -1156,66 +1155,66 @@ if (isset($_SESSION['nombre'])) {
                             <tbody>
                                 <!-----------------------------------------------------------------------------CUANDO YA EXISTE MINIMO UN SEGUIMIENTO -->
 
-                                    <tr v-if="seguimientos>0" style="vertical-align: middle; font-size: 1.1em;" v-for="(proyecto,posicion) in arregloID" :key="posicion">
-                                        <td v-if="seguimiento_status">
-                                            <button v-if="actualizar==0 && actualizatabla == false" type="button" class="boton-actualizar" v-if="actualizatabla == false" @Click="asignarDatosActualizar(posicion)">Actualizar</button>
-                                            <button v-if="actualizar==(posicion+1)" v-if="actualizatabla == true" class="boton-eliminar mx-2" @Click="actualizar = 0">Cancelar</button>
-                                            <button v-if="actualizar==(posicion+1) && proyecto.id_registro " v-if="actualizatabla == true" class="boton-aceptar" @Click="actualizarSeguimiento(posicion)">Guardar</button><!--Guardar Actualizacion cuando existe minimo 1-->
-                                        </td>
-                                        <td style="min-width: 351px;">
-                                            <div v-if="actualizar==(posicion+1)">
-                                                <label class="ms-1"> Mes: </label>
-                                                <select v-model=" mes_select" class="me-3">
-                                                    <option v-for="(month,index) in months" :value="(index+1)">{{month}}</option>
-                                                </select>
-                                                <label class="ms-1 "> Año: </label>
-                                                <select v-model="anio_select">
-                                                    <option v-for="(year,index) in years" :value="year">{{year}}</option>
-                                                </select>
-                                            </div>
-                                            <div v-else>
-                                                <label> {{mostrandoMes(proyecto.mes)}} <label>
-                                                        <label> {{proyecto.anio}} <label>
-                                            </div>
-                                        </td>
+                                <tr v-if="seguimientos>0" style="vertical-align: middle; font-size: 1.1em;" v-for="(proyecto,posicion) in arregloID" :key="posicion">
+                                    <td v-if="seguimiento_status">
+                                        <button v-if="actualizar==0 && actualizatabla == false" type="button" class="boton-actualizar" v-if="actualizatabla == false" @Click="asignarDatosActualizar(posicion)">Actualizar</button>
+                                        <button v-if="actualizar==(posicion+1)" v-if="actualizatabla == true" class="boton-eliminar mx-2" @Click="actualizar = 0">Cancelar</button>
+                                        <button v-if="actualizar==(posicion+1) && proyecto.id_registro " v-if="actualizatabla == true" class="boton-aceptar" @Click="actualizarSeguimiento(posicion)">Guardar</button><!--Guardar Actualizacion cuando existe minimo 1-->
+                                    </td>
+                                    <td style="min-width: 351px;">
+                                        <div v-if="actualizar==(posicion+1)">
+                                            <label class="ms-1"> Mes: </label>
+                                            <select v-model=" mes_select" class="me-3">
+                                                <option v-for="(month,index) in months" :value="(index+1)">{{month}}</option>
+                                            </select>
+                                            <label class="ms-1 "> Año: </label>
+                                            <select v-model="anio_select">
+                                                <option v-for="(year,index) in years" :value="year">{{year}}</option>
+                                            </select>
+                                        </div>
+                                        <div v-else>
+                                            <label> {{mostrandoMes(proyecto.mes)}} <label>
+                                                    <label> {{proyecto.anio}} <label>
+                                        </div>
+                                    </td>
 
-                                        <td style="background: #bfe49b;">
-                                            <input v-if="actualizar==(posicion+1)" type="text" v-model="input_tons_co2" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputSinPesos('input_tons_co2')"></input><!--:value="proyecto.tons_co2"-->
-                                            <label v-else>{{proyecto.tons_co2}}</label>
-                                        </td>
-                                        <td v-if="sinImpacto!='Sin Impacto'" v-for="(cantidad,index) in columnaImpactoAmbiental.length" :key="index"><!--columa v-for"-->
-                                            <input v-if="actualizar==(posicion+1)" type="text" v-model="inputImpactoAmbiental[posicion][index]" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputSinPesosImpactoAmbientalPosicion(posicion,index)"> </input>
-                                            <label v-else>{{inputImpactoAmbiental[posicion][index]}}</label>
-                                        </td>
-                                        <td>
-                                            <input v-if="actualizar==(posicion+1)" type="text" v-model="input_ahorro_duro" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('input_ahorro_duro')"></input> <!--:value="proyecto.ahorro_duro"-->
-                                            <label v-else>{{proyecto.ahorro_duro}}</label>
-                                        </td>
-                                        <td>
-                                            <input v-if="actualizar==(posicion+1)" type="text" v-model="input_ahorro_suave" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('input_ahorro_suave')"></input> <!--:value="proyecto.ahorro_suave"-->
-                                            <label v-else>{{proyecto.ahorro_suave}}</label>
-                                        </td>
-                                        <td style="min-width:150px">
-                                            <div v-if="posicion === (arregloID.length - 1)" class="form-check form-switch">
-                                                <div class="form-check form-switch">
-                                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" v-model="seguimiento_status" @change="guardarStatus()" style=" background-color: #B3F09B; color:white">
-                                                    <label v-if="seguimiento_status" class="form-check-label" for="flexSwitchCheckDefault">Siguiendo</label>
-                                                    <label v-else class="form-check-label" for="flexSwitchCheckDefault">Cerrado</label>
-                                                </div>
+                                    <td style="background: #bfe49b;">
+                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="input_tons_co2" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputSinPesos('input_tons_co2')"></input><!--:value="proyecto.tons_co2"-->
+                                        <label v-else>{{proyecto.tons_co2}}</label>
+                                    </td>
+                                    <td v-if="sinImpacto!='Sin Impacto'" v-for="(cantidad,index) in columnaImpactoAmbiental.length" :key="index"><!--columa v-for"-->
+                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="inputImpactoAmbiental[posicion][index]" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputSinPesosImpactoAmbientalPosicion(posicion,index)"> </input>
+                                        <label v-else>{{inputImpactoAmbiental[posicion][index]}}</label>
+                                    </td>
+                                    <td>
+                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="input_ahorro_duro" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('input_ahorro_duro')"></input> <!--:value="proyecto.ahorro_duro"-->
+                                        <label v-else>{{proyecto.ahorro_duro}}</label>
+                                    </td>
+                                    <td>
+                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="input_ahorro_suave" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('input_ahorro_suave')"></input> <!--:value="proyecto.ahorro_suave"-->
+                                        <label v-else>{{proyecto.ahorro_suave}}</label>
+                                    </td>
+                                    <td style="min-width:150px">
+                                        <div v-if="posicion === (arregloID.length - 1)" class="form-check form-switch">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" v-model="seguimiento_status" @change="guardarStatus()" style=" background-color: #B3F09B; color:white">
+                                                <label v-if="seguimiento_status" class="form-check-label" for="flexSwitchCheckDefault">Siguiendo</label>
+                                                <label v-else class="form-check-label" for="flexSwitchCheckDefault">Cerrado</label>
                                             </div>
-                                        </td>
-                                    </tr>
-                                    <tr v-if="seguimientos>0"> <!--Sumatoria y adjuntos-->
-                                        <td v-if="seguimiento_status"></td><!--Se oculta esta columna cuando es cerrado-->
-                                        <td><b>Sumatoria:</b> </td>
-                                        <td><b>{{sumaCO2}}</b></td>
-                                        <td v-if="sinImpacto!='Sin Impacto'" v-for="(cantidad,index) in columnaImpactoAmbiental.length" :key="index"><!--columa v-for"-->
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr v-if="seguimientos>0"> <!--Sumatoria y adjuntos-->
+                                    <td v-if="seguimiento_status"></td><!--Se oculta esta columna cuando es cerrado-->
+                                    <td><b>Sumatoria:</b> </td>
+                                    <td><b>{{sumaCO2}}</b></td>
+                                    <td v-if="sinImpacto!='Sin Impacto'" v-for="(cantidad,index) in columnaImpactoAmbiental.length" :key="index"><!--columa v-for"-->
                                         <b>{{sumaColumnasImpacto['suma'+index]}}<b>
-                                        </td>
-                                        <td><b>{{sumaAhorroDuro}}</b></td>
-                                        <td><b>{{sumaAhorroSuave}}<b></td>
-                                        <td></td>
-                                    </tr> 
+                                    </td>
+                                    <td><b>{{sumaAhorroDuro}}</b></td>
+                                    <td><b>{{sumaAhorroSuave}}<b></td>
+                                    <td></td>
+                                </tr>
                                 <!------------------------------------------------------------------------------PRIMER SEGUIMIETO --------------------------------------------------->
                                 <tr v-if="id_proyecto!='' && seguimiento_status==true" style="vertical-align: middle; font-size: 1.1em;">
                                     <td v-if="seguimiento_status">
