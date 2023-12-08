@@ -98,6 +98,13 @@ button[type]:focus,
     /* Establece la altura máxima del div con scroll */
 }
 
+.scroll-bateria {
+    overflow: auto;
+    height: 90vh;
+    /* Establece la altura máxima del div con scroll */
+}
+
+
 thead {
     color: #fff;
     background-color: #848484;
@@ -598,59 +605,29 @@ button {
 }
 
 
+.visible {display: block;}
+.oculto {display: none;}
+.cuerpoAlto{min-height: 90vh; }
+.cuerpoNormal{min-height: 80vh}
 
-/*.positionBaterycontainer{
-    width: 900px;
-    height: 572px;
-    padding-top: 100px;
-}*/
-
-.tablasBatery,.tablasBatery2,.tablasBatery3,.tablasBatery4{width: 160px; font-size:0.4em}
-.tablasBateryHead{font-size:0.4em;width: 640px;}
-.imgBateria{width: 750px; height: 700px;}
-.div-color{ background-color:grey;}
+    .tablasBatery,.tablasBatery2,.tablasBatery3,.tablasBatery4{width: 160px; font-size:0.4em}
+    .tablasBateryHead{font-size:0.4em;width: 640px;  margin-top:150px}
+    .imgBateria{width: 750px; height: 600px;}
+    .div-color{ background-color:black;}
 
 
 /* Small devices (landscape phones, 576px and up)*/
 @media (min-width: 576px) {
-    .titulo {
-        font-size: 1.5em;
-    }
-
-    .cabecera {
-        background: linear-gradient(140deg, rgba(255, 255, 255, 1) 26%, rgb(251, 208, 208, 0)27%, rgb(184, 14, 14) 28%, rgb(184, 14, 14) 71%, rgb(236, 194, 194, 0) 72%, rgba(255, 255, 255, 1) 73%);
-    }
-
-    .form-login {
-        color: black;
-    }
-
+    .titulo {font-size: 1.5em; }
+    .cabecera {background: linear-gradient(140deg, rgba(255, 255, 255, 1) 26%, rgb(251, 208, 208, 0)27%, rgb(184, 14, 14) 28%, rgb(184, 14, 14) 71%, rgb(236, 194, 194, 0) 72%, rgba(255, 255, 255, 1) 73%);}
+    .form-login {color: black;}
     .btn-actualizar,
     .btn-eliminar,
-    .btn-guardar {
-        font-size: 0.7em;
-    }
-
-    .formulario {
-        width: 80%;
-    }
-
-    .modal {
-        font-family: 'Almarai', sans-serif;
-        font-size: 0.9em;
-    }
-
-    .input-group-text {
-        font-family: 'Almarai', sans-serif;
-        font-size: 0.9em;
-    }
-
-
-    .tablasBatery,.tablasBatery2,.tablasBatery3,.tablasBatery4{width: 160px; font-size:0.4em}
-    .tablasBateryHead{font-size:0.4em;width: 640px;}
-    .imgBateria{width: 750px; height: 700px;}
-    .div-color{ background-color:black;}
-
+    .btn-guardar {font-size: 0.7em;}
+    .formulario { width: 80%;}
+    .modal { font-family: 'Almarai', sans-serif;font-size: 0.9em;}
+    .input-group-text {font-family: 'Almarai', sans-serif;font-size: 0.9em; }
+    
 }
 
 
@@ -668,10 +645,11 @@ button {
         min-width: 200px;
         padding: 6px 24px;
     }
-    /*.tablasBateryHead{font-size:0.5em}
-    .tablasBatery,.tablasBatery2,.tablasBatery3,.tablasBatery4{width: 180px; font-size:0.4em}
-    .imgBateria{width: 720px; height: 700px;}
-    .div-color{ background-color:green;}*/
+    .tablasBatery,.tablasBatery2,.tablasBatery3,.tablasBatery4{width: 160px; font-size:0.4em}
+    .tablasBateryHead{font-size:0.4em;width: 640px;  margin-top:150px}
+    .imgBateria{width: 750px; height: 600px;}
+    .div-color{ background-color:gray;}
+
   
 }
 
@@ -686,9 +664,9 @@ button {
     .btn-guardar {
         font-size: 0.9em;
     }
-    .tablasBatery,.tablasBatery2,.tablasBatery3,.tablasBatery4{width: 210px; font-size:0.5em}
-    .tablasBateryHead{font-size:0.7em;width: 840px;}
-    .imgBateria{width: 1000px; height: 800px;}
+    .tablasBatery,.tablasBatery2,.tablasBatery3,.tablasBatery4{width: 180px; font-size:0.5em}
+    .tablasBateryHead{font-size:0.5em;width: 640px; margin-top:160px}
+    .imgBateria{width: 850px; height: 680px;}
     .div-color{ background-color:yellow;}
     
 }
@@ -700,9 +678,9 @@ button {
     }
     
     .div-color{ background-color:red;}
-    .tablasBatery,.tablasBatery2,.tablasBatery3,.tablasBatery4{width: 250px; font-size:0.6em}
-    .tablasBateryHead{font-size:0.8em; width: 1000px;}
-    .imgBateria{width: 1150px; height: 100%}
+    .tablasBatery,.tablasBatery2,.tablasBatery3,.tablasBatery4{width: 200px; font-size:0.6em}
+    .tablasBateryHead{font-size:0.6em;width: 800px; margin-top: 160px;}
+    .imgBateria{width: 950px; height: 750px; }
 
 }
 
@@ -712,8 +690,8 @@ button {
         width: 70%;
     }
     .tablasBatery,.tablasBatery2,.tablasBatery3,.tablasBatery4{width: 300px; font-size:0.7em}
-    .tablasBateryHead{font-size:0.9em; width: 1200px;}
-    .imgBateria{width: 1400px;}
+    .tablasBateryHead{font-size:0.7em;width: 1200px; margin-top: 150px;}
+    .imgBateria{width: 1400px; height: 900px; }
     .div-color{ background-color:blue;}
 }
 
