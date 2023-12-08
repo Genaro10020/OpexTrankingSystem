@@ -31,12 +31,15 @@ if (isset($_SESSION['nombre'])) {
                     <button class="btn-menu me-sm-3" @click="ventana='Seguimiento'">
                         <i class="bi bi-plus-circle"></i> Seguimiento
                     </button>
-                    <!--<button class="btn-menu me-sm-3 " @click="ventana='Generar Valor',consultarObjetivosRelacional()">
+                    <button class="btn-menu me-sm-3 " @click="ventana='Generar Valor',consultarObjetivosRelacional()">
                         <i class="bi bi-plus-circle"></i> Generando Valor
                     </button>
-                    <button class="btn-menu" @click="ventana='Reportes',consultarObjetivosRelacional()">
+                    <button class="btn-menu  me-sm-3" @click="ventana='Reportes',consultarObjetivosRelacional()">
                         <i class="bi bi-plus-circle"></i> Reportes
-                    </button>-->
+                    </button>
+                    <button class="btn-menu" @click="ventana='Calendario',consultarProyectos()">
+                        <i class="bi bi-plus-circle"></i> Calendario
+                    </button>
                     <!--Modal Alta Proyectos-->
                     <div id="modal-alta-proyecto" class="modal text-start" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
                         <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
@@ -1436,9 +1439,15 @@ if (isset($_SESSION['nombre'])) {
                             </div>
                         </div>
                     </div>
-
+                       <!--//////////////////////////////////////////////////////////////REPORTES////////////////////////////////////////////////////////////////////////////////-->
                 </div>
                 <div v-if="ventana == 'Reportes'">
+                    <div class="input-group mt-3 mb-2 ">
+                        <span class="input-group-text">Seleccione año</span>
+                        <select>
+                            <option>opcion 1</option>
+                        </select>
+                    </div>
                     <table class="table table-bordered table-striped table-hover">
                         <thead>
                             <tr>
@@ -1465,7 +1474,44 @@ if (isset($_SESSION['nombre'])) {
                         </tbody>
                     </table>
                 </div>
-                <!--////////////////////////////////////////////// FIN DE COMPETENCIA -->
+                 <!--//////////////////////////////////////////////////////////////FINALIZA REPORTES////////////////////////////////////////////////////////////////////////////////-->
+
+
+                 
+                 <!--//////////////////////////////////////////////////////////////CALEMDARIO////////////////////////////////////////////////////////////////////////////////-->
+                <div v-if="ventana == 'Calendario'">
+                    <div class="input-group mt-3 mb-2 ">
+                        <span class="input-group-text">Seleccione proyecto</span>
+                        <select>
+                            <option>opcion 1</option>
+                        </select>
+                    </div>
+                    <table class="table table-bordered table-striped table-hover text-center">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Enero</th>
+                                <th>Febrero</th>
+                                <th>Marzo</th>
+                                <th>Abril</th>
+                                <th>Mayo</th>
+                                <th>Junio</th>
+                                <th>Julio</th>
+                                <th>Agosto</th>
+                                <th>Septiembre</th>
+                                <th>Octubre</th>
+                                <th>Noviembre</th>
+                                <th>Diciembre</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="proyecto in proyectos">
+                                <th>{{proyecto.nombre_proyecto}}</th>
+                                <td v-for="x in 12"><i class="bi bi-check2"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div><!--cuerpo-->
 
             <div class="footer row" style="min-height:10vh;"> <!--pie-->
