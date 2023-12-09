@@ -78,12 +78,13 @@ button[type]:focus,
     border: 2px solid rgb(137, 0, 0);
 }
 
-.contenido-bateria{
-    position:absolute; z-index:1;
+.contenido-bateria {
+    position: absolute;
+    z-index: 1;
 }
 
-.imagen-index{
- width: 100%;
+.imagen-index {
+    width: 100%;
 }
 
 .scroll {
@@ -459,62 +460,67 @@ button {
         opacity: 0;
     }
 }
+
 .myButton {
-	box-shadow: 0px 0px 6px 0px #000000;
-	background-color:#ce0100;
-	border-radius:33px;
-	border:3px solid #d83526;
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-	font-family:Arial;
-	font-size:14px;
-	padding:1px 3px;
-	text-decoration:none;
-	text-shadow:0px 0px 0px #b23e35;
+    box-shadow: 0px 0px 6px 0px #000000;
+    background-color: #ce0100;
+    border-radius: 33px;
+    border: 3px solid #d83526;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    font-family: Arial;
+    font-size: 14px;
+    padding: 1px 3px;
+    text-decoration: none;
+    text-shadow: 0px 0px 0px #b23e35;
 }
+
 .myButton:hover {
-	background-color:#fe1a00;
+    background-color: #fe1a00;
 }
 
 .myButton2 {
-	box-shadow: 0px 0px 8px 0px #7a6d07;
-	background-color:rgb(241, 210, 34);
-	border-radius:28px;
-	border:1px solid #ffec60;
-	display:inline-block;
-	cursor:pointer;
-	color:#333333;
-	font-family:Arial;
-	font-size:14px;
-	padding:1px 4px;
-	text-decoration:none;
-	text-shadow:0px 1px 0px #ffee66;
+    box-shadow: 0px 0px 8px 0px #7a6d07;
+    background-color: rgb(241, 210, 34);
+    border-radius: 28px;
+    border: 1px solid #ffec60;
+    display: inline-block;
+    cursor: pointer;
+    color: #333333;
+    font-family: Arial;
+    font-size: 14px;
+    padding: 1px 4px;
+    text-decoration: none;
+    text-shadow: 0px 1px 0px #ffee66;
 }
+
 .myButton2:hover {
-	background-color:#fafa2d;
+    background-color: #fafa2d;
 }
 
 
-.tablasBatery{
+.tablasBatery {
     background-color: #0149C1;
-   /*  min-width: 300px; */
+    /*  min-width: 300px; */
 }
 
-.tablasBatery2{
+.tablasBatery2 {
     background-color: #7E07AE;
-   /*  min-width: 300px; */
+    /*  min-width: 300px; */
 }
 
-.tablasBatery3{
+.tablasBatery3 {
     background-color: #D97100;
     /* min-width: 300px; */
 }
 
-.tablasBatery4{
+.tablasBatery4 {
     background-color: #C40608;
     /*min-width: 300px;*/
-}*/
+}
+
+*/
 /*.imagenBatery{
     width: 100%;
     height: 80vh; 
@@ -605,29 +611,80 @@ button {
 }
 
 
-.visible {display: block;}
-.oculto {display: none;}
-.cuerpoAlto{min-height: 90vh; }
-.cuerpoNormal{min-height: 80vh}
+.visible {
+    display: block;
+}
 
-    .tablasBatery,.tablasBatery2,.tablasBatery3,.tablasBatery4{width: 160px; font-size:0.4em}
-    .tablasBateryHead{font-size:0.4em;width: 640px;  margin-top:150px}
-    .imgBateria{width: 750px; height: 600px;}
-    .div-color{ background-color:black;}
+.oculto {
+    display: none;
+}
+
+.cuerpoAlto {
+    min-height: 90vh;
+}
+
+.cuerpoNormal {
+    min-height: 80vh
+}
+
+.tablasBatery,
+.tablasBatery2,
+.tablasBatery3,
+.tablasBatery4 {
+    width: 160px;
+    font-size: 0.4em
+}
+
+.tablasBateryHead {
+    font-size: 0.4em;
+    width: 640px;
+    margin-top: 150px
+}
+
+.imgBateria {
+    width: 750px;
+    height: 600px;
+}
+
+.div-color {
+    background-color: black;
+}
 
 
 /* Small devices (landscape phones, 576px and up)*/
 @media (min-width: 576px) {
-    .titulo {font-size: 1.5em; }
-    .cabecera {background: linear-gradient(140deg, rgba(255, 255, 255, 1) 26%, rgb(251, 208, 208, 0)27%, rgb(184, 14, 14) 28%, rgb(184, 14, 14) 71%, rgb(236, 194, 194, 0) 72%, rgba(255, 255, 255, 1) 73%);}
-    .form-login {color: black;}
+    .titulo {
+        font-size: 1.5em;
+    }
+
+    .cabecera {
+        background: linear-gradient(140deg, rgba(255, 255, 255, 1) 26%, rgb(251, 208, 208, 0)27%, rgb(184, 14, 14) 28%, rgb(184, 14, 14) 71%, rgb(236, 194, 194, 0) 72%, rgba(255, 255, 255, 1) 73%);
+    }
+
+    .form-login {
+        color: black;
+    }
+
     .btn-actualizar,
     .btn-eliminar,
-    .btn-guardar {font-size: 0.7em;}
-    .formulario { width: 80%;}
-    .modal { font-family: 'Almarai', sans-serif;font-size: 0.9em;}
-    .input-group-text {font-family: 'Almarai', sans-serif;font-size: 0.9em; }
-    
+    .btn-guardar {
+        font-size: 0.7em;
+    }
+
+    .formulario {
+        width: 80%;
+    }
+
+    .modal {
+        font-family: 'Almarai', sans-serif;
+        font-size: 0.9em;
+    }
+
+    .input-group-text {
+        font-family: 'Almarai', sans-serif;
+        font-size: 0.9em;
+    }
+
 }
 
 
@@ -645,12 +702,31 @@ button {
         min-width: 200px;
         padding: 6px 24px;
     }
-    .tablasBatery,.tablasBatery2,.tablasBatery3,.tablasBatery4{width: 160px; font-size:0.4em}
-    .tablasBateryHead{font-size:0.4em;width: 640px;  margin-top:150px}
-    .imgBateria{width: 750px; height: 600px;}
-    .div-color{ background-color:gray;}
 
-  
+    .tablasBatery,
+    .tablasBatery2,
+    .tablasBatery3,
+    .tablasBatery4 {
+        width: 160px;
+        font-size: 0.4em
+    }
+
+    .tablasBateryHead {
+        font-size: 0.4em;
+        width: 640px;
+        margin-top: 150px
+    }
+
+    .imgBateria {
+        width: 750px;
+        height: 600px;
+    }
+
+    .div-color {
+        background-color: gray;
+    }
+
+
 }
 
 /* Large devices (desktops, 992px and up)*/
@@ -664,11 +740,30 @@ button {
     .btn-guardar {
         font-size: 0.9em;
     }
-    .tablasBatery,.tablasBatery2,.tablasBatery3,.tablasBatery4{width: 180px; font-size:0.5em}
-    .tablasBateryHead{font-size:0.5em;width: 640px; margin-top:160px}
-    .imgBateria{width: 850px; height: 680px;}
-    .div-color{ background-color:yellow;}
-    
+
+    .tablasBatery,
+    .tablasBatery2,
+    .tablasBatery3,
+    .tablasBatery4 {
+        width: 180px;
+        font-size: 0.5em
+    }
+
+    .tablasBateryHead {
+        font-size: 0.5em;
+        width: 640px;
+        margin-top: 160px
+    }
+
+    .imgBateria {
+        width: 850px;
+        height: 680px;
+    }
+
+    .div-color {
+        background-color: yellow;
+    }
+
 }
 
 /* X-Large devices (large desktops, 1200px and up)*/
@@ -676,11 +771,29 @@ button {
     .formulario {
         width: 70%;
     }
-    
-    .div-color{ background-color:red;}
-    .tablasBatery,.tablasBatery2,.tablasBatery3,.tablasBatery4{width: 200px; font-size:0.6em}
-    .tablasBateryHead{font-size:0.6em;width: 800px; margin-top: 160px;}
-    .imgBateria{width: 950px; height: 750px; }
+
+    .div-color {
+        background-color: red;
+    }
+
+    .tablasBatery,
+    .tablasBatery2,
+    .tablasBatery3,
+    .tablasBatery4 {
+        width: 200px;
+        font-size: 0.6em
+    }
+
+    .tablasBateryHead {
+        font-size: 0.6em;
+        width: 800px;
+        margin-top: 160px;
+    }
+
+    .imgBateria {
+        width: 950px;
+        height: 750px;
+    }
 
 }
 
@@ -689,9 +802,27 @@ button {
     .formulario {
         width: 70%;
     }
-    .tablasBatery,.tablasBatery2,.tablasBatery3,.tablasBatery4{width: 300px; font-size:0.7em}
-    .tablasBateryHead{font-size:0.7em;width: 1200px; margin-top: 150px;}
-    .imgBateria{width: 1400px; height: 900px; }
-    .div-color{ background-color:blue;}
-}
 
+    .tablasBatery,
+    .tablasBatery2,
+    .tablasBatery3,
+    .tablasBatery4 {
+        width: 300px;
+        font-size: 0.7em
+    }
+
+    .tablasBateryHead {
+        font-size: 0.7em;
+        width: 1200px;
+        margin-top: 150px;
+    }
+
+    .imgBateria {
+        width: 1400px;
+        height: 800px;
+    }
+
+    .div-color {
+        background-color: blue;
+    }
+}

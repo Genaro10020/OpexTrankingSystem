@@ -1263,190 +1263,202 @@ if (isset($_SESSION['nombre'])) {
                     <!--/////////////////////////////////////////////////////////////GENERAR VALOR////////////////////////////////////////-->
                 </div>
                 <div v-if="ventana=='Generar Valor'">
-                <div class="scroll-bateria ">
-                <div class="m-0 " style=" min-width: 768px; width: 100%; height: 100%; position: relative;">
+                    <div class="scroll-bateria ">
+                        <div class="m-0 " style=" min-width: 768px; width: 100%; height: 100%; position: relative;">
                             <div class="col-12 text-center" style="z-index: 1; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); ">
                                 <img class="imgBateria" src="img/imagenBateriaFondo.jpg"></img>
                             </div>
-                    <!--CONTENIDO BATERIA-->
-                    
-                            <div class="row"> 
-                            <div class="col-12 d-flex align-items-center text-center justify-content-center mx-auto " style="height: 75vh; position: absolute; z-index: 2;">
-                                        <div class="ms-4 " style="min-width: 800px;">   
-                                       
-                                            <div class=" tablasBateryHead d-flex  mx-auto" >
-                                                         <div class="col-9 mt-1 bg-success text-white text-center d-flex align-items-center justify-content-center">
-                                                            <span>Generar valor sustentable</span>
-                                                        </div>
-                                                        <div class="col-3">
-                                                            <table class="mt-1 text-center w-100 ">
-                                                                <thead class="border border-dark">
-                                                                 
-                                                                </thead>
-                                                                <tbody>
-                                                                    <tr scope="col">
-                                                                        <td class="border border-secondary bg-dark text-white">Valor</td>
-                                                                        <td class="border border-dark"><b>$0.00</b></td>
-                                                                    </tr>
-                                                                    <tr scope="row">
-                                                                        <td class="border border-secondary bg-dark text-white" >Sustentable</td>
-                                                                        <td class="border border-dark"><b>0.00</b></td>
-                                                                    </tr>
+                            <!--CONTENIDO BATERIA-->
 
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
+                            <div class="row">
+                                <div class="col-12 d-flex align-items-center text-center justify-content-center mx-auto " style="height: 75vh; position: absolute; z-index: 2;">
+                                    <div class="ms-4 " style="min-width: 800px;">
+
+                                        <div class=" tablasBateryHead d-flex  mx-auto">
+                                            <div class="col-9 mt-1 bg-success text-white text-center d-flex align-items-center justify-content-center">
+                                                <span>Generar valor sustentable</span>
                                             </div>
-                                            <div class="d-flex justify-content-center pt-1 ">
-                                                <div class="tablasBatery col-3 px-1 px-lg-2">
-                                                    <div class="d-flex  text-center text-white pb-2">
-                                                        <span class="col-6 mt-3">Cliente</span>
-                                                        <table class="col-6  mt-1  text-center  table-bordered border-dark  ">
-                                                            <thead>
+                                            <div class="col-3">
+                                                <table class="mt-1 text-center w-100 ">
+                                                    <thead class="border border-dark">
 
-                                                            </thead>
-                                                            <tbody class="bg-white text-dark">
-                                                                <tr>
-                                                                    <td><b>Valor</b></td>
-                                                                    <td>$0.0</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td><b>Sust.</b></td>
-                                                                    <td>0.00</td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr scope="col">
+                                                            <td class="border border-secondary bg-dark text-white">Valor</td>
+                                                            <td class="border border-dark"><b>$0.00</b></td>
+                                                        </tr>
+                                                        <tr scope="row">
+                                                            <td class="border border-secondary bg-dark text-white">Sustentable</td>
+                                                            <td class="border border-dark"><b>0.00</b></td>
+                                                        </tr>
 
-                                                    </div>
-                                                    <table class=" text-center table table-bordered border-dark  ">
-                                                        <thead>
-                                                            <th>Objetivo Estrategíco</th>
-                                                            <th>Valor</th>
-                                                            <th>Sustentable</th>
-                                                        </thead>
-                                                        <tbody class="bg-white">
-                                                            <tr v-for="objetivos in objetivos_ligados">
-                                                                <th scope="row" v-if="objetivos.nombre_pilares == 'Cliente'">{{objetivos.nombre_objetivos}}</th>
-                                                                <td v-if="objetivos.nombre_pilares == 'Cliente'">$0.00</td>
-                                                                <td v-if="objetivos.nombre_pilares == 'Cliente'">0.00</td>
-                                                            </tr>
-
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                                <div class="tablasBatery2 col-3 px-1 px-lg-2">
-                                                    <div class="d-flex  text-white pb-2">
-                                                        <span class="col-6 mt-3">Capital humano</span>
-                                                        <table class="col-6  mt-1  text-center  table-bordered border-dark  ">
-                                                            <thead>
-
-                                                            </thead>
-                                                            <tbody class="bg-white text-dark">
-                                                                <tr>
-                                                                    <td><b>Valor</b></td>
-                                                                    <td>$0.0</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td><b>Sust.</b></td>
-                                                                    <td>0.00</td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                    <table class=" text-center table table-bordered border-dark  ">
-                                                        <thead>
-                                                            <th>Objetivo Estrategíco</th>
-                                                            <th>Valor</th>
-                                                            <th>Sustentable</th>
-                                                        </thead>
-                                                        <tbody class="bg-white">
-                                                            <tr v-for="objetivos in objetivos_ligados">
-                                                                <th scope="row" v-if="objetivos.nombre_pilares == 'Capital Humano'">{{objetivos.nombre_objetivos}}</th>
-                                                                <td v-if="objetivos.nombre_pilares == 'Capital Humano'">$0.00</td>
-                                                                <td v-if="objetivos.nombre_pilares == 'Capital Humano'">$0.00</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                                <div class="tablasBatery3 col-3 px-1 px-lg-2">
-                                                    <div class="d-flex text-center text-white pb-2">
-                                                        <span class="col-6 mt-3">Excelencia operativa</span>
-                                                        <table class="col-6  mt-1  text-center  table-bordered border-dark  ">
-                                                            <thead>
-
-                                                            </thead>
-                                                            <tbody class="bg-white text-dark">
-                                                                <tr>
-                                                                    <td><b>Valor</b></td>
-                                                                    <td>$0.0</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td><b>Sust.</b></td>
-                                                                    <td>0.00</td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                    <table class=" text-center table table-bordered border-dark  ">
-                                                        <thead>
-                                                        <th>Objetivo Estrategíco</th>
-                                                            <th>Valor</th>
-                                                            <th>Sustentable</th>
-                                                        </thead>
-                                                        <tbody class="bg-white">
-                                                            <tr v-for="objetivos in objetivos_ligados">
-                                                                <th scope="row" v-if="objetivos.nombre_pilares == 'Excelencia Operativa'">{{objetivos.nombre_objetivos}}</th>
-                                                                <td v-if="objetivos.nombre_pilares == 'Excelencia Operativa'">$0.00</td>
-                                                                <td v-if="objetivos.nombre_pilares == 'Excelencia Operativa'">0.00</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                                <div class="tablasBatery4 col-3 px-1 px-lg-2">
-                                                    <div class="d-flex text-center text-white pb-2">
-                                                        <span class="col-6 mt-3">investigacion y desarrollo</span>
-                                                        <table class="col-6  mt-1  text-center  table-bordered border-dark  ">
-                                                            <thead>
-
-                                                            </thead>
-                                                            <tbody class="bg-white text-dark">
-                                                                <tr>
-                                                                    <td><b>Valor</b></td>
-                                                                    <td>$0.0</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td><b>Sust.</b></td>
-                                                                    <td>0.00</td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-
-
-                                                    </div>
-                                                    <table class=" table table-bordered border-dark ">
-                                                        <thead>
-                                                        <th>Objetivo Estrategíco</th>
-                                                            <th>Valor</th>
-                                                            <th>Sustentable</th>
-                                                        </thead>
-                                                        <tbody class="bg-white">
-                                                            <tr v-for="objetivos in objetivos_ligados">
-                                                                <th scope="row" v-if="objetivos.nombre_pilares == 'Investigación y Desarrollo'">{{objetivos.nombre_objetivos}}</th>
-                                                                <td v-if="objetivos.nombre_pilares == 'Investigación y Desarrollo'">$0.00</td>
-                                                                <td v-if="objetivos.nombre_pilares == 'Investigación y Desarrollo'">0.00</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
+                                                    </tbody>
+                                                </table>
                                             </div>
-                                         </div> 
-                                    </div> 
+                                        </div>
+                                        <div class="d-flex justify-content-center pt-1 ">
+                                            <div class="tablasBatery col-3 px-1 px-lg-2">
+                                                <div class="d-flex  text-center text-white pb-2">
+                                                    <span class="col-6 mt-3">Cliente</span>
+                                                    <table class="col-6  mt-1  text-center  table-bordered border-dark  ">
+                                                        <thead>
+
+                                                        </thead>
+                                                        <tbody class="bg-white text-dark">
+                                                            <tr>
+                                                                <td><b>Valor</b></td>
+                                                                <td>$0.0</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><b>Sust.</b></td>
+                                                                <td>0.00</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+
+                                                </div>
+                                                <table class=" text-center table table-bordered border-dark  ">
+                                                    <thead>
+                                                        <th>Objetivo Estrategíco</th>
+                                                        <th>Valor</th>
+                                                        <th>Sustentable</th>
+                                                    </thead>
+                                                    <tbody class="bg-white">
+                                                        <tr v-for="objetivos in objetivos_ligados">
+                                                            <th scope="row" v-if="objetivos.nombre_pilares == 'Cliente'">{{objetivos.nombre_objetivos}}</th>
+                                                            <td v-if="objetivos.nombre_pilares == 'Cliente'">$0.00</td>
+                                                            <td v-if="objetivos.nombre_pilares == 'Cliente'">0.00</td>
+                                                        </tr>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="tablasBatery2 col-3 px-1 px-lg-2">
+                                                <div class="d-flex  text-white pb-2">
+                                                    <span class="col-6 mt-3">Capital humano</span>
+                                                    <table class="col-6  mt-1  text-center  table-bordered border-dark  ">
+                                                        <thead>
+
+                                                        </thead>
+                                                        <tbody class="bg-white text-dark">
+                                                            <tr>
+                                                                <td><b>Valor</b></td>
+                                                                <td>$0.0</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><b>Sust.</b></td>
+                                                                <td>0.00</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <table class=" text-center table table-bordered border-dark  ">
+                                                    <thead>
+                                                        <th>Objetivo Estrategíco</th>
+                                                        <th>Valor</th>
+                                                        <th>Sustentable</th>
+                                                    </thead>
+                                                    <tbody class="bg-white">
+                                                        <tr v-for="objetivos in objetivos_ligados">
+                                                            <th scope="row" v-if="objetivos.nombre_pilares == 'Capital Humano'">{{objetivos.nombre_objetivos}}</th>
+                                                            <td v-if="objetivos.nombre_pilares == 'Capital Humano'">$0.00</td>
+                                                            <td v-if="objetivos.nombre_pilares == 'Capital Humano'">$0.00</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="tablasBatery3 col-3 px-1 px-lg-2">
+                                                <div class="d-flex text-center text-white pb-2">
+                                                    <span class="col-6 mt-3">Excelencia operativa</span>
+                                                    <table class="col-6  mt-1  text-center  table-bordered border-dark  ">
+                                                        <thead>
+
+                                                        </thead>
+                                                        <tbody class="bg-white text-dark">
+                                                            <tr>
+                                                                <td><b>Valor</b></td>
+                                                                <td>$0.0</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><b>Sust.</b></td>
+                                                                <td>0.00</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <table class=" text-center table table-bordered border-dark  ">
+                                                    <thead>
+                                                        <th>Objetivo Estrategíco</th>
+                                                        <th>Valor</th>
+                                                        <th>Sustentable</th>
+                                                    </thead>
+                                                    <tbody class="bg-white">
+                                                        <tr class="align-middle" v-for="objetivos in objetivos_ligados">
+                                                            <th scope="row" v-if="objetivos.nombre_pilares == 'Excelencia Operativa'">{{objetivos.nombre_objetivos}}</th>
+                                                            <td v-if="objetivos.nombre_pilares == 'Excelencia Operativa'">
+                                                                <template v-for="(valores, index) in sumasGenerandoValor">
+                                                                    <label class="text-primary" v-if="index === objetivos.nombre_objetivos+' ('+objetivos.siglas+')'">
+                                                                        <b> {{valores.valor}}</b>
+                                                                    </label>
+                                                                </template>
+                                                            </td>
+                                                            <td v-if="objetivos.nombre_pilares == 'Excelencia Operativa'">
+                                                                <template v-for="(valores, index) in sumasGenerandoValor">
+                                                                    <label class="text-success" v-if="index === objetivos.nombre_objetivos+' ('+objetivos.siglas+')'">
+                                                                        <b>{{valores.sustentable}}</b>
+                                                                    </label>
+                                                                </template>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="tablasBatery4 col-3 px-1 px-lg-2">
+                                                <div class="d-flex text-center text-white pb-2">
+                                                    <span class="col-6 mt-3">investigacion y desarrollo</span>
+                                                    <table class="col-6  mt-1  text-center  table-bordered border-dark  ">
+                                                        <thead>
+
+                                                        </thead>
+                                                        <tbody class="bg-white text-dark">
+                                                            <tr>
+                                                                <td><b>Valor</b></td>
+                                                                <td>$0.0</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><b>Sust.</b></td>
+                                                                <td>0.00</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+
+
+                                                </div>
+                                                <table class=" table table-bordered border-dark ">
+                                                    <thead>
+                                                        <th>Objetivo Estrategíco</th>
+                                                        <th>Valor</th>
+                                                        <th>Sustentable</th>
+                                                    </thead>
+                                                    <tbody class="bg-white">
+                                                        <tr v-for="objetivos in objetivos_ligados">
+                                                            <th scope="row" v-if="objetivos.nombre_pilares == 'Investigación y Desarrollo'">{{objetivos.nombre_objetivos}}</th>
+                                                            <td v-if="objetivos.nombre_pilares == 'Investigación y Desarrollo'">$0.00</td>
+                                                            <td v-if="objetivos.nombre_pilares == 'Investigación y Desarrollo'">0.00</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                      <!----------------------------------FIN CONTENIDO BATERIA--->
+                            </div>
+                            <!----------------------------------FIN CONTENIDO BATERIA--->
+                        </div>
                     </div>
-</div>
-   
-<!--<div class="div-color">
+
+                    <!--<div class="div-color">
     estoy en
 </div>-->
                 </div>

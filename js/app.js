@@ -108,7 +108,10 @@ const AltaProyectos = {
       sumaAhorroSuave: 0,
       sumaColumnasImpacto: [],
       todosSeguimientos: [],
-      mostrarHeader:true,
+      mostrarHeader: true,
+      sumasGenerandoValor: [],
+      sumaExcelenciaValor: 0.00,
+      sumaExcelenciaSustentable: 0.00
     }
   },
   mounted() {
@@ -2583,34 +2586,32 @@ const AltaProyectos = {
       this.input_ahorro_duro = this.arregloID[posicion].ahorro_duro
       this.input_ahorro_suave = this.arregloID[posicion].ahorro_suave
     },
-      /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PROYECTOS*/
+    /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PROYECTOS*/
     consultarSeguimientos() {
       axios.get('seguimientoAmbientalProyectoController.php', {
       }).then(response => {
         console.log(response.data)
         if (response.data[0][1] == true) {
-          if(response.data[0][2] == true){
-              if (response.data[0][0].length > 0) {
-                console.log("Seguimientos")
-                this.todosSeguimientos = response.data[0][0];
-                console.log(this.todosSeguimientos)
-              } else {
-                this.todosSeguimientos = []
-              }
-          }else{
-            alert("consulta proyectos en consultarSeguimiento, no se realizo correctamente")
-          }
-
-        } else {
-          alert("La consulta de pilares, no se realizo correctamente.")
-        }
+          if (response.data[0][2] == true) {
+            if (response.data[0][0].length > 0) {
+              console.log("Seguimientos")
+              this.todosSeguimientos = response.data[0][0];
+              console.log(this.todosSeguimientos)
+              this.sumasGenerandoValor = response.data[0][4];
+            } else {
+              this.todosSeguimientos = []
+            }
+          } else { alert("consulta proyectos en consultarSeguimiento, no se realizo correctamente") }
+        } else { alert("La consulta de pilares, no se realizo correctamente.") }
       }).catch(error => {
         console.log('Erro :-(' + error)
       }).finally(() => {
 
       })
     },
-
+    sumarExcelencia(valor) {
+      //this.sumaExcelenciaValor += parseFloat(valor);
+    }
   }
 };
 
