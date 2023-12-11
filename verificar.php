@@ -16,11 +16,23 @@ $contrasena = $arreglo['contrasena'];
                         while ($dato=mysqli_fetch_array($query)) {
                             $_SESSION['nombre']=$dato['nombre'];
                             $_SESSION['nomina']=$dato['nomina'];
-                            $_SESSION['planta']=$dato['planta'];
+                            $_SESSION['acceso']=$dato['tipo_acceso'];
                     $resultado = "Autorizado";
                             }
                 }else{
-                    $resultado = "Verifique";
+
+                    $consulta = "SELECT * FROM responsables WHERE numero_nomina = '$usuario' AND contrasena = '$contrasena'";
+                    $query=$conexion->query($consulta);
+                            if(mysqli_num_rows($query)>0){
+                                    while ($dato=mysqli_fetch_array($query)) {
+                                        $_SESSION['nombre']=$dato['nombre'];
+                                        $_SESSION['nomina']=$dato['numero_nomina'];
+                                        $_SESSION['acceso']='Usuario';
+                                $resultado = "Autorizado";
+                                        }
+                        }else{
+                            $resultado = "Verifique";
+                        }
                 }
      
    

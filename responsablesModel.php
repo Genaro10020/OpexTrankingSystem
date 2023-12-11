@@ -37,9 +37,10 @@ include("conexionGhoner.php");
     function insertarResponsable($nombre,$nomina,$correo,$telefono){
         global $conexion;
         $estado = false;
-        $insertar = "INSERT INTO responsables (nombre,numero_nomina,correo,telefono) VALUES (?,?,?,?)";
+        $contrasena = "123456"; 
+        $insertar = "INSERT INTO responsables (nombre,numero_nomina,contrasena,correo,telefono) VALUES (?,?,?,?,?)";
         $stmt = $conexion->prepare($insertar);
-        $stmt->bind_param("ssss",$nombre,$nomina,$correo,$telefono);
+        $stmt->bind_param("sssss",$nombre,$nomina,$contrasena,$correo,$telefono);
         if($stmt->execute()){
             $estado = true;
         }

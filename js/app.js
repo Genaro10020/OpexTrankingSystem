@@ -111,7 +111,8 @@ const AltaProyectos = {
       mostrarHeader: true,
       sumasGenerandoValor: [],
       sumaExcelenciaValor: 0.00,
-      sumaExcelenciaSustentable: 0.00
+      sumaExcelenciaSustentable: 0.00,
+      var:'',
     }
   },
   mounted() {
@@ -1863,7 +1864,7 @@ const AltaProyectos = {
       this.telefono = ''
     },
     abrirModal(modal, tipo, accion) {
-      this.nombre_proyecto = ''
+      //this.nombre_proyecto = ''
       this.respondio = true;
       this.nueva = ''
       this.tipo = tipo
@@ -2238,6 +2239,7 @@ const AltaProyectos = {
             this.ahorro_duro = "$.00"
             this.ahorro_suave = "$.00"
             this.objetivo_estrategico = false
+            this.nombre_proyecto = ''
           }
         } else {
           alert("No se dio de alta el proyecto.")
@@ -2608,9 +2610,18 @@ const AltaProyectos = {
       }).finally(() => {
 
       })
+    }, buscarCoincidencias(valor1) {
+      //console.log("El resultado que llego"+valor1)
+      console.log("coincidencia");
+      for (let key in this.sumasGenerandoValor) {
+        if (key === valor1) {
+          return true
+        }
+      }
+      return false
     },
-    sumarExcelencia(valor) {
-      //this.sumaExcelenciaValor += parseFloat(valor);
+    sumaExcelencia(valor) {
+      this.sumaExcelenciaValor += parseFloat(valor);
     }
   }
 };

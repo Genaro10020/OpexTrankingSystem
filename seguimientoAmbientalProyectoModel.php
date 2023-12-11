@@ -89,6 +89,7 @@ function consultarSeguimientos()
             $sumaAhorroSuave = 0.0;
             $valor = 0.0;
             $sustentable = 0.0;
+            $sumaSustentableFormateada ='0.00';
             // Consultar la tabla impacto_ambiental_proyecto para cada ID de proyecto
             foreach ($idsProyecto as $idProyecto) {
 

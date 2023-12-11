@@ -441,25 +441,7 @@ button {
 
 
 
-.ocultar {
-    animation: fadeOut 4s;
-    width: 100%;
-    /* O el ancho adecuado para tu diseño */
-    height: 0;
-    /* O la altura adecuada para tu diseño */
-    overflow: hidden;
-    opacity: 0;
-}
 
-@keyframes fadeOut {
-    from {
-        opacity: 1;
-    }
-
-    to {
-        opacity: 0;
-    }
-}
 
 .myButton {
     box-shadow: 0px 0px 6px 0px #000000;
@@ -532,16 +514,16 @@ button {
 
 
 .mostrar {
-    animation: fadeIn 2s;
+    animation: Mostrar 2s;
     position: relative;
     /* Cambia la posición a relativa para volver a colocar el elemento en su posición original */
     height: auto;
     /* Ajusta la altura según el contenido real del elemento */
     opacity: 1;
+    display: block;
 }
 
-
-@keyframes fadeIn {
+@keyframes Mostrar {
     from {
         opacity: 0;
     }
@@ -550,6 +532,28 @@ button {
         opacity: 1;
     }
 }
+
+.ocultar {
+    animation: Ocultar 4s;
+    width: 100%;
+    /* O el ancho adecuado para tu diseño */
+    height: 0;
+    /* O la altura adecuada para tu diseño */
+    overflow: hidden;
+    opacity: 0;
+}
+
+@keyframes Ocultar {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+
 
 .tablaSeguimiento {
     border: #080808;
@@ -631,13 +635,13 @@ button {
 .tablasBatery2,
 .tablasBatery3,
 .tablasBatery4 {
-    width: 160px;
-    font-size: 0.4em
+    width: 170px;
+    font-size: 0.3em
 }
 
 .tablasBateryHead {
-    font-size: 0.4em;
-    width: 640px;
+    font-size: 0.6em;
+    width: 680px;
     margin-top: 150px
 }
 
@@ -704,23 +708,23 @@ button {
     }
 
     .tablasBatery,
-    .tablasBatery2,
-    .tablasBatery3,
-    .tablasBatery4 {
-        width: 160px;
-        font-size: 0.4em
-    }
+.tablasBatery2,
+.tablasBatery3,
+.tablasBatery4 {
+    width: 170px;
+    font-size: 0.3em
+}
 
-    .tablasBateryHead {
-        font-size: 0.4em;
-        width: 640px;
-        margin-top: 150px
-    }
+.tablasBateryHead {
+    font-size: 0.6em;
+    width: 680px;
+    margin-top: 150px
+}
 
-    .imgBateria {
-        width: 750px;
-        height: 600px;
-    }
+.imgBateria {
+    width: 750px;
+    height: 600px;
+}
 
     .div-color {
         background-color: gray;
@@ -745,21 +749,20 @@ button {
     .tablasBatery2,
     .tablasBatery3,
     .tablasBatery4 {
-        width: 180px;
-        font-size: 0.5em
+        width: 200px;
+        font-size: 0.4em
     }
 
     .tablasBateryHead {
-        font-size: 0.5em;
-        width: 640px;
+        font-size: 0.7em;
+        width: 800px;
         margin-top: 160px
     }
 
     .imgBateria {
-        width: 850px;
-        height: 680px;
+        width: 900px;
+        height: 550px;
     }
-
     .div-color {
         background-color: yellow;
     }
@@ -781,20 +784,19 @@ button {
     .tablasBatery3,
     .tablasBatery4 {
         width: 200px;
-        font-size: 0.6em
+        font-size: 0.4em
     }
 
     .tablasBateryHead {
-        font-size: 0.6em;
+        font-size: 0.5em;
         width: 800px;
-        margin-top: 160px;
+        margin-top: 160px
     }
 
     .imgBateria {
-        width: 950px;
-        height: 750px;
+        width: 900px;
+        height: 550px;
     }
-
 }
 
 /* XX-Large devices (larger desktops, 1400px and up)*/
@@ -807,18 +809,18 @@ button {
     .tablasBatery2,
     .tablasBatery3,
     .tablasBatery4 {
-        width: 300px;
-        font-size: 0.7em
+        width: 250px;
+        font-size: 0.5em
     }
 
     .tablasBateryHead {
-        font-size: 0.7em;
-        width: 1200px;
-        margin-top: 150px;
+        font-size: 0.6em;
+        width: 1000px;
+        margin-top: 180px;
     }
 
     .imgBateria {
-        width: 1400px;
+        width: 1300px;
         height: 800px;
     }
 
