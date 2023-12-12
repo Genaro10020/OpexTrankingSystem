@@ -111,10 +111,11 @@ function consultarSeguimientos()
                         $sumaAhorroSuave += floatval($ahorro_suave);
 
                         $sumaTonsCo2 += floatval($fila['tons_co2']);
-                        $sumaDato += floatval($fila['dato']);
+                        //$sumaDato += floatval($fila['dato']);
 
                         $valor = $sumaAhorroDuro + $sumaAhorroSuave;
-                        $sustentable = $sumaTonsCo2 + $sumaDato;
+                        //$sustentable = $sumaTonsCo2 + $sumaDato;
+                        $sustentable = $sumaTonsCo2;
                         // Formatear la suma de sustentable con formato de moneda
                         $sumaSustentableFormateada = '$' . number_format($valor, 2, '.', ',');
                         $sustentable = number_format($sustentable, 2, '.', ',');
@@ -178,7 +179,7 @@ function guardarSeguimietoInicial($id_proyecto, $mes, $anio, $toneladas, $inputI
                 $cantidad = $resultados->num_rows;
                 $anio_mes_en_tabla = "";
                 while ($row = $resultados->fetch_assoc()) {
-                    $$anio_mes_en_tabla = $row['mes_anio'];
+                    $anio_mes_en_tabla = $row['mes_anio'];
                 }
                 if ($resultados->num_rows > 0 || $anio_mes_en_tabla == $mes_anio) {
                     $existe = true;

@@ -11,7 +11,6 @@ if (isset($_SESSION['nombre'])) {
             // Manejar solicitud GET (consultar)
             $val[] = consultarProyectos();
             break;
-            break;
         case 'POST':
             // Manejar solicitud POST (creación)
             if (
