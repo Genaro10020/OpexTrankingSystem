@@ -1,3 +1,5 @@
+let sumandoExcelenciaValor = 0;
+let sumandoExcelenciaSustentable = 0;
 const AltaProyectos = {
   data() {
     return {
@@ -110,9 +112,6 @@ const AltaProyectos = {
       todosSeguimientos: [],
       mostrarHeader: true,
       sumasGenerandoValor: [],
-      sumaExcelenciaValor: 0.00,
-      sumaExcelenciaSustentable: 0.00,
-      var:'',
     }
   },
   mounted() {
@@ -2612,7 +2611,6 @@ const AltaProyectos = {
       })
     }, buscarCoincidencias(valor1) {
       //console.log("El resultado que llego"+valor1)
-      console.log("coincidencia");
       for (let key in this.sumasGenerandoValor) {
         if (key === valor1) {
           return true
@@ -2620,9 +2618,23 @@ const AltaProyectos = {
       }
       return false
     },
-    sumaExcelencia(valor) {
-      this.sumaExcelenciaValor += parseFloat(valor);
-    }
+    sumaExcelenciaValor(valor) {
+      var dato = this.formatoSoloNumeros(valor);
+      dato = parseFloat(dato);
+      sumandoExcelenciaValor += dato;
+      valorExcelencia = parseFloat(sumandoExcelenciaValor).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+      document.getElementById("total_valor_ex").textContent = "$" + valorExcelencia;
+      document.getElementById("valor_global").textContent = "$" + valorExcelencia;
+    },
+
+    sumaExcelenciaSustentable(valor) {
+      var dato = this.formatoSoloNumeros(valor);
+      dato = parseFloat(dato);
+      sumandoExcelenciaSustentable += dato;
+      sustentableExcelencia = parseFloat(sumandoExcelenciaSustentable).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+      document.getElementById("total_sustentable_ex").textContent = sustentableExcelencia;
+      document.getElementById("sustentable_global").textContent = sustentableExcelencia;
+    },
   }
 };
 

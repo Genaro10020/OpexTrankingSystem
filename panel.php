@@ -22,10 +22,10 @@ if (isset($_SESSION['nombre'])) {
 
                 <!--Bóton-->
                 <div class="text-center">
-                    <?php if($_SESSION['acceso']=='Admin'){ ?>
-                    <button class="btn-menu " @click="ventana='Crear',consultarMisionesRelacional(),consultarObjetivosRelacional(),consultarMisiones(),consultarImpactoAmbiental(),consultarEstandaresCO2(),consultarFuentes(),mostrarHeader=true">
-                        <i class="bi bi-plus-circle"></i> Crear Catalogos
-                    </button>
+                    <?php if ($_SESSION['acceso'] == 'Admin') { ?>
+                        <button class="btn-menu " @click="ventana='Crear',consultarMisionesRelacional(),consultarObjetivosRelacional(),consultarMisiones(),consultarImpactoAmbiental(),consultarEstandaresCO2(),consultarFuentes(),mostrarHeader=true">
+                            <i class="bi bi-plus-circle"></i> Crear Catalogos
+                        </button>
                     <?php } ?>
                     <button class="btn-menu me-0 mx-sm-3" @click="ventana='Altas',mostrarHeader=true">
                         <i class="bi bi-plus-circle"></i> Proyectos Creados
@@ -525,11 +525,11 @@ if (isset($_SESSION['nombre'])) {
             <div :class="{ 'cuerpoNormal': mostrarHeader, 'cuerpoAlto': !mostrarHeader }">
                 <!--AQUI TRABAJA //ALTA DE PROYECTOS-->
                 <div class="text-center mt-3" v-if="ventana=='Altas'">
-                <?php if($_SESSION['acceso']=='Admin'){ ?>
-                    <button class="btn-menu align-items-center" @click="abrirModal('Alta')">
-                        <i class="bi bi-plus-circle"></i> Alta Proyecto
-                    </button>
-                <?php } ?>
+                    <?php if ($_SESSION['acceso'] == 'Admin') { ?>
+                        <button class="btn-menu align-items-center" @click="abrirModal('Alta')">
+                            <i class="bi bi-plus-circle"></i> Alta Proyecto
+                        </button>
+                    <?php } ?>
                     <div class="scroll-dos px-2">
                         <table class="mx-auto mt-5  mb-5 tabla-proyectos">
                             <thead class="sticky-top">
@@ -1265,7 +1265,7 @@ if (isset($_SESSION['nombre'])) {
                     <!--/////////////////////////////////////////////////////////////GENERAR VALOR////////////////////////////////////////-->
                 </div>
                 <div v-if="ventana=='Generar Valor'">
-                <!--<div class="div-color">
+                    <!--<div class="div-color">
                 dd   
                 </div>-->
                     <div class="scroll-bateria ">
@@ -1291,11 +1291,11 @@ if (isset($_SESSION['nombre'])) {
                                                     <tbody>
                                                         <tr scope="col">
                                                             <td class="border border-secondary bg-dark text-white">Valor</td>
-                                                            <td class="border border-dark"><b>$0.00</b></td>
+                                                            <td class="border border-dark"><b id="valor_global"></b></td>
                                                         </tr>
                                                         <tr scope="row">
                                                             <td class="border border-secondary bg-dark text-white">Sustentable</td>
-                                                            <td class="border border-dark"><b>0.00</b></td>
+                                                            <td class="border border-dark"><b id="sustentable_global"></b></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -1344,7 +1344,7 @@ if (isset($_SESSION['nombre'])) {
                                                                     <b>{{sumasGenerandoValor[objetivos.nombre_objetivos + ' (' + objetivos.siglas + ')'].sustentable}}</b>
                                                                 </label>
                                                                 <label class="text-success" v-else>
-                                                                <b> 0.00</b>
+                                                                    <b> 0.00</b>
                                                                 </label>
                                                             </td>
                                                         </tr>
@@ -1392,7 +1392,7 @@ if (isset($_SESSION['nombre'])) {
                                                                     <b>{{sumasGenerandoValor[objetivos.nombre_objetivos + ' (' + objetivos.siglas + ')'].sustentable}}</b>
                                                                 </label>
                                                                 <label class="text-success" v-else>
-                                                                   <b> 0.00</b>
+                                                                    <b> 0.00</b>
                                                                 </label>
                                                             </td>
                                                         </tr>
@@ -1409,11 +1409,11 @@ if (isset($_SESSION['nombre'])) {
                                                         <tbody class="bg-white text-dark">
                                                             <tr>
                                                                 <td><b>Valor</b></td>
-                                                                <td>$0.00</td>
+                                                                <td><b id="total_valor_ex"></b></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><b>Sust.</b></td>
-                                                                <td>0.00</td>
+                                                                <td><b id="total_sustentable_ex"></b></td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -1425,12 +1425,13 @@ if (isset($_SESSION['nombre'])) {
                                                         <th>Sustentable</th>
                                                     </thead>
                                                     <tbody class="bg-white">
-                                                        <tr class="align-middle" v-for="(objetivos,item) in objetivos_ligados">
+                                                        <tr class="align-middle" v-for="(objetivos,index) in objetivos_ligados">
+
                                                             <th scope="row" v-if="objetivos.nombre_pilares == 'Excelencia Operativa'">{{objetivos.nombre_objetivos}}</th>
                                                             <td v-if="objetivos.nombre_pilares == 'Excelencia Operativa'">
                                                                 <label class="text-primary" v-if="buscarCoincidencias(objetivos.nombre_objetivos + ' (' + objetivos.siglas + ')')">
-                                                                    <b>{{sumasGenerandoValor[objetivos.nombre_objetivos + ' (' + objetivos.siglas + ')'].valor}}</b>
-                                                                    {{sumaExcelencia(sumasGenerandoValor[objetivos.nombre_objetivos + ' (' + objetivos.siglas + ')'].valor)}}
+                                                                    <b>{{sumasGenerandoValor[objetivos.nombre_objetivos + ' (' + objetivos.siglas + ')'].valor}}</b><!--Imprimir el valor-->
+                                                                    {{sumaExcelenciaValor(sumasGenerandoValor[objetivos.nombre_objetivos + ' (' + objetivos.siglas + ')'].valor)}}<!--sumando los valor-->
                                                                 </label>
                                                                 <label class="text-primary" v-else>
                                                                     <b>$0.00</b>
@@ -1438,10 +1439,11 @@ if (isset($_SESSION['nombre'])) {
                                                             </td>
                                                             <td v-if="objetivos.nombre_pilares == 'Excelencia Operativa'">
                                                                 <label class="text-success" v-if="buscarCoincidencias(objetivos.nombre_objetivos + ' (' + objetivos.siglas + ')')">
-                                                                    <b>{{sumasGenerandoValor[objetivos.nombre_objetivos + ' (' + objetivos.siglas + ')'].sustentable}}</b>
+                                                                    <b>{{sumasGenerandoValor[objetivos.nombre_objetivos + ' (' + objetivos.siglas + ')'].sustentable}}</b><!--Imprimir sustentable-->
+                                                                    {{sumaExcelenciaSustentable(sumasGenerandoValor[objetivos.nombre_objetivos + ' (' + objetivos.siglas + ')'].sustentable)}}<!--sumando los sustentable-->
                                                                 </label>
                                                                 <label class="text-success" v-else>
-                                                                   <b> 0.00</b>
+                                                                    <b> 0.00</b>
                                                                 </label>
                                                             </td>
                                                         </tr>
