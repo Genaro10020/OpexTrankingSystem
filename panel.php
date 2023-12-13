@@ -552,7 +552,7 @@ if (isset($_SESSION['nombre'])) {
                                 <th>Ahorro Suave $MXN/Año <br>(Proyectado)</th>
                                 <th>Estatus</th>
                                 <?php if ($_SESSION['acceso'] == 'Admin') { ?>
-                                <th>Eliminar</th>
+                                    <th>Eliminar</th>
                                 <?php } ?>
                             </thead>
                             <tbody class=" border:1px solid black" style="text-align: center">
@@ -587,16 +587,13 @@ if (isset($_SESSION['nombre'])) {
                                                 <li v-for="impacto in JSON.parse(proyecto.impacto_ambiental)">{{impacto}}</li>
                                             </ul>
                                         </td>
-                                        <!--<td class="border border-secondary">{{proyecto.tons_co2}}<br> <label class="text-success" v-if="proyectoSumas[proyecto.id]"><b>{{proyectoSumas[proyecto.id].sumaTons}}<b><label></td>
-                                        <td class="border border-secondary">{{proyecto.ahorro_duro}}<br> <label class="text-success" v-if="proyectoSumas[proyecto.id]"><b>{{proyectoSumas[proyecto.id].sumaDuro}}<b><label></td>
-                                        <td class="border border-secondary">{{proyecto.ahorro_suave}}<br> <label class="text-success" v-if="proyectoSumas[proyecto.id]"><b>{{proyectoSumas[proyecto.id].sumaSuave}}<b><label></td>-->
-                                        <td class="border border-secondary">{{proyecto.tons_co2}}<label></td>
-                                        <td class="border border-secondary">{{proyecto.ahorro_duro}}</td>
-                                        <td class="border border-secondary">{{proyecto.ahorro_suave}}</td>
-                                        <td class="border border-secondary"><b><label v-if="proyecto.status_seguimiento!='Cerrado'">Siguiendo</label><label v-else="proyecto.status_seguimiento!='Cerrado'">{{proyecto.status_seguimiento}}<label></b></td>
+                                        <td class="border border-secondary">{{proyecto.tons_co2}}<br> <label class="text-success" v-if="proyectoSumas[proyecto.id]"><b>{{proyectoSumas[proyecto.id].sumaTons}}<b><label></td>
+                                        <td class="border border-secondary">{{proyecto.ahorro_duro}}<br> <label class="text-primary" v-if="proyectoSumas[proyecto.id]"><b>{{proyectoSumas[proyecto.id].sumaDuro}}<b><label></td>
+                                        <td class="border border-secondary">{{proyecto.ahorro_suave}}<br> <label class="text-primary" v-if="proyectoSumas[proyecto.id]"><b>{{proyectoSumas[proyecto.id].sumaSuave}}<b><label></td>
+                                        <td class="border border-secondary"><b><label v-if="proyecto.status_seguimiento!='Cerrado'">Siguiendo</label><label v-else="proyecto.status_seguimiento!='Cerrado'">{{proyecto.status_seguimiento}}<label></b><br>{{proyecto.id}} </td>
                                         <?php if ($_SESSION['acceso'] == 'Admin') { ?>
-                                        <td class="border border-secondary"> <button class="rounded-circle bg-danger border border-secondary btn shadow-sm" @click="eliminarProyecto(proyecto.id)"><i class="bi bi-trash3-fill text-white"></i></button></td>
-                                        <?php }?>
+                                            <td class="border border-secondary"> <button class="rounded-circle bg-danger border border-secondary btn shadow-sm" @click="eliminarProyecto(proyecto.id)"><i class="bi bi-trash3-fill text-white"></i></button></td>
+                                        <?php } ?>
                                     </tr>
                                 </template>
                         </table>
@@ -1288,7 +1285,7 @@ if (isset($_SESSION['nombre'])) {
 
                                         <div class=" tablasBateryHead d-flex  mx-auto">
                                             <div class="col-9 mt-1 bg-success text-white text-center d-flex align-items-center justify-content-center">
-                                               <h5 class="my-auto pb-1">Generar valor sustentable</h5>
+                                                <h5 class="my-auto pb-1">Generar valor sustentable</h5>
                                             </div>
                                             <div class="col-3">
                                                 <table class="mt-1 w-100 ">
@@ -1301,8 +1298,8 @@ if (isset($_SESSION['nombre'])) {
                                                             <td class="border border-dark text-primary bg-white"><b id="valor_global">{{SumaValorEx}}</b></td>
                                                         </tr>
                                                         <tr scope="row">
-                                                        <td class="border border-dark bg-secondary text-white">Sustentable (t CO2)</td>
-                                                            <td class="border border-dark text-success bg-white" ><b id="sustentable_global">{{SumaSustentableEx}}</b></td>
+                                                            <td class="border border-dark bg-secondary text-white">Sustentable (t CO2)</td>
+                                                            <td class="border border-dark text-success bg-white"><b id="sustentable_global">{{SumaSustentableEx}}</b></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>

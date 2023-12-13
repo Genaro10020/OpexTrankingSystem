@@ -5,7 +5,7 @@ function consultarProyectos()
     global $conexion;
     $resultado = [];
     $estado = false;
-    
+
     $consulta = "SELECT * FROM proyectos_creados ORDER BY folio ASC";
     $query = $conexion->query($consulta);
     if ($query) {
@@ -18,65 +18,106 @@ function consultarProyectos()
     }
 
     $estado2 = false;
-    $sumaTons=0;
-    $sumaDuro=0;
-    $sumaSuave=0;
-    $valor1 =0;
-    $valor2  =0;
-    $valor3  =0;
+    $sumaTons = 0;
+    $sumaDuro = 0;
+    $sumaSuave = 0;
+    $valor1 = 0;
+    $valor2  = 0;
+    $valor3  = 0;
     $id = null;
-
-    $query = "SELECT proyectos_creados.id, proyectos_creados.nombre_proyecto, registros_impacto_ambiental.tons_co2, registros_impacto_ambiental.ahorro_duro, registros_impacto_ambiental.ahorro_suave FROM impacto_ambiental_proyecto 
+    $nombre = 0;
+    $sumando = '';
+    $checando = [];
+    $sumasXProyecto = array();
+    $ids = '';
+    $doce_vueltas = 0;
+    $todaslasvueltas = 0;
+    $query = "SELECT impacto_ambiental_proyecto.id_proyecto, proyectos_creados.id, proyectos_creados.nombre_proyecto, registros_impacto_ambiental.id_impacto_ambiental_proyecto, registros_impacto_ambiental.tons_co2, registros_impacto_ambiental.ahorro_duro, registros_impacto_ambiental.ahorro_suave FROM impacto_ambiental_proyecto 
     INNER JOIN proyectos_creados ON impacto_ambiental_proyecto.id_proyecto = proyectos_creados.id
-    INNER JOIN registros_impacto_ambiental ON impacto_ambiental_proyecto.id = registros_impacto_ambiental.id_impacto_ambiental_proyecto";//AGRUPO LOS PROYECTO EXISTENTES
-    if($datos=$conexion->query($query)){
+    INNER JOIN registros_impacto_ambiental ON impacto_ambiental_proyecto.id = registros_impacto_ambiental.id_impacto_ambiental_proyecto  ORDER BY  proyectos_creados.id, registros_impacto_ambiental.id_impacto_ambiental_proyecto  ASC"; //AGRUPO LOS PROYECTO EXISTENTES
+    if ($datos = $conexion->query($query)) {
         $estado2 = true;
-        $sumasXProyecto = array();
-         while($fila=$datos->fetch_assoc()){
+        $ultimaFila = $datos->num_rows;
+        while ($fila = $datos->fetch_assoc()) {;
+            $todaslasvueltas++;
 
-                //$id=$fila['id']; 
-                //$sumasXProyecto[$id] = $fila['id'];
-            
 
+            if ($id === null) { // entrara solo una vez
+                $id = $fila['id'];
+                $sumasXProyecto[$id] = array();
+                $nombre = $fila['nombre_proyecto'];
+
+
+                $valor1 = (float)$fila['tons_co2'];
+                $sumaTons += $valor1;
+                // Eliminar el sigono de "$" y las comas y convertir a float
+                $valor2 = (float)str_replace(['$', ','], '', $fila['ahorro_duro']);
+                $sumaDuro += $valor2;
+                $valor3 = (float)str_replace(['$', ','], '', $fila['ahorro_suave']);
+                $sumaSuave += $valor3;
+                $sumando .= " " . $fila['tons_co2'];
+                $ids .= "nulo" . $fila['id'];
+            } else { // despues comparara id
+                if ($id != $fila['id']) { //cuando sea distinto al id anterior se insertara y se receteraran las variables
+                    $doce_vueltas = 1;
+                    $sumaTons = number_format($sumaTons, 2, '.', ',');
+                    $sumaDuro = "$" . number_format($sumaDuro, 2, '.', ',');
+                    $sumaSuave = "$" . number_format($sumaSuave, 2, '.', ',');
+
+                    $sumasXProyecto[$id] = array(
+                        'sumaTons' => $sumaTons,
+                        'sumaDuro' => $sumaDuro,
+                        'sumaSuave' => $sumaSuave,
+                        'nombre' => $nombre,
+                        'sumando' => $sumando,
+                        'id' => $ids
+                    );
+                    $nombre = $fila['nombre_proyecto'];
+                    $ids = "diferente" . $fila['id'];
+                    $id = $fila['id'];
+                    $sumando = $fila['tons_co2'];
+                    $sumaTons = (float)$fila['tons_co2'];
+                    $sumaDuro = (float)str_replace(['$', ','], '', $fila['ahorro_duro']);
+                    $sumaSuave = (float)str_replace(['$', ','], '', $fila['ahorro_suave']);
+                    $valor1 = 0.0;
+                    $valor2  = 0.0;
+                    $valor3  = 0.0;
+                    $doce_vueltas++;
+                } else {
+                    if ($doce_vueltas <= 12) {
                         $valor1 = (float)$fila['tons_co2'];
-                        $sumaTons += $valor1; 
+                        $sumaTons += $valor1;
                         // Eliminar el sigono de "$" y las comas y convertir a float
                         $valor2 = (float)str_replace(['$', ','], '', $fila['ahorro_duro']);
                         $sumaDuro += $valor2;
-
                         $valor3 = (float)str_replace(['$', ','], '', $fila['ahorro_suave']);
                         $sumaSuave += $valor3;
+                        $sumando .= " " . $fila['tons_co2'];
+                        $ids .= " " . $fila['id'];
+                        $doce_vueltas++;
+                    }
+                    if ($ultimaFila === $todaslasvueltas) { //cuando ya no es diferente pero se realiza la ultima vuelta guardo toda la suma
+                        $sumaTons = number_format($sumaTons, 2, '.', ',');
+                        $sumaDuro = "$" . number_format($sumaDuro, 2, '.', ',');
+                        $sumaSuave = "$" . number_format($sumaSuave, 2, '.', ',');
 
-                        if($id===null){// entrara solo una vez
-                            $id = $fila['id'];
-                            $sumasXProyecto[$id] = array();
-                        }else{// despues comparara id
-                            if($id!=$fila['id']){//cuando sea distinto al id anterior se insertara y se receteraran las variables
-                                $sumaTons = number_format($sumaTons, 2, '.',',');
-                                $sumaDuro = "$".number_format($sumaDuro, 2, '.', ',');
-                                $sumaSuave = "$".number_format($sumaSuave, 2, '.', ',');
-
-                                    $sumasXProyecto[$id] = array(
-                                        'sumaTons' => $sumaTons,
-                                        'sumaDuro' => $sumaDuro,
-                                        'sumaSuave' => $sumaSuave,
-                                    );
-                                    $id = $fila['id'];
-                                    $sumaTons = 0.0;
-                                    $sumaDuro = 0.0;
-                                    $sumaSuave = 0.0;
-                                    $valor1 =0.0;
-                                    $valor2  =0.0;
-                                    $valor3  =0.0;
-                            }
-                        }
-                    
-         }
-    }else{
+                        $sumasXProyecto[$id] = array(
+                            'sumaTons' => $sumaTons,
+                            'sumaDuro' => $sumaDuro,
+                            'sumaSuave' => $sumaSuave,
+                            'nombre' => $nombre,
+                            'sumando' => $sumando,
+                            'id' => $ids
+                        );
+                    }
+                }
+            }
+        }
+    } else {
         $estado2 = $conexion->error;
     }
 
-    return array($resultado, $estado,$sumasXProyecto,$estado2);
+    return array($resultado, $estado, $sumasXProyecto, $estado2, $checando);
 }
 
 function consultarProyectosID($id_proyecto)
