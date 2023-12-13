@@ -1481,9 +1481,9 @@ if (isset($_SESSION['nombre'])) {
                  <!--//////////////////////////////////////////////////////////////CALEMDARIO////////////////////////////////////////////////////////////////////////////////-->
                 <div v-if="ventana == 'Calendario'">
                     <div class="input-group mt-3 mb-2 ">
-                        <span class="input-group-text">Seleccione proyecto</span>
+                        <span class="input-group-text">Seleccione año</span>
                         <select>
-                            <option>opcion 1</option>
+                            <option v-for="anios in years">{{anios}}</option>
                         </select>
                     </div>
                     <table class="table table-bordered table-striped table-hover text-center">
