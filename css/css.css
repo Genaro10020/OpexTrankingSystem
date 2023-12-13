@@ -1,3 +1,7 @@
+.body-principal{
+    font-family: 'Lexend Deca', sans-serif; 
+}
+
 .cabecera {
     background: linear-gradient(140deg, rgba(255, 255, 255, 1) 25%, rgb(211, 134, 134, 0)26%, rgb(184, 14, 14) 28%, rgb(184, 14, 14) 70%, rgb(211, 134, 134, 0) 72%, rgba(255, 255, 255, 1) 73%);
 
@@ -220,7 +224,7 @@ button {
 
 
 .btn-menu {
-    width: 150px;
+    width: 180px;
 
     background-color: #3ea157;
     color: white;
@@ -635,24 +639,29 @@ button {
 .tablasBatery2,
 .tablasBatery3,
 .tablasBatery4 {
-    width: 170px;
-    font-size: 0.3em
+    width: 195px;
+    font-size: 0.4em
 }
 
-
 .tablasBateryHead {
-    font-size: 0.6em;
-    width: 680px;
-    margin-top: 150px
+    font-size: 0.5em;
+    width: 780px;
+    margin-top: 10vh;
 }
 
 .imgBateria {
-    width: 750px;
+    width: 880px;
     height: 600px;
 }
 
+
 .div-color {
     background-color: black;
+}
+
+.subtitulo{
+    font-size: 1.5em;
+    line-height: 1;
 }
 
 
@@ -708,22 +717,22 @@ button {
         padding: 6px 24px;
     }
 
-    .tablasBatery,
+.tablasBatery,
 .tablasBatery2,
 .tablasBatery3,
 .tablasBatery4 {
-    width: 170px;
-    font-size: 0.3em
+    width: 195px;
+    font-size: 0.4em
 }
 
 .tablasBateryHead {
-    font-size: 0.6em;
-    width: 680px;
-    margin-top: 150px
+    font-size: 0.5em;
+    width: 780px;
+    margin-top: 10vh;
 }
 
 .imgBateria {
-    width: 750px;
+    width: 880px;
     height: 600px;
 }
 
@@ -757,7 +766,7 @@ button {
     .tablasBateryHead {
         font-size: 0.7em;
         width: 800px;
-        margin-top: 160px
+        margin-top: 5vh;
     }
 
     .imgBateria {
@@ -772,32 +781,11 @@ button {
 
 /* X-Large devices (large desktops, 1200px and up)*/
 @media (min-width: 1200px) {
-    .formulario {
-        width: 70%;
-    }
-
-    .div-color {
-        background-color: red;
-    }
-
-    .tablasBatery,
-    .tablasBatery2,
-    .tablasBatery3,
-    .tablasBatery4 {
-        width: 200px;
-        font-size: 0.4em
-    }
-
-    .tablasBateryHead {
-        font-size: 0.7em;
-        width: 800px;
-        margin-top: 160px
-    }
-
-    .imgBateria {
-        width: 900px;
-        height: 550px;
-    }
+    .formulario { width: 70%;}
+    .div-color {background-color: red;}
+    .tablasBatery,.tablasBatery2,.tablasBatery3,.tablasBatery4 { width: 230px; font-size: 0.5em}
+    .tablasBateryHead {font-size: 0.7em; width: 920px;margin-top:8vh;}
+    .imgBateria {width: 1100px; height: 600px;}
 }
 
 /* XX-Large devices (larger desktops, 1400px and up)*/

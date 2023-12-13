@@ -8,7 +8,7 @@ if (isset($_SESSION['nombre'])) {
         <?php include('head.php'); ?>
     </head>
 
-    <body class="container-fluid d-flex flex-column" style="min-height: 100vh;">
+    <body class="container-fluid d-flex flex-column body-principal" style="min-height: 100vh;">
         <div id="alta-proyectos">
             <!--Encabezado-->
             <div :class="{ 'visible': mostrarHeader, 'oculto': !mostrarHeader }">
@@ -1270,10 +1270,10 @@ if (isset($_SESSION['nombre'])) {
                 </div>
                 <div v-if="ventana=='Generar Valor'">
                     <!--<div class="div-color">
-                dd   
+                Pantalla 
                 </div>-->
                     <div class="scroll-bateria ">
-                        <div class="m-0 " style=" min-width: 768px; width: 100%; height: 100%; position: relative;">
+                        <div class="m-0 " style=" min-width: 900px; width: 100%; height: 100%; position: relative;">
                             <div class="col-12 text-center" style="z-index: 1; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); ">
                                 <img class="imgBateria" src="img/imagenBateriaFondoNegro.jpg"></img>
                             </div>
@@ -1285,7 +1285,7 @@ if (isset($_SESSION['nombre'])) {
 
                                         <div class=" tablasBateryHead d-flex  mx-auto">
                                             <div class="col-9 mt-1 bg-success text-white text-center d-flex align-items-center justify-content-center">
-                                                <h5 class="my-auto pb-1">Generar valor sustentable</h5>
+                                                <h5 class="my-auto">Generar valor sustentable</h5>
                                             </div>
                                             <div class="col-3">
                                                 <table class="mt-1 w-100 ">
@@ -1307,8 +1307,8 @@ if (isset($_SESSION['nombre'])) {
                                         </div>
                                         <div class="d-flex justify-content-center pt-1">
                                             <div class="tablasBatery col-3 px-1 px-lg-2">
-                                                <div class="d-flex  text-center text-white pb-2">
-                                                    <span class="col-6 mt-3 subtitulo">Cliente</span>
+                                                <div class="d-flex  text-center text-white pb-1">
+                                                    <span class="col-6 subtitulo" style="margin-top:11px">Cliente</span>
                                                     <table class="col-6  mt-1  text-center  table-bordered border-dark  ">
                                                         <thead>
 
@@ -1333,7 +1333,7 @@ if (isset($_SESSION['nombre'])) {
                                                         <th>Sustentable <br>(t CO2)</th>
                                                     </thead>
                                                     <tbody class="bg-white">
-                                                        <tr class="align-middle" v-for="objetivos in objetivos_ligados">
+                                                        <tr class="align-middle text-start" v-for="objetivos in objetivos_ligados">
                                                             <th scope="row" v-if="objetivos.nombre_pilares == 'Cliente'">{{objetivos.nombre_objetivos}}</th>
                                                             <td v-if="objetivos.nombre_pilares == 'Cliente'">
                                                                 <label class="text-primary" v-if="buscarCoincidencias(objetivos.nombre_objetivos + ' (' + objetivos.siglas + ')')">
@@ -1356,8 +1356,8 @@ if (isset($_SESSION['nombre'])) {
                                                 </table>
                                             </div>
                                             <div class="tablasBatery2 col-3 px-1 px-lg-2 border-start border-end border-3 border-dark">
-                                                <div class="d-flex  text-white pb-2">
-                                                    <span class="col-6 mt-3 subtitulo">Capital humano</span>
+                                                <div class="d-flex  text-white pb-1">
+                                                    <span class="col-6 subtitulo" style="margin-top:11px">Capital humano</span>
                                                     <table class="col-6  mt-1  text-center  table-bordered border-dark  ">
                                                         <thead>
 
@@ -1381,7 +1381,7 @@ if (isset($_SESSION['nombre'])) {
                                                         <th>Sustentable <br>(t CO2)</th>
                                                     </thead>
                                                     <tbody class="bg-white">
-                                                        <tr class="align-middle" v-for="objetivos in objetivos_ligados">
+                                                        <tr class="align-middle text-start" v-for="objetivos in objetivos_ligados">
                                                             <th scope="row" v-if="objetivos.nombre_pilares == 'Capital Humano'">{{objetivos.nombre_objetivos}}</th>
                                                             <td v-if="objetivos.nombre_pilares == 'Capital Humano'">
                                                                 <label class="text-primary" v-if="buscarCoincidencias(objetivos.nombre_objetivos + ' (' + objetivos.siglas + ')')">
@@ -1404,8 +1404,8 @@ if (isset($_SESSION['nombre'])) {
                                                 </table>
                                             </div>
                                             <div class="tablasBatery3 col-3 px-1 px-lg-2 border-end border-3 border-dark">
-                                                <div class="d-flex text-center text-white pb-2">
-                                                    <span class="col-6 mt-3 subtitulo">Excelencia operativa</span>
+                                                <div class="d-flex text-center text-white pb-1">
+                                                    <span class="col-6 subtitulo" style="margin-top:6px">Excelencia operativa</span>
                                                     <table class="col-6  mt-1  text-center  table-bordered border-dark  ">
                                                         <thead>
 
@@ -1429,7 +1429,7 @@ if (isset($_SESSION['nombre'])) {
                                                         <th>Sustentable <br>(t CO2)</th>
                                                     </thead>
                                                     <tbody class="bg-white">
-                                                        <tr class="align-middle" v-for="(objetivos,index) in objetivos_ligados">
+                                                        <tr class="align-middle text-start" v-for="(objetivos,index) in objetivos_ligados">
 
                                                             <th scope="row" v-if="objetivos.nombre_pilares == 'Excelencia Operativa'">{{objetivos.nombre_objetivos}}</th>
                                                             <td v-if="objetivos.nombre_pilares == 'Excelencia Operativa'">
@@ -1455,8 +1455,8 @@ if (isset($_SESSION['nombre'])) {
                                                 </table>
                                             </div>
                                             <div class="tablasBatery4 col-3 px-1 px-lg-2">
-                                                <div class="d-flex text-center text-white pb-2">
-                                                    <span class="col-6 mt-3 subtitulo">investigacion y desarrollo</span>
+                                                <div class="d-flex text-center text-white pb-1">
+                                                    <span class="col-6 subtitulo" style="margin-top:6px">Investigacion y desarrollo</span>
                                                     <table class="col-6  mt-1  text-center  table-bordered border-dark  ">
                                                         <thead>
 
@@ -1480,7 +1480,7 @@ if (isset($_SESSION['nombre'])) {
                                                         <th>Sustentable <br>(t CO2)</th>
                                                     </thead>
                                                     <tbody class="bg-white">
-                                                        <tr class="align-middle" v-for="objetivos in objetivos_ligados">
+                                                        <tr class="align-middle text-start" v-for="objetivos in objetivos_ligados">
                                                             <th scope="row" v-if="objetivos.nombre_pilares == 'Investigación y Desarrollo'">{{objetivos.nombre_objetivos}}</th>
                                                             <td v-if="objetivos.nombre_pilares == 'Investigación y Desarrollo'">
                                                                 <label class="text-primary" v-if="buscarCoincidencias(objetivos.nombre_objetivos + ' (' + objetivos.siglas + ')')">
