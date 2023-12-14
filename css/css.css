@@ -505,7 +505,9 @@ button {
     background-color: #C40608;
     /*min-width: 300px;*/
 }
-
+.pieBateriaFondo{
+    background-image: linear-gradient(to right,rgb(40, 40, 85),rgb(12, 83, 81));
+}
 */
 /*.imagenBatery{
     width: 100%;

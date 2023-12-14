@@ -43,7 +43,7 @@ session_destroy();
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-lg-6 my-auto">
+                <div class="col-12 col-lg-8 my-auto">
                     <div>
                         <img class="imagen-index" :src="'imagenes/imagen.jpg'+'?'+random" alt="No existe imagen para mostrar">
                     </div>
