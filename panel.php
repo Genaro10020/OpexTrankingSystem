@@ -1503,6 +1503,45 @@ if (isset($_SESSION['nombre'])) {
                                                 </table>
                                             </div>
                                         </div>
+                                        <div class="col-12 mt-1 text-white d-flex align-items-center pieBateriaFondo">
+                                        <div class="col-3">
+                                            <div class="d-flex align-content-start flex-wrap">
+                                                <img src="img/EneryaLogo.png" style="width: 160px; height: 50px;">
+                                            </div> 
+                                            <div>
+                                                <img src="img/RiasaLogo.png" style="width: 165px; height: 50px;">
+                                            </div>
+                                        </div>
+                                        <div class="col-3 text-start">
+                                            <div class="mb-2">
+                                                <i class="bi bi-check-circle"></i> Calidad
+                                            </div>
+                                            <div class="lh-1">
+                                                <i class="bi bi-check-circle"></i> Servicio y <br>orientacion <br>al cliente
+                                            </div>            
+                                        </div>
+                                        <div class="col-3 text-start ">
+                                            <div class="mb-2">
+                                                <i class="bi bi-check-circle"></i> Trabajo en equipo
+                                            </div>
+                                            <div class="mb-2">
+                                                <i class="bi bi-check-circle"></i> Productividad
+                                            </div>
+                                            <div class="lh-1">
+                                                <i class="bi bi-check-circle"></i> Desarrollo de <br> nuestra gente   
+                                            </div>         
+                                        </div>
+                                        <div class="col-3 text-start">
+                                            <div class="mb-2">
+                                                <i class="bi bi-check-circle"></i> Compromiso
+                                            </div>
+                                            <div class="mb-2">
+                                                <i class="bi bi-check-circle"></i> Integridad
+                                            </div>
+                                            <div>
+                                            <i class="bi bi-check-circle"></i> Inovacion
+                                            </div>         
+                                        </div>
                                     </div>
                                 </div>
                             </div>
