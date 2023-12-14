@@ -648,7 +648,7 @@ button {
 .tablasBateryHead {
     font-size: 0.5em;
     width: 780px;
-    margin-top: 10vh;
+    margin-top:20vh;
 }
 
 .imgBateria {
@@ -686,7 +686,7 @@ button {
     .btn-guardar {
         font-size: 0.7em;
     }
-
+    
     .formulario {
         width: 80%;
     }
@@ -730,7 +730,7 @@ button {
 .tablasBateryHead {
     font-size: 0.5em;
     width: 780px;
-    margin-top: 10vh;
+    margin-top:20vh;
 }
 
 .imgBateria {
@@ -768,7 +768,7 @@ button {
     .tablasBateryHead {
         font-size: 0.7em;
         width: 800px;
-        margin-top: 5vh;
+        margin-top:20vh;
     }
 
     .imgBateria {
@@ -786,7 +786,7 @@ button {
     .formulario { width: 70%;}
     .div-color {background-color: red;}
     .tablasBatery,.tablasBatery2,.tablasBatery3,.tablasBatery4 { width: 230px; font-size: 0.5em}
-    .tablasBateryHead {font-size: 0.7em; width: 920px;margin-top:8vh;}
+    .tablasBateryHead {font-size: 0.7em; width: 920px; margin-top:20vh;}
     .imgBateria {width: 1100px; height: 600px;}
 }
 

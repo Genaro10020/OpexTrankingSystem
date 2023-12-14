@@ -1269,10 +1269,10 @@ if (isset($_SESSION['nombre'])) {
                     <!--/////////////////////////////////////////////////////////////GENERAR VALOR////////////////////////////////////////-->
                 </div>
                 <div v-if="ventana=='Generar Valor'">
-                    <div class="div-color">
+                    <!--<div class="div-color">
                 Pantalla 
-                </div>
-                        <div class="input-group mt-3 mx-2 mb-2 d-flex justify-content-center">
+                </div>-->
+                        <div class="input-group mt-3 mx-2 mb-2 d-flex justify-content-center  mt-xxl-5">
                             <span class="input-group-text w-5">Seleccione Año</span>
                             <select v-model="select_anio_generando_valor" @change="consultarSeguimientos()">
                                 <option value="" selected>Todos los años..</option> 
@@ -1282,7 +1282,7 @@ if (isset($_SESSION['nombre'])) {
                     <div class="scroll-bateria ">
                         <div class="m-0 " style=" min-width: 900px; width: 100%; height: 100%; position: relative;">
                             <div class="col-12 text-center" style="z-index: 1; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); ">
-                                <img class="imgBateria" src="img/imagenBateriaFondoNegro.jpg"></img>
+                                <img class="imgBateria" src="img/imagenBateriaFondoObscuro.jpg"></img>
                             </div>
                             <!--CONTENIDO BATERIA-->
                             <div class="row">
@@ -1524,7 +1524,7 @@ if (isset($_SESSION['nombre'])) {
                                                 <i class="bi bi-check-circle"></i> Calidad
                                             </div>
                                             <div class="lh-1">
-                                                <i class="bi bi-check-circle"></i> Servicio y <br>orientacion <br>al cliente
+                                                <i class="bi bi-check-circle"></i> Servicio y <br>orientación <br>al cliente
                                             </div>            
                                         </div>
                                         <div class="col-3 text-start ">
@@ -1546,7 +1546,7 @@ if (isset($_SESSION['nombre'])) {
                                                 <i class="bi bi-check-circle"></i> Integridad
                                             </div>
                                             <div>
-                                            <i class="bi bi-check-circle"></i> Inovacion
+                                            <i class="bi bi-check-circle"></i> Inovación
                                             </div>         
                                         </div>
                                     </div>
