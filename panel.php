@@ -1272,17 +1272,23 @@ if (isset($_SESSION['nombre'])) {
                     <!--<div class="div-color">
                 Pantalla 
                 </div>-->
+                        <div class="input-group mt-3 mx-2 mb-2 d-flex justify-content-center">
+                            <span class="input-group-text w-5">Seleccione Año</span>
+                            <select v-model="select_anio_generando_valor" @change="consultarSeguimientos()">
+                                <option value="" selected>Todos los años..</option> 
+                                <option v-for="(year,index) in years" :value="year">{{year}}</option>
+                            </select>
+                        </div>
                     <div class="scroll-bateria ">
                         <div class="m-0 " style=" min-width: 900px; width: 100%; height: 100%; position: relative;">
                             <div class="col-12 text-center" style="z-index: 1; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); ">
                                 <img class="imgBateria" src="img/imagenBateriaFondoNegro.jpg"></img>
                             </div>
                             <!--CONTENIDO BATERIA-->
-
                             <div class="row">
                                 <div class="col-12 d-flex align-items-center text-center justify-content-center mx-auto " style="height: 75vh; position: absolute; z-index: 2;">
                                     <div class="ms-4 " style="min-width: 800px;">
-
+                                        
                                         <div class=" tablasBateryHead d-flex  mx-auto">
                                             <div class="col-9 mt-1 bg-success text-white text-center d-flex align-items-center justify-content-center">
                                                 <h5 class="my-auto">Generar valor sustentable</h5>
@@ -1295,11 +1301,11 @@ if (isset($_SESSION['nombre'])) {
                                                     <tbody>
                                                         <tr scope="col">
                                                             <td class="border border-dark bg-secondary text-white">Valor (MXN)</td>
-                                                            <td class="border border-dark text-primary bg-white"><b id="valor_global">{{SumaValorEx}}</b></td>
+                                                            <td class="border border-dark text-primary bg-white"><b>{{sumaGeneralValor}}</b></td>
                                                         </tr>
                                                         <tr scope="row">
                                                             <td class="border border-dark bg-secondary text-white">Sustentable (t CO2)</td>
-                                                            <td class="border border-dark text-success bg-white"><b id="sustentable_global">{{SumaSustentableEx}}</b></td>
+                                                            <td class="border border-dark text-success bg-white"><b>{{sumaGeneralSustentable}}</b></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -1316,11 +1322,11 @@ if (isset($_SESSION['nombre'])) {
                                                         <tbody class="bg-white text-dark">
                                                             <tr>
                                                                 <td><b>Valor</b></td>
-                                                                <td class="text-primary"><b>$0.0</b></td>
+                                                                <td class="text-primary"><b>{{sumaClienteValor}}</b></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><b>Sust.</b></td>
-                                                                <td class="text-success"><b>0.00</b></td>
+                                                                <td class="text-success"><b>{{sumaClienteSustentable}}</b></td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -1413,11 +1419,13 @@ if (isset($_SESSION['nombre'])) {
                                                         <tbody class="bg-white text-dark">
                                                             <tr>
                                                                 <td><b>Valor</b></td>
-                                                                <td class="text-primary"><b id="total_valor_ex">{{SumaValorEx}}</b></td>
+                                                                <!---<td class="text-primary"><b id="total_valor_ex">{{SumaValorEx}}</b></td>-->
+                                                                <td class="text-primary"><b>{{sumaExcelenciaValor}}</b></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><b>Sust.</b></td>
-                                                                <td class="text-success"><b id="total_sustentable_ex">{{SumaSustentableEx}}</b></td>
+                                                                <!--<td class="text-success"><b id="total_sustentable_ex">{{SumaSustentableEx}}</b></td>-->
+                                                                <td class="text-success"><b>{{sumaExcelenciaSustentable}}</b></td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -1430,12 +1438,11 @@ if (isset($_SESSION['nombre'])) {
                                                     </thead>
                                                     <tbody class="bg-white">
                                                         <tr class="align-middle text-start" v-for="(objetivos,index) in objetivos_ligados">
-
                                                             <th scope="row" v-if="objetivos.nombre_pilares == 'Excelencia Operativa'">{{objetivos.nombre_objetivos}}</th>
                                                             <td v-if="objetivos.nombre_pilares == 'Excelencia Operativa'">
                                                                 <label class="text-primary" v-if="buscarCoincidencias(objetivos.nombre_objetivos + ' (' + objetivos.siglas + ')')">
                                                                     <b>{{sumasGenerandoValor[objetivos.nombre_objetivos + ' (' + objetivos.siglas + ')'].valor}}</b><!--Imprimir el valor-->
-                                                                    {{sumaExcelenciaValor(sumasGenerandoValor[objetivos.nombre_objetivos + ' (' + objetivos.siglas + ')'].valor)}}<!--sumando los valor-->
+                                                                   <!-- {{sumaExcelenciaValor(sumasGenerandoValor[objetivos.nombre_objetivos + ' (' + objetivos.siglas + ')'].valor)}}-->
                                                                 </label>
                                                                 <label class="text-primary" v-else>
                                                                     <b>$0.00</b>
@@ -1444,7 +1451,7 @@ if (isset($_SESSION['nombre'])) {
                                                             <td v-if="objetivos.nombre_pilares == 'Excelencia Operativa'">
                                                                 <label class="text-success" v-if="buscarCoincidencias(objetivos.nombre_objetivos + ' (' + objetivos.siglas + ')')">
                                                                     <b>{{sumasGenerandoValor[objetivos.nombre_objetivos + ' (' + objetivos.siglas + ')'].sustentable}}</b><!--Imprimir sustentable-->
-                                                                    {{sumaExcelenciaSustentable(sumasGenerandoValor[objetivos.nombre_objetivos + ' (' + objetivos.siglas + ')'].sustentable)}}<!--sumando los sustentable-->
+                                                                    <!--{{sumaExcelenciaSustentable(sumasGenerandoValor[objetivos.nombre_objetivos + ' (' + objetivos.siglas + ')'].sustentable)}}-->
                                                                 </label>
                                                                 <label class="text-success" v-else>
                                                                     <b> 0.00</b>

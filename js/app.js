@@ -119,6 +119,24 @@ const AltaProyectos = {
       sumarSoloUnaVez: 0,
       SumaValorEx:0,
       SumaSustentableEx:0,
+      /*GENERANDO VALOR*/
+      select_anio_generando_valor:'',
+      sumaClienteValor:'',
+      sumaClienteSustentable:'',
+
+      sumaExcelenciaValor:'',
+      sumaExcelenciaSustentable:'',
+
+      sumaCapitalHumanoValor:'',
+      sumaCapitalHumanoSustentable:'',
+
+      sumaInvestigacionDesarrolloValor:'',
+      sumaInvestigacionDesarrolloSustentable:'',
+
+      sumaGeneralValor:'',
+      sumaGeneralSustentable:''
+      
+
     }
   },
   mounted() {
@@ -2601,7 +2619,11 @@ const AltaProyectos = {
     },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PROYECTOS*/
     consultarSeguimientos() {
+      this.sumarSoloUnaVez = 0
       axios.get('seguimientoAmbientalProyectoController.php', {
+        params:{
+          anio:this.select_anio_generando_valor
+        }
       }).then(response => {
         console.log(response.data)
         if (response.data[0][1] == true) {
@@ -2611,6 +2633,85 @@ const AltaProyectos = {
               this.todosSeguimientos = response.data[0][0];
               console.log(this.todosSeguimientos)
               this.sumasGenerandoValor = response.data[0][4];
+
+                //******************************** */
+                if (this.sumasGenerandoValor) {
+                  var sumaValorExcelecia =0
+                  var sumaSustentableExcelecia =0
+
+                  var sumaValorCliente =0
+                  var sumaSustentableCliente =0
+
+                  var sumaValorCapitalHumano =0
+                  var sumaSustentableCapitalHumano =0
+
+                  var sumaValorInvestigacionDesarrollo =0
+                  var sumaSustentableInvestigacionDesarrollo =0
+
+                  var sumaGeneralV =0
+                  var sumaGeneralS =0
+                  // Recorro cada propiedad en this.sumasGenerandoValor
+                  for (const key in this.sumasGenerandoValor) {
+                    if (this.sumasGenerandoValor.hasOwnProperty(key)) {//verifico que exista
+                      const elemento = this.sumasGenerandoValor[key];
+                      /* // Imprimo las propiedades del objeto
+                       console.log("Nombre:", key);
+                      console.log("Valor:", elemento.valor);
+                      console.log("Sustentable:", elemento.sustentable);
+                      console.log("Pilar:", elemento.pilar);
+                      console.log("-------------------------");*/
+
+                      if(elemento.pilar.includes("Cliente")){
+                         sumaValorCliente += parseFloat(elemento.valor.replace(/[^\d.-]/g, ''));
+                         sumaSustentableCliente += parseFloat(elemento.sustentable.replace(/[^\d.-]/g, ''));
+                      }
+                      if(elemento.pilar.includes("Capital Humano")){
+                        sumaValorCapitalHumano += parseFloat(elemento.valor.replace(/[^\d.-]/g, ''));
+                        sumaSustentableCapitalHumano += parseFloat(elemento.sustentable.replace(/[^\d.-]/g, ''));
+
+                      }
+                      if(elemento.pilar.includes("Excelencia Operativa")){
+                            sumaValorExcelecia += parseFloat(elemento.valor.replace(/[^\d.-]/g, ''));
+                            sumaSustentableExcelecia += parseFloat(elemento.sustentable.replace(/[^\d.-]/g, ''));
+                       }
+                      if(elemento.pilar.includes("Investigación y Desarrollo")){
+                        sumaValorInvestigacionDesarrollo += parseFloat(elemento.valor.replace(/[^\d.-]/g, ''));
+                        sumaSustentableInvestigacionDesarrollo += parseFloat(elemento.sustentable.replace(/[^\d.-]/g, ''));
+                      }
+                      
+                      
+                      
+
+                    }
+                  }
+
+                this.sumaClienteValor = "$"+parseFloat(sumaValorCliente).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                this.sumaClienteSustentable = parseFloat(sumaSustentableCliente).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+
+                this.sumaCapitalHumanoValor = "$"+parseFloat(sumaValorCapitalHumano).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                this.sumaCapitalHumanoSustentable = parseFloat(sumaSustentableCapitalHumano).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+
+                this.sumaExcelenciaValor = "$"+parseFloat(sumaValorExcelecia).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                this.sumaExcelenciaSustentable = parseFloat(sumaSustentableExcelecia).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+
+                this.sumaInvestigacionDesarrolloValor = "$"+parseFloat(sumaValorInvestigacionDesarrollo).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                this.sumaInvestigacionDesarrolloSustentable = parseFloat(sumaSustentableInvestigacionDesarrollo).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+
+                sumaGeneralV = sumaValorCliente + sumaValorCapitalHumano +sumaValorExcelecia + sumaValorInvestigacionDesarrollo;
+                sumaGeneralS = sumaSustentableCliente + sumaSustentableCapitalHumano + sumaSustentableExcelecia + sumaSustentableInvestigacionDesarrollo;
+
+                this.sumaGeneralValor = "$"+parseFloat(sumaGeneralV).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                this.sumaGeneralSustentable = parseFloat(sumaGeneralS).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+
+
+                } else {
+                  console.log("this.sumasGenerandoValor no está definido o es nulo.");
+                }
+                //SumaExcelenciaValor:'',
+               // SumaExcelenciaSustentable:'',
+/****************************/
+
+
             } else {
               this.todosSeguimientos = []
             }
@@ -2621,17 +2722,23 @@ const AltaProyectos = {
       }).finally(() => {
 
       })
-    }, buscarCoincidencias(valor1) {
+    }, buscarCoincidencias(objetivo_con_siglas) {
       //console.log("El resultado que llego"+valor1)
       for (let key in this.sumasGenerandoValor) {
-        if (key === valor1) {
+        if (key === objetivo_con_siglas) {
           return true
         }
       }
       return false
     },
-    sumaExcelenciaValor(valor) {
+    /*sumaExcelenciaValor(valor) {
+      console.log("Sumando Valor")
+      console.log(valor)
       if(this.sumarSoloUnaVez==0){
+        this.SumaValorEx = '$0.00';
+        if(valor==0 || valor=='0'){
+          valor = "0.00";
+        }
           var dato = this.formatoSoloNumeros(valor);
           dato = parseFloat(dato);
           sumandoExcelenciaValor += dato;
@@ -2644,26 +2751,31 @@ const AltaProyectos = {
             valorExcelencia =0
             dato = 0
             this.sumarSoloUnaVez = 1;
-          }, 10);
+          }, 5);
       }
-      
     },
     sumaExcelenciaSustentable(valor) {
+      console.log("Sumando Sustentable")
+      console.log(valor)
       if(this.sumarSoloUnaVez==0){
+        this.SumaSustentableEx = '0.00';
+        if(valor==0 || valor=='0'){
+          valor = "0.00";
+        }
           var dato = this.formatoSoloNumeros(valor);
           dato = parseFloat(dato);
           sumandoExcelenciaSustentable += dato;
           var sustentableExcelencia = parseFloat(sumandoExcelenciaSustentable).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
-          setTimeout(() => {
+       
             //document.getElementById("total_sustentable_ex").textContent = sustentableExcelencia;
             //document.getElementById("sustentable_global").textContent = sustentableExcelencia;
             this.SumaSustentableEx = sustentableExcelencia
             sumandoExcelenciaSustentable=0
             sustentableExcelencia = 0
             this.sumarSoloUnaVez = 1;
-          }, 10);
+  
       }
-    },
+    },*/
   }
 };
 

@@ -9,7 +9,13 @@ if (isset($_SESSION['nombre'])) {
     switch ($_SERVER['REQUEST_METHOD']) {
         case 'GET':
             // Manejar solicitud GET (consultar)
-            $val[] = consultarSeguimientos();
+            if(isset($_GET['anio'])){
+                $anio=$_GET['anio'];
+                $val[] = consultarSeguimientos($anio);
+            }else{
+                $val[] = 'No llego la variable anio en get controlador seguimientoAmbieltanProyectoController';
+            }
+            
             break;
         case 'POST':
             // Manejar solicitud POST (creación)

@@ -1,6 +1,6 @@
 <?php
 include("conexionGhoner.php");
-function consultarSeguimientos()
+function consultarSeguimientos($anio)
 {
     global $conexion;
     $pilasconSiglas = [];
@@ -11,7 +11,8 @@ function consultarSeguimientos()
     $estadoObjetivos = false;
     $estadoProyectos = false;
     $estadoSeguimiento = false;
-
+    $estadoProyectos= false;
+    $check=[];
     $consulta = "SELECT * FROM pilares ORDER BY id DESC";
     $query = $conexion->query($consulta);
     if ($query) {
@@ -81,6 +82,7 @@ function consultarSeguimientos()
         if (isset($posicionNombresconIdsObjetivos[$objetivoNombre])) {
             // Obtener los IDs asociados al objetivo
             $idsProyecto = $posicionNombresconIdsObjetivos[$objetivoNombre];
+
             // Array para almacenar los resultados específicos de este objetivo
             $resultadosObjetivo = [];
             $sumaDato = 0.0;
@@ -88,20 +90,30 @@ function consultarSeguimientos()
             $sumaAhorroDuro = 0.0;
             $sumaAhorroSuave = 0.0;
             $valor = 0.0;
-            $sustentable = 0.0;
+            $sustentable = "0.00";
             $sumaSustentableFormateada ='0.00';
             // Consultar la tabla impacto_ambiental_proyecto para cada ID de proyecto
             foreach ($idsProyecto as $idProyecto) {
+                /*$seleccionar = "SELECT misiones FROM proyectos_creados WHERE id='$idProyecto'";
+                $obtenido=$conexion->query($seleccionar);
+                if($obtenido){
+                    $recibo=$obtenido ->fetch_assoc(); 
+                    $check[] =  json_decode($recibo['mision']); 
+                    $estadoProyectos = true;
+                }else{
+                    $estadoProyectos=  "Error en la consulta: " . $conexion->error;
+                }*/
 
                 // Realizar la consulta (ajusta según tu estructura de base de datos)
-                $consulta = "SELECT * FROM registros_impacto_ambiental JOIN  impacto_ambiental_proyecto ON impacto_ambiental_proyecto.id = registros_impacto_ambiental.id_impacto_ambiental_proyecto  WHERE impacto_ambiental_proyecto.id_proyecto = $idProyecto";
+                $consulta = "SELECT * FROM registros_impacto_ambiental JOIN  impacto_ambiental_proyecto ON impacto_ambiental_proyecto.id = registros_impacto_ambiental.id_impacto_ambiental_proyecto WHERE impacto_ambiental_proyecto.id_proyecto = '$idProyecto' AND registros_impacto_ambiental.anio LIKE '%$anio%'";
                 $resultado = $conexion->query($consulta);
                 // Verificar si la consulta fue exitosa
                 if ($resultado) {
                     $estadoSeguimiento = true;
+                    $pilar=$pilaresArreglos[$idProyecto][0];
                     // Procesar los resultados y almacenarlos en el array
                     while ($fila = $resultado->fetch_assoc()) {
-
+                       
                         // Convertir la columna "tons_co2" a float y sumarla
                         $ahorro_duro = str_replace(['$', ','], '', $fila['ahorro_duro']); // Eliminar símbolo de dólar y comas
                         $ahorro_suave = str_replace(['$', ','], '', $fila['ahorro_suave']); // Eliminar símbolo de dólar y comas
@@ -118,24 +130,26 @@ function consultarSeguimientos()
                         $sustentable = $sumaTonsCo2;
                         // Formatear la suma de sustentable con formato de moneda
                         $sumaSustentableFormateada = '$' . number_format($valor, 2, '.', ',');
+                       
                         $sustentable = number_format($sustentable, 2, '.', ',');
                     }
                 } else {
                     // Manejar el error de la consulta
-                    echo "Error en la consulta: " . $conexion->error;
+                    $estadoSeguimiento = "Error en la consulta: " . $conexion->error;
                 }
             }
 
             // Almacenar los resultados específicos de este objetivo en el array principal
             $sumasPorObjetivo[$objetivoNombre] = [
                 'valor' => $sumaSustentableFormateada,
-                'sustentable' => $sustentable
+                'sustentable' => $sustentable,
+                'pilar'=>$pilar
             ];
         }
     }
 
     //$objetivosNombre, $idsConcidenConCadaPilar, $posicionNombresconIdsObjetivos
-    return array($pilasconSiglas, $estadoPilar, $estadoObjetivos, $estadoProyectos, $sumasPorObjetivo, $estadoSeguimiento);
+    return array($pilasconSiglas, $estadoPilar, $estadoObjetivos, $estadoProyectos, $sumasPorObjetivo, $estadoSeguimiento,$pilaresArreglos,$estadoProyectos);
 }
 
 
