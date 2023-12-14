@@ -9,7 +9,12 @@ if (isset($_SESSION['nombre'])) {
     switch ($_SERVER['REQUEST_METHOD']) {
         case 'GET':
             // Manejar solicitud GET (consultar)
-            $val[] = consultarProyectos();
+            if (isset($_GET['accion'])) {
+                $val[] = consultarSumaProyecto();
+            } else {
+                $val[] = consultarProyectos();
+            }
+
             break;
         case 'POST':
             // Manejar solicitud POST (creación)
@@ -55,9 +60,9 @@ if (isset($_SESSION['nombre'])) {
         case 'PUT':
             // Manejar solicitud PUT (actualización)
             if (isset($arreglo['id_proyecto']) && isset($arreglo['status'])) {
-                $id_proyecto=$arreglo['id_proyecto'];
-                $status=$arreglo['status'];
-                $val[] = actualizarStatusCerradoSiguiendo($id_proyecto,$status);
+                $id_proyecto = $arreglo['id_proyecto'];
+                $status = $arreglo['status'];
+                $val[] = actualizarStatusCerradoSiguiendo($id_proyecto, $status);
             }
             // ...
             break;

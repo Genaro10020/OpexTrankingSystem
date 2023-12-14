@@ -1,6 +1,6 @@
 
-  let sumandoExcelenciaValor = 0;
-  let sumandoExcelenciaSustentable = 0;
+let sumandoExcelenciaValor = 0;
+let sumandoExcelenciaSustentable = 0;
 
 
 const AltaProyectos = {
@@ -21,7 +21,7 @@ const AltaProyectos = {
       responsables: [],
       plantas: [],
       areas: [],
-      proyectoSumas:[],
+      proyectoSumas: [],
       /*Alta Proyectos */
       fecha_alta: '',
       nombre_proyecto: '',
@@ -117,13 +117,14 @@ const AltaProyectos = {
       mostrarHeader: true,
       sumasGenerandoValor: [],
       sumarSoloUnaVez: 0,
-      SumaValorEx:0,
-      SumaSustentableEx:0,
+      SumaValorEx: 0,
+      SumaSustentableEx: 0,
     }
   },
   mounted() {
     //  this.consultarUsuarios()
     this.consultarProyectos()
+    this.consultarSumaProyectos()
   },
   methods: {
     toggleDiv() {
@@ -138,16 +139,30 @@ const AltaProyectos = {
         if (response.data[0][1] == true) {
           if (response.data[0][0].length > 0) {
             this.proyectos = response.data[0][0];
-            if(response.data[0][3] == true){
-              this.proyectoSumas = response.data[0][2]
-            }else{
-               alert("En la consulta sumar total por proyecto, no se logro")
-            }
           } else {
             this.proyectos = []
           }
         } else {
           alert("La consulta de proyectos no se realizo correctamente.")
+        }
+      }).catch(error => {
+        console.log('Erro :-(' + error)
+      }).finally(() => {
+
+      })
+    },
+    /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PROYECTOS*/
+    consultarSumaProyectos() {
+      axios.get('proyectosController.php', {
+        params: {
+          accion: 'suma'
+        }
+      }).then(response => {
+        console.log(response.data)
+        if (response.data[0][1] == true) {
+          this.proyectoSumas = response.data[0][0]
+        } else {
+          alert("En la consulta sumar total por proyecto, no se logro")
         }
       }).catch(error => {
         console.log('Erro :-(' + error)
@@ -2495,6 +2510,7 @@ const AltaProyectos = {
                 this.actualizar = 0
                 this.actualizatabla = false
                 this.consultarImpactoAmbieltalXProyectoID()
+                this.consultarSumaProyectos()
                 alert("Se inserto con éxito")
               } else {
                 alert("Verifique que los campos no esten vacios, valor minimo 0 ")
@@ -2535,6 +2551,7 @@ const AltaProyectos = {
           if (response.data[0][0] == true) {
             this.actualizar = 0
             this.consultarImpactoAmbieltalXProyectoID()
+            this.consultarSumaProyectos()
             alert("Se actualizo con éxito")
             //this.consultarImpactoAmbieltalXProyectoID()
           } else {
@@ -2631,37 +2648,37 @@ const AltaProyectos = {
       return false
     },
     sumaExcelenciaValor(valor) {
-      if(this.sumarSoloUnaVez==0){
-          var dato = this.formatoSoloNumeros(valor);
-          dato = parseFloat(dato);
-          sumandoExcelenciaValor += dato;
-          var valorExcelencia = parseFloat(sumandoExcelenciaValor).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
-          setTimeout(() => {
-            //document.getElementById("total_valor_ex").textContent = "$" + valorExcelencia;
-            //document.getElementById("valor_global").textContent = "$" + valorExcelencia;
-            this.SumaValorEx = '$'+valorExcelencia;
-            sumandoExcelenciaValor=0
-            valorExcelencia =0
-            dato = 0
-            this.sumarSoloUnaVez = 1;
-          }, 10);
+      if (this.sumarSoloUnaVez == 0) {
+        var dato = this.formatoSoloNumeros(valor);
+        dato = parseFloat(dato);
+        sumandoExcelenciaValor += dato;
+        var valorExcelencia = parseFloat(sumandoExcelenciaValor).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+        setTimeout(() => {
+          //document.getElementById("total_valor_ex").textContent = "$" + valorExcelencia;
+          //document.getElementById("valor_global").textContent = "$" + valorExcelencia;
+          this.SumaValorEx = '$' + valorExcelencia;
+          sumandoExcelenciaValor = 0
+          valorExcelencia = 0
+          dato = 0
+          this.sumarSoloUnaVez = 1;
+        }, 10);
       }
-      
+
     },
     sumaExcelenciaSustentable(valor) {
-      if(this.sumarSoloUnaVez==0){
-          var dato = this.formatoSoloNumeros(valor);
-          dato = parseFloat(dato);
-          sumandoExcelenciaSustentable += dato;
-          var sustentableExcelencia = parseFloat(sumandoExcelenciaSustentable).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
-          setTimeout(() => {
-            //document.getElementById("total_sustentable_ex").textContent = sustentableExcelencia;
-            //document.getElementById("sustentable_global").textContent = sustentableExcelencia;
-            this.SumaSustentableEx = sustentableExcelencia
-            sumandoExcelenciaSustentable=0
-            sustentableExcelencia = 0
-            this.sumarSoloUnaVez = 1;
-          }, 10);
+      if (this.sumarSoloUnaVez == 0) {
+        var dato = this.formatoSoloNumeros(valor);
+        dato = parseFloat(dato);
+        sumandoExcelenciaSustentable += dato;
+        var sustentableExcelencia = parseFloat(sumandoExcelenciaSustentable).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+        setTimeout(() => {
+          //document.getElementById("total_sustentable_ex").textContent = sustentableExcelencia;
+          //document.getElementById("sustentable_global").textContent = sustentableExcelencia;
+          this.SumaSustentableEx = sustentableExcelencia
+          sumandoExcelenciaSustentable = 0
+          sustentableExcelencia = 0
+          this.sumarSoloUnaVez = 1;
+        }, 10);
       }
     },
   }
