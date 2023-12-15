@@ -224,7 +224,7 @@ button {
 
 
 .btn-menu {
-    width: 180px;
+    width: 260px;
 
     background-color: #3ea157;
     color: white;
@@ -641,14 +641,19 @@ button {
 .tablasBatery2,
 .tablasBatery3,
 .tablasBatery4 {
-    width: 195px;
+    width: 200px;
     font-size: 0.4em
 }
 
+.selector-anio{
+    margin-top:15vh;
+}
+
 .tablasBateryHead {
+    margin-top:2vh;
     font-size: 0.5em;
-    width: 780px;
-    margin-top:20vh;
+    width: 800px;
+   
 }
 
 .imgBateria {
@@ -665,6 +670,8 @@ button {
     font-size: 1.5em;
     line-height: 1;
 }
+
+
 
 
 /* Small devices (landscape phones, 576px and up)*/
@@ -696,6 +703,10 @@ button {
         font-size: 0.9em;
     }
 
+    .selector-anio{
+        margin-top:20vh;
+    }
+
     .input-group-text {
         font-family: 'Almarai', sans-serif;
         font-size: 0.9em;
@@ -723,14 +734,14 @@ button {
 .tablasBatery2,
 .tablasBatery3,
 .tablasBatery4 {
-    width: 195px;
+    width: 200px;
     font-size: 0.4em
 }
 
 .tablasBateryHead {
     font-size: 0.5em;
-    width: 780px;
-    margin-top:20vh;
+    width: 800px;
+   
 }
 
 .imgBateria {
@@ -768,12 +779,16 @@ button {
     .tablasBateryHead {
         font-size: 0.7em;
         width: 800px;
-        margin-top:20vh;
+       
+    }
+
+    .selector-anio{
+        margin-top:18vh;
     }
 
     .imgBateria {
-        width: 900px;
-        height: 550px;
+        width: 950px;
+        height: 600px;
     }
     .div-color {
         background-color: yellow;
@@ -786,8 +801,9 @@ button {
     .formulario { width: 70%;}
     .div-color {background-color: red;}
     .tablasBatery,.tablasBatery2,.tablasBatery3,.tablasBatery4 { width: 230px; font-size: 0.5em}
-    .tablasBateryHead {font-size: 0.7em; width: 920px; margin-top:20vh;}
-    .imgBateria {width: 1100px; height: 600px;}
+    .tablasBateryHead {font-size: 0.7em; width: 920px;  margin-top:1vh;}
+    .selector-anio{margin-top:23vh;}
+    .imgBateria {width: 1100px; height: 650px;}
 }
 
 /* XX-Large devices (larger desktops, 1400px and up)*/
@@ -804,10 +820,11 @@ button {
         font-size: 0.5em
     }
 
+    .selector-anio{margin-top:15vh;}
+
     .tablasBateryHead {
         font-size: 0.8em;
         width: 1000px;
-        margin-top: 180px;
     }
 
     .imgBateria {

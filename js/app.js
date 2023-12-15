@@ -134,8 +134,10 @@ const AltaProyectos = {
       sumaInvestigacionDesarrolloSustentable:'',
 
       sumaGeneralValor:'',
-      sumaGeneralSustentable:''
-      
+      sumaGeneralSustentable:'',
+      //Calendario
+      select_anio_calendario:2023,
+      proyectosDatosCalendario:[]
 
     }
   },
@@ -162,6 +164,26 @@ const AltaProyectos = {
           }
         } else {
           alert("La consulta de proyectos no se realizo correctamente.")
+        }
+      }).catch(error => {
+        console.log('Erro :-(' + error)
+      }).finally(() => {
+
+      })
+    },
+     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PROYECTOS*/
+     consultarCalendarioProyectos() {
+      axios.get('proyectosController.php', {
+        params: {
+          accion: 'calendario',
+          anio:this.select_anio_calendario
+        }
+      }).then(response => {
+        console.log(response.data)
+        if (response.data[0][1] == true) {
+          this.proyectosDatosCalendario = response.data[0][0]
+        } else {
+          alert("En la consulta calendario total por proyecto, no se logro")
         }
       }).catch(error => {
         console.log('Erro :-(' + error)

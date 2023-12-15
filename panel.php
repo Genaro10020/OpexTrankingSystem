@@ -17,9 +17,6 @@ if (isset($_SESSION['nombre'])) {
             <!--Cinta-->
             <div class="cinta row d-flex align-items-center" style="min-height:5vh; ">
                 <!--Bóton Crear misiones/pilares/Objetivos-->
-
-
-
                 <!--Bóton-->
                 <div class="text-center">
                     <?php if ($_SESSION['acceso'] == 'Admin') { ?>
@@ -31,15 +28,18 @@ if (isset($_SESSION['nombre'])) {
                         <i class="bi bi-plus-circle"></i> Proyectos Creados
                     </button>
 
-                    <button class="btn-menu me-sm-3" @click="ventana='Seguimiento',mostrarHeader=true,sumarSoloUnaVez=0">
+                    <button class="btn-menu " @click="ventana='Seguimiento',mostrarHeader=true,sumarSoloUnaVez=0">
                         <i class="bi bi-plus-circle"></i> Seguimiento
                     </button>
-                    <button class="btn-menu me-sm-3 " @click="ventana='Generar Valor',consultarObjetivosRelacional(),mostrarHeader=false,consultarSeguimientos()">
-                        <i class="bi bi-plus-circle"></i> Generando Valor
+                    <button class="btn-menu me-sm-3 ms-sm-3 " @click="ventana='Generar Valor',consultarObjetivosRelacional(),mostrarHeader=false,consultarSeguimientos()">
+                        <i class="bi bi-plus-circle"></i> Generando Valor Sustentable
                     </button>
-                    <!--<button class="btn-menu" @click="ventana='Reportes',consultarObjetivosRelacional()">
+                    <!--<button class="btn-menu" @click="ventana='Reportes'">
                         <i class="bi bi-plus-circle"></i> Reportes
                     </button>-->
+                    <button class="btn-menu" @click="ventana='Calendario',mostrarHeader=true, consultarCalendarioProyectos()">
+                        <i class="bi bi-plus-circle"></i> Calendario
+                    </button>
                     <!--Modal Alta Proyectos-->
                     <div id="modal-alta-proyecto" class="modal text-start" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
                         <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
@@ -590,7 +590,7 @@ if (isset($_SESSION['nombre'])) {
                                         <td class="border border-secondary">{{proyecto.tons_co2}}<br> <label class="text-success" v-if="proyectoSumas[proyecto.id]"><b>{{proyectoSumas[proyecto.id].sumaTons}}<b><label></td>
                                         <td class="border border-secondary">{{proyecto.ahorro_duro}}<br> <label class="text-primary" v-if="proyectoSumas[proyecto.id]"><b>{{proyectoSumas[proyecto.id].sumaDuro}}<b><label></td>
                                         <td class="border border-secondary">{{proyecto.ahorro_suave}}<br> <label class="text-primary" v-if="proyectoSumas[proyecto.id]"><b>{{proyectoSumas[proyecto.id].sumaSuave}}<b><label></td>
-                                        <td class="border border-secondary"><b><label v-if="proyecto.status_seguimiento!='Cerrado'">Siguiendo</label><label v-else="proyecto.status_seguimiento!='Cerrado'">{{proyecto.status_seguimiento}}<label></b></td>
+                                        <td class="border border-secondary"><b><label v-if="proyecto.status_seguimiento!='Cerrado'" class="text-success">Siguiendo</label><label v-else="proyecto.status_seguimiento!='Cerrado'" class="text-danger">{{proyecto.status_seguimiento}}<label></b></td>
                                         <?php if ($_SESSION['acceso'] == 'Admin') { ?>
                                             <td class="border border-secondary"> <button class="rounded-circle bg-danger border border-secondary btn shadow-sm" @click="eliminarProyecto(proyecto.id)"><i class="bi bi-trash3-fill text-white"></i></button></td>
                                         <?php } ?>
@@ -1269,16 +1269,10 @@ if (isset($_SESSION['nombre'])) {
                     <!--/////////////////////////////////////////////////////////////GENERAR VALOR////////////////////////////////////////-->
                 </div>
                 <div v-if="ventana=='Generar Valor'">
-                    <!--<div class="div-color">
+                <!--<div class="div-color">
                 Pantalla 
                 </div>-->
-                        <div class="input-group mt-3 mx-2 mb-2 d-flex justify-content-center  mt-xxl-5">
-                            <span class="input-group-text w-5">Seleccione Año</span>
-                            <select v-model="select_anio_generando_valor" @change="consultarSeguimientos()">
-                                <option value="" selected>Todos los años..</option> 
-                                <option v-for="(year,index) in years" :value="year">{{year}}</option>
-                            </select>
-                        </div>
+                       
                     <div class="scroll-bateria ">
                         <div class="m-0 " style=" min-width: 900px; width: 100%; height: 100%; position: relative;">
                             <div class="col-12 text-center" style="z-index: 1; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); ">
@@ -1288,10 +1282,17 @@ if (isset($_SESSION['nombre'])) {
                             <div class="row">
                                 <div class="col-12 d-flex align-items-center text-center justify-content-center mx-auto " style="height: 75vh; position: absolute; z-index: 2;">
                                     <div class="ms-4 " style="min-width: 800px;">
-                                        
+                                   
+                                    <div class="selector-anio col-12 input-group mx-2 mb-2 d-flex justify-content-center ">
+                                        <span class="input-group-text w-5">Seleccione Año</span>
+                                        <select v-model="select_anio_generando_valor" @change="consultarSeguimientos()">
+                                            <option value="" selected>Todos los años..</option> 
+                                            <option v-for="(year,index) in years" :value="year">{{year}}</option>
+                                        </select>
+                                    </div>
                                         <div class=" tablasBateryHead d-flex  mx-auto">
                                             <div class="col-9 mt-1 bg-success text-white text-center d-flex align-items-center justify-content-center">
-                                                <h5 class="my-auto">Generar valor sustentable</h5>
+                                                <h5 class="my-auto">Generando valor sustentable</h5>
                                             </div>
                                             <div class="col-3">
                                                 <table class="mt-1 w-100 ">
@@ -1584,6 +1585,43 @@ if (isset($_SESSION['nombre'])) {
                     </tbody>
                 </table>
             </div>
+            <div v-if="ventana == 'Calendario'">
+                    <div class="input-group mt-3 mb-2 ">
+                        <span class="input-group-text">Seleccione año</span>
+                        <select v-model="select_anio_calendario" @change=consultarCalendarioProyectos()>
+                            <option v-for="(year,index) in years" :value="year">{{year}}</option>
+                        </select>
+                    </div>
+                    <table class="table table-bordered table-striped table-hover text-center">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Enero</th>
+                                <th>Febrero</th>
+                                <th>Marzo</th>
+                                <th>Abril</th>
+                                <th>Mayo</th>
+                                <th>Junio</th>
+                                <th>Julio</th>
+                                <th>Agosto</th>
+                                <th>Septiembre</th>
+                                <th>Octubre</th>
+                                <th>Noviembre</th>
+                                <th>Diciembre</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="proyecto in proyectos">
+                                <th>{{proyecto.nombre_proyecto}}</th>
+                                <td v-for="x in 12">
+                                    <template v-for="proyectosDatosCalendario in proyectosDatosCalendario">
+                                        <i v-if="proyectosDatosCalendario.proyectoID==proyecto.id && proyectosDatosCalendario.mes==x && proyectosDatosCalendario.anio==select_anio_calendario" class="bi bi-check2"></i>
+                                    </template>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <!--////////////////////////////////////////////// FIN DE COMPETENCIA -->
             </div><!--cuerpo-->
 

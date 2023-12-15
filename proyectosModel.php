@@ -89,6 +89,27 @@ function consultarSumaProyecto()
     return array($sumasXProyecto, $estado1, $estado2);
 }
 
+function consultarCalendarioProyecto($anio)
+{
+    global $conexion;
+    $resultado1 = [];
+    $estado1 = false;
+    $consulta = "SELECT proyectos_creados.id AS proyectoID, proyectos_creados.nombre_proyecto, registros_impacto_ambiental.mes, registros_impacto_ambiental.anio, proyectos_creados.id 
+    FROM impacto_ambiental_proyecto JOIN proyectos_creados ON impacto_ambiental_proyecto.id_proyecto = proyectos_creados.id 
+    JOIN registros_impacto_ambiental ON impacto_ambiental_proyecto.id = registros_impacto_ambiental.id_impacto_ambiental_proyecto WHERE registros_impacto_ambiental.anio ='$anio' ORDER BY proyectos_creados.folio ASC";
+    $query = $conexion->query($consulta);
+    if ($query) {
+        while ($datos = mysqli_fetch_array($query)) {
+            $resultado1[] = $datos;
+        }
+        $estado1 = true;
+    } else {
+        $estado1 = false;
+    }
+
+    return array($resultado1, $estado1);
+}
+
 function consultarProyectosID($id_proyecto)
 {
     global $conexion;

@@ -9,9 +9,17 @@ if (isset($_SESSION['nombre'])) {
     switch ($_SERVER['REQUEST_METHOD']) {
         case 'GET':
             // Manejar solicitud GET (consultar)
+            
             if (isset($_GET['accion'])) {
-                $val[] = consultarSumaProyecto();
-            } else {
+                if($_GET['accion']=='suma'){
+                    $val[] = consultarSumaProyecto();
+                }
+                if($_GET['accion']=='calendario'){
+                    $anio=$_GET['anio'];
+                    //$val[] = 'Hola'.$anio;
+                    $val[] = consultarCalendarioProyecto($anio);
+                }
+            }else {
                 $val[] = consultarProyectos();
             }
 
