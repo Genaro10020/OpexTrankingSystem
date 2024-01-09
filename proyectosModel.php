@@ -109,7 +109,7 @@ function consultarCalendarioProyecto($anio)
 
     $resultado2 =[];
     $estado2 = false;
-    $consulta="SELECT proyectos_creados.nombre_proyecto,proyectos_creados.id, registros_impacto_ambiental.mes /*Proyectos por año*/
+    $consulta="SELECT proyectos_creados.nombre_proyecto,proyectos_creados.id, registros_impacto_ambiental.mes,proyectos_creados.status_seguimiento /*Proyectos por año*/
     FROM impacto_ambiental_proyecto JOIN proyectos_creados 
     ON proyectos_creados.id = impacto_ambiental_proyecto.id_proyecto 
     JOIN registros_impacto_ambiental 
@@ -127,7 +127,7 @@ function consultarCalendarioProyecto($anio)
 
     $resultado3 =[];
     $estado3 = false;
-    $consulta = "SELECT DISTINCT proyectos_creados.id AS proyectoID, proyectos_creados.nombre_proyecto, registros_impacto_ambiental.mes, registros_impacto_ambiental.anio, proyectos_creados.id /*Datos Proyecto */
+    $consulta = "SELECT DISTINCT proyectos_creados.id AS proyectoID, proyectos_creados.nombre_proyecto, registros_impacto_ambiental.mes, registros_impacto_ambiental.anio, proyectos_creados.id /*Contando Meses*/
     FROM impacto_ambiental_proyecto JOIN proyectos_creados ON impacto_ambiental_proyecto.id_proyecto = proyectos_creados.id 
     JOIN registros_impacto_ambiental ON impacto_ambiental_proyecto.id = registros_impacto_ambiental.id_impacto_ambiental_proyecto";
     $query = $conexion->query($consulta);

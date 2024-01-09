@@ -37,9 +37,11 @@ if (isset($_SESSION['nombre'])) {
                     <!--<button class="btn-menu" @click="ventana='Reportes'">
                         <i class="bi bi-plus-circle"></i> Reportes
                     </button>-->
+                    <?php if ($_SESSION['acceso'] == 'Admin') { ?>
                     <button class="btn-menu" @click="ventana='Calendario',mostrarHeader=true, consultarCalendarioProyectos()">
-                        <i class="bi bi-plus-circle"></i> Calendario
+                        <i class="bi bi-plus-circle"></i> Estatus Proyectos
                     </button>
+                    <?php } ?>
                     <!--Modal Alta Proyectos-->
                     <div id="modal-alta-proyecto" class="modal text-start" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
                         <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
@@ -1613,8 +1615,12 @@ if (isset($_SESSION['nombre'])) {
                         </thead>
                         <tbody>
                             <tr v-if="proyectosXanioCalendario.length>0" v-for="proyectosXanio in proyectosXanioCalendario">
-                                <th>{{proyectosXanio.nombre_proyecto}}</th>
-                                <td><!--<span class="badge bg-dark" style=" font-size: 8px" v-if="cantidadMesesRegistrados[proyectosXanio.id]==proyectosXanio.id">Finalizado</span> {{cantidadMesesRegistrados[proyectosXanio.id]==proyectosXanio.id}}--></td>
+                                <th class="text-start">{{proyectosXanio.nombre_proyecto}}</th>
+                                <td>
+                                    <!--<span class="badge bg-dark" style=" font-size: 8px" v-if="cantidadMesesRegistrados[proyectosXanio.id]>11">Finalizado</span><br>-->
+                                    <span v-if="proyectosXanio.status_seguimiento=='Cerrado'" class="badge bg-dark" style="font-size: 8px">Finalizado</span> 
+                                    <span v-else class="badge bg-success" style=" font-size: 8px">Seguiendo</span>
+                                </td>
                                 <td v-for="x in 12">
                                     <template v-for="proyectosDatosCalendario in proyectosDatosCalendario">
                                         <div v-if="proyectosDatosCalendario.proyectoID==proyectosXanio.id && proyectosDatosCalendario.mes==x && proyectosDatosCalendario.anio==select_anio_calendario" >

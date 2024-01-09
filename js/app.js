@@ -310,12 +310,15 @@ const AltaProyectos = {
             for (let i = 0; i < this.inputImpactoAmbiental.length; i++) {
               for (let j = 0; j < this.inputImpactoAmbiental[i].length; j++) {
                 valor = this.inputImpactoAmbiental[i][j]
+                valor = valor.replaceAll(',', '');//elimino la "," par que la suma sea correcta y dejo el "."
                 if (i === 0) {
                   // Inicializar la suma en la primera iteración
                   sumas['suma' + j] = parseFloat(valor);
+                  console.log(parseFloat(valor))
                 } else {
                   // Sumar en las iteraciones siguientes
                   sumas['suma' + j] += parseFloat(valor);
+                  console.log(parseFloat(valor))
                 }
               }
 
@@ -323,7 +326,7 @@ const AltaProyectos = {
 
             // Redondear al mostrar o almacenar para que no aparecans numero con msa de dos decimas .00
             for (let i in sumas) {
-              sumas[i] = parseFloat(sumas[i]).toFixed(2);  // Convertir a número antes de usar toFixed
+              sumas[i] = parseFloat(sumas[i]).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });  // Convertir a número antes de usar toFixed
             }
             this.sumaColumnasImpacto = sumas;
 
