@@ -94,9 +94,9 @@ function consultarCalendarioProyecto($anio)
     global $conexion;
     $resultado1 = [];
     $estado1 = false;
-    $consulta = "SELECT proyectos_creados.id AS proyectoID, proyectos_creados.nombre_proyecto, registros_impacto_ambiental.mes, registros_impacto_ambiental.anio, proyectos_creados.id 
+    $consulta = "SELECT DISTINCT proyectos_creados.id AS proyectoID, proyectos_creados.nombre_proyecto, registros_impacto_ambiental.mes, registros_impacto_ambiental.anio, proyectos_creados.id /*Datos Proyecto */
     FROM impacto_ambiental_proyecto JOIN proyectos_creados ON impacto_ambiental_proyecto.id_proyecto = proyectos_creados.id 
-    JOIN registros_impacto_ambiental ON impacto_ambiental_proyecto.id = registros_impacto_ambiental.id_impacto_ambiental_proyecto WHERE registros_impacto_ambiental.anio ='$anio' ORDER BY proyectos_creados.folio ASC";
+    JOIN registros_impacto_ambiental ON impacto_ambiental_proyecto.id = registros_impacto_ambiental.id_impacto_ambiental_proyecto WHERE registros_impacto_ambiental.anio ='$anio'";
     $query = $conexion->query($consulta);
     if ($query) {
         while ($datos = mysqli_fetch_array($query)) {
@@ -107,7 +107,53 @@ function consultarCalendarioProyecto($anio)
         $estado1 = false;
     }
 
-    return array($resultado1, $estado1);
+    $resultado2 =[];
+    $estado2 = false;
+    $consulta="SELECT proyectos_creados.nombre_proyecto,proyectos_creados.id, registros_impacto_ambiental.mes /*Proyectos por año*/
+    FROM impacto_ambiental_proyecto JOIN proyectos_creados 
+    ON proyectos_creados.id = impacto_ambiental_proyecto.id_proyecto 
+    JOIN registros_impacto_ambiental 
+    ON impacto_ambiental_proyecto.id = registros_impacto_ambiental.id_impacto_ambiental_proyecto 
+    WHERE registros_impacto_ambiental.anio = '$anio' GROUP BY impacto_ambiental_proyecto.id_proyecto";
+    $query = $conexion->query($consulta);
+    if($query){
+        $estado2 = true;
+        while ($nombres_proyectos = mysqli_fetch_array($query)) {
+            $resultado2[] = $nombres_proyectos;
+        }
+    }else{
+        $estado2 = false;
+    }
+
+    $resultado3 =[];
+    $estado3 = false;
+    $consulta = "SELECT DISTINCT proyectos_creados.id AS proyectoID, proyectos_creados.nombre_proyecto, registros_impacto_ambiental.mes, registros_impacto_ambiental.anio, proyectos_creados.id /*Datos Proyecto */
+    FROM impacto_ambiental_proyecto JOIN proyectos_creados ON impacto_ambiental_proyecto.id_proyecto = proyectos_creados.id 
+    JOIN registros_impacto_ambiental ON impacto_ambiental_proyecto.id = registros_impacto_ambiental.id_impacto_ambiental_proyecto";
+    $query = $conexion->query($consulta);
+    if($query){
+        $estado3 = true;
+        while ($todos_los_proyectos = mysqli_fetch_array($query)) {
+           // Contar ocurrencias de proyectos_creados.id
+        $id_proyecto = $todos_los_proyectos['proyectoID'];
+        if (isset($proyectos_repetidos[$id_proyecto])) {
+            $proyectos_repetidos[$id_proyecto]++;
+        } else {
+            $proyectos_repetidos[$id_proyecto] = 1;
+        }
+    }
+     // Agregar la cantidad de ocurrencias al resultado
+     foreach ($proyectos_repetidos as $id_proyecto => $ocurrencias) {
+        $resultado3[$id_proyecto] = $ocurrencias;
+    }
+    
+
+
+    }else{
+        $estado3 = false;
+    }
+
+    return array($resultado1, $estado1,$resultado2,$estado2,$resultado3,$estado3);
 }
 
 function consultarProyectosID($id_proyecto)

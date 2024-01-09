@@ -1595,7 +1595,8 @@ if (isset($_SESSION['nombre'])) {
                     <table class="table table-bordered table-striped table-hover text-center">
                         <thead>
                             <tr>
-                                <th></th>
+                                <th>Nombre del Proyecto</th>
+                                <th>Estatus</th>
                                 <th>Enero</th>
                                 <th>Febrero</th>
                                 <th>Marzo</th>
@@ -1611,12 +1612,21 @@ if (isset($_SESSION['nombre'])) {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="proyecto in proyectos">
-                                <th>{{proyecto.nombre_proyecto}}</th>
+                            <tr v-if="proyectosXanioCalendario.length>0" v-for="proyectosXanio in proyectosXanioCalendario">
+                                <th>{{proyectosXanio.nombre_proyecto}}</th>
+                                <td><!--<span class="badge bg-dark" style=" font-size: 8px" v-if="cantidadMesesRegistrados[proyectosXanio.id]==proyectosXanio.id">Finalizado</span> {{cantidadMesesRegistrados[proyectosXanio.id]==proyectosXanio.id}}--></td>
                                 <td v-for="x in 12">
                                     <template v-for="proyectosDatosCalendario in proyectosDatosCalendario">
-                                        <i v-if="proyectosDatosCalendario.proyectoID==proyecto.id && proyectosDatosCalendario.mes==x && proyectosDatosCalendario.anio==select_anio_calendario" class="bi bi-check2"></i>
+                                        <div v-if="proyectosDatosCalendario.proyectoID==proyectosXanio.id && proyectosDatosCalendario.mes==x && proyectosDatosCalendario.anio==select_anio_calendario" >
+                                            <i class="bi bi-check2"></i>
+                                            <!--<span class="badge bg-dark" style=" font-size: 8px">Finalizado</span>-->
+                                        </div>
                                     </template>
+                                </td>
+                            </tr>
+                            <tr v-else>
+                                <td colspan="13">
+                                    <label>No existe seguimiento de proyectos {{select_anio_calendario}}</label>
                                 </td>
                             </tr>
                         </tbody>

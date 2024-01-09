@@ -137,7 +137,9 @@ const AltaProyectos = {
       sumaGeneralSustentable:'',
       //Calendario
       select_anio_calendario:2023,
-      proyectosDatosCalendario:[]
+      proyectosDatosCalendario:[],
+      proyectosXanioCalendario:[],
+      cantidadMesesRegistrados:[]
 
     }
   },
@@ -180,8 +182,10 @@ const AltaProyectos = {
         }
       }).then(response => {
         console.log(response.data)
-        if (response.data[0][1] == true) {
+        if (response.data[0][1] == true && response.data[0][3]) {
           this.proyectosDatosCalendario = response.data[0][0]
+          this.proyectosXanioCalendario = response.data[0][2]
+          this.cantidadMesesRegistrados = response.data[0][4]
         } else {
           alert("En la consulta calendario total por proyecto, no se logro")
         }
