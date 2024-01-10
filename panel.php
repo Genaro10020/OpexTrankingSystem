@@ -39,7 +39,7 @@ if (isset($_SESSION['nombre'])) {
                     </button>-->
                     <?php if ($_SESSION['acceso'] == 'Admin') { ?>
                     <button class="btn-menu" @click="ventana='Calendario',mostrarHeader=true, consultarCalendarioProyectos()">
-                        <i class="bi bi-plus-circle"></i> Estatus Proyectos
+                        <i class="bi bi-plus-circle"></i> Estatus Captura
                     </button>
                     <?php } ?>
                     <!--Modal Alta Proyectos-->
@@ -293,10 +293,8 @@ if (isset($_SESSION['nombre'])) {
                                                 <input type="checkbox" v-model="objetivo_estrategico">
                                             </div>
                                         </div>
-                                        <div class="col-3 my-auto mx-auto "><!--bloque imagen de la modal-->
-                                            <form @submit.prevent="uploadFile()">
-                                                <!--Subir Documento Sugerencia-->
-
+                                        <div class="col-3 my-auto mx-auto "><!--bloque imagen Alta Proyecto-->
+                                            <form @submit.prevent="uploadFile('Alta Proyecto')">
                                                 <div class="row mx-auto">
                                                     <input type="file" id="input_file_subir" @change="varificandoSelecion()" ref="ref_imagen" accept="*.jpg/*.png" class="btn-success py-1" required />
                                                 </div>
@@ -1214,7 +1212,7 @@ if (isset($_SESSION['nombre'])) {
                                         </div>
                                     </td>
                                 </tr>
-                                <tr v-if="seguimientos>0"> <!--Sumatoria y adjuntos-->
+                                <tr v-if="seguimientos>0" class="align-middle"> <!--Sumatoria y adjuntos-->
                                     <td v-if="seguimiento_status"></td><!--Se oculta esta columna cuando es cerrado-->
                                     <td><b>Sumatoria:</b> </td>
                                     <td><b>{{sumaCO2}}</b></td>
@@ -1223,7 +1221,26 @@ if (isset($_SESSION['nombre'])) {
                                     </td>
                                     <td><b>{{sumaAhorroDuro}}</b></td>
                                     <td><b>{{sumaAhorroSuave}}<b></td>
-                                    <td></td>
+                                    <td>
+                                    <button type="button" class="btn btn-secondary" title="Subir Archivo"  @click="modal_seguimiento()" ><i class="bi bi-paperclip"></i></button>
+                                        <!--<form @submit.prevent="uploadFile('Seguimiento')">
+                                                <div class="row">
+                                                       <div class="col-8">
+                                                            <input type="file" id="input_file_seguimiento" @change="varificandoSelecionSeguimiento()" ref="ref_seguimiento" accept="*.jpg/*.png/*.pdf/*.doc/*.docx/*.ppt/*.pptx/*.xls/*.xlsx" class="btn btn-secondary  ms-2 p-0" required />
+                                                       </div> 
+                                                       <div class="col-4 text-start my-auto">
+                                                                <input v-if="existeImagenSeleccionadaSeguimiento==true && login!=true" class="btn-success w-50" type="submit" value="Subir" />
+                                                        </div> 
+                                                </div>
+                                              
+                                                
+                                                <div v-if="login==true" class="d-flex justify-content-center">
+                                                    <div>
+                                                        <img class="mx-auto" style="width:50px;" src="img/loading.gif" /><label>Subiendo...</label>
+                                                    </div>
+                                                </div>
+                                            </form>-->
+                                    </td>
                                 </tr>
                                 <!------------------------------------------------------------------------------PRIMER SEGUIMIETO --------------------------------------------------->
                                 <tr v-if="id_proyecto!='' && seguimiento_status==true" style="vertical-align: middle; font-size: 1.1em;">
@@ -1268,8 +1285,59 @@ if (isset($_SESSION['nombre'])) {
                         </table>
                     </div>
 
-                    <!--/////////////////////////////////////////////////////////////GENERAR VALOR////////////////////////////////////////-->
+                    <!-- Modal Eliminar/Actualizar Seguimiento-->
+                    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-xl">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h6 class="modal-title" id="exampleModalLabel" >Subir documentos</h6>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                        <div class="text-center" v-if="contenido_modal_agregar_eliminar=='Subir'">
+                                                <form @submit.prevent="uploadFile()">
+                                                    <!--Subir Documento Sugerencia-->
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <div class="custom-file my-5"> 
+                                                                <input type="file" id="input_file_subir"  ref="ref_premio" multiple required/>{{extensiones_valida}}</input>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <button  type="submit" name="upload" class="btn btn-primary">Subir Archivos </button>
+                                                        </div>
+                                                    </div> 
+                                                       
+                                                          <!-- Mostrando los archivos cargados -->
+                                                        <!--<div v-show="filepremio.length>0 && cual_documento=='premio'" >
+                                                        <hr>
+                                                                <div class="col-12" v-for= "(fileprem,index) in filepremio">
+                                                                    <div class="row">
+                                                                        <span class="badge bg-secondary">Documento {{index+1}}</span><br>
+                                                                            <div class="">
+                                                                                <button type="button" class="btn btn-danger" @click="eliminarDocumento(fileprem)" >Eliminar</button>
+                                                                            </div>
+                                                                    </div>
+                                                                    <img :src="filepremio[index]" style="width:50%"></img>
+                                                                    
+                                                                  <iframe src="https://vvnorth.com/Sugerencias/documentos/pdf.pdf" style="width:100%;height:500px;"></iframe>
+                                                                </div>
+                                                        </div>-->
+                                                </form>
+                                        </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                </div>
+                                </div>
+                            </div>
+                    </div>
+                <!--Fin Modal subir seguimiento-->
                 </div>
+                <!--/////////////////////////////////////////////////////////////GENERAR VALOR////////////////////////////////////////-->
+
+
+
                 <div v-if="ventana=='Generar Valor'">
                 <!--<div class="div-color">
                 Pantalla 

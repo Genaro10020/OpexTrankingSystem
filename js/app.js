@@ -51,6 +51,7 @@ const AltaProyectos = {
       select_pilar: '',
       select_mision: '',
       imagenes: [],
+      documentos: [],
       tons_co2: '',
       ahorro_duro: '$.00',
       ahorro_suave: '$.00',
@@ -58,6 +59,7 @@ const AltaProyectos = {
       respondio: true,//utilizo para cambiar el css si no repondio en altas
       objetivo_estrategico: false,
       existeImagenSeleccionada: false,
+      existeImagenSeleccionadaSeguimiento: false,
       /*Planta*/ /*Área*/ /*Departamento*/
       nueva: '',
       nuevoNombre: '',
@@ -119,6 +121,7 @@ const AltaProyectos = {
       sumarSoloUnaVez: 0,
       SumaValorEx: 0,
       SumaSustentableEx: 0,
+      myModalSeguimiento: '',
       /*GENERANDO VALOR*/
       select_anio_generando_valor:'',
       sumaClienteValor:'',
@@ -2047,6 +2050,12 @@ const AltaProyectos = {
         this.existeImagenSeleccionada = true;
       }
     },
+    varificandoSelecionSeguimiento() {
+      var imagen_seleccion = document.getElementById('input_file_seguimiento').value;
+      if (imagen_seleccion != null) {
+        this.existeImagenSeleccionadaSeguimiento = true;
+      }
+    },
     buscarDocumentos() {
       this.imagenes = []
       axios.post("buscar_documentos.php", {
@@ -2063,32 +2072,51 @@ const AltaProyectos = {
           console.log(error);
         });
     },
-    uploadFile() {
+    uploadFile(cual_documento) {
       this.login = true
-      //this.mensaje_boton = "Espere, estamos subiendo su archivo...."
       let formData = new FormData();
-      var files = this.$refs.ref_imagen.files;
-      var totalfiles = this.$refs.ref_imagen.files.length;
+      if(cual_documento=='Alta Proyecto'){
+        var files = this.$refs.ref_imagen.files;
+        var totalfiles = this.$refs.ref_imagen.files.length;
+      }
 
+      if(cual_documento=='Seguimiento'){
+        var files = this.$refs.ref_seguimiento.files;
+        var totalfiles = this.$refs.ref_seguimiento.files.length;
+      }
+     
       for (var index = 0; index < totalfiles; index++) {
         formData.append("files[]", files[index]);//arreglo de documentos
       }
-      /*formData.append("subarea", this.subarea);
-      formData.append("nombre_ayuda_visual", this.nombre_ayuda_visual);
-      formData.append("id_concentrado", this.id_concentrado);*/
+      formData.append("id", this.id_proyecto);
+      formData.append("cual_documento", cual_documento);
       axios.post("subir_imagen.php", formData,
         {
           headers: { "Content-Type": "multipart/form-data" }
         })
         .then(response => {
-
           console.log(response.data);
-          this.imagenes = response.data;
-          if (this.imagenes.length > 0) {
-            document.getElementById("input_file_subir").value = ""
-            this.existeImagenSeleccionada = false;
-            this.random = Math.random()
-          } else {
+          if(response.data.length>0){
+            if(cual_documento == "Alta Proyecto")
+            {
+              console.log("estoy en alta")
+                this.imagenes = response.data;
+                  if (this.imagenes.length > 0) {
+                    console.log("entre a todo imagen >0")
+                    document.getElementById("input_file_subir").value = ""
+                    this.existeImagenSeleccionada = false;
+                    this.random = Math.random()
+                  }
+            }
+            if(cual_documento == "Seguimiento"){
+                this.documentos = response.data;
+                if (this.documentos.length > 0) {
+                  document.getElementById("input_file_seguimiento").value = ""
+                  this.existeImagenSeleccionadaSeguimiento = false;
+                  this.random = Math.random()
+                }
+            }
+          }else{
             this.login = false
             alert("Verifique la extension del archivo o Intente nuevamente.")
           }
@@ -2101,6 +2129,10 @@ const AltaProyectos = {
             this.login = false
           }, 3000)
         });
+    },
+    modal_seguimiento(){
+      this.myModalSeguimiento = new bootstrap.Modal(document.getElementById('modal'))
+      this.myModalSeguimiento.show()
     },
     verificarAltaProyecto() {
 

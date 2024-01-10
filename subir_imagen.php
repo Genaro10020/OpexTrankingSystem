@@ -1,8 +1,6 @@
 <?php
-
 session_start();
-$plantaBD = $_SESSION['planta'];
-include "conexionGhoner.php"; 
+
 // Para almacenar la ruta de los archivos cargados
 $files_arr = array();
 
@@ -15,8 +13,15 @@ $suma=0;
 // Contar archivos totales
 $countfiles = count($_FILES['files']['name']);
 //$suma=$countfiles + $cantidad;
+if($_POST['cual_documento']=="Seguimiento"){
+    //echo "LLEGARON".$_POST['id']."y el documento sera:".$_POST['cual_documento'];
+    $path = "seguimiento/".$_POST['id']."/";
+}else{
+    $path = "imagenes/";
+}
 
-$path = "imagenes/";
+
+
 
 //verificar si existe directorio de$path = "sample/path/newfolder";
 if (!file_exists($path)) {
@@ -35,17 +40,31 @@ if (!file_exists($path)) {
                             $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
                             // Validar extensiones permitidas
-                            $valid_ext = array("jpeg","jpg","png");//entension valida para 
+                            if($_POST['cual_documento']=="Seguimiento"){
+                                $valid_ext = array("png","jpeg","jpg","pdf","doc","docx","ppt","pptx","xls","xlsx");
+                            }else{
+                                $valid_ext = array("jpeg","jpg","png");//entension valida para 
+                            }
                          
                             // Revisar extension
                             if(in_array($ext, $valid_ext)){
 
-                            $ruta_y_doc= $path."imagen.jpg";
+                                if($_POST['cual_documento']=="Seguimiento"){
+                                    $filename = str_replace(" ","_", $filename);
+                                    $newfilename = $filename;
+                                    $ruta_y_doc= $path.$newfilename;
+                                }else{
+                                    $ruta_y_doc = $path."imagen.jpg";///entension valida para 
+                                }
 
-                            // Subir archivos
-                            if(move_uploaded_file($_FILES['files']['tmp_name'][$index],$ruta_y_doc)){
-                            $files_arr[] = $ruta_y_doc;
-                            }
+                            // Eliminado Espacios al Nombre
+                               
+
+                                // Subir archivos
+                                if(move_uploaded_file($_FILES['files']['tmp_name'][$index],$ruta_y_doc))
+                                {
+                                $files_arr[] = $ruta_y_doc;
+                                }
                         }
                     }
             }
