@@ -20,7 +20,7 @@ if (isset($_SESSION['nombre'])) {
                 <!--Bóton-->
                 <div class="text-center">
                     <?php if ($_SESSION['acceso'] == 'Admin') { ?>
-                        <button class="btn-menu " @click="ventana='Crear',consultarMisionesRelacional(),consultarObjetivosRelacional(),consultarMisiones(),consultarImpactoAmbiental(),consultarEstandaresCO2(),consultarFuentes(),mostrarHeader=true,sumarSoloUnaVez=0">
+                        <button class="btn-menu " @click="ventana='Crear',consultarMisionesRelacional(),consultarObjetivosRelacional(),consultarMisiones(),consultarImpactoAmbiental(),consultarEstandaresCO2(),consultarFuentes(),mostrarHeader=true,sumarSoloUnaVez=0,buscarDocumentos('Documento CO2')">
                             <i class="bi bi-plus-circle"></i> Crear Catalogos
                         </button>
                     <?php } ?>
@@ -28,7 +28,7 @@ if (isset($_SESSION['nombre'])) {
                         <i class="bi bi-plus-circle"></i> Proyectos Creados
                     </button>
 
-                    <button class="btn-menu " @click="ventana='Seguimiento',mostrarHeader=true,sumarSoloUnaVez=0">
+                    <button class="btn-menu " @click="ventana='Seguimiento',mostrarHeader=true,sumarSoloUnaVez=0,buscarDocumentos('Documento CO2')">
                         <i class="bi bi-plus-circle"></i> Seguimiento
                     </button>
                     <button class="btn-menu me-sm-3 ms-sm-3 " @click="ventana='Generar Valor',consultarObjetivosRelacional(),mostrarHeader=false,consultarSeguimientos()">
@@ -849,17 +849,21 @@ if (isset($_SESSION['nombre'])) {
                             <div class=" encabezadoTablas">
                                 <div class=" d-flex justify-content-center align-items-center " style="font-size: 0.9em;">
                                     <div class="d-none d-lg-block col-lg-4"></div>
-                                    <div class="col-6 col-lg-4 mt-2 ">Estandares de CO2</div>
+                                    <div class="col-6 col-lg-4 mt-2 ">
+                                        Estandares de CO2
+                                    </div>
                                     <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
                                         <button type="button" class=" btn btn-menu " @Click="modalCatalogos('Crear','Estandar')">Crear</button>
                                     </div>
-
                                 </div>
                             </div>
                             <div class="scroll">
                                 <table class="  table table-bordered border-secondary border border-3 border-secondary">
                                     <thead>
                                         <tr class="border border-3 border-secondary" style="font-size: 0.9em;">
+                                            <th class=" sticky-top thmodal">
+                                                Documentos
+                                            </th>
                                             <th class=" sticky-top thmodal">
                                                 Nombre
                                             </th>
@@ -878,7 +882,11 @@ if (isset($_SESSION['nombre'])) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="estandar in estandares " style="font-size: 0.7em;">
+                                        <tr v-for="(estandar,index) in estandares " style="font-size: 0.7em;">
+                                            <td class="align-middle" v-if="index==0" :rowspan="estandares.length">
+                                                <button v-if="documentos_co2.length>0" type="button" class="btn btn-success" title="Visualizar/Subir Archivos"  @click="modal_co2()" style="font-size:10px"><i class="bi bi-paperclip"></i>{{documentos_co2.length}} Archivos Encontrados</button>
+                                                <button v-else type="button" class="btn btn-secondary" title="Visualizar/Subir Archivos"  @click="modal_co2()" style="font-size:10px"><i class="bi bi-paperclip"></i>{{documentos_co2.length}} Archivos Encontrados</button>    
+                                            </td>
                                             <td>
                                                 {{estandar.nombre}}
                                             </td>
@@ -1137,16 +1145,114 @@ if (isset($_SESSION['nombre'])) {
                             </div>
                         </div>
                     </div>
+                    <!--Fin Modal-->
+                    <!-- Modal Eliminar/Actualizar Documentos CO2-->
+                    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-xl">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h6 class="modal-title" id="exampleModalLabel" >Subir documentos</h6>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                        <div class="text-center">
+                                                <form @submit.prevent="uploadFile('Documento CO2')">
+                                                    <!--Subir Documento Sugerencia-->
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <div class="custom-file mt-5 mb-3"> 
+                                                            <input type="file" id="input_file_co2" @change="verificandoSelecionCO2()" ref="ref_co2" multiple accept="*.jpg/*.png/*.pdf/*.doc/*.docx/*.ppt/*.pptx/*.xls/*.xlsx" class="btn btn-secondary  ms-2 p-0" required />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12" v-if="existeImagenSeleccionadaCO2 && login!=true" >
+                                                            <button  type="submit" name="upload" class="btn btn-primary">Subir Archivos </button>
+                                                        </div>
+                                                        <div v-if="login==true" class="d-flex justify-content-center">
+                                                            <div>
+                                                                <img class="mx-auto" style="width:50px;" src="img/loading.gif" /><label>Subiendo...</label>
+                                                            </div>
+                                                        </div>
+                                                    </div> 
+                                                          <!-- Mostrando los archivos cargados -->
+                                                        <div v-show="documentos_co2.length>0" >
+                                                        <hr>
+                                                                <div class="col-12" v-for= "(archivos,index) in documentos_co2">
+                                                                    <div class="row">
+                                                                        <span class="badge bg-secondary">Documento {{index+1}}</span><br>
+                                                                            <div class="mt-1">
+                                                                                <button type="button" class="btn btn-danger" @click="eliminarDocumento(archivos)" style="font-size:14px;">Eliminar</button>
+                                                                            </div>
+                                                                    </div>
+                                                                   <!--Mostar los JPG y PNG-->
+                                                                   <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='png' || archivos.slice(archivos.lastIndexOf('.') + 1)=='jpg'" class="col-12 text-center">
+                                                                    {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br>
+                                                                        <img  :src="documentos_co2[index]" style="width:50%" class="mb-5"></img>
+                                                                    </div>
+                                                                     <!--Mostrar PDF-->
+                                                                     <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='pdf'"  class="col-12 text-center">
+                                                                     {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br>
+                                                                            <iframe  :src="documentos_co2[index]" style="width:100%;height:500px;" class="mb-5"></iframe>
+                                                                    </div>
+                                                                    <!--Mostrar Word-->
+                                                                    <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='doc' || archivos.slice(archivos.lastIndexOf('.') + 1)=='docx'" class="col-12 text-center">
+                                                                    {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br><!--obtengo el nombre del documento con extension-->
+                                                                            <a :href="archivos" :download="nombre_de_descarga">
+                                                                                <img src="img/word.png" style="width:200px" class="mb-5"></img>
+                                                                            </a>
+                                                                    </div>
+                                                                    <!--Mostrar Excel-->
+                                                                    <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='xls' || archivos.slice(archivos.lastIndexOf('.') + 1)=='xlsx'" class="col-12 text-center">
+                                                                    {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br><!--obtengo el nombre del documento con extension-->
+                                                                            <a :href="archivos" :download="nombre_de_descarga">
+                                                                                <img src="img/excel.png" style="width:200px" class="mb-5"></img>
+                                                                            </a>
+                                                                    </div>
+                                                                    <!--Mostrar Power Point -->
+                                                                    <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='ppt' || archivos.slice(archivos.lastIndexOf('.') + 1)=='pptx'" class="col-12 text-center">
+                                                                    {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br> <!--obtengo el nombre del documento con extension-->
+                                                                            <a :href="archivos" :download="nombre_de_descarga">
+                                                                            <img  src="img/powerpoint.png" style="width:200px" class="mb-5"></img>
+                                                                            </a>
+                                                                    </div>
+                                                                </div>
+                                                        </div>
+                                                </form>
+                                        </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                </div>
+                                </div>
+                            </div>
+                    </div>
+                <!--Fin Modal Documento C02-->
                 </div>
                 <!---------------------------VENTANA DE SEGUIMIENTO DE PROYECTO------------------------------->
                 <div v-if="ventana=='Seguimiento'">
-                    <div class="input-group mt-3 mx-2 mb-2 ">
-                        <span class="input-group-text w-5">Seleccione Proyecto</span>
-                        <select class="w-5" @keydown.up="cancelarEvento" @keydown.down="cancelarEvento" @keydown.left="cancelarEvento" @keydown.right="cancelarEvento" @change="consultarImpactoAmbieltalXProyectoID()" v-model="id_proyecto">
-                            <option value="">Seleccione...</option>
-                            <option v-for="proyecto in proyectos" :value="proyecto.id">{{proyecto.nombre_proyecto}}</option>
-                        </select>
-                    </div>
+                          <div class="col-12">                     
+                                    <div class="row">
+                                        <div class="col-6">
+                                                <div class="input-group mt-3 mx-2 mb-2 ">
+                                                    <span class="input-group-text w-5">Seleccione Proyecto</span>
+                                                    <select class="w-5" @keydown.up="cancelarEvento" @keydown.down="cancelarEvento" @keydown.left="cancelarEvento" @keydown.right="cancelarEvento" @change="consultarImpactoAmbieltalXProyectoID()" v-model="id_proyecto">
+                                                        <option value="">Seleccione...</option>
+                                                        <option v-for="proyecto in proyectos" :value="proyecto.id">{{proyecto.nombre_proyecto}}</option>
+                                                    </select>
+                                                    <button v-if="documentos_seguimiento.length>0" type="button" class="btn btn-success" title="Visualizar/Subir Archivos"  @click="modal_seguimiento()" style="font-size:10px"><i class="bi bi-paperclip"></i>{{documentos_seguimiento.length}} Archivos Encontrados</button>
+                                                    <button v-else type="button" class="btn btn-secondary" title="Visualizar/Subir Archivos"  @click="modal_seguimiento()" style="font-size:10px"><i class="bi bi-paperclip"></i>{{documentos_seguimiento.length}} Archivos Encontrados</button>
+                                                </div>
+                                        </div>
+                                        <div class="col-6">
+                                                <div class="input-group mt-3 mx-2 mb-2 ">
+                                                    <span class="input-group-text w-5">Documentos estandares CO<label style="font-size:8px" class="mt-1">2</label></span>
+                                                    <button v-if="documentos_co2.length>0" type="button" class="btn btn-success" title="Visualizar"  @click="modal_co2()" style="font-size:10px"><i class="bi bi-paperclip"></i>{{documentos_co2.length}} Archivos Encontrados</button>
+                                                    <button v-else type="button" class="btn btn-secondary" title="Visualizar/Subir Archivos"  @click="modal_co2()" style="font-size:10px"><i class="bi bi-paperclip"></i>{{documentos_co2.length}} Archivos Encontrados</button>
+                                                </div>
+                                        </div>
+                                    </div>
+                            </div> 
+
+                   
                     <div class="scroll-dos">
                         <table class="mx-2 mb-5 table table-hover table-bordered table-striped text-center" style="font-size: 0.8em;">
                             <thead style="background: #848484; color:white;">
@@ -1222,24 +1328,6 @@ if (isset($_SESSION['nombre'])) {
                                     <td><b>{{sumaAhorroDuro}}</b></td>
                                     <td><b>{{sumaAhorroSuave}}<b></td>
                                     <td>
-                                    <button type="button" class="btn btn-secondary" title="Subir Archivo"  @click="modal_seguimiento()" ><i class="bi bi-paperclip"></i></button>
-                                        <!--<form @submit.prevent="uploadFile('Seguimiento')">
-                                                <div class="row">
-                                                       <div class="col-8">
-                                                            <input type="file" id="input_file_seguimiento" @change="varificandoSelecionSeguimiento()" ref="ref_seguimiento" accept="*.jpg/*.png/*.pdf/*.doc/*.docx/*.ppt/*.pptx/*.xls/*.xlsx" class="btn btn-secondary  ms-2 p-0" required />
-                                                       </div> 
-                                                       <div class="col-4 text-start my-auto">
-                                                                <input v-if="existeImagenSeleccionadaSeguimiento==true && login!=true" class="btn-success w-50" type="submit" value="Subir" />
-                                                        </div> 
-                                                </div>
-                                              
-                                                
-                                                <div v-if="login==true" class="d-flex justify-content-center">
-                                                    <div>
-                                                        <img class="mx-auto" style="width:50px;" src="img/loading.gif" /><label>Subiendo...</label>
-                                                    </div>
-                                                </div>
-                                            </form>-->
                                     </td>
                                 </tr>
                                 <!------------------------------------------------------------------------------PRIMER SEGUIMIETO --------------------------------------------------->
@@ -1276,7 +1364,6 @@ if (isset($_SESSION['nombre'])) {
                                         <input v-if="actualizatabla==true" type="text" v-model="input_ahorro_suave" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('input_ahorro_suave')"></input> <!--:value="proyecto.ahorro_duro"-->
                                         <label v-else></label>
                                     </td>
-
                                     <td style="min-width:150px">
 
                                     </td>
@@ -1290,39 +1377,115 @@ if (isset($_SESSION['nombre'])) {
                             <div class="modal-dialog modal-dialog-centered modal-xl">
                                 <div class="modal-content">
                                 <div class="modal-header">
-                                    <h6 class="modal-title" id="exampleModalLabel" >Subir documentos</h6>
+                                    <h6 v-if="cual_documento=='Seguimiento'" class="modal-title" id="exampleModalLabel" >Subir documentos</h6>
+                                    <h6 v-if="cual_documento=='Documento CO2'" class="modal-title" id="exampleModalLabel" >Documentos CO2</h6>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                        <div class="text-center" v-if="contenido_modal_agregar_eliminar=='Subir'">
-                                                <form @submit.prevent="uploadFile()">
+                                        <div class="text-center">
+                                                <form @submit.prevent="uploadFile('Seguimiento')">
                                                     <!--Subir Documento Sugerencia-->
-                                                    <div class="row">
+                                                    <div v-if="cual_documento=='Seguimiento'" class="row" >
                                                         <div class="col-12">
-                                                            <div class="custom-file my-5"> 
-                                                                <input type="file" id="input_file_subir"  ref="ref_premio" multiple required/>{{extensiones_valida}}</input>
+                                                            <div class="custom-file mt-5 mb-3"> 
+                                                            <input type="file" id="input_file_seguimiento" @change="varificandoSelecionSeguimiento()" ref="ref_seguimiento" multiple accept="*.jpg/*.png/*.pdf/*.doc/*.docx/*.ppt/*.pptx/*.xls/*.xlsx" class="btn btn-secondary  ms-2 p-0" required />
                                                             </div>
                                                         </div>
-                                                        <div class="col-12">
+                                                        <div class="col-12" v-if="existeImagenSeleccionadaSeguimiento && login!=true" >
                                                             <button  type="submit" name="upload" class="btn btn-primary">Subir Archivos </button>
                                                         </div>
+                                                        <div v-if="login==true" class="d-flex justify-content-center">
+                                                            <div>
+                                                                <img class="mx-auto" style="width:50px;" src="img/loading.gif" /><label>Subiendo...</label>
+                                                            </div>
+                                                        </div>
                                                     </div> 
-                                                       
-                                                          <!-- Mostrando los archivos cargados -->
-                                                        <!--<div v-show="filepremio.length>0 && cual_documento=='premio'" >
+                                                          <!-- Mostrando los archivos cargados SEGUIMIENTO-->
+                                                        <div v-if="cual_documento=='Seguimiento'" v-show="documentos_seguimiento.length>0" >
                                                         <hr>
-                                                                <div class="col-12" v-for= "(fileprem,index) in filepremio">
+                                                                <div class="col-12" v-for= "(archivos,index) in documentos_seguimiento">
                                                                     <div class="row">
                                                                         <span class="badge bg-secondary">Documento {{index+1}}</span><br>
-                                                                            <div class="">
-                                                                                <button type="button" class="btn btn-danger" @click="eliminarDocumento(fileprem)" >Eliminar</button>
+                                                                            <div class="mt-1">
+                                                                                <button type="button" class="btn btn-danger" @click="eliminarDocumento(archivos)" style="font-size:14px;" >Eliminar</button>
                                                                             </div>
                                                                     </div>
-                                                                    <img :src="filepremio[index]" style="width:50%"></img>
-                                                                    
-                                                                  <iframe src="https://vvnorth.com/Sugerencias/documentos/pdf.pdf" style="width:100%;height:500px;"></iframe>
+                                                                    <!--Mostar los JPG y PNG-->
+                                                                    <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='png' || archivos.slice(archivos.lastIndexOf('.') + 1)=='jpg'" class="col-12 text-center">
+                                                                    {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br>
+                                                                        <img  :src="documentos_seguimiento[index]" style="width:50%" class="mb-5"></img>
+                                                                    </div>
+                                                                     <!--Mostrar PDF-->
+                                                                     <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='pdf'"  class="col-12 text-center">
+                                                                     {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br>
+                                                                            <iframe  :src="documentos_seguimiento[index]" style="width:100%;height:500px;" class="mb-5"></iframe>
+                                                                    </div>
+                                                                    <!--Mostrar Word-->
+                                                                    <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='doc' || archivos.slice(archivos.lastIndexOf('.') + 1)=='docx'" class="col-12 text-center">
+                                                                    {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br><!--obtengo el nombre del documento con extension-->
+                                                                            <a :href="archivos" :download="nombre_de_descarga">
+                                                                                <img src="img/word.png" style="width:200px" class="mb-5"></img>
+                                                                            </a>
+                                                                    </div>
+                                                                    <!--Mostrar Excel-->
+                                                                    <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='xls' || archivos.slice(archivos.lastIndexOf('.') + 1)=='xlsx'" class="col-12 text-center">
+                                                                    {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br><!--obtengo el nombre del documento con extension-->
+                                                                            <a :href="archivos" :download="nombre_de_descarga">
+                                                                                <img src="img/excel.png" style="width:200px" class="mb-5"></img>
+                                                                            </a>
+                                                                    </div>
+                                                                    <!--Mostrar Power Point -->
+                                                                    <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='ppt' || archivos.slice(archivos.lastIndexOf('.') + 1)=='pptx'" class="col-12 text-center">
+                                                                    {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br> <!--obtengo el nombre del documento con extension-->
+                                                                            <a :href="archivos" :download="nombre_de_descarga">
+                                                                            <img  src="img/powerpoint.png" style="width:200px" class="mb-5"></img>
+                                                                            </a>
+                                                                    </div>
                                                                 </div>
-                                                        </div>-->
+                                                        </div>
+
+                                                          <!-- Mostrando los archivos cargados CO2 -->
+                                                          <div v-if="cual_documento=='Documento CO2'" v-show="documentos_co2.length>0" >
+                                                        
+                                                                <div class="col-12" v-for= "(archivos,index) in documentos_co2">
+
+                                                                    <div class="row">
+                                                                        <span class="badge bg-secondary">Documento {{index+1}}</span><br>
+                                                                    </div>
+
+                                                                   <!--Mostar los JPG y PNG-->
+                                                                   <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='png' || archivos.slice(archivos.lastIndexOf('.') + 1)=='jpg'" class="col-12 text-center">
+                                                                    {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br>
+                                                                        <img  :src="documentos_co2[index]" style="width:50%" class="mb-5"></img>
+                                                                    </div>
+                                                                     <!--Mostrar PDF-->
+                                                                     <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='pdf'"  class="col-12 text-center">
+                                                                     {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br>
+                                                                            <iframe  :src="documentos_co2[index]" style="width:100%;height:500px;"  class="mb-5"></iframe>
+                                                                    </div>
+                                                                    <!--Mostrar Word-->
+                                                                    <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='doc' || archivos.slice(archivos.lastIndexOf('.') + 1)=='docx'" class="col-12 text-center">
+                                                                    {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br><!--obtengo el nombre del documento con extension-->
+                                                                            <a :href="archivos" :download="nombre_de_descarga">
+                                                                                <img src="img/word.png" style="width:200px" class="mb-5"></img>
+                                                                            </a>
+                                                                    </div>
+                                                                    <!--Mostrar Excel-->
+                                                                    <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='xls' || archivos.slice(archivos.lastIndexOf('.') + 1)=='xlsx'" class="col-12 text-center">
+                                                                    {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br><!--obtengo el nombre del documento con extension-->
+                                                                            <a :href="archivos" :download="nombre_de_descarga">
+                                                                                <img src="img/excel.png" style="width:200px" class="mb-5"></img>
+                                                                            </a>
+                                                                    </div>
+                                                                    <!--Mostrar Power Point -->
+                                                                    <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='ppt' || archivos.slice(archivos.lastIndexOf('.') + 1)=='pptx'" class="col-12 text-center">
+                                                                    {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br> <!--obtengo el nombre del documento con extension-->
+                                                                            <a :href="archivos" :download="nombre_de_descarga">
+                                                                            <img  src="img/powerpoint.png" style="width:200px" class="mb-5"></img>
+                                                                            </a>
+                                                                    </div>
+                                                                </div>
+                                                        </div>
                                                 </form>
                                         </div>
                                 </div>
@@ -1334,10 +1497,9 @@ if (isset($_SESSION['nombre'])) {
                     </div>
                 <!--Fin Modal subir seguimiento-->
                 </div>
+
+
                 <!--/////////////////////////////////////////////////////////////GENERAR VALOR////////////////////////////////////////-->
-
-
-
                 <div v-if="ventana=='Generar Valor'">
                 <!--<div class="div-color">
                 Pantalla 

@@ -21,7 +21,9 @@ const AltaProyectos = {
       responsables: [],
       plantas: [],
       areas: [],
+      cual_documento:'',
       proyectoSumas: [],
+      documentos_co2: [],
       /*Alta Proyectos */
       fecha_alta: '',
       nombre_proyecto: '',
@@ -51,7 +53,8 @@ const AltaProyectos = {
       select_pilar: '',
       select_mision: '',
       imagenes: [],
-      documentos: [],
+      documentos_seguimiento: [],
+      documentos_co2: [],
       tons_co2: '',
       ahorro_duro: '$.00',
       ahorro_suave: '$.00',
@@ -60,6 +63,7 @@ const AltaProyectos = {
       objetivo_estrategico: false,
       existeImagenSeleccionada: false,
       existeImagenSeleccionadaSeguimiento: false,
+      existeImagenSeleccionadaCO2: false,
       /*Planta*/ /*Área*/ /*Departamento*/
       nueva: '',
       nuevoNombre: '',
@@ -122,6 +126,8 @@ const AltaProyectos = {
       SumaValorEx: 0,
       SumaSustentableEx: 0,
       myModalSeguimiento: '',
+      myModalCO2: '',
+      nombre_de_descarga:'',
       /*GENERANDO VALOR*/
       select_anio_generando_valor:'',
       sumaClienteValor:'',
@@ -345,7 +351,7 @@ const AltaProyectos = {
             }*/
 
 
-
+            this.buscarDocumentos('Seguimiento')
           } else {
             this.consultarProyectoID() // si no existe seguimientos consultara proyectos para insetarlos primeros registros
           }
@@ -1958,7 +1964,7 @@ const AltaProyectos = {
         this.consultarImpactoAmbiental()
         this.consultarMisiones()
         this.consultarFuentes()
-        this.buscarDocumentos()
+        this.buscarDocumentos('Alta Proyecto')
 
       } else if (modal == "CRUD") {
         this.myModalCRUD = new bootstrap.Modal(document.getElementById("modal-alta-crud"))
@@ -2056,16 +2062,46 @@ const AltaProyectos = {
         this.existeImagenSeleccionadaSeguimiento = true;
       }
     },
-    buscarDocumentos() {
+    verificandoSelecionCO2() {
+      var imagen_seleccion = document.getElementById('input_file_co2').value;
+      if (imagen_seleccion != null) {
+        this.existeImagenSeleccionadaCO2 = true;
+        
+      }
+    },
+    buscarDocumentos(cual_documento) {
       this.imagenes = []
       axios.post("buscar_documentos.php", {
+        documento: cual_documento,
+        id: this.id_proyecto
       })
         .then(response => {
-          this.imagenes = response.data
-          if (this.imagenes.length > 0) {
-            console.log(this.imagenes + "Archivos encontrados.")
-          } else {
-            console.log(this.imagenes + "Sin imagen encontrada.")
+          if(cual_documento=="Alta Proyecto"){
+            this.imagenes = response.data
+            if (this.imagenes.length > 0) {
+              console.log(this.imagenes + "Archivos encontrados.")
+              this.random = Math.random()
+            } else {
+              console.log(this.imagenes + "Sin imagen encontrada.")
+            }
+          }
+          if(cual_documento=="Seguimiento"){
+            this.documentos_seguimiento = response.data
+            if (this.documentos_seguimiento.length > 0) {
+              console.log(this.documentos_seguimiento + "Archivos encontrados.")
+              this.random = Math.random()
+            } else {
+              console.log(this.documentos_seguimiento + "Sin imagen encontrada.")
+            }
+          }
+          if(cual_documento=="Documento CO2"){
+            this.documentos_co2 = response.data
+            if (this.documentos_co2.length > 0) {
+              console.log(this.documentos_co2 + "Archivos encontrados.")
+              this.random = Math.random()
+            } else {
+              console.log(this.documentos_co2 + "Sin imagen encontrada.")
+            }
           }
         })
         .catch(error => {
@@ -2084,9 +2120,14 @@ const AltaProyectos = {
         var files = this.$refs.ref_seguimiento.files;
         var totalfiles = this.$refs.ref_seguimiento.files.length;
       }
+
+      if(cual_documento=='Documento CO2'){
+        var files = this.$refs.ref_co2.files;
+        var totalfiles = this.$refs.ref_co2.files.length;
+      }
      
       for (var index = 0; index < totalfiles; index++) {
-        formData.append("files[]", files[index]);//arreglo de documentos
+        formData.append("files[]", files[index]);//arreglo de documentos_seguimiento
       }
       formData.append("id", this.id_proyecto);
       formData.append("cual_documento", cual_documento);
@@ -2099,23 +2140,31 @@ const AltaProyectos = {
           if(response.data.length>0){
             if(cual_documento == "Alta Proyecto")
             {
-              console.log("estoy en alta")
                 this.imagenes = response.data;
                   if (this.imagenes.length > 0) {
-                    console.log("entre a todo imagen >0")
                     document.getElementById("input_file_subir").value = ""
                     this.existeImagenSeleccionada = false;
                     this.random = Math.random()
                   }
             }
             if(cual_documento == "Seguimiento"){
-                this.documentos = response.data;
-                if (this.documentos.length > 0) {
+                if (response.data.length > 0) {
                   document.getElementById("input_file_seguimiento").value = ""
                   this.existeImagenSeleccionadaSeguimiento = false;
                   this.random = Math.random()
+                  alert("Se agregaron con Éxito")
+                  this.buscarDocumentos('Seguimiento')
                 }
             }
+            if(cual_documento == "Documento CO2"){
+              if (response.data.length > 0) {
+                document.getElementById("input_file_co2").value = ""
+                this.existeImagenSeleccionadaCO2 = false;
+                this.random = Math.random()
+                alert("Se agregaron con Éxito")
+                this.buscarDocumentos('Documento CO2')
+              }
+          }
           }else{
             this.login = false
             alert("Verifique la extension del archivo o Intente nuevamente.")
@@ -2130,9 +2179,45 @@ const AltaProyectos = {
           }, 3000)
         });
     },
+    eliminarDocumento(ruta){
+        axios.post("eliminar_documento.php",{
+            ruta_eliminar: ruta
+        }).then( reponse=>{
+            console.log(reponse)
+            if(reponse.data=="Archivo Eliminado"){
+
+              if(this.cual_documento=="Seguimiento"){
+                console.log("eline a seguimiento")
+                this.buscarDocumentos('Seguimiento')
+              }
+              if(this.cual_documento=="Documento CO2"){
+                console.log("se elimino DOCUMENTO CO2")
+                this.buscarDocumentos('Documento CO2')
+              }
+              alert("Archivo/Documento Eliminado con Éxito")
+                
+            }else if(reponse.data=="No Eliminado"){
+                alert("Algo no salio bien no se logro Eliminar.")
+            }else{
+                alert("Error al eliminar el Documento.")
+            }
+        }).catch(error =>{
+            console.log("Error :-("+error)
+        })
+       }, 
     modal_seguimiento(){
       this.myModalSeguimiento = new bootstrap.Modal(document.getElementById('modal'))
       this.myModalSeguimiento.show()
+      this.cual_documento = "Seguimiento"
+      //this.buscarDocumentos('Seguimiento')
+      
+    },
+    modal_co2(){
+      this.myModalCO2 = new bootstrap.Modal(document.getElementById('modal'))
+      this.myModalCO2.show()
+      this.cual_documento = "Documento CO2"
+      //this.buscarDocumentos('Documento CO2')
+      
     },
     verificarAltaProyecto() {
 

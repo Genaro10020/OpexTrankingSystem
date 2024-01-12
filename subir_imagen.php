@@ -14,11 +14,14 @@ $suma=0;
 $countfiles = count($_FILES['files']['name']);
 //$suma=$countfiles + $cantidad;
 if($_POST['cual_documento']=="Seguimiento"){
-    //echo "LLEGARON".$_POST['id']."y el documento sera:".$_POST['cual_documento'];
     $path = "seguimiento/".$_POST['id']."/";
+}else if($_POST['cual_documento']=="Documento CO2"){
+    $path = "documentosco2/";
 }else{
     $path = "imagenes/";
 }
+   
+
 
 
 
@@ -40,7 +43,7 @@ if (!file_exists($path)) {
                             $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
                             // Validar extensiones permitidas
-                            if($_POST['cual_documento']=="Seguimiento"){
+                            if($_POST['cual_documento']=="Seguimiento" || $_POST['cual_documento']=="Documento CO2"){
                                 $valid_ext = array("png","jpeg","jpg","pdf","doc","docx","ppt","pptx","xls","xlsx");
                             }else{
                                 $valid_ext = array("jpeg","jpg","png");//entension valida para 
@@ -49,7 +52,7 @@ if (!file_exists($path)) {
                             // Revisar extension
                             if(in_array($ext, $valid_ext)){
 
-                                if($_POST['cual_documento']=="Seguimiento"){
+                                if($_POST['cual_documento']=="Seguimiento" || $_POST['cual_documento']=="Documento CO2"){
                                     $filename = str_replace(" ","_", $filename);
                                     $newfilename = $filename;
                                     $ruta_y_doc= $path.$newfilename;
