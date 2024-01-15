@@ -41,6 +41,7 @@ const AltaProyectos = {
       checkObjetivos: [],
       checkImpactoAmbiental: [],
       impactoAmbiental: [],
+      sumasImpactoAmbiental: [],
       selectImpactoAmbiental: '',
       misiones: [],
       allMisiones: [],
@@ -890,9 +891,27 @@ const AltaProyectos = {
             this.impactoAmbiental = []
           }
         } else {
-          alert("La consulta Objetivos, no se realizo correctamente.")
+          alert("La consulta impacto ambieltal, no se realizo correctamente.")
         }
 
+      }).catch(error => {
+        console.log('Erro :-(' + error)
+      }).finally(() => {
+
+      })
+    },
+     /*/////////////////////////////////////////////////////////////////////////////////SUMA IMPACTO AMBIENTAL*/
+     sumaImpactoAmbiental() {
+      axios.post('impactoAmbientalController.php', {
+       suma:'suma'
+      }).then(response => {
+        console.log("SUMAS")
+        console.log(response.data)
+        if (response.data[0][1] == true) {
+            this.sumasImpactoAmbiental = response.data[0][0]
+        } else {
+          alert("La consulta sumaImpactoAmbiental, no se realizo correctamente.")
+        }
       }).catch(error => {
         console.log('Erro :-(' + error)
       }).finally(() => {

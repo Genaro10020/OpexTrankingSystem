@@ -16,6 +16,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
         if(isset($arreglo['nueva'])){
             $nueva = $arreglo['nueva'];
            $val [] = insertarImpactoAmbiental($nueva);     
+        }else if(isset($arreglo['suma'])){
+            $val[] = sumaImpactoAmbiental();
         }else{
             $val [] =  "No existe la variable nueva";
         }

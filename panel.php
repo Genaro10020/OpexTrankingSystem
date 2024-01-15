@@ -16,29 +16,30 @@ if (isset($_SESSION['nombre'])) {
             </div>
             <!--Cinta-->
             <div class="cinta row d-flex align-items-center" style="min-height:5vh; ">
+            
                 <!--Bóton Crear misiones/pilares/Objetivos-->
                 <!--Bóton-->
                 <div class="text-center">
                     <?php if ($_SESSION['acceso'] == 'Admin') { ?>
-                        <button class="btn-menu " @click="ventana='Crear',consultarMisionesRelacional(),consultarObjetivosRelacional(),consultarMisiones(),consultarImpactoAmbiental(),consultarEstandaresCO2(),consultarFuentes(),mostrarHeader=true,sumarSoloUnaVez=0,buscarDocumentos('Documento CO2')">
-                            <i class="bi bi-plus-circle"></i> Crear Catalogos
+                        <button class="btn-menu " @click="ventana='Crear',consultarMisionesRelacional(),consultarObjetivosRelacional(),consultarMisiones(),consultarImpactoAmbiental(),consultarEstandaresCO2(),consultarFuentes(),mostrarHeader=true,sumarSoloUnaVez=0,buscarDocumentos('Documento CO2'),sumaImpactoAmbiental()">
+                            <i class="bi bi-plus-circle"></i> Crear Catálogos
                         </button>
                     <?php } ?>
-                    <button class="btn-menu me-0 mx-sm-3" @click="ventana='Altas',mostrarHeader=true,sumarSoloUnaVez=0">
+                    <button class="btn-menu me-0  mx-sm-3 mt-sm-3" @click="ventana='Altas',mostrarHeader=true,sumarSoloUnaVez=0">
                         <i class="bi bi-plus-circle"></i> Proyectos Creados
                     </button>
 
-                    <button class="btn-menu " @click="ventana='Seguimiento',mostrarHeader=true,sumarSoloUnaVez=0,buscarDocumentos('Documento CO2')">
+                    <button class="btn-menu mb-sm-3 mt-sm-3" @click="ventana='Seguimiento',mostrarHeader=true,sumarSoloUnaVez=0,buscarDocumentos('Documento CO2')">
                         <i class="bi bi-plus-circle"></i> Seguimiento
                     </button>
-                    <button class="btn-menu me-sm-3 ms-sm-3 " @click="ventana='Generar Valor',consultarObjetivosRelacional(),mostrarHeader=false,consultarSeguimientos()">
+                    <button class="btn-menu me-sm-3 ms-sm-3 mb-sm-3" @click="ventana='Generar Valor',consultarObjetivosRelacional(),mostrarHeader=false,consultarSeguimientos()">
                         <i class="bi bi-plus-circle"></i> Generando Valor Sustentable
                     </button>
                     <!--<button class="btn-menu" @click="ventana='Reportes'">
                         <i class="bi bi-plus-circle"></i> Reportes
                     </button>-->
                     <?php if ($_SESSION['acceso'] == 'Admin') { ?>
-                    <button class="btn-menu" @click="ventana='Calendario',mostrarHeader=true, consultarCalendarioProyectos()">
+                    <button class="btn-menu mb-sm-3 " @click="ventana='Calendario',mostrarHeader=true, consultarCalendarioProyectos()">
                         <i class="bi bi-plus-circle"></i> Estatus Captura
                     </button>
                     <?php } ?>
@@ -526,12 +527,12 @@ if (isset($_SESSION['nombre'])) {
                 <!--AQUI TRABAJA //ALTA DE PROYECTOS-->
                 <div class="text-center mt-3" v-if="ventana=='Altas'">
                     <?php if ($_SESSION['acceso'] == 'Admin') { ?>
-                        <button class="btn-menu align-items-center" @click="abrirModal('Alta')">
+                        <button class="btn-menu align-items-center my-2 "  @click="abrirModal('Alta')">
                             <i class="bi bi-plus-circle"></i> Alta Proyecto
                         </button>
                     <?php } ?>
                     <div class="scroll-dos px-2">
-                        <table class="mx-auto mt-5  mb-5 tabla-proyectos">
+                        <table class="mx-auto  mb-5 tabla-proyectos">
                             <thead class="sticky-top">
                                 <th>Fecha</th>
                                 <th>Folio</th>
@@ -647,7 +648,7 @@ if (isset($_SESSION['nombre'])) {
                                     <div class="d-none d-lg-block col-lg-4"></div>
                                     <div class="col-6 col-lg-4 mt-2">Misiones</div>
                                     <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
-                                        <button type="button" class=" btn btn-menu " @Click="modalCatalogos('Crear','Mision')">Crear</button>
+                                        <button type="button" class=" btn btn-menu w-50 " @Click="modalCatalogos('Crear','Mision')">Crear</button>
                                     </div>
 
                                 </div>
@@ -669,7 +670,7 @@ if (isset($_SESSION['nombre'])) {
                                     </thead>
                                     <tbody>
                                         <tr v-for="mision in misiones" style="font-size: 0.7em;">
-                                            <td>
+                                            <td class="text-start">
                                                 {{mision.nombre}}
                                             </td>
                                             <td>
@@ -692,7 +693,7 @@ if (isset($_SESSION['nombre'])) {
                                     <div class="d-none d-lg-block col-lg-4"></div>
                                     <div class="col-6 col-lg-4 mt-2">Pilares Estrategicos</div>
                                     <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
-                                        <button type="button" class=" btn btn-menu " @Click="modalCatalogos('Crear','Pilar')">Crear</button>
+                                        <button type="button" class=" btn btn-menu w-50" @Click="modalCatalogos('Crear','Pilar')">Crear</button>
                                     </div>
 
                                 </div>
@@ -720,7 +721,7 @@ if (isset($_SESSION['nombre'])) {
                                     </thead>
                                     <tbody>
                                         <tr v-for="pilar in pilaresRelacion" style="font-size: 0.7em;">
-                                            <td>
+                                            <td class="text-start">
                                                 {{pilar.nombre}}
                                             </td>
                                             <td>
@@ -749,7 +750,7 @@ if (isset($_SESSION['nombre'])) {
                                     <div class="d-none d-lg-block col-lg-4"></div>
                                     <div class="col-6 col-lg-4 mt-2">Objetivos Estrategicos</div>
                                     <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
-                                        <button type="button" class=" btn btn-menu " @Click="modalCatalogos('Crear','Objetivo')">Crear</button>
+                                        <button type="button" class=" btn btn-menu w-50" @Click="modalCatalogos('Crear','Objetivo')">Crear</button>
                                     </div>
 
                                 </div>
@@ -777,7 +778,7 @@ if (isset($_SESSION['nombre'])) {
                                     </thead>
                                     <tbody>
                                         <tr v-for="objetivo in objetivos_ligados" style="font-size: 0.7em;">
-                                            <td>
+                                            <td class="text-start">
                                                 {{objetivo.nombre_objetivos}}
                                             </td>
                                             <td>
@@ -806,7 +807,7 @@ if (isset($_SESSION['nombre'])) {
                                     <div class="d-none d-lg-block col-lg-4"></div>
                                     <div class="col-6 col-lg-4 mt-2">Impacto Ambiental</div>
                                     <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
-                                        <button type="button" class=" btn btn-menu " @Click="modalCatalogos('Crear','Impacto Ambiental')">Crear</button>
+                                        <button type="button" class=" btn btn-menu w-50" @Click="modalCatalogos('Crear','Impacto Ambiental')">Crear</button>
                                     </div>
 
                                 </div>
@@ -819,6 +820,9 @@ if (isset($_SESSION['nombre'])) {
                                                 Nombre
                                             </th>
                                             <th class="sticky-top thmodal">
+                                                Suma
+                                            </th>
+                                            <th class="sticky-top thmodal">
                                                 Eliminar
                                             </th>
                                             <th class="sticky-top thmodal">
@@ -828,8 +832,13 @@ if (isset($_SESSION['nombre'])) {
                                     </thead>
                                     <tbody>
                                         <tr v-for="impacto in impactoAmbiental" style="font-size: 0.7em;">
-                                            <td>
+                                            <td class="text-start">
                                                 {{impacto.nombre}}
+                                            </td>
+                                            <td>
+                                                <template v-for="(suma,indexImpacto ) in sumasImpactoAmbiental">
+                                                    <label v-if="indexImpacto==impacto.nombre" class="bg-success rounded-pill w-75 text-white ms-2 px-2 text-start">{{suma}}</label>
+                                                </template>
                                             </td>
                                             <td>
                                                 <button type="button" class="myButton" @click="eliminarImpactoAmbiental(impacto.id)"><i class="bi bi-trash3-fill"></i></button>
@@ -853,7 +862,7 @@ if (isset($_SESSION['nombre'])) {
                                         Estandares de CO2
                                     </div>
                                     <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
-                                        <button type="button" class=" btn btn-menu " @Click="modalCatalogos('Crear','Estandar')">Crear</button>
+                                        <button type="button" class=" btn btn-menu w-50" @Click="modalCatalogos('Crear','Estandar')">Crear</button>
                                     </div>
                                 </div>
                             </div>
@@ -887,7 +896,7 @@ if (isset($_SESSION['nombre'])) {
                                                 <button v-if="documentos_co2.length>0" type="button" class="btn btn-success" title="Visualizar/Subir Archivos"  @click="modal_co2()" style="font-size:10px"><i class="bi bi-paperclip"></i>{{documentos_co2.length}} Archivos Encontrados</button>
                                                 <button v-else type="button" class="btn btn-secondary" title="Visualizar/Subir Archivos"  @click="modal_co2()" style="font-size:10px"><i class="bi bi-paperclip"></i>{{documentos_co2.length}} Archivos Encontrados</button>    
                                             </td>
-                                            <td>
+                                            <td class="text-start">
                                                 {{estandar.nombre}}
                                             </td>
                                             <td>
@@ -916,7 +925,7 @@ if (isset($_SESSION['nombre'])) {
                                     <div class="d-none d-lg-block col-lg-4"></div>
                                     <div class="col-6 col-lg-4 mt-2">Fuentes</div>
                                     <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
-                                        <button type="button" class=" btn btn-menu " @Click="modalCatalogos('Crear','Fuente')">Crear</button>
+                                        <button type="button" class=" btn btn-menu w-50" @Click="modalCatalogos('Crear','Fuente')">Crear</button>
                                     </div>
 
                                 </div>
@@ -941,7 +950,7 @@ if (isset($_SESSION['nombre'])) {
                                     </thead>
                                     <tbody>
                                         <tr v-for="fuente in fuentes " style="font-size: 0.7em;">
-                                            <td>
+                                            <td class="text-start">
                                                 {{fuente.nombre}}
                                             </td>
                                             <td>
