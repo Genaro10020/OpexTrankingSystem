@@ -554,12 +554,13 @@ if (isset($_SESSION['nombre'])) {
                                 <th>Estatus</th>
                                 <?php if ($_SESSION['acceso'] == 'Admin') { ?>
                                     <th>Eliminar</th>
+                                    <th>Actualizar</th>
                                 <?php } ?>
                             </thead>
                             <tbody class=" border:1px solid black" style="text-align: center">
                                 <template v-for="(proyecto,index) in proyectos">
                                     <tr v-if="folioAnteriorSinNumeral(proyecto.folio, index)" :class="{ 'divisor-tr-creados': folioAnteriorSinNumeral(proyecto.folio, index)==true}"><!--ES DIFERENTE--->
-                                        <td colspan="19" v-if="index>0"></td>
+                                        <td colspan="20" v-if="index>0"></td>
                                     </tr>
                                     <tr class="cuerpo-tabla-creados border border-secondary" style="vertical-align: middle;" :class="{ 'fila-ultimo-proyecto': buscandoUltimoProyectoCreado(proyecto.nombre_proyecto) }">
                                         <td class="border border-secondary">{{proyecto.fecha}}</td>
@@ -594,6 +595,7 @@ if (isset($_SESSION['nombre'])) {
                                         <td class="border border-secondary"><b><label v-if="proyecto.status_seguimiento!='Cerrado'" class="text-success">Siguiendo</label><label v-else="proyecto.status_seguimiento!='Cerrado'" class="text-danger">{{proyecto.status_seguimiento}}<label></b></td>
                                         <?php if ($_SESSION['acceso'] == 'Admin') { ?>
                                             <td class="border border-secondary"> <button class="rounded-circle bg-danger border border-secondary btn shadow-sm" @click="eliminarProyecto(proyecto.id)"><i class="bi bi-trash3-fill text-white"></i></button></td>
+                                            <td><button type="button" class=" btn boton_actualizar mx-2" @Click="">Actualizar</button></td>
                                         <?php } ?>
                                     </tr>
                                 </template>

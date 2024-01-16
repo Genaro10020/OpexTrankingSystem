@@ -242,6 +242,25 @@ button {
     border-radius: 5px;
 }
 
+.boton_actualizar {
+    width: 100px;
+    background-color: #fbef71;
+    color: rgb(98, 98, 98);
+    font-size: 0.9em;
+    box-shadow: 1px 2px 5px #151515;
+    border: none;
+    transition: all 0.3s;
+}
+
+.boton_actualizar:hover {
+    background-color: #fdee48;
+    color: rgb(84, 84, 84);
+    font-size: 0.9em;
+    box-shadow: 1px 1px 10px #151515;
+    border: none;
+    border-radius: 5px;
+}
+
 
 .boton-aceptar {
     width: 100px;
