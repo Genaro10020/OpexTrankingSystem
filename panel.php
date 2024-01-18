@@ -140,7 +140,7 @@ if (isset($_SESSION['nombre'])) {
                                                 <div><button class="btn-delete" title="Eliminar" @click="eliminarResponsable()"><i class="bi bi-x-circle"></i></button></div>
                                             </div>
 
-                                            <div class="input-group">
+                                            <div class="input-group mb-3">
                                                 <span class="input-group-text w-25">Responsable</span>
                                                 <select v-model="selectResponsable" class="w-50" :class="{'nocontestado': respondio === false && selectResponsable === '', '': selectResponsable !== ''}">
                                                     <option value="" disabled selected>Seleccione..</option>
@@ -167,11 +167,27 @@ if (isset($_SESSION['nombre'])) {
                                                         <span class="input-group-text w-25">Teléfono</span>
                                                         <input type="text" v-model="telefono" class="w-75" :disabled="!nuevoResponsable">
                                                     </div>
+                                                    <!--<div class="mb-3">
+                                                        <label class="me-2 text-center">¿Es usuario de finanzas?</label>
+                                                        <input type="checkbox" v-model="financiero" :disabled="!nuevoResponsable">
+                                                    </div>-->
                                                 </div>
                                                 <div class="col-2 my-auto text-center">
                                                     <button type="button" v-if="nuevoResponsable==true && actualizarResponsable==false" class="btn-nuevo-responsable" @click="insertarResponsable()">Crear</button>
                                                     <button type="button" v-if="actualizarResponsable" class="btn-actualizar-responsable" @click="actualizandoResponsable()">Actualiazar</button>
                                                     <button type="button" class="btn-cancelar-responsable mt-3" @click="cancelar()">Cancelar</button>
+                                                </div>
+                                            </div>
+                                            <!--Observadores-->
+                                            <div class="input-group">
+                                            <span class="input-group-text w-25">Observador (Opcional)</span>
+                                                <div class="scroll w-50">
+                                                    <div class="form-check border border-1 mt-1" v-for="(responsable, index) in responsables" :key="index">
+                                                        <input class="form-check-input" type="checkbox" :value="responsable.nombre+'<->'+responsable.numero_nomina" v-model="checkObservadores">
+                                                        <label class="form-check-label">
+                                                            {{ responsable.nombre }}
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -554,7 +570,7 @@ if (isset($_SESSION['nombre'])) {
                                 <th>Estatus</th>
                                 <?php if ($_SESSION['acceso'] == 'Admin') { ?>
                                     <th>Eliminar</th>
-                                    <th>Actualizar</th>
+                                    <!--<th>Actualizar</th>-->
                                 <?php } ?>
                             </thead>
                             <tbody class=" border:1px solid black" style="text-align: center">
@@ -594,8 +610,8 @@ if (isset($_SESSION['nombre'])) {
                                         <td class="border border-secondary">{{proyecto.ahorro_suave}}<br> <label class="text-primary" v-if="proyectoSumas[proyecto.id]"><b>{{proyectoSumas[proyecto.id].sumaSuave}}<b><label></td>
                                         <td class="border border-secondary"><b><label v-if="proyecto.status_seguimiento!='Cerrado'" class="text-success">Siguiendo</label><label v-else="proyecto.status_seguimiento!='Cerrado'" class="text-danger">{{proyecto.status_seguimiento}}<label></b></td>
                                         <?php if ($_SESSION['acceso'] == 'Admin') { ?>
-                                            <td class="border border-secondary"> <button class="rounded-circle bg-danger border border-secondary btn shadow-sm" @click="eliminarProyecto(proyecto.id)"><i class="bi bi-trash3-fill text-white"></i></button></td>
-                                            <td><button type="button" class=" btn boton_actualizar mx-2" @Click="">Actualizar</button></td>
+                                            <td class="border border-secondary"> <button class="rounded-circle bg-danger border border-secondary btn shadow-sm" @click="eliminarProyecto(proyecto.id,proyecto.nombre_proyecto)"><i class="bi bi-trash3-fill text-white"></i></button></td>
+                                            <!--<td><button type="button" class=" btn boton_actualizar mx-2" @Click="">Actualizar</button></td>-->
                                         <?php } ?>
                                     </tr>
                                 </template>
@@ -1242,19 +1258,19 @@ if (isset($_SESSION['nombre'])) {
                 <div v-if="ventana=='Seguimiento'">
                           <div class="col-12">                     
                                     <div class="row">
-                                        <div class="col-6">
+                                        <div class="col-12 col-lg-6">
                                                 <div class="input-group mt-3 mx-2 mb-2 ">
                                                     <span class="input-group-text w-5">Seleccione Proyecto</span>
-                                                    <select class="w-5" @keydown.up="cancelarEvento" @keydown.down="cancelarEvento" @keydown.left="cancelarEvento" @keydown.right="cancelarEvento" @change="consultarImpactoAmbieltalXProyectoID()" v-model="id_proyecto">
-                                                        <option value="">Seleccione...</option>
-                                                        <option v-for="proyecto in proyectos" :value="proyecto.id">{{proyecto.nombre_proyecto}}</option>
+                                                    <select class="w-50" @keydown.up="cancelarEvento" @keydown.down="cancelarEvento" @keydown.left="cancelarEvento" @keydown.right="cancelarEvento" @change="consultarImpactoAmbieltalXProyectoID()" v-model="id_proyecto">
+                                                        <option value="" disabled>Seleccione...</option>
+                                                        <option v-for="proyecto in proyectos" :value="proyecto.id" style="font-size:15px;">{{proyecto.nombre_proyecto}}</option>
                                                     </select>
-                                                    <button v-if="documentos_seguimiento.length>0" type="button" class="btn btn-success" title="Visualizar/Subir Archivos"  @click="modal_seguimiento()" style="font-size:10px"><i class="bi bi-paperclip"></i>{{documentos_seguimiento.length}} Archivos Encontrados</button>
-                                                    <button v-else type="button" class="btn btn-secondary" title="Visualizar/Subir Archivos"  @click="modal_seguimiento()" style="font-size:10px"><i class="bi bi-paperclip"></i>{{documentos_seguimiento.length}} Archivos Encontrados</button>
+                                                    <button v-show="id_proyecto!=''" v-if="documentos_seguimiento.length>0" type="button" class="btn btn-success" title="Visualizar/Subir Archivos"  @click="modal_seguimiento()" style="font-size:10px"><i class="bi bi-paperclip"></i>{{documentos_seguimiento.length}} Archivos Encontrados</button>
+                                                    <button v-show="id_proyecto!=''" v-else type="button" class="btn btn-secondary" title="Visualizar/Subir Archivos"  @click="modal_seguimiento()" style="font-size:10px"><i class="bi bi-paperclip"></i>{{documentos_seguimiento.length}} Archivos Encontrados</button>
                                                 </div>
                                         </div>
-                                        <div class="col-6">
-                                                <div class="input-group mt-3 mx-2 mb-2 ">
+                                        <div class="col-12 col-lg-6">
+                                                <div class="input-group mt-3 mx-2 mb-2 d-flex justify-content-start justify-content-lg-center">
                                                     <span class="input-group-text w-5">Documentos estandares CO<label style="font-size:8px" class="mt-1">2</label></span>
                                                     <button v-if="documentos_co2.length>0" type="button" class="btn btn-success" title="Visualizar"  @click="modal_co2()" style="font-size:10px"><i class="bi bi-paperclip"></i>{{documentos_co2.length}} Archivos Encontrados</button>
                                                     <button v-else type="button" class="btn btn-secondary" title="Visualizar/Subir Archivos"  @click="modal_co2()" style="font-size:10px"><i class="bi bi-paperclip"></i>{{documentos_co2.length}} Archivos Encontrados</button>

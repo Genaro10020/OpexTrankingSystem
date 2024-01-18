@@ -28,7 +28,7 @@ if (isset($_SESSION['nombre'])) {
             // Manejar solicitud POST (creación)
             if (
                 isset($arreglo['folio']) && isset($arreglo['fecha_alta']) && isset($arreglo['nombre_proyecto']) && isset($arreglo['fuente']) && isset($arreglo['select_planta']) && isset($arreglo['select_area'])
-                && isset($arreglo['select_departamento']) && isset($arreglo['select_metodologia']) && isset($arreglo['responsable_id']) && isset($arreglo['misiones'])
+                && isset($arreglo['select_departamento']) && isset($arreglo['select_metodologia']) && isset($arreglo['responsable_id']) && isset($arreglo['observador']) && isset($arreglo['misiones'])
                 && isset($arreglo['pilares']) && isset($arreglo['objetivos']) && isset($arreglo['impacto_ambiental']) && isset($arreglo['tons_co2'])
                 && isset($arreglo['ahorro_duro']) && isset($arreglo['ahorro_suave'])
             ) {
@@ -41,6 +41,7 @@ if (isset($_SESSION['nombre'])) {
                 $departamento = $arreglo['select_departamento'];
                 $metodologia = $arreglo['select_metodologia'];
                 $responsable_id = $arreglo['responsable_id'];
+                $observador = $arreglo['observador'];
                 $misiones = $arreglo['misiones'];
                 $pilares = $arreglo['pilares'];
                 $objetivos = $arreglo['objetivos'];
@@ -52,10 +53,11 @@ if (isset($_SESSION['nombre'])) {
                 $ahorro_duro = $arreglo['ahorro_duro'];
                 $ahorro_suave = $arreglo['ahorro_suave'];
                 $misiones = json_encode($misiones, JSON_UNESCAPED_UNICODE); //conviertiendo arreglos en cadena
+                $observador = json_encode($observador, JSON_UNESCAPED_UNICODE); //conviert
                 $pilares = json_encode($pilares, JSON_UNESCAPED_UNICODE); //conviertiendo arreglos en cadena
                 $objetivos = json_encode($objetivos, JSON_UNESCAPED_UNICODE); //conviertiendo arreglos en cadena
                 $impacto_ambiental = json_encode($impacto_ambiental, JSON_UNESCAPED_UNICODE); //conviertiendo arreglos en cadena
-                $val[] = insertarProyecto($folio, $fecha_alta, $nombre_proyecto, $fuente, $planta, $area, $departamento, $metodologia, $responsable_id, $misiones, $pilares, $objetivos, $impacto_ambiental, $tons_co2, $ahorro_duro, $ahorro_suave);
+                $val[] = insertarProyecto($folio, $fecha_alta, $nombre_proyecto, $fuente, $planta, $area, $departamento, $metodologia, $responsable_id,$observador, $misiones, $pilares, $objetivos, $impacto_ambiental, $tons_co2, $ahorro_duro, $ahorro_suave);
             } else if (isset($arreglo['id_proyecto'])) {
 
                 $id_proyecto = $arreglo['id_proyecto'];

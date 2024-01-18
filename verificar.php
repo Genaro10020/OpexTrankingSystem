@@ -27,7 +27,11 @@ $contrasena = $arreglo['contrasena'];
                                     while ($dato=mysqli_fetch_array($query)) {
                                         $_SESSION['nombre']=$dato['nombre'];
                                         $_SESSION['nomina']=$dato['numero_nomina'];
-                                        $_SESSION['acceso']='Usuario';
+                                        if($dato['tipo_usuario']=="Financiero"){
+                                                $_SESSION['acceso']='Financiero';
+                                        }else{
+                                                $_SESSION['acceso']='Usuario';
+                                        }
                                 $resultado = "Autorizado";
                                         }
                         }else{

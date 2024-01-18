@@ -14,12 +14,13 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
     case 'POST':
         // Manejar solicitud POST (creación)
-        if(isset($arreglo['nombre']) && isset($arreglo['numero_nomina']) && isset($arreglo['correo']) && isset($arreglo['telefono'])){
+        if(isset($arreglo['nombre']) && isset($arreglo['numero_nomina']) && isset($arreglo['correo']) && isset($arreglo['telefono']) && isset($arreglo['financiero'])){
             $nombre=$arreglo['nombre'];
             $numero_nomina=$arreglo['numero_nomina'];
             $correo=$arreglo['correo'];
             $telefono=$arreglo['telefono'];
-            $val[]=insertarResponsable($nombre,$numero_nomina,$correo,$telefono);
+            $financiero=$arreglo['financiero'];
+            $val[]=insertarResponsable($nombre,$numero_nomina,$correo,$telefono,$financiero);
         }else if(isset($arreglo['id'])){
             $id=$arreglo['id'];
             $val[] = consultarResponsableID($id);
@@ -31,13 +32,14 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
     case 'PUT':
         // Manejar solicitud PUT (actualización)
-        if(isset($arreglo['nombre']) && isset($arreglo['numero_nomina']) && isset($arreglo['correo']) && isset($arreglo['telefono']) && isset($arreglo['id'])){
+        if(isset($arreglo['nombre']) && isset($arreglo['numero_nomina']) && isset($arreglo['correo']) && isset($arreglo['telefono']) && isset($arreglo['financiero']) && isset($arreglo['id'])){
             $nombre=$arreglo['nombre'];
             $numero_nomina=$arreglo['numero_nomina'];
             $correo=$arreglo['correo'];
             $telefono=$arreglo['telefono'];
+            $financiero=$arreglo['financiero'];
             $id=$arreglo['id'];
-            $val[] = actualizarResponsable($id,$nombre,$numero_nomina,$correo,$telefono);
+            $val[] = actualizarResponsable($id,$nombre,$numero_nomina,$correo,$telefono,$financiero);
         }else{
             $val[] = "No llegaron todas la variables requeridas";
         }

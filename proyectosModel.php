@@ -11,6 +11,9 @@ function consultarProyectos()
         $consulta = "SELECT * FROM proyectos_creados ORDER BY folio ASC";
     } else {
         $consulta = "SELECT * FROM proyectos_creados WHERE nomina='$nomina' ORDER BY folio ASC";
+       // $consulta = "SELECT * FROM proyectos_creados WHERE nomina='$nomina' OR JSON_SEARCH(observador, 'one', '$nomina') IS NOT NULL ORDER BY folio ASC"; //Explico la consulta la convierto a JSON, busco por lo menos una coincidencia pero no busca cuando es nulo.
+        //$consulta = "SELECT * FROM proyectos_creados WHERE nomina='$nomina' OR (observador IS NOT NULL AND JSON_SEARCH(observador, 'one', '$nomina') IS NOT NULL) ORDER BY folio ASC";
+        //$consulta = "SELECT * FROM proyectos_creados WHERE nomina='$nomina' OR (COALESCE(observador, '[]') IS NOT NULL AND JSON_SEARCH(COALESCE(observador, '[]'), 'one', '$nomina') IS NOT NULL) ORDER BY folio ASC";
     }
 
     $query = $conexion->query($consulta);
@@ -174,7 +177,7 @@ function consultarProyectosID($id_proyecto)
     return array($resultado, $estado);
 }
 
-function insertarProyecto($folio, $fecha_alta, $nombre_proyecto, $fuente, $planta, $area, $departamento, $metodologia, $responsable_id, $misiones, $pilares, $objetivos, $impacto_ambiental, $tons_co2, $ahorro_duro, $ahorro_suave)
+function insertarProyecto($folio, $fecha_alta, $nombre_proyecto, $fuente, $planta, $area, $departamento, $metodologia, $responsable_id, $observador, $misiones, $pilares, $objetivos, $impacto_ambiental, $tons_co2, $ahorro_duro, $ahorro_suave)
 {
     global $conexion;
     $folio_sin_numero = "";
@@ -182,6 +185,9 @@ function insertarProyecto($folio, $fecha_alta, $nombre_proyecto, $fuente, $plant
     $igual = "";
     $numero = 1;
     $ultimoNum = "";
+    if($observador=='[""]'){
+        $observador = "";
+    }
     $select = "SELECT folio FROM proyectos_creados WHERE folio LIKE '$folio%' ORDER BY id DESC LIMIT 1";
     $query = $conexion->query($select);
     if ($query) {
@@ -219,9 +225,9 @@ function insertarProyecto($folio, $fecha_alta, $nombre_proyecto, $fuente, $plant
         $fecha_invertida = $separando[2] . "-" . $separando[1] . "-" . $separando[0];
         $estado  = true;
         //Inserto el proyecto
-        $query = "INSERT INTO proyectos_creados (folio,fecha, fuente, nombre_proyecto, planta, area, departamento, metodologia,nomina, responsable,correo,telefono, misiones,pilares,objetivos,impacto_ambiental, tons_co2, ahorro_duro, ahorro_suave) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $query = "INSERT INTO proyectos_creados (folio,fecha, fuente, nombre_proyecto, planta, area, departamento, metodologia,nomina, responsable,correo,telefono, misiones,pilares,objetivos,impacto_ambiental, tons_co2, ahorro_duro, ahorro_suave,observador) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $stmt = $conexion->prepare($query);
-        $stmt->bind_param("sssssssssssssssssss", $nuevo_folio, $fecha_invertida, $fuente, $nombre_proyecto, $planta, $area, $departamento, $metodologia, $nomina, $nombre_responsable, $correo_responsable, $telefono_responsable, $misiones, $pilares, $objetivos, $impacto_ambiental, $tons_co2, $ahorro_duro, $ahorro_suave);
+        $stmt->bind_param("ssssssssssssssssssss", $nuevo_folio, $fecha_invertida, $fuente, $nombre_proyecto, $planta, $area, $departamento, $metodologia, $nomina, $nombre_responsable, $correo_responsable, $telefono_responsable, $misiones, $pilares, $objetivos, $impacto_ambiental, $tons_co2, $ahorro_duro, $ahorro_suave,$observador);
         if ($stmt->execute()) {
             $estado = true;
             //insertado el proyecto, ahora inserto los impactos ambientales en otra tabla

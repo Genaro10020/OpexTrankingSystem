@@ -34,13 +34,19 @@ include("conexionGhoner.php");
 
 
 
-    function insertarResponsable($nombre,$nomina,$correo,$telefono){
+    function insertarResponsable($nombre,$nomina,$correo,$telefono,$financiero){
         global $conexion;
         $estado = false;
         $contrasena = "123456"; 
-        $insertar = "INSERT INTO responsables (nombre,numero_nomina,contrasena,correo,telefono) VALUES (?,?,?,?,?)";
+        if($financiero==true){
+            $financiero = "Financiero";
+            $contrasena = "Financiero.".$nomina; 
+        }else{
+            $financiero = "";
+        }
+        $insertar = "INSERT INTO responsables (nombre,numero_nomina,contrasena,correo,telefono,tipo_usuario) VALUES (?,?,?,?,?,?)";
         $stmt = $conexion->prepare($insertar);
-        $stmt->bind_param("sssss",$nombre,$nomina,$contrasena,$correo,$telefono);
+        $stmt->bind_param("ssssss",$nombre,$nomina,$contrasena,$correo,$telefono,$financiero);
         if($stmt->execute()){
             $estado = true;
         }
@@ -50,12 +56,19 @@ include("conexionGhoner.php");
 
 
 
-    function actualizarResponsable($id,$nombre,$numero_nomina,$correo,$telefono){
+    function actualizarResponsable($id,$nombre,$numero_nomina,$correo,$telefono,$financiero){
         global $conexion;
         $estado = false;
-        $update = "UPDATE responsables SET nombre=?, numero_nomina=?, correo=?, telefono=? WHERE  id=?";
+        $contrasena = "123456"; 
+        if($financiero==true){
+            $financiero = "Financiero";
+            $contrasena = "Financiero.".$numero_nomina; 
+        }else{
+            $financiero = "";
+        }
+        $update = "UPDATE responsables SET nombre=?, numero_nomina=?, contrasena=?, correo=?, telefono=?,tipo_usuario=? WHERE  id=?";
         $stmt = $conexion->prepare($update);
-        $stmt->bind_param("ssssi", $nombre,$numero_nomina,$correo,$telefono, $id);
+        $stmt->bind_param("ssssssi", $nombre,$numero_nomina,$contrasena,$correo,$telefono,$financiero, $id);
         if($stmt->execute()){
             $estado = true;
         }

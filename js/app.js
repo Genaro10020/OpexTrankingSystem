@@ -31,6 +31,7 @@ const AltaProyectos = {
       fuentes: [],
       departamentos: [],
       metodologias: [],
+      checkObservadores:[],
       pilares: [],
       pilaresRelacion: [],
       allPilares: [],
@@ -76,6 +77,7 @@ const AltaProyectos = {
       numero_nomina: '',
       correo: '',
       telefono: '',
+      financiero:false,
       responsableID: [],
       random: '',
       /*Impacto Ambiental */
@@ -513,6 +515,7 @@ const AltaProyectos = {
               this.numero_nomina = this.responsableID[0].numero_nomina
               this.correo = this.responsableID[0].correo
               this.telefono = this.responsableID[0].telefono
+              if(this.responsableID[0].tipo_usuario=="Financiero"){this.financiero = true;}else{this.financiero = false;}
             }
           } else {
             alert("La consulta responsables no se realizo correctamente.")
@@ -1122,13 +1125,13 @@ const AltaProyectos = {
 
     /*/////////////////////////////////////////////////////////////////////////////////INSERTAR RESPONSABLE*/
     insertarResponsable() {
-      var nuevo = this.nombre
       if (this.nuevoResponsable == true && this.nombre != '' && this.numero_nomina != '' && this.correo != '' && this.telefono != '') {
         axios.post('responsablesController.php', {
           nombre: this.nombre,
           numero_nomina: this.numero_nomina,
           correo: this.correo,
           telefono: this.telefono,
+          financiero: this.financiero
         }).then(response => {
           console.log(response.data)
           if (response.data[0] == true) {
@@ -1138,6 +1141,7 @@ const AltaProyectos = {
             this.numero_nomina = ''
             this.correo = ''
             this.telefono = ''
+            this.financiero = false
             this.nuevoResponsable = false
           } else {
             alert("La inserción Responsable, no se realizo correctamente.")
@@ -1357,6 +1361,7 @@ const AltaProyectos = {
         numero_nomina: this.numero_nomina,
         correo: this.correo,
         telefono: this.telefono,
+        financiero: this.financiero,
         id: this.id
       }).then(response => {
         console.log(response.data)
@@ -1366,6 +1371,7 @@ const AltaProyectos = {
           this.numero_nomina = ''
           this.correo = ''
           this.telefono = ''
+          this.financiero = false
           this.id = ''
           this.actualizarResponsable = false
           this.nuevoResponsable = false
@@ -1901,8 +1907,8 @@ const AltaProyectos = {
         })
       }
     },
-    eliminarProyecto(id) {
-      if (confirm("¿Desea eliminar el Proyecto?")) {
+    eliminarProyecto(id,nombre_proyecto) {
+      if (confirm("¿Desea eliminar el Proyecto '"+nombre_proyecto+"'?")) {
         axios.delete('proyectosController.php', {
           data: {
             id: id
@@ -1912,9 +1918,9 @@ const AltaProyectos = {
           if (response.data[0] == true) {
             this.consultarProyectos();
             this.id = ''
-            alert("Se elimino Correctamente.")
+            alert("Se elimino Correctamente el proyecto '"+nombre_proyecto+"'.")
           } else {
-            alert("No se elimino al Responsable.")
+            alert("No se elimino el proyecto '"+nombre_proyecto+"'.")
           }
         }).catch(error => {
           //console.log('Erro :-('+error)
@@ -2193,9 +2199,10 @@ const AltaProyectos = {
           this.login = false
           console.log(error);
         }).finally(() => {
-          setTimeout(() => {
+          this.login = false
+          /*setTimeout(() => {
             this.login = false
-          }, 3000)
+          }, 3000)*/
         });
     },
     eliminarDocumento(ruta){
@@ -2306,6 +2313,19 @@ const AltaProyectos = {
       const separandoResponsable = this.selectResponsable.split('<->');
       var responsable_id = separandoResponsable[0];
 
+
+      //Observador 
+      var arreglo_observador = [];
+      for (let i = 0; i < this.checkObservadores.length; i++){
+        var observador = this.checkObservadores[i].split('<->')[1];
+        arreglo_observador.push(observador);
+      }
+
+      if(arreglo_observador.length<=0){
+        arreglo_observador.push('');
+      }
+
+
       //Utilizo para tomar todos los nombres.
       console.log(this.checkMisiones)
       var misiones_nombres = [];
@@ -2401,11 +2421,12 @@ const AltaProyectos = {
         impacto_ambiental_nombres.push('Sin Impacto')
       }
 
-      console.log(impacto_ambiental_nombres)
+      
+      console.log(arreglo_observador)
       //Folio proyecto
 
       var folio = siglasPlanta + "-" + siglasArea + '-' + siglasDepartamento + '-P' + siglasPilaresConcatenado + '-O' + siglasObjetivosConcatenado;
-      console.log(fuenteConSiglas);
+      //console.log(fuenteConSiglas);
 
       axios.post("proyectosController.php", {
         folio: folio,
@@ -2417,6 +2438,7 @@ const AltaProyectos = {
         select_departamento: departamento,
         select_metodologia: metodologia,
         responsable_id: responsable_id,
+        observador:arreglo_observador,
         misiones: misiones_nombres,
         pilares: pilares_nombres,
         objetivos: combinadoObjetivo,
@@ -2438,6 +2460,7 @@ const AltaProyectos = {
             this.selectDepartamento = ''
             this.selectMetodologia = ''
             this.selectResponsable = ''
+            this.checkObservadores =[]
             this.checkMisiones = []
             this.checkPilares = []
             this.selectPilar = []
@@ -2448,7 +2471,9 @@ const AltaProyectos = {
             this.ahorro_duro = "$.00"
             this.ahorro_suave = "$.00"
             this.objetivo_estrategico = false
-            this.nombre_proyecto = ''
+            setTimeout(()=>{
+              this.nombre_proyecto = ''
+            },4000)
           }
         } else {
           alert("No se dio de alta el proyecto.")
