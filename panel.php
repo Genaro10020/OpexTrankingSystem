@@ -5,7 +5,8 @@ if (isset($_SESSION['nombre'])) {
     <html lang="en">
 
     <head>
-        <?php include('head.php'); ?>
+        <?php 
+        include('head.php'); ?>
     </head>
 
     <body class="container-fluid d-flex flex-column body-principal" style="min-height: 100vh;">
@@ -38,7 +39,7 @@ if (isset($_SESSION['nombre'])) {
                     <!--<button class="btn-menu" @click="ventana='Reportes'">
                         <i class="bi bi-plus-circle"></i> Reportes
                     </button>-->
-                    <?php if ($_SESSION['acceso'] == 'Admin') { ?>
+                    <?php if ($_SESSION['acceso'] == 'Admin' || $_SESSION['acceso'] == 'Financiero') { ?>
                     <button class="btn-menu mb-sm-3 " @click="ventana='Calendario',mostrarHeader=true, consultarCalendarioProyectos()">
                         <i class="bi bi-plus-circle"></i> Estatus Captura
                     </button>
@@ -1851,49 +1852,79 @@ if (isset($_SESSION['nombre'])) {
                             <option v-for="(year,index) in years" :value="year">{{year}}</option>
                         </select>
                     </div>
-                    <table class="table table-bordered table-striped table-hover text-center">
-                        <thead>
-                            <tr>
-                                <th>Nombre del Proyecto</th>
-                                <th>Estatus</th>
-                                <th>Enero</th>
-                                <th>Febrero</th>
-                                <th>Marzo</th>
-                                <th>Abril</th>
-                                <th>Mayo</th>
-                                <th>Junio</th>
-                                <th>Julio</th>
-                                <th>Agosto</th>
-                                <th>Septiembre</th>
-                                <th>Octubre</th>
-                                <th>Noviembre</th>
-                                <th>Diciembre</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-if="proyectosXanioCalendario.length>0" v-for="proyectosXanio in proyectosXanioCalendario">
-                                <th class="text-start">{{proyectosXanio.nombre_proyecto}}</th>
-                                <td>
-                                    <!--<span class="badge bg-dark" style=" font-size: 8px" v-if="cantidadMesesRegistrados[proyectosXanio.id]>11">Finalizado</span><br>-->
-                                    <span v-if="proyectosXanio.status_seguimiento=='Cerrado'" class="badge bg-dark" style="font-size: 8px">Finalizado</span> 
-                                    <span v-else class="badge bg-success" style=" font-size: 8px">Seguiendo</span>
-                                </td>
-                                <td v-for="x in 12">
-                                    <template v-for="proyectosDatosCalendario in proyectosDatosCalendario">
-                                        <div v-if="proyectosDatosCalendario.proyectoID==proyectosXanio.id && proyectosDatosCalendario.mes==x && proyectosDatosCalendario.anio==select_anio_calendario" >
-                                            <i class="bi bi-check2"></i>
-                                            <!--<span class="badge bg-dark" style=" font-size: 8px">Finalizado</span>-->
-                                        </div>
-                                    </template>
-                                </td>
-                            </tr>
-                            <tr v-else>
-                                <td colspan="13">
-                                    <label>No existe seguimiento de proyectos {{select_anio_calendario}}</label>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                            <div class="scroll-dos">
+                                    <table class="table table-bordered table-striped table-hover text-center">
+                                        <thead>
+                                            <tr  style="font-size:10px;">
+                                                <th style="min-width:250px">Nombre del Proyecto</th>
+                                                <th>Estatus</th>
+                                                <th>Enero</th>
+                                                <th>Febrero</th>
+                                                <th>Marzo</th>
+                                                <th>Abril</th>
+                                                <th>Mayo</th>
+                                                <th>Junio</th>
+                                                <th>Julio</th>
+                                                <th>Agosto</th>
+                                                <th>Septiembre</th>
+                                                <th>Octubre</th>
+                                                <th>Noviembre</th>
+                                                <th>Diciembre</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-if="proyectosXanioCalendario.length>0" v-for="proyectosXanio in proyectosXanioCalendario">
+                                                <th class="text-start" style="font-size:10px;">{{proyectosXanio.nombre_proyecto}}</th>
+                                                <td>
+                                                    <!--<span class="badge bg-dark" style=" font-size: 8px" v-if="cantidadMesesRegistrados[proyectosXanio.id]>11">Finalizado</span><br>-->
+                                                    <span v-if="proyectosXanio.status_seguimiento=='Cerrado'" class="badge bg-dark" style="font-size: 8px">Finalizado</span> 
+                                                    <span v-else class="badge bg-success" style=" font-size: 8px">Seguiendo</span>
+                                                </td>
+                                                <td v-for="x in 12">
+                                                    <template v-for="proyectosDatosCalendario in proyectosDatosCalendario">
+                                                        <div v-if="proyectosDatosCalendario.proyectoID==proyectosXanio.id && proyectosDatosCalendario.mes==x && proyectosDatosCalendario.anio==select_anio_calendario" >
+                                                            <i class="bi bi-check2"></i>
+                                                            <span class="badge rounded-pill alert-dark"  style=" font-size: 8px">Ahorro Duro:<br><label class="text-dark">{{proyectosDatosCalendario.ahorro_duro}}<label></span>
+                                                            <span class="badge rounded-pill alert-warning"  style=" font-size: 8px">Ahorro Suave:<br>{{proyectosDatosCalendario.ahorro_suave}}</span>
+                                                            <!--<span class="badge bg-dark" style=" font-size: 8px">Finalizado</span>-->
+                                                        </div>
+                                                    </template>
+                                                </td>
+                                            </tr>
+                                            <tr v-else>
+                                                <td colspan="13">
+                                                    <label>No existe seguimiento de proyectos {{select_anio_calendario}}</label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td class="align-middle" style="font-size:10px">Totales</td>
+                                                <td v-for="x in 12" style="font-size:12px" class="text-start"><!--Columna de Sumas X Anio-->
+                                                        <div v-show="calendarioSumaXMesAnio.sumas_ahorro_duro && calendarioSumaXMesAnio.sumas_ahorro_duro[x.toString()]" class="alert alert-dark" role="alert" style="min-width:170px;">
+                                                                <label>Ah. S.: </label>&nbsp;<label> {{ calendarioSumaXMesAnio.sumas_ahorro_suave && calendarioSumaXMesAnio.sumas_ahorro_suave[x.toString()]}}</label>
+                                                        <hr>
+                                                                <label>Ah. D.: </label>&nbsp;<label> {{ calendarioSumaXMesAnio.sumas_ahorro_duro && calendarioSumaXMesAnio.sumas_ahorro_duro[x.toString()]}}</label>
+                                                        </div>
+                                                        
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td class="align-middle" style="font-size:10px">Total Real: </td>
+                                                <td v-for="x in 12" style="font-size:12px" class="text-start"><!--Columna de Sumas X Anio-->
+                                                        <div class="text-center" v-show="calendarioSumaXMesAnio.sumas_ahorro_duro && calendarioSumaXMesAnio.sumas_ahorro_duro[x.toString()]">
+                                                            <?php if ($_SESSION['acceso']=="Financiero"){ ?>
+                                                                <input type="text"></input><br>
+                                                                <label>Validar</label>&nbsp;<input class="form-check-input" type="checkbox" @change="guardarValidacionFinanciera(x)">
+                                                            <?php } ?>
+                                                            <br><label>Representante Financiero</label>
+                                                            <br><label class="text-primary">Pendiente</label>
+                                                        </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
                 </div>
                 <!--////////////////////////////////////////////// FIN DE COMPETENCIA -->
             </div><!--cuerpo-->

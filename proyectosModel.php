@@ -7,13 +7,10 @@ function consultarProyectos()
     global $conexion;
     $resultado = [];
     $estado = false;
-    if ($_SESSION['acceso'] == "Admin") {
+    if ($_SESSION['acceso'] == "Admin" || $_SESSION['acceso'] == "Financiero") {
         $consulta = "SELECT * FROM proyectos_creados ORDER BY folio ASC";
     } else {
-        $consulta = "SELECT * FROM proyectos_creados WHERE nomina='$nomina' ORDER BY folio ASC";
-       // $consulta = "SELECT * FROM proyectos_creados WHERE nomina='$nomina' OR JSON_SEARCH(observador, 'one', '$nomina') IS NOT NULL ORDER BY folio ASC"; //Explico la consulta la convierto a JSON, busco por lo menos una coincidencia pero no busca cuando es nulo.
-        //$consulta = "SELECT * FROM proyectos_creados WHERE nomina='$nomina' OR (observador IS NOT NULL AND JSON_SEARCH(observador, 'one', '$nomina') IS NOT NULL) ORDER BY folio ASC";
-        //$consulta = "SELECT * FROM proyectos_creados WHERE nomina='$nomina' OR (COALESCE(observador, '[]') IS NOT NULL AND JSON_SEARCH(COALESCE(observador, '[]'), 'one', '$nomina') IS NOT NULL) ORDER BY folio ASC";
+        $consulta = "SELECT * FROM proyectos_creados WHERE nomina='$nomina' OR observador LIKE '%$nomina%' ORDER BY folio ASC";
     }
 
     $query = $conexion->query($consulta);
@@ -96,15 +93,42 @@ function consultarCalendarioProyecto($anio)
 {
     global $conexion;
     $resultado1 = [];
+    $sumasPorMes['sumas_ahorro_duro'] = [];
+    $sumasPorMes['sumas_ahorro_suave'] = [];
     $estado1 = false;
-    $consulta = "SELECT DISTINCT proyectos_creados.id AS proyectoID, proyectos_creados.nombre_proyecto, registros_impacto_ambiental.mes, registros_impacto_ambiental.anio, proyectos_creados.id /*Datos Proyecto */
+    $suma = 0;
+    $consulta = "SELECT DISTINCT proyectos_creados.id AS proyectoID, proyectos_creados.nombre_proyecto, registros_impacto_ambiental.mes, registros_impacto_ambiental.anio, registros_impacto_ambiental.ahorro_duro, registros_impacto_ambiental.ahorro_suave, proyectos_creados.id /*Datos Proyecto */
     FROM impacto_ambiental_proyecto JOIN proyectos_creados ON impacto_ambiental_proyecto.id_proyecto = proyectos_creados.id 
     JOIN registros_impacto_ambiental ON impacto_ambiental_proyecto.id = registros_impacto_ambiental.id_impacto_ambiental_proyecto WHERE registros_impacto_ambiental.anio ='$anio'";
     $query = $conexion->query($consulta);
     if ($query) {
         while ($datos = mysqli_fetch_array($query)) {
+            $ahorro_duro = str_replace(['$',','],'', $datos['ahorro_duro']);//eliminando caracteres
+            $ahorro_duro= floatval($ahorro_duro);//conviertiendolo a número
+            $ahorro_suave = str_replace(['$',','],'', $datos['ahorro_suave']);//eliminando caracteres
+            $ahorro_suave = floatval($ahorro_suave);//a flotante
+
+            if(!isset($sumasPorMes['sumas_ahorro_duro'][$datos['mes']])){
+                $sumasPorMes['sumas_ahorro_duro'][$datos['mes']]=0;
+            }
+
+            if(!isset($sumasPorMes['sumas_ahorro_suave'][$datos['mes']])){
+                $sumasPorMes['sumas_ahorro_suave'][$datos['mes']]=0;
+            }
+
+            $sumasPorMes['sumas_ahorro_suave'][$datos['mes']]+=$ahorro_suave;
+            $sumasPorMes['sumas_ahorro_duro'][$datos['mes']]+=$ahorro_duro;
             $resultado1[] = $datos;
         }
+        //dandole formato a las posiciones
+        foreach ($sumasPorMes['sumas_ahorro_duro'] as $elmes => $suma) {
+            $sumasPorMes['sumas_ahorro_duro'][$elmes] = "$".number_format($suma,2,".",","); 
+        }
+
+        foreach ($sumasPorMes['sumas_ahorro_suave'] as $elmes => $suma){
+            $sumasPorMes['sumas_ahorro_suave'][$elmes] = "$".number_format($suma,2,".",",");
+        }
+
         $estado1 = true;
     } else {
         $estado1 = false;
@@ -112,12 +136,14 @@ function consultarCalendarioProyecto($anio)
 
     $resultado2 =[];
     $estado2 = false;
-    $consulta="SELECT proyectos_creados.nombre_proyecto,proyectos_creados.id, registros_impacto_ambiental.mes,proyectos_creados.status_seguimiento /*Proyectos por año*/
+    $anioActual=intval($anio);
+    $anioAnterior = $anioActual-1;
+    $consulta="SELECT proyectos_creados.nombre_proyecto,proyectos_creados.id, registros_impacto_ambiental.mes,proyectos_creados.status_seguimiento /*Proyectos por año Unicos listado de proyectos a mostrar*/
     FROM impacto_ambiental_proyecto JOIN proyectos_creados 
     ON proyectos_creados.id = impacto_ambiental_proyecto.id_proyecto 
     JOIN registros_impacto_ambiental 
     ON impacto_ambiental_proyecto.id = registros_impacto_ambiental.id_impacto_ambiental_proyecto 
-    WHERE registros_impacto_ambiental.anio = '$anio' GROUP BY impacto_ambiental_proyecto.id_proyecto";
+    WHERE registros_impacto_ambiental.anio = '$anio' OR (registros_impacto_ambiental.anio = '$anioAnterior' AND proyectos_creados.status_seguimiento!='Cerrado') GROUP BY impacto_ambiental_proyecto.id_proyecto";
     $query = $conexion->query($consulta);
     if($query){
         $estado2 = true;
@@ -156,7 +182,7 @@ function consultarCalendarioProyecto($anio)
         $estado3 = false;
     }
 
-    return array($resultado1, $estado1,$resultado2,$estado2,$resultado3,$estado3);
+    return array($resultado1, $estado1,$resultado2,$estado2,$resultado3,$estado3,$sumasPorMes);
 }
 
 function consultarProyectosID($id_proyecto)

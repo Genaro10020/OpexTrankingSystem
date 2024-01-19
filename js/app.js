@@ -151,8 +151,8 @@ const AltaProyectos = {
       select_anio_calendario:2023,
       proyectosDatosCalendario:[],
       proyectosXanioCalendario:[],
-      cantidadMesesRegistrados:[]
-
+      cantidadMesesRegistrados:[],
+      calendarioSumaXMesAnio:[]
     }
   },
   mounted() {
@@ -198,6 +198,7 @@ const AltaProyectos = {
           this.proyectosDatosCalendario = response.data[0][0]
           this.proyectosXanioCalendario = response.data[0][2]
           this.cantidadMesesRegistrados = response.data[0][4]
+          this.calendarioSumaXMesAnio = response.data[0][6]
         } else {
           alert("En la consulta calendario total por proyecto, no se logro")
         }
@@ -2938,51 +2939,19 @@ const AltaProyectos = {
       }
       return false
     },
-    /*sumaExcelenciaValor(valor) {
-      console.log("Sumando Valor")
-      console.log(valor)
-      if (this.sumarSoloUnaVez == 0) {
-        this.SumaValorEx = '$0.00';
-        if(valor==0 || valor=='0'){
-          valor = "0.00";
-        }
-        var dato = this.formatoSoloNumeros(valor);
-        dato = parseFloat(dato);
-        sumandoExcelenciaValor += dato;
-        var valorExcelencia = parseFloat(sumandoExcelenciaValor).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
-        setTimeout(() => {
-          //document.getElementById("total_valor_ex").textContent = "$" + valorExcelencia;
-          //document.getElementById("valor_global").textContent = "$" + valorExcelencia;
-          this.SumaValorEx = '$' + valorExcelencia;
-          sumandoExcelenciaValor = 0
-          valorExcelencia = 0
-          dato = 0
-          this.sumarSoloUnaVez = 1;
-        }, 5);
-      }
-    },
-    sumaExcelenciaSustentable(valor) {
-      console.log("Sumando Sustentable")
-      console.log(valor)
-      if (this.sumarSoloUnaVez == 0) {
-        this.SumaSustentableEx = '0.00';
-        if(valor==0 || valor=='0'){
-          valor = "0.00";
-        }
-        var dato = this.formatoSoloNumeros(valor);
-        dato = parseFloat(dato);
-        sumandoExcelenciaSustentable += dato;
-        var sustentableExcelencia = parseFloat(sumandoExcelenciaSustentable).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
-     
-          //document.getElementById("total_sustentable_ex").textContent = sustentableExcelencia;
-          //document.getElementById("sustentable_global").textContent = sustentableExcelencia;
-          this.SumaSustentableEx = sustentableExcelencia
-          sumandoExcelenciaSustentable = 0
-          sustentableExcelencia = 0
-          this.sumarSoloUnaVez = 1;
+    guardarValidacionFinanciera(mes){
+      console.log("anio"+this.select_anio_calendario)
+      console.log("mes"+mes)
+      /* axios.post('validacionFinancieraController',{
 
-      }
-    },*/
+      }).then(response =>{
+        
+      }).catch(error =>{  
+
+      }).finally(()=>{
+
+      })*/
+    }
   }
 };
 

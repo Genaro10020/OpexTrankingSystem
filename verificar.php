@@ -10,13 +10,18 @@ $contrasena = $arreglo['contrasena'];
   
     //Verificar SI existe usuario
    
-        $consulta = "SELECT * FROM usuarios WHERE nomina = '$usuario' AND contrasena = '$contrasena' AND tipo_acceso = 'Admin'";
+        $consulta = "SELECT * FROM usuarios WHERE nomina = '$usuario' AND contrasena = '$contrasena' AND (tipo_acceso = 'Admin' OR tipo_acceso='Financiero')";
         $query=$conexion->query($consulta);
                 if(mysqli_num_rows($query)>0){
                         while ($dato=mysqli_fetch_array($query)) {
                             $_SESSION['nombre']=$dato['nombre'];
                             $_SESSION['nomina']=$dato['nomina'];
                             $_SESSION['acceso']=$dato['tipo_acceso'];
+                                if($dato['tipo_acceso']=="Financiero"){
+                                        $_SESSION['acceso']='Financiero';
+                                }else{
+                                        $_SESSION['acceso']=$dato['tipo_acceso'];
+                                }
                     $resultado = "Autorizado";
                             }
                 }else{
@@ -27,11 +32,7 @@ $contrasena = $arreglo['contrasena'];
                                     while ($dato=mysqli_fetch_array($query)) {
                                         $_SESSION['nombre']=$dato['nombre'];
                                         $_SESSION['nomina']=$dato['numero_nomina'];
-                                        if($dato['tipo_usuario']=="Financiero"){
-                                                $_SESSION['acceso']='Financiero';
-                                        }else{
-                                                $_SESSION['acceso']='Usuario';
-                                        }
+                                        $_SESSION['acceso']='Usuario';
                                 $resultado = "Autorizado";
                                         }
                         }else{
