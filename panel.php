@@ -40,7 +40,7 @@ if (isset($_SESSION['nombre'])) {
                         <i class="bi bi-plus-circle"></i> Reportes
                     </button>-->
                     <?php if ($_SESSION['acceso'] == 'Admin' || $_SESSION['acceso'] == 'Financiero') { ?>
-                    <button class="btn-menu mb-sm-3 " @click="ventana='Calendario',mostrarHeader=true, consultarCalendarioProyectos()">
+                    <button class="btn-menu mb-sm-3 " @click="ventana='Calendario',mostrarHeader=true, consultarCalendarioProyectos(),consultarValidacion()">
                         <i class="bi bi-plus-circle"></i> Estatus Captura
                     </button>
                     <?php } ?>
@@ -1909,23 +1909,30 @@ if (isset($_SESSION['nombre'])) {
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td></td>
+                                                <td><!--{{checkValidar}}--></td>
                                                 <td class="align-middle" style="font-size:10px">Total Real: </td>
-                                                <td v-for="x in 12" style="font-size:12px" class="text-start"><!--Columna de Sumas X Anio-->
+                                                <td v-for="(x,index) in 12" style="font-size:12px" class="text-start"><!--Columna de Sumas X Anio-->
                                                         <div class="text-center" v-show="calendarioSumaXMesAnio.sumas_ahorro_duro && calendarioSumaXMesAnio.sumas_ahorro_duro[x.toString()]">
                                                             <?php if ($_SESSION['acceso']=="Financiero"){ ?>
-                                                                <input type="text"></input><br>
-                                                                <label>Validar</label>&nbsp;<input class="form-check-input" type="checkbox" @change="guardarValidacionFinanciera(x)">
+                                                                <input class="text-primary" type="text" v-model="inputTotalReal[index]" @blur="darFormatoInputValorReal(x)" :disabled="checkValidar[index]"></input><br><!--Input activado solo para financieros-->
+                                                                <label>Validar</label>&nbsp;
+                                                                <input class="form-check-input" type="checkbox" v-model="checkValidar[index]"  @change="guardarValidacionFinanciera(x)" >
+                                                            <?php }else{ ?>
+                                                                <input class="text-primary" type="text" v-model="inputTotalReal[index]" @blur="darFormatoInputValorReal(x)" disabled></input><!--Input siempre desactivado para todos los usuarios-->
                                                             <?php } ?>
                                                             <br><label>Representante Financiero</label>
-                                                            <br><label class="text-primary">Pendiente</label>
+                                                            <br> <div class="text-primary" v-if="datosFinancieros[x.toString()] && datosFinancieros[x.toString()].validado">
+                                                                        <!-- Tu contenido aquí si la posición existe y es válida -->
+                                                                        {{ datosFinancieros[x.toString()].nombre}}
+                                                                 </div>
+                                                              <div v-else class="text-primary">Sin validar</div>
                                                         </div>
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
                             </div>
-                </div>
+                </div> 
                 <!--////////////////////////////////////////////// FIN DE COMPETENCIA -->
             </div><!--cuerpo-->
 

@@ -152,7 +152,10 @@ const AltaProyectos = {
       proyectosDatosCalendario:[],
       proyectosXanioCalendario:[],
       cantidadMesesRegistrados:[],
-      calendarioSumaXMesAnio:[]
+      calendarioSumaXMesAnio:[],
+      datosFinancieros:[],
+      inputTotalReal:[],
+      checkValidar:[]
     }
   },
   mounted() {
@@ -199,6 +202,7 @@ const AltaProyectos = {
           this.proyectosXanioCalendario = response.data[0][2]
           this.cantidadMesesRegistrados = response.data[0][4]
           this.calendarioSumaXMesAnio = response.data[0][6]
+          this.consultarValidacion();
         } else {
           alert("En la consulta calendario total por proyecto, no se logro")
         }
@@ -2939,18 +2943,83 @@ const AltaProyectos = {
       }
       return false
     },
-    guardarValidacionFinanciera(mes){
-      console.log("anio"+this.select_anio_calendario)
-      console.log("mes"+mes)
-      /* axios.post('validacionFinancieraController',{
-
+    consultarValidacion(){
+      axios.get("validacionFinancieraController.php",{
+        params:{
+          anio:this.select_anio_calendario
+        }
       }).then(response =>{
-        
-      }).catch(error =>{  
+        console.log("validacion")
+        console.log(response.data)
+        if(response.data[0][1]==true){
+          var checksValidados = [];
+          checksValidados.push(response.data[0][0])
+          this.datosFinancieros = response.data[0][0]
+          if(checksValidados.length>0){
+            for (let i = 1; i <= 12; i++) {
+              const nombreIndex = i.toString();  // Convertir el número a cadena para acceder a la propiedad
+              if (checksValidados[0][nombreIndex]) {
+                this.checkValidar[i - 1] = checksValidados[0][nombreIndex].validado;
+                this.inputTotalReal[i - 1] = checksValidados[0][nombreIndex].real_duro;
+              } else {
+                // Puedes asignar un valor predeterminado o manejar el caso de que la propiedad no exista
+                this.checkValidar[i - 1] = null;
+                this.inputTotalReal[i - 1] = '$0.00';
+              }
+            }
+          }else{
 
+            this.checkValidar=[]
+          }
+        }else{
+          alert("Error en la consulta");
+        }
+      }).catch(error => {
+        console.log("Fallo el metodo consultarValidacion"+error);
+      })
+    },
+    guardarValidacionFinanciera(mes){//guardar y actualizar
+      id="";
+      if (this.datosFinancieros[mes.toString()] !== undefined) {
+        id=this.datosFinancieros[mes.toString()].id
+      }
+  
+      /*console.log("anio"+this.select_anio_calendario)
+      console.log("mes"+mes)
+      console.log("Ahorro Suave"+this.calendarioSumaXMesAnio.sumas_ahorro_suave[mes.toString()])
+      console.log("Ahorro Duro"+this.calendarioSumaXMesAnio.sumas_ahorro_duro[mes.toString()])*/
+      var suave = this.calendarioSumaXMesAnio.sumas_ahorro_suave[mes.toString()]
+      var duro =this.calendarioSumaXMesAnio.sumas_ahorro_duro[mes.toString()]
+      var real_duro = this.inputTotalReal[mes-1];
+      var validar=this.checkValidar[mes-1];
+       axios.post('validacionFinancieraController.php',{
+        mes:mes,
+        anio:this.select_anio_calendario,
+        suave: suave,
+        duro:duro,
+        real_duro:real_duro,
+        validar: validar,
+        id:id
+      }).then(response =>{
+        console.log(response.data)
+          if(response.data[0]==true){
+            if(validar==true){
+              alert("Validación guardada con éxito.")
+            }else{
+              alert("Validación desactivada con éxito.")
+            }
+              this.consultarValidacion();
+          }else{
+            alert("La insercion no se realizo con éxito");
+          }
+      }).catch(error =>{  
+        console.log("Error en guardarValidacionFinanciera"+error)
       }).finally(()=>{
 
-      })*/
+      })
+    },
+    darFormatoInputValorReal(mes_o_index){
+      this.inputTotalReal[mes_o_index-1]=this.formatMonedaPesos(this.inputTotalReal[mes_o_index-1])
     }
   }
 };
