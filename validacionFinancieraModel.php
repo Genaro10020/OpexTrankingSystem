@@ -67,12 +67,13 @@ include("conexionGhoner.php");
                     $estado = true;
                 }
         }else{
-                $update = "UPDATE validacion_financiera SET validado=? WHERE  id=?";
+                $real_duro = "$0.00";
+                $update = "UPDATE validacion_financiera SET validado=?,real_duro=? WHERE  id=?";
                 $stmt = $conexion->prepare($update);
-                $stmt->bind_param("si", $validar,$id);
+                $stmt->bind_param("ssi", $validar,$real_duro,$id);
                 if($stmt->execute()){
                     $estado = true;
-        }
+                }
 
         }
         

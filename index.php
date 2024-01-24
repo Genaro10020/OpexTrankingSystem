@@ -18,7 +18,7 @@ session_destroy();
 
         <div class="container-fluid d-flex align-items-stretch" style="min-height: 80vh;">
             <div class="row">
-                <div class="col-12 col-lg-4 d-flex  justify-content-center   align-items-center">
+                <div class="col-12 col-lg-4 d-flex  justify-content-center   align-items-center" style="min-width:300px;">
                     <!-- Centra vertical y horizontalmente el contenido -->
                     <div class="form-login  mt-5 mt-lg-0  rounded shadow-sm p-3" style="width:300px; height:300px;">
                         <!-- Agrega la clase "rounded" para bordes redondeados y "shadow-lg" para sombra -->

@@ -17,7 +17,6 @@ if (isset($_SESSION['nombre'])) {
             </div>
             <!--Cinta-->
             <div class="cinta row d-flex align-items-center" style="min-height:5vh; ">
-            
                 <!--Bóton Crear misiones/pilares/Objetivos-->
                 <!--Bóton-->
                 <div class="text-center">
@@ -40,7 +39,7 @@ if (isset($_SESSION['nombre'])) {
                         <i class="bi bi-plus-circle"></i> Reportes
                     </button>-->
                     <?php if ($_SESSION['acceso'] == 'Admin' || $_SESSION['acceso'] == 'Financiero') { ?>
-                    <button class="btn-menu mb-sm-3 " @click="ventana='Calendario',mostrarHeader=true, consultarCalendarioProyectos(),consultarValidacion()">
+                    <button class="btn-menu mb-sm-3 " @click="ventana='Calendario',mostrarHeader=true, consultarCalendarioProyectos()">
                         <i class="bi bi-plus-circle"></i> Estatus Captura
                     </button>
                     <?php } ?>
@@ -544,7 +543,7 @@ if (isset($_SESSION['nombre'])) {
                 <!--AQUI TRABAJA //ALTA DE PROYECTOS-->
                 <div class="text-center mt-3" v-if="ventana=='Altas'">
                     <?php if ($_SESSION['acceso'] == 'Admin') { ?>
-                        <button class="btn-menu align-items-center my-2 "  @click="abrirModal('Alta')">
+                        <button class="btn-menu align-items-center my-2" style=" background:#519f3c; "  @click="abrirModal('Alta')">
                             <i class="bi bi-plus-circle"></i> Alta Proyecto
                         </button>
                     <?php } ?>
@@ -1273,19 +1272,19 @@ if (isset($_SESSION['nombre'])) {
                                         <div class="col-12 col-lg-6">
                                                 <div class="input-group mt-3 mx-2 mb-2 d-flex justify-content-start justify-content-lg-center">
                                                     <span class="input-group-text w-5">Documentos estandares CO<label style="font-size:8px" class="mt-1">2</label></span>
-                                                    <button v-if="documentos_co2.length>0" type="button" class="btn btn-success" title="Visualizar"  @click="modal_co2()" style="font-size:10px"><i class="bi bi-paperclip"></i>{{documentos_co2.length}} Archivos Encontrados</button>
-                                                    <button v-else type="button" class="btn btn-secondary" title="Visualizar/Subir Archivos"  @click="modal_co2()" style="font-size:10px"><i class="bi bi-paperclip"></i>{{documentos_co2.length}} Archivos Encontrados</button>
+                                                    <button v-if="documentos_co2.length>0" type="button" class="btn btn-success" title="Visualizar"  @click="modal_co2()" style="font-size:10px"><i class="bi bi-file-earmark me-1"></i>{{documentos_co2.length}} Archivos Encontrados</button>
+                                                    <button v-else type="button" class="btn btn-secondary" title="Visualizar/Subir Archivos"  @click="modal_co2()" style="font-size:10px"><i class="bi bi-file-earmark  me-1"></i>{{documentos_co2.length}} Archivos Encontrados</button>
                                                 </div>
                                         </div>
                                     </div>
                             </div> 
-
-                   
                     <div class="scroll-dos">
                         <table class="mx-2 mb-5 table table-hover table-bordered table-striped text-center" style="font-size: 0.8em;">
                             <thead style="background: #848484; color:white;">
                                 <tr>
+                                <?php if($_SESSION['acceso']!="Financiero")  {?>
                                     <th v-if="seguimiento_status" style="background: #848484; color:white;">Actualizar</th>
+                                <?php } ?>
                                     <th style="background: #848484; color:white;">Fecha</th>
                                     <th style="background: #848484; color:white;">Tons CO2 (Evitados) </th>
                                     <th style="background: #848484; color:white;" v-if="sinImpacto!='Sin Impacto'" v-for="(impacto,index) in columnaImpactoAmbiental" :key="index">{{impacto}}</th>
@@ -1298,11 +1297,13 @@ if (isset($_SESSION['nombre'])) {
                                 <!-----------------------------------------------------------------------------CUANDO YA EXISTE MINIMO UN SEGUIMIENTO -->
 
                                 <tr v-if="seguimientos>0" style="vertical-align: middle; font-size: 1.1em;" v-for="(proyecto,posicion) in arregloID" :key="posicion">
+                                    <?php if($_SESSION['acceso']!="Financiero")  {?>
                                     <td v-if="seguimiento_status">
                                         <button v-if="actualizar==0 && actualizatabla == false" type="button" class="boton-actualizar" v-if="actualizatabla == false" @Click="asignarDatosActualizar(posicion)">Actualizar</button>
                                         <button v-if="actualizar==(posicion+1)" v-if="actualizatabla == true" class="boton-eliminar mx-2" @Click="actualizar = 0">Cancelar</button>
                                         <button v-if="actualizar==(posicion+1) && proyecto.id_registro " v-if="actualizatabla == true" class="boton-aceptar" @Click="actualizarSeguimiento(posicion)">Guardar</button><!--Guardar Actualizacion cuando existe minimo 1-->
                                     </td>
+                                    <?php } ?>
                                     <td style="min-width: 351px;">
                                         <div v-if="actualizar==(posicion+1)">
                                             <label class="ms-1"> Mes: </label>
@@ -1337,6 +1338,7 @@ if (isset($_SESSION['nombre'])) {
                                         <label v-else>{{proyecto.ahorro_suave}}</label>
                                     </td>
                                     <td style="min-width:150px">
+                                    <?php if($_SESSION['acceso']!="Financiero")  {?>
                                         <div v-if="posicion === (arregloID.length - 1)" class="form-check form-switch">
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" v-model="seguimiento_status" @change="guardarStatus()" style=" background-color: #B3F09B; color:white">
@@ -1344,10 +1346,13 @@ if (isset($_SESSION['nombre'])) {
                                                 <label v-else class="form-check-label" for="flexSwitchCheckDefault">Cerrado</label>
                                             </div>
                                         </div>
+                                        <?php } ?>
                                     </td>
                                 </tr>
                                 <tr v-if="seguimientos>0" class="align-middle"> <!--Sumatoria y adjuntos-->
-                                    <td v-if="seguimiento_status"></td><!--Se oculta esta columna cuando es cerrado-->
+                                    <?php if($_SESSION['acceso']!="Financiero")  {?>
+                                        <td v-if="seguimiento_status"></td><!--Se oculta esta columna cuando es cerrado-->
+                                    <?php } ?>
                                     <td><b>Sumatoria:</b> </td>
                                     <td><b>{{sumaCO2}}</b></td>
                                     <td v-if="sinImpacto!='Sin Impacto'" v-for="(cantidad,index) in columnaImpactoAmbiental.length" :key="index"><!--columa v-for"-->
@@ -1360,11 +1365,13 @@ if (isset($_SESSION['nombre'])) {
                                 </tr>
                                 <!------------------------------------------------------------------------------PRIMER SEGUIMIETO --------------------------------------------------->
                                 <tr v-if="id_proyecto!='' && seguimiento_status==true" style="vertical-align: middle; font-size: 1.1em;">
-                                    <td v-if="seguimiento_status">
-                                        <button v-if="actualizatabla == false && actualizar==0 " type="button" class="boton-aceptar" @Click="actualizatabla =!actualizatabla,nuevoLimpiarVariables()">Nuevo</button>
-                                        <button v-if="actualizatabla == true" class="boton-eliminar mx-2" @Click="actualizatabla =!actualizatabla ">Cancelar</button>
-                                        <button v-if="actualizatabla == true" class="boton-aceptar" @Click="guardarSeguimiento()">Guardar</button><!--Cundo no existe aun ningun registro-->
-                                    </td>
+                                    <?php if($_SESSION['acceso']!="Financiero")  {?>
+                                        <td v-if="seguimiento_status">
+                                            <button v-if="actualizatabla == false && actualizar==0 " type="button" class="boton-aceptar" @Click="actualizatabla =!actualizatabla,nuevoLimpiarVariables()">Nuevo</button>
+                                            <button v-if="actualizatabla == true" class="boton-eliminar mx-2" @Click="actualizatabla =!actualizatabla ">Cancelar</button>
+                                            <button v-if="actualizatabla == true" class="boton-aceptar" @Click="guardarSeguimiento()">Guardar</button><!--Cundo no existe aun ningun registro-->
+                                        </td>
+                                    <?php } ?>
                                     <td style="min-width: 351px;">
                                         <label v-if="actualizatabla==true" class="ms-3"> Mes: </label>
                                         <select v-if="actualizatabla==true" v-model="mes_select">
@@ -1413,31 +1420,37 @@ if (isset($_SESSION['nombre'])) {
                                         <div class="text-center">
                                                 <form @submit.prevent="uploadFile('Seguimiento')">
                                                     <!--Subir Documento Sugerencia-->
-                                                    <div v-if="cual_documento=='Seguimiento'" class="row" >
-                                                        <div class="col-12">
-                                                            <div class="custom-file mt-5 mb-3"> 
-                                                            <input type="file" id="input_file_seguimiento" @change="varificandoSelecionSeguimiento()" ref="ref_seguimiento" multiple accept="*.jpg/*.png/*.pdf/*.doc/*.docx/*.ppt/*.pptx/*.xls/*.xlsx" class="btn btn-secondary  ms-2 p-0" required />
+                                                    <?php if($_SESSION['acceso']!="Financiero")  {?>
+                                                        <div v-if="cual_documento=='Seguimiento'" class="row" >
+                                                            <div class="col-12">
+                                                                <div class="custom-file mt-5 mb-3"> 
+                                                                <input type="file" id="input_file_seguimiento" @change="varificandoSelecionSeguimiento()" ref="ref_seguimiento" multiple accept="*.jpg/*.png/*.pdf/*.doc/*.docx/*.ppt/*.pptx/*.xls/*.xlsx" class="btn btn-secondary  ms-2 p-0" required />
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-12" v-if="existeImagenSeleccionadaSeguimiento && login!=true" >
-                                                            <button  type="submit" name="upload" class="btn btn-primary">Subir Archivos </button>
-                                                        </div>
-                                                        <div v-if="login==true" class="d-flex justify-content-center">
-                                                            <div>
-                                                                <img class="mx-auto" style="width:50px;" src="img/loading.gif" /><label>Subiendo...</label>
+                                                            <div class="col-12" v-if="existeImagenSeleccionadaSeguimiento && login!=true" >
+                                                                <button  type="submit" name="upload" class="btn btn-primary">Subir Archivos </button>
                                                             </div>
-                                                        </div>
-                                                    </div> 
+                                                            <div v-if="login==true" class="d-flex justify-content-center">
+                                                                <div>
+                                                                    <img class="mx-auto" style="width:50px;" src="img/loading.gif" /><label>Subiendo...</label>
+                                                                </div>
+                                                            </div>
+                                                        </div> 
+                                                    <?php } ?>
                                                           <!-- Mostrando los archivos cargados SEGUIMIENTO-->
                                                         <div v-if="cual_documento=='Seguimiento'" v-show="documentos_seguimiento.length>0" >
                                                         <hr>
                                                                 <div class="col-12" v-for= "(archivos,index) in documentos_seguimiento">
-                                                                    <div class="row">
-                                                                        <span class="badge bg-secondary">Documento {{index+1}}</span><br>
-                                                                            <div class="mt-1">
-                                                                                <button type="button" class="btn btn-danger" @click="eliminarDocumento(archivos)" style="font-size:14px;" >Eliminar</button>
-                                                                            </div>
-                                                                    </div>
+                                                                    
+                                                                        <div class="row">
+                                                                            <span class="badge bg-secondary">Documento {{index+1}}</span><br>
+                                                                            <?php if($_SESSION['acceso']!="Financiero")  {?>
+                                                                                <div class="mt-1">
+                                                                                    <button type="button" class="btn btn-danger" @click="eliminarDocumento(archivos)" style="font-size:14px;" >Eliminar</button>
+                                                                                </div>
+                                                                            <?php } ?>
+                                                                        </div>
+                                                                    
                                                                     <!--Mostar los JPG y PNG-->
                                                                     <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='png' || archivos.slice(archivos.lastIndexOf('.') + 1)=='jpg'" class="col-12 text-center">
                                                                     {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br>
@@ -1856,8 +1869,9 @@ if (isset($_SESSION['nombre'])) {
                                     <table class="table table-bordered table-striped table-hover text-center">
                                         <thead>
                                             <tr  style="font-size:10px;">
+                                                <th style="min-width:150px">Documento</th>
                                                 <th style="min-width:250px">Nombre del Proyecto</th>
-                                                <th>Estatus</th>
+                                                <th>Estatus </th>
                                                 <th>Enero</th>
                                                 <th>Febrero</th>
                                                 <th>Marzo</th>
@@ -1873,8 +1887,18 @@ if (isset($_SESSION['nombre'])) {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr v-if="proyectosXanioCalendario.length>0" v-for="proyectosXanio in proyectosXanioCalendario">
-                                                <th class="text-start" style="font-size:10px;">{{proyectosXanio.nombre_proyecto}}</th>
+                                            <tr v-if="proyectosXanioCalendario.length>0" v-for="(proyectosXanio,indexa) in proyectosXanioCalendario">
+                                                <th>
+                                                <template v-for ="cantidadArchivos in cantidadDocumentos"><!--Contine ID y Cantidad de documentos-->
+                                                    <button v-if="cantidadArchivos.id==proyectosXanio.id && parseInt(cantidadArchivos.cantidad)>0" type="button" class="btn btn-success" title="Visualizar"  @click="modal_estatus(proyectosXanio.id)" style="font-size:10px"><i class="bi bi-file-earmark"></i><!--Si el ID es igual-->
+                                                        {{cantidadArchivos.cantidad}} Archivo/s
+                                                    </button>
+                                                    <button v-if="cantidadArchivos.id==proyectosXanio.id && parseInt(cantidadArchivos.cantidad)<=0" type="button" class="btn btn-secondary" title="Sin Documentos" style="font-size:10px"><i class="bi bi-file-earmark"></i>
+                                                        {{documentos_seguimiento_captura.length}} Archivo/s
+                                                    </button>
+                                                </template>
+                                                </th>
+                                                <td class="text-start" style="font-size:10px;">{{proyectosXanio.nombre_proyecto}}</td>
                                                 <td>
                                                     <!--<span class="badge bg-dark" style=" font-size: 8px" v-if="cantidadMesesRegistrados[proyectosXanio.id]>11">Finalizado</span><br>-->
                                                     <span v-if="proyectosXanio.status_seguimiento=='Cerrado'" class="badge bg-dark" style="font-size: 8px">Finalizado</span> 
@@ -1892,11 +1916,12 @@ if (isset($_SESSION['nombre'])) {
                                                 </td>
                                             </tr>
                                             <tr v-else>
-                                                <td colspan="13">
+                                                <td colspan="14">
                                                     <label>No existe seguimiento de proyectos {{select_anio_calendario}}</label>
                                                 </td>
                                             </tr>
-                                            <tr>
+                                            <tr><!--Fila Totales-->
+                                                <td></td>
                                                 <td></td>
                                                 <td class="align-middle" style="font-size:10px">Totales</td>
                                                 <td v-for="x in 12" style="font-size:12px" class="text-start"><!--Columna de Sumas X Anio-->
@@ -1908,7 +1933,8 @@ if (isset($_SESSION['nombre'])) {
                                                         
                                                 </td>
                                             </tr>
-                                            <tr>
+                                            <tr><!--Fila Total Real-->
+                                                <td></td>
                                                 <td><!--{{checkValidar}}--></td>
                                                 <td class="align-middle" style="font-size:10px">Total Real: </td>
                                                 <td v-for="(x,index) in 12" style="font-size:12px" class="text-start"><!--Columna de Sumas X Anio-->
@@ -1923,15 +1949,100 @@ if (isset($_SESSION['nombre'])) {
                                                             <br><label>Representante Financiero</label>
                                                             <br> <div class="text-primary" v-if="datosFinancieros[x.toString()] && datosFinancieros[x.toString()].validado">
                                                                         <!-- Tu contenido aquí si la posición existe y es válida -->
-                                                                        {{ datosFinancieros[x.toString()].nombre}}
+                                                                        {{ datosFinancieros[x.toString()].nombre}}<br>
+                                                                        <span  class="badge bg-success" style="font-size: 8px">Liberado</span>
                                                                  </div>
-                                                              <div v-else class="text-primary">Sin validar</div>
+                                                                <div v-else class="text-primary"><span class="badge bg-secondary" style="font-size: 8px">Sin liberar</span></div>
                                                         </div>
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
                             </div>
+
+                                                <!-- Modal Eliminar/Actualizar Seguimiento-->
+                    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-xl">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h6 class="modal-title" id="exampleModalLabel" >Documento</h6>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                        <div class="text-center">
+                                                <form @submit.prevent="uploadFile('Seguimiento')">
+                                                    <!--Subir Documento Sugerencia-->
+                                                    <!--<div v-if="cual_documento=='Seguimiento'" class="row" >
+                                                        <div class="col-12">
+                                                            <div class="custom-file mt-5 mb-3"> 
+                                                            <input type="file" id="input_file_seguimiento" @change="varificandoSelecionSeguimiento()" ref="ref_seguimiento" multiple accept="*.jpg/*.png/*.pdf/*.doc/*.docx/*.ppt/*.pptx/*.xls/*.xlsx" class="btn btn-secondary  ms-2 p-0" required />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12" v-if="existeImagenSeleccionadaSeguimiento && login!=true" >
+                                                            <button  type="submit" name="upload" class="btn btn-primary">Subir Archivos </button>
+                                                        </div>
+                                                        <div v-if="login==true" class="d-flex justify-content-center">
+                                                            <div>
+                                                                <img class="mx-auto" style="width:50px;" src="img/loading.gif" /><label>Subiendo...</label>
+                                                            </div>
+                                                        </div>
+                                                    </div> -->
+                                                          <!-- Mostrando los archivos cargados SEGUIMIENTO-->
+                                                        <div v-if="cual_documento=='Seguimiento'" v-show="documentos_seguimiento_financiero.length>0" >
+                                                        <hr>
+                                                                <div class="col-12" v-for= "(archivos,index) in documentos_seguimiento_financiero">
+                                                                    <div class="row">
+                                                                        <span class="badge bg-secondary">Documento {{index+1}}</span><br>
+                                                                            <!--<div class="mt-1">
+                                                                                <button type="button" class="btn btn-danger" @click="eliminarDocumento(archivos)" style="font-size:14px;" >Eliminar</button>
+                                                                            </div>-->
+                                                                    </div>
+                                                                    <!--Mostar los JPG y PNG-->
+                                                                    <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='png' || archivos.slice(archivos.lastIndexOf('.') + 1)=='jpg'" class="col-12 text-center">
+                                                                    {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br>
+                                                                        <img  :src="documentos_seguimiento_financiero[index]" style="width:50%" class="mb-5"></img>
+                                                                    </div>
+                                                                     <!--Mostrar PDF-->
+                                                                     <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='pdf'"  class="col-12 text-center">
+                                                                     {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br>
+                                                                            <iframe  :src="documentos_seguimiento_financiero[index]" style="width:100%;height:500px;" class="mb-5"></iframe>
+                                                                    </div>
+                                                                    <!--Mostrar Word-->
+                                                                    <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='doc' || archivos.slice(archivos.lastIndexOf('.') + 1)=='docx'" class="col-12 text-center">
+                                                                    {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br><!--obtengo el nombre del documento con extension-->
+                                                                            <a :href="archivos" :download="nombre_de_descarga">
+                                                                                <img src="img/word.png" style="width:200px" class="mb-5"></img>
+                                                                            </a>
+                                                                    </div>
+                                                                    <!--Mostrar Excel-->
+                                                                    <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='xls' || archivos.slice(archivos.lastIndexOf('.') + 1)=='xlsx'" class="col-12 text-center">
+                                                                    {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br><!--obtengo el nombre del documento con extension-->
+                                                                            <a :href="archivos" :download="nombre_de_descarga">
+                                                                                <img src="img/excel.png" style="width:200px" class="mb-5"></img>
+                                                                            </a>
+                                                                    </div>
+                                                                    <!--Mostrar Power Point -->
+                                                                    <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='ppt' || archivos.slice(archivos.lastIndexOf('.') + 1)=='pptx'" class="col-12 text-center">
+                                                                    {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br> <!--obtengo el nombre del documento con extension-->
+                                                                            <a :href="archivos" :download="nombre_de_descarga">
+                                                                            <img  src="img/powerpoint.png" style="width:200px" class="mb-5"></img>
+                                                                            </a>
+                                                                    </div>
+                                                                </div>
+                                                        </div>
+                                                </form>
+                                        </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                </div>
+                                </div>
+                            </div>
+                    </div>
+                <!--Fin Modal subir seguimiento-->
+
+
+                            
                 </div> 
                 <!--////////////////////////////////////////////// FIN DE COMPETENCIA -->
             </div><!--cuerpo-->

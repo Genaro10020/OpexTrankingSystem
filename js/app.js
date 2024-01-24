@@ -56,6 +56,8 @@ const AltaProyectos = {
       select_mision: '',
       imagenes: [],
       documentos_seguimiento: [],
+      documentos_seguimiento_captura: [],
+      documentos_seguimiento_financiero: [],
       documentos_co2: [],
       tons_co2: '',
       ahorro_duro: '$.00',
@@ -130,6 +132,7 @@ const AltaProyectos = {
       SumaSustentableEx: 0,
       myModalSeguimiento: '',
       myModalCO2: '',
+      myModalStatus: '',
       nombre_de_descarga:'',
       /*GENERANDO VALOR*/
       select_anio_generando_valor:'',
@@ -155,7 +158,8 @@ const AltaProyectos = {
       calendarioSumaXMesAnio:[],
       datosFinancieros:[],
       inputTotalReal:[],
-      checkValidar:[]
+      checkValidar:[],
+      cantidadDocumentos:[]
     }
   },
   mounted() {
@@ -190,6 +194,7 @@ const AltaProyectos = {
     },
      /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PROYECTOS*/
      consultarCalendarioProyectos() {
+      this.documentos_seguimiento_financiero = []
       axios.get('proyectosController.php', {
         params: {
           accion: 'calendario',
@@ -202,7 +207,11 @@ const AltaProyectos = {
           this.proyectosXanioCalendario = response.data[0][2]
           this.cantidadMesesRegistrados = response.data[0][4]
           this.calendarioSumaXMesAnio = response.data[0][6]
-          this.consultarValidacion();
+          this.consultarValidacion();//Consutar la parte financiera
+          this.cantidadDocumentos = []
+            for (var i = 0; i < this.proyectosXanioCalendario.length; i++) {
+              this.buscarDocumentos('Estatus',this.proyectosXanioCalendario[i].id);
+            }    
         } else {
           alert("En la consulta calendario total por proyecto, no se logro")
         }
@@ -2099,11 +2108,12 @@ const AltaProyectos = {
         
       }
     },
-    buscarDocumentos(cual_documento) {
+    buscarDocumentos(cual_documento,ids) {
       this.imagenes = []
       axios.post("buscar_documentos.php", {
         documento: cual_documento,
-        id: this.id_proyecto
+        id: this.id_proyecto,
+        ids:ids
       })
         .then(response => {
           if(cual_documento=="Alta Proyecto"){
@@ -2131,6 +2141,31 @@ const AltaProyectos = {
               this.random = Math.random()
             } else {
               console.log(this.documentos_co2 + "Sin imagen encontrada.")
+            }
+          }
+          if(cual_documento=="Estatus"){
+            var objeto = {"id":ids,"cantidad":response.data.length}
+            this.cantidadDocumentos.push(objeto)
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    buscarDocumentosEnFinancieros(cual_documento,id) {
+      this.imagenes = []
+      axios.post("buscar_documentos.php", {
+        documento: cual_documento,
+        id: id
+      })
+        .then(response => {
+          if(cual_documento=="Seguimiento"){
+            this.documentos_seguimiento_financiero = response.data
+            if (this.documentos_seguimiento_financiero.length > 0) {
+              console.log(this.documentos_seguimiento_financiero + "Archivos encontrados.")
+              this.random = Math.random()
+            } else {
+              console.log(this.documentos_seguimiento_financiero + "Sin imagen encontrada.")
             }
           }
         })
@@ -2249,6 +2284,13 @@ const AltaProyectos = {
       this.cual_documento = "Documento CO2"
       //this.buscarDocumentos('Documento CO2')
       
+    },
+    modal_estatus(id){
+      this.documentos_seguimiento_financiero = []
+      this.cual_documento = "Seguimiento"
+      this.myModalEstatus = new bootstrap.Modal(document.getElementById('modal'))
+      this.myModalEstatus.show()
+      this.buscarDocumentosEnFinancieros('Seguimiento',id)//Financieros
     },
     verificarAltaProyecto() {
 
@@ -3017,6 +3059,9 @@ const AltaProyectos = {
       }).finally(()=>{
 
       })
+    },
+    buscarEstatusSeguimiento(id_proyecto){
+      console.log("ID: "+id_proyecto)
     },
     darFormatoInputValorReal(mes_o_index){
       this.inputTotalReal[mes_o_index-1]=this.formatMonedaPesos(this.inputTotalReal[mes_o_index-1])

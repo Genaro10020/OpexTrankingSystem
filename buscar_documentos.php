@@ -14,6 +14,11 @@ if($documento=="Seguimiento"){
     $ruta = "seguimiento/".$id;
 }
 
+if($documento=="Estatus"){
+    $id=$variables['ids'];
+    $ruta = "seguimiento/".$id;
+}
+
 if($documento=="Documento CO2"){
     $ruta = "documentosco2";
 }
