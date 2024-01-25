@@ -896,7 +896,7 @@ const AltaProyectos = {
 
       })
     },
-    /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR OBJETIVOS*/
+    /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL*/
     consultarImpactoAmbiental() {
       axios.get('impactoAmbientalController.php', {
       }).then(response => {
@@ -916,6 +916,42 @@ const AltaProyectos = {
       }).finally(() => {
 
       })
+    },
+    /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL*/
+    descargarExcel(){
+      axios.post('descargar_excel.php', {
+      }).then(response => {
+        console.log(response.data)
+        if(response.data.success){
+           // Crear un enlace temporal para descargar el archivo
+        const link = document.createElement('a');
+        link.href = 'reportes/'+response.data.archivo;
+        link.download = response.data.archivo;
+
+        // Agregar el enlace al DOM y hacer clic en él
+        document.body.appendChild(link);
+        link.click();
+
+        // Eliminar el enlace del DOM después de la descarga
+        document.body.removeChild(link);
+        }else{
+          alert("No se genero el archivo.")
+        }
+       /* if (response.data[0][1] == true) {
+          if (response.data[0][0].length > 0) {
+            this.impactoAmbiental = response.data[0][0]
+          } else {
+            this.impactoAmbiental = []
+          }
+        } else {
+          alert("No se logro, consultar para descargar.")
+        }*/
+      }).catch(error => {
+        console.log('Erro :-(' + error)
+      }).finally(() => {
+
+      })
+     
     },
      /*/////////////////////////////////////////////////////////////////////////////////SUMA IMPACTO AMBIENTAL*/
      sumaImpactoAmbiental() {

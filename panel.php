@@ -821,13 +821,13 @@ if (isset($_SESSION['nombre'])) {
                     <div class="col-12 col-lg-6 ">
                         <div class="col-12  text-center ">
                             <div class=" encabezadoTablas">
-                                <div class=" d-flex justify-content-center " style="font-size: 0.9em;">
+                                <div class=" d-flex justify-content-center align-items-baseline " style="font-size: 0.9em;">
                                     <div class="d-none d-lg-block col-lg-4"></div>
                                     <div class="col-6 col-lg-4 mt-2">Impacto Ambiental</div>
                                     <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
                                         <button type="button" class=" btn btn-menu w-50" @Click="modalCatalogos('Crear','Impacto Ambiental')">Crear</button>
+                                        <button type="button" class="btn btn-menu w-25 ms-2" style="min-width:70px;" @click="descargarExcel()" title="Descargar"><i class="bi bi-file-earmark-arrow-down"></i></button>
                                     </div>
-
                                 </div>
                             </div>
                             <div class="scroll">
