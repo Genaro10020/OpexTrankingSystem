@@ -621,6 +621,10 @@ if (isset($_SESSION['nombre'])) {
                 </div>
                 <!--------------------------CREAR PERFILES, PILARES OBJETIVOS---------------------------------->
                 <div class="row" v-if="ventana=='Crear'">
+                    <div class="offset-2 col-8 col-sm-4 offset-sm-4 offset-xl-5 col-xl-2 mt-2 text-center">
+                        <button type="button" class="btn btn-menu w-75 bg-primary " style="min-width:180px;" @click="descargarExcel()" title="Descargar">
+                        <i class="bi bi-file-earmark-arrow-down"></i>Descargar Reporte</button>
+                    </div>
                     <!-- <div class=" bg-secondary mt-3 text-white align-items-center ">
                             <div class=" text-center">
                                 RELACIONES
@@ -826,7 +830,6 @@ if (isset($_SESSION['nombre'])) {
                                     <div class="col-6 col-lg-4 mt-2">Impacto Ambiental</div>
                                     <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
                                         <button type="button" class=" btn btn-menu w-50" @Click="modalCatalogos('Crear','Impacto Ambiental')">Crear</button>
-                                        <button type="button" class="btn btn-menu w-25 ms-2" style="min-width:70px;" @click="descargarExcel()" title="Descargar"><i class="bi bi-file-earmark-arrow-down"></i></button>
                                     </div>
                                 </div>
                             </div>
