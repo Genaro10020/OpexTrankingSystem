@@ -25,6 +25,9 @@ const AltaProyectos = {
       proyectoSumas: [],
       documentos_co2: [],
       /*Alta Proyectos */
+      id_actualizar:'',
+      titulo_nombre_proyecto:'',
+      titulo_modal:'',
       fecha_alta: '',
       nombre_proyecto: '',
       nombre_fuente: '',
@@ -42,6 +45,8 @@ const AltaProyectos = {
       checkObjetivos: [],
       checkImpactoAmbiental: [],
       impactoAmbiental: [],
+      valores:[],
+      valoresCheck:[],
       sumasImpactoAmbiental: [],
       selectImpactoAmbiental: '',
       misiones: [],
@@ -68,6 +73,7 @@ const AltaProyectos = {
       existeImagenSeleccionada: false,
       existeImagenSeleccionadaSeguimiento: false,
       existeImagenSeleccionadaCO2: false,
+      actualizar_proyecto: false,
       /*Planta*/ /*Área*/ /*Departamento*/
       nueva: '',
       nuevoNombre: '',
@@ -917,6 +923,27 @@ const AltaProyectos = {
 
       })
     },
+     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR VALORES*/
+     consultarValores() {
+      axios.get('valoresController.php', {
+      }).then(response => {
+        console.log(response.data[0])
+        if (response.data[0][1] == true) {
+          if (response.data[0][0].length > 0) {
+            this.valores = response.data[0][0]
+          } else {
+            this.valores = []
+          }
+        } else {
+          alert("La consulta valores, no se realizo correctamente.")
+        }
+
+      }).catch(error => {
+        console.log('Erro :-(' + error)
+      }).finally(() => {
+
+      })
+    },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL*/
     descargarExcel(){
       axios.post('descargar_excel.php', {
@@ -937,21 +964,12 @@ const AltaProyectos = {
         }else{
           alert("No se genero el archivo.")
         }
-       /* if (response.data[0][1] == true) {
-          if (response.data[0][0].length > 0) {
-            this.impactoAmbiental = response.data[0][0]
-          } else {
-            this.impactoAmbiental = []
-          }
-        } else {
-          alert("No se logro, consultar para descargar.")
-        }*/
       }).catch(error => {
         console.log('Erro :-(' + error)
       }).finally(() => {
 
       })
-     
+    
     },
      /*/////////////////////////////////////////////////////////////////////////////////SUMA IMPACTO AMBIENTAL*/
      sumaImpactoAmbiental() {
@@ -2020,13 +2038,19 @@ const AltaProyectos = {
       this.correo = ''
       this.telefono = ''
     },
-    abrirModal(modal, tipo, accion) {
+    abrirModal(modal, tipo, accion,id,nombre_proyecto) {
+      
       //this.nombre_proyecto = ''
-      this.respondio = true;
-      this.nueva = ''
       this.tipo = tipo
       this.accion = accion
+      
+      //resetando variables
+      this.titulo_modal = ''
+      this.nueva = ''
+      this.respondio = true;
       if (modal == "Alta") {
+        this.actualizar_proyecto = false
+        this.titulo_modal = "Alta Proyecto"
         this.myModal = new bootstrap.Modal(document.getElementById("modal-alta-proyecto"))
         this.myModal.show()
         this.consultarPlantas()
@@ -2034,14 +2058,31 @@ const AltaProyectos = {
         this.consultarDepartamentos()
         this.consultarMetodologias()
         this.consultarResponsables()
-        //this.consultarObjetivos()
-        //this.consultarPilares()
         this.consultarImpactoAmbiental()
         this.consultarMisiones()
         this.consultarFuentes()
+        this.consultarValores()
         this.buscarDocumentos('Alta Proyecto')
 
-      } else if (modal == "CRUD") {
+      }else if(modal=="Actualizar Proyecto"){
+        this.valoresCheck = [] //la limpio
+        this.titulo_nombre_proyecto = nombre_proyecto
+        this.id_actualizar = id
+        this.actualizar_proyecto = true
+        this.titulo_modal = "Actualizar Proyecto"
+        this.myModal = new bootstrap.Modal(document.getElementById("modal-alta-proyecto"))
+        this.myModal.show()
+        this.consultarPlantas()
+        this.consultarAreas()
+        this.consultarDepartamentos()
+        this.consultarMetodologias()
+        this.consultarResponsables()
+        this.consultarImpactoAmbiental()
+        this.consultarMisiones()
+        this.consultarFuentes()
+        this.consultarValores()
+
+      }else if (modal == "CRUD") {
         this.myModalCRUD = new bootstrap.Modal(document.getElementById("modal-alta-crud"))
         if (accion == "Crear") {
           this.select_pilar = '';
@@ -2359,6 +2400,8 @@ const AltaProyectos = {
       else if (!this.selectObjetivo.includes("directo")) { this.respondio = false; alert("Minimo un Objetivo tiene que ser 'Directo'") }
       //Impacto Ambiental
       /*else if (this.checkImpactoAmbiental.length <= 0) { this.respondio = false; alert("Seleccione minimo una Impacto Ambiental") }*/
+       //Impacto Ambiental
+      else if (this.valoresCheck.length <= 0) { this.respondio = false; alert("Seleccione minimo un Valor Gonher") }
       //Ahorros
       else if ((this.tons_co2 == "0" || this.tons_co2 == "" || this.tons_co2 == "0.00") && this.ahorro_duro == "$.00" && this.ahorro_suave == "$.00" && (this.objetivo_estrategico == false || this.objetivo_estrategico == true)) { this.respondio = false; alert("Minimo uno debe ser distinto a 0") }
       //Si algo no se a contestado
@@ -2367,35 +2410,58 @@ const AltaProyectos = {
       }
 
       if (this.respondio === true) {
-        this.guardarAltaProyecto()
+        this.guardarAltaProyecto("Alta Proyecto")
       }
 
     },
-    guardarAltaProyecto() {
+    guardarAltaProyecto(insertar_o_actualizar) {
 
-      const separandoFuente = this.selectFuente.split('<->');//separando
-      var fuente = separandoFuente[1];
-      var siglasFuente = separandoFuente[2];
-      var fuenteConSiglas = fuente + siglasFuente;
+      var fuente = ''
+      var siglasFuente = ''
+      var fuenteConSiglas = ''
+      if(this.selectFuente.length>=3){
+        const separandoFuente = this.selectFuente.split('<->');//separando
+        fuente = separandoFuente[1];
+        siglasFuente = separandoFuente[2];
+        fuenteConSiglas = fuente + siglasFuente;
+      }
+      
+      var planta = ''
+      var siglasPlanta = ''
+      if(this.selectPlanta.length>=3){
+        const separandoPlanta = this.selectPlanta.split('<->');//separando
+        planta = separandoPlanta[1];
+        siglasPlanta = separandoPlanta[2];
+      }
 
-      const separandoPlanta = this.selectPlanta.split('<->');//separando
-      var planta = separandoPlanta[1];
-      var siglasPlanta = separandoPlanta[2];
+      var area = '';
+      var siglasArea = '';
+      if(this.selectArea.length>=3){
+        const separandoArea = this.selectArea.split('<->');//separando const */
+        area = separandoArea[1];
+        siglasArea = separandoArea[2];
+      }
+      
+      var metodologia = '';
+      if(this.selectMetodologia.length>=2){
+        const separandoMetodologia = this.selectMetodologia.split('<->');//separando */
+        metodologia = separandoMetodologia[1];
+      }
 
-      const separandoArea = this.selectArea.split('<->');//separando const */
-      var area = separandoArea[1];
-      var siglasArea = separandoArea[2];
-
-      const separandoMetodologia = this.selectMetodologia.split('<->');//separando */
-      var metodologia = separandoMetodologia[1];
-
-      const separandoDepartamento = this.selectDepartamento.split('<->');//separando*/;
-      var departamento = separandoDepartamento[1];
-      var siglasDepartamento = separandoDepartamento[2];
-
-      const separandoResponsable = this.selectResponsable.split('<->');
-      var responsable_id = separandoResponsable[0];
-
+      var departamento = '';
+      var siglasDepartamento= '';
+      if(this.selectDepartamento.length>=3){
+        const separandoDepartamento = this.selectDepartamento.split('<->');//separando*/;
+        departamento = separandoDepartamento[1];
+        siglasDepartamento = separandoDepartamento[2];
+      }
+      
+      var responsable_id = '';
+      if(this.selectResponsable.length>=1){
+        const separandoResponsable = this.selectResponsable.split('<->');
+        var responsable_id = separandoResponsable[0];
+      }
+     
 
       //Observador 
       var arreglo_observador = [];
@@ -2449,26 +2515,6 @@ const AltaProyectos = {
       }
       console.log(objetivos_nombres)
 
-      /*var pilaresDirectosIndirectos = [];
-      for (let i = 0; i < this.selectPilar.length; i++) {//insertando directo e indirectos de selectPilares
-        if (this.selectPilar[i] != "") {
-          pilaresDirectosIndirectos.push(this.selectPilar[i]);//nuevo arreglo eliminado los "" del arreglo anterior1
-        }
-      }
-      console.log("Pilares Directo e Indirectos")
-      console.log(pilaresDirectosIndirectos);
-
-      var combinadoPilar = [];
-      if (pilares_nombres.length == pilaresDirectosIndirectos.length) {
-        for (let i = 0; i < pilares_nombres.length; i++) {
-          combinadoPilar.push(pilares_nombres[i] + "->" + pilaresDirectosIndirectos[i]);
-        }
-        console.log("Combinado Pilares")
-        console.log(combinadoPilar)
-      } else {
-        console.log("los nombres del pilar y directos e indirecto de pilar no tienen el mismo tamaño")
-      }*/
-
       var objetivosDirectosIndirectos = [];
       for (let i = 0; i < this.selectObjetivo.length; i++) {//insertando directo e indirectos de selectPilares
         if (this.selectObjetivo[i] != "") {
@@ -2503,15 +2549,22 @@ const AltaProyectos = {
       if (impacto_ambiental_nombres.length <= 0) {
         impacto_ambiental_nombres.push('Sin Impacto')
       }
-
-      
       console.log(arreglo_observador)
+      
+      var valores = [];
+      for (let index = 0; index < this.valoresCheck.length; index++) {
+        if(this.valoresCheck[index]!=""){
+          var valor = this.valoresCheck[index]
+          valores.push(valor)
+        }
+      }
       //Folio proyecto
-
       var folio = siglasPlanta + "-" + siglasArea + '-' + siglasDepartamento + '-P' + siglasPilaresConcatenado + '-O' + siglasObjetivosConcatenado;
       //console.log(fuenteConSiglas);
-
+      //console.log("VALORES ARREGLO",valores,"ID",this.id_actualizar);
       axios.post("proyectosController.php", {
+        id_actualizar:this.id_actualizar,
+        accion:insertar_o_actualizar,
         folio: folio,
         fecha_alta: this.fecha_alta,
         nombre_proyecto: this.nombre_proyecto,
@@ -2526,40 +2579,55 @@ const AltaProyectos = {
         pilares: pilares_nombres,
         objetivos: combinadoObjetivo,
         impacto_ambiental: impacto_ambiental_nombres,
+        valores:valores,
         tons_co2: this.tons_co2,
         ahorro_duro: this.ahorro_duro,
         ahorro_suave: this.ahorro_suave
       }).then(response => {
         console.log(response.data)
-        if (response.data[0][0] == true) {
-          if (response.data[0][1] == true) {
-            this.myModal.hide()
-            this.consultarProyectos()
-            alert("El proyecto '" + this.nombre_proyecto + "' se creó con éxito..")
-            this.fecha_alta = ''
-            this.selectFuente = ''
-            this.selectPlanta = ''
-            this.selectArea = ''
-            this.selectDepartamento = ''
-            this.selectMetodologia = ''
-            this.selectResponsable = ''
-            this.checkObservadores =[]
-            this.checkMisiones = []
-            this.checkPilares = []
-            this.selectPilar = []
-            this.checkObjetivos = []
-            this.selectObjetivo = []
-            this.checkImpactoAmbiental = []
-            this.tons_co2 = ""
-            this.ahorro_duro = "$.00"
-            this.ahorro_suave = "$.00"
-            this.objetivo_estrategico = false
-            setTimeout(()=>{
-              this.nombre_proyecto = ''
-            },4000)
+        if(insertar_o_actualizar == "Alta Proyecto"){
+          if (response.data[0][0] == true) {
+            if (response.data[0][1] == true) {
+              this.myModal.hide()
+              this.consultarProyectos()
+              alert("El proyecto '" + this.nombre_proyecto + "' se creó con éxito..")
+              this.fecha_alta = ''
+              this.selectFuente = ''
+              this.selectPlanta = ''
+              this.selectArea = ''
+              this.selectDepartamento = ''
+              this.selectMetodologia = ''
+              this.selectResponsable = ''
+              this.checkObservadores =[]
+              this.checkMisiones = []
+              this.checkPilares = []
+              this.selectPilar = []
+              this.checkObjetivos = []
+              this.selectObjetivo = []
+              this.checkImpactoAmbiental = []
+              this.valoresCheck = []
+              this.tons_co2 = ""
+              this.ahorro_duro = "$.00"
+              this.ahorro_suave = "$.00"
+              this.objetivo_estrategico = false
+              setTimeout(()=>{
+                this.nombre_proyecto = ''
+              },4000)
+            }
+          } else {
+            alert("No se dio de alta el proyecto.")
           }
-        } else {
-          alert("No se dio de alta el proyecto.")
+        }else if(insertar_o_actualizar == "Actualizar Proyecto"){
+          
+          if (response.data[0] == true) {
+            this.consultarProyectos()
+            this.myModal.hide()
+            alert("Actualizado con éxito.")
+
+          }
+         
+        }else{
+          console.log("No es ni insertar ni actualizar")
         }
       }).catch(error => {
 
@@ -2570,6 +2638,24 @@ const AltaProyectos = {
       if (nombres === this.nombre_proyecto) {
         return true
       }
+    },
+    actualizarProyecto(id){
+      axios.post('proyectosController.php', {
+        accion:'Actualizar Proyecto',
+        id: id,
+      }).then(response => {
+        console.log(response.data)
+        if (response.data[0] == true) {
+             this.consultarProyectos()
+        } else {
+          alert("La actualización, no se realizo correctamente.")
+        }
+      }).catch(error => {
+        //console.log('Erro :-('+error)
+      }).finally(() => {
+
+      })
+
     },
     folioAnteriorSinNumeral(nombre, index) {
       // Compara el nombre actual con el anterior y asigna un color diferente si es diferente
@@ -2866,6 +2952,7 @@ const AltaProyectos = {
       }
 
       axios.put('proyectosController.php', {
+        accion:'Guardar Estatus',
         id_proyecto: this.id_proyecto,
         status: status,
       }).then(response => {

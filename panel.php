@@ -43,46 +43,50 @@ if (isset($_SESSION['nombre'])) {
                         <i class="bi bi-plus-circle"></i> Estatus Captura
                     </button>
                     <?php } ?>
+                    
                     <!--Modal Alta Proyectos-->
                     <div id="modal-alta-proyecto" class="modal text-start" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
                         <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title"> Alta Proyecto</h5>
+                                    <h6 class="modal-title me-5"> {{titulo_modal}}</h6><label style="font-size: 16px; color: #ec9826; text-shadow: 0px 1px #fff;" v-show="actualizar_proyecto">{{titulo_nombre_proyecto}}</label>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
+                                        
+                                    
                                     <div class="d-flex col-12">
                                         <div class="col-9 "><!--bloque imagen-->
                                             <!--Formulario Alta Proyecto-->
                                             <div class="input-group mb-3">
-                                                <span class="input-group-text w-25">Fecha</span>
-                                                <input type="date" class="w-50" v-model="fecha_alta" :class="{'nocontestado': respondio === false && fecha_alta === '', '': fecha_alta !== ''}">
+                                                <span class="input-group-text w-25">Fecha{{id_actualizar}}</span>
+                                                <input type="date" class="w-50" v-model="fecha_alta" :class="{'nocontestado': respondio === false && fecha_alta === '', '': fecha_alta !== ''}" :disabled="actualizar_proyecto">
                                                 <div v-show="fecha_alta !==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
 
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-25">Nombre Proyecto</span>
-                                                <input type="text" class="w-50" v-model="nombre_proyecto" :class="{'nocontestado': respondio === false && nombre_proyecto === '', '':nombre_proyecto !== ''}">
+                                                <input type="text" class="w-50" v-model="nombre_proyecto" :class="{'nocontestado': respondio === false && nombre_proyecto === '', '':nombre_proyecto !== ''}" :disabled="actualizar_proyecto">
                                                 <div v-if="nombre_proyecto !==''" class=" text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
 
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-25">Fuente</span>
-                                                <select v-model="selectFuente" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectFuente === '', '': selectFuente !== ''}">
+                                                <select v-model="selectFuente" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectFuente === '', '': selectFuente !== ''}" :disabled="actualizar_proyecto">
                                                     <option value="" selected disabled>Seleccione..</option>
                                                     <option v-for="fuente in fuentes" :value="fuente.id +'<->'+ fuente.nombre+'<->'+fuente.siglas">{{fuente.nombre}} ({{fuente.siglas}})</option>
                                                 </select>
+                                                <div v-if="selectFuente !==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
 
                                             <!---Planta-->
                                             <div class="input-group mb-3 ">
                                                 <span class="input-group-text w-25">Planta</span>
-                                                <select v-model="selectPlanta" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectPlanta === '', '': selectPlanta !== ''}">
+                                                <select v-model="selectPlanta" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectPlanta === '', '': selectPlanta !== ''}" :disabled="actualizar_proyecto">
                                                     <option value="" selected disabled>Seleccione..</option>
                                                     <option v-for="planta in plantas" :value="planta.id +'<->'+ planta.nombre+'<->'+planta.siglas">{{planta.nombre}} ({{planta.siglas}})</option>
                                                 </select>
-                                                <div class="flex-column">
+                                                <div v-show="actualizar_proyecto==false" class="flex-column">
                                                     <div class="col-12"><button class="btn-anadir" title="Crear " @click="abrirModal('CRUD','Planta','Crear')"><i class="bi bi-plus-circle"></i></button></div>
                                                     <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Planta','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
                                                     <div class="col-12"><button class="btn-delete" title="Eliminar" @click="eliminarPlanta()"><i class="bi bi-x-circle"></i></button></div>
@@ -93,11 +97,11 @@ if (isset($_SESSION['nombre'])) {
                                             <!---Área-->
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-25">Área</span>
-                                                <select v-model="selectArea" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectArea === '', '': selectArea !== ''}">
+                                                <select v-model="selectArea" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectArea === '', '': selectArea !== ''}" :disabled="actualizar_proyecto">
                                                     <option selected disabled>Seleccione..</option>
                                                     <option v-for="area in areas" :value="area.id +'<->'+ area.nombre+'<->'+ area.siglas">{{area.nombre}} ({{area.siglas}})</option>
                                                 </select>
-                                                <div>
+                                                <div v-show="actualizar_proyecto==false">
                                                     <div class="col-12"><button class="btn-anadir" title="Crear" @click="abrirModal('CRUD','Área','Crear')"><i class="bi bi-plus-circle"></i></button></div>
                                                     <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Área','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
                                                     <div class="col-12"><button class="btn-delete" title="Eliminar" @click="eliminarArea()"><i class="bi bi-x-circle"></i></button></div>
@@ -108,11 +112,11 @@ if (isset($_SESSION['nombre'])) {
                                             <!---Departamentos-->
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-25">Departamento</span>
-                                                <select v-model="selectDepartamento" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectDepartamento === '', '': selectDepartamento !== ''}">
+                                                <select v-model="selectDepartamento" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectDepartamento === '', '': selectDepartamento !== ''}" :disabled="actualizar_proyecto">
                                                     <option selected disabled>Seleccione..</option>
                                                     <option v-for="departamento in departamentos" :value="departamento.id+'<->'+departamento.nombre+'<->'+departamento.siglas">{{departamento.nombre}} ({{departamento.siglas}})</option>
                                                 </select>
-                                                <div>
+                                                <div v-show="actualizar_proyecto==false">
                                                     <div class="col-12"><button class="btn-anadir" title="Crear" @click="abrirModal('CRUD','Departamento','Crear')"><i class="bi bi-plus-circle"></i></button></div>
                                                     <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Departamento','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
                                                     <div class="col-12"><button class="btn-delete" title="Eliminar" @click="eliminarDepartamento()"><i class="bi bi-x-circle"></i></button></div>
@@ -122,11 +126,11 @@ if (isset($_SESSION['nombre'])) {
                                             <!---Metodologías-->
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-25">Metodología</span>
-                                                <select v-model="selectMetodologia" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectMetodologia === '', '': selectMetodologia !== ''}">
+                                                <select v-model="selectMetodologia" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectMetodologia === '', '': selectMetodologia !== ''}" :disabled="actualizar_proyecto">
                                                     <option selected disabled>Seleccione..</option>
                                                     <option v-for="metodologia in metodologias" :value="metodologia.id+'<->'+metodologia.nombre">{{metodologia.nombre}}</option>
                                                 </select>
-                                                <div>
+                                                <div v-show="actualizar_proyecto==false">
                                                     <div class="col-12"><button class="btn-anadir" title="Crear " @click="abrirModal('CRUD','Metodología','Crear')"><i class="bi bi-plus-circle"></i></button></div>
                                                     <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Metodología','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
                                                     <div class="col-12"><button class="btn-delete" title="Eliminar" @click="eliminarMetodologia()"><i class="bi bi-x-circle"></i></button></div>
@@ -134,7 +138,7 @@ if (isset($_SESSION['nombre'])) {
                                                 <div v-if="selectMetodologia !==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
                                             <!---Responsables-->
-                                            <div class="d-flex d-flex-row justify-content-center">
+                                            <div v-if="actualizar_proyecto==false" class="d-flex d-flex-row justify-content-center" >
                                                 <div><button class="btn-anadir" title="Crear " @click="crearResponsable()"><i class="bi bi-plus-circle"></i></button></div>
                                                 <div><button class="btn-up" title="Actualizar" @click="consultarResponsableID()"><i class="bi bi-arrow-up-circle"></i></button></div>
                                                 <div><button class="btn-delete" title="Eliminar" @click="eliminarResponsable()"><i class="bi bi-x-circle"></i></button></div>
@@ -142,7 +146,7 @@ if (isset($_SESSION['nombre'])) {
 
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-25">Responsable</span>
-                                                <select v-model="selectResponsable" class="w-50" :class="{'nocontestado': respondio === false && selectResponsable === '', '': selectResponsable !== ''}">
+                                                <select v-model="selectResponsable" class="w-50" :class="{'nocontestado': respondio === false && selectResponsable === '', '': selectResponsable !== ''}" :disabled="actualizar_proyecto">
                                                     <option value="" disabled selected>Seleccione..</option>
                                                     <option v-for="responsable in responsables" :value="responsable.id+'<->'+responsable.nombre">{{responsable.nombre}}</option>
                                                 </select>
@@ -172,7 +176,7 @@ if (isset($_SESSION['nombre'])) {
                                                         <input type="checkbox" v-model="financiero" :disabled="!nuevoResponsable">
                                                     </div>-->
                                                 </div>
-                                                <div class="col-2 my-auto text-center">
+                                                <div class="col-2 my-auto text-center" >
                                                     <button type="button" v-if="nuevoResponsable==true && actualizarResponsable==false" class="btn-nuevo-responsable" @click="insertarResponsable()">Crear</button>
                                                     <button type="button" v-if="actualizarResponsable" class="btn-actualizar-responsable" @click="actualizandoResponsable()">Actualiazar</button>
                                                     <button type="button" class="btn-cancelar-responsable mt-3" @click="cancelar()">Cancelar</button>
@@ -183,7 +187,7 @@ if (isset($_SESSION['nombre'])) {
                                             <span class="input-group-text w-25">Observador (Opcional)</span>
                                                 <div class="scroll w-50">
                                                     <div class="form-check border border-1 mt-1" v-for="(responsable, index) in responsables" :key="index">
-                                                        <input class="form-check-input" type="checkbox" :value="responsable.nombre+'<->'+responsable.numero_nomina" v-model="checkObservadores">
+                                                        <input class="form-check-input" type="checkbox" :value="responsable.nombre+'<->'+responsable.numero_nomina" v-model="checkObservadores" :disabled="actualizar_proyecto">
                                                         <label class="form-check-label">
                                                             {{ responsable.nombre }}
                                                         </label>
@@ -191,13 +195,15 @@ if (isset($_SESSION['nombre'])) {
                                                 </div>
                                             </div>
 
+                                         
+
                                             <!--Misiones-->
 
                                             <div class="input-group mb-3 mt-3 ">
                                                 <span class="input-group-text w-25 text-start">Misión </span>
-                                                <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkMisiones.length<=0, '': checkMisiones.length>0}">
+                                                <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkMisiones.length<=0, '': checkMisiones.length>0}" >
                                                     <div class="form-check border border-1 mt-1" v-for="(mision, index) in misiones" :key="index">
-                                                        <input class="form-check-input" type="checkbox" :value="mision.id+'<->'+mision.nombre" v-model="checkMisiones" @change="consultarPilaresXmisionSeleccionada()">
+                                                        <input class="form-check-input" type="checkbox" :value="mision.id+'<->'+mision.nombre" v-model="checkMisiones" @change="consultarPilaresXmisionSeleccionada()" :disabled="actualizar_proyecto">
                                                         <label class="form-check-label">
                                                             {{ mision.nombre }}
                                                         </label>
@@ -216,7 +222,7 @@ if (isset($_SESSION['nombre'])) {
                                                 <span class="input-group-text w-25 text-start">Pilares <br>Estratégicos </span>
                                                 <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkPilares.length<=0, '': checkPilares.length>0}">
                                                     <div class="form-check border border-1 mt-1" v-for="(pilar, index) in pilares" :key="index">
-                                                        <input class="form-check-input" type="checkbox" :value="pilar.id+'<->'+pilar.nombre+'<->'+pilar.siglas+'<->'+(index+1)" v-model="checkPilares" @change="consultarObjetivosXpilaresSeleccionados()">
+                                                        <input class="form-check-input" type="checkbox" :value="pilar.id+'<->'+pilar.nombre+'<->'+pilar.siglas+'<->'+(index+1)" v-model="checkPilares" @change="consultarObjetivosXpilaresSeleccionados()" :disabled="actualizar_proyecto">
                                                         <label class="form-check-label w-75">
                                                             {{ pilar.nombre }} ({{pilar.siglas}})
                                                         </label>
@@ -244,7 +250,7 @@ if (isset($_SESSION['nombre'])) {
                                                 <span class="input-group-text w-25 text-start">Objetivos <br>Estratégicos</span>
                                                 <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkObjetivos.length<=0, '': checkObjetivos.length>0}">
                                                     <div v-for="(objetivo, index) in objetivos" class="form-check border border-1 mt-1" :key="index">
-                                                        <input class="form-check-input" v-model="checkObjetivos" type="checkbox" id="checkbox1" :value="objetivo.id+'<->'+objetivo.nombre+'<->'+objetivo.id_pilares+'<->'+objetivo.siglas+'<->'+(index+1)" @change="checkeandoObjetivos()">
+                                                        <input class="form-check-input" v-model="checkObjetivos" type="checkbox" id="checkbox1" :value="objetivo.id+'<->'+objetivo.nombre+'<->'+objetivo.id_pilares+'<->'+objetivo.siglas+'<->'+(index+1)" @change="checkeandoObjetivos()" :disabled="actualizar_proyecto">
                                                         <label class="form-check-label w-75" for="checkbox1">
                                                             {{objetivo.nombre}} ({{objetivo.siglas}})
                                                         </label>
@@ -271,7 +277,7 @@ if (isset($_SESSION['nombre'])) {
                                                 <span class="input-group-text w-25 text-start">Impacto <br>Ambiental<br><label class="ms-5"><i class="bi bi-question-circle"></label></i></span>
                                                 <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkImpactoAmbiental.length<=0, '': checkImpactoAmbiental.length>0}">
                                                     <div v-for="impacto in impactoAmbiental" class="form-check border border-1  mt-1">
-                                                        <input class="form-check-input" type="checkbox" id="checkbox1" v-model="checkImpactoAmbiental" :value="impacto.id+'<->'+impacto.nombre">
+                                                        <input class="form-check-input" type="checkbox" id="checkbox1" v-model="checkImpactoAmbiental" :value="impacto.id+'<->'+impacto.nombre" :disabled="actualizar_proyecto">
                                                         <label class="form-check-label" for="checkbox1">
                                                             {{impacto.nombre}}
                                                         </label>
@@ -285,9 +291,24 @@ if (isset($_SESSION['nombre'])) {
                                                 <div v-if="checkImpactoAmbiental.length>0" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
 
+                                            <!--Valores Gonher-->
+                                            <div class="input-group mb-3 mt-3 ">
+                                            <span class="input-group-text w-25">Valores</span>
+                                                <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && valoresCheck.length<=0, '': valoresCheck.length>0}">
+                                                    <div class="form-check border border-1 mt-1" v-for="(valor, index) in valores" :key="index">
+                                                        <input class="form-check-input" type="checkbox" :value="valor.valor" v-model="valoresCheck" >
+                                                        <label class="form-check-label" :class="{'valor-calidad':'Calidad - Productividad'==valor.valor,'valor-trabajo':'Trabajo en Equipo'==valor.valor, 'valor-compromiso':'Compromiso'==valor.valor,'valor-servicio':'Servicio y Orientación al Cliente'==valor.valor, 'valor-desarrollo':'Desarrollo de Nuestra Gente'==valor.valor,'valor-integridad':'Integridad'==valor.valor,'valor-innovacion':'Innovación'==valor.valor}">
+                                                            {{ valor.valor }}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div v-if="valoresCheck.length>0" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                            </div>
+
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-50">Tons CO2 por Evitar (Proyectado)</span>
-                                                <input id="tons_co2" type="text" v-model="tons_co2" min="0" class="w-25" :class="{'nocontestado': respondio === false && (tons_co2 == 0 || tons_co2 == '' ), '': tons_co2 !== 0 && tons_co2 !== ''}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputSinPesos('tons_co2')">
+                                                <input id="tons_co2" type="text" v-model="tons_co2" min="0" class="w-25" :class="{'nocontestado': respondio === false && (tons_co2 == 0 || tons_co2 == '' ), '': tons_co2 !== 0 && tons_co2 !== ''}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputSinPesos('tons_co2')"
+                                                :disabled="actualizar_proyecto">
                                                 <div v-if="tons_co2 !== '' && tons_co2 !== '0'" class="text-center my-auto ms-3">
                                                     <i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i>
                                                 </div>
@@ -295,25 +316,27 @@ if (isset($_SESSION['nombre'])) {
 
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-50">Ahorro Duro $MXN/Año (Proyectado )</span>
-                                                <input id="ahorro_duro" type="text" v-model="ahorro_duro" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_duro==='$.00', '': ahorro_duro!==0 && ahorro_duro!==''}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('ahorro_duro')">
+                                                <input id="ahorro_duro" type="text" v-model="ahorro_duro" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_duro==='$.00', '': ahorro_duro!==0 && ahorro_duro!==''}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('ahorro_duro')"
+                                                :disabled="actualizar_proyecto">
                                                 <div v-if="ahorro_duro!=='' && ahorro_duro !== '$0.00' && ahorro_duro !== '$.00' && ahorro_duro !== '$.0' && ahorro_duro !== '$.'  && ahorro_duro !== '$'" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
                                             <!--@click="colocarCursor('ahorro_duro')" @blur="asignarValor('ahorro_duro')" @keyUp=" formatoNumero('ahorro_duro', $event)"-->
 
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-50">Ahorro Suave $MXN/Año (Proyectado)</span>
-                                                <input id="ahorro_suave" type="text" v-model="ahorro_suave" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_suave==='$.00', '': ahorro_suave!==0 && ahorro_suave!==''}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('ahorro_suave')">
+                                                <input id="ahorro_suave" type="text" v-model="ahorro_suave" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_suave==='$.00', '': ahorro_suave!==0 && ahorro_suave!==''}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('ahorro_suave')"
+                                                :disabled="actualizar_proyecto">
                                                 <div v-if="ahorro_suave!=='' && ahorro_suave !== '$0.00' && ahorro_suave !== '$.00' && ahorro_suave !== '$.0' && ahorro_suave !== '$.'  && ahorro_suave !== '$'" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-25 me-2">Objetivo Estrategico</span>
-                                                <input type="checkbox" v-model="objetivo_estrategico">
+                                                <input type="checkbox" v-model="objetivo_estrategico" :disabled="actualizar_proyecto">
                                             </div>
                                         </div>
                                         <div class="col-3 my-auto mx-auto "><!--bloque imagen Alta Proyecto-->
                                             <form @submit.prevent="uploadFile('Alta Proyecto')">
                                                 <div class="row mx-auto">
-                                                    <input type="file" id="input_file_subir" @change="varificandoSelecion()" ref="ref_imagen" accept="*.jpg/*.png" class="btn-success py-1" required />
+                                                    <input type="file" id="input_file_subir" @change="varificandoSelecion()" ref="ref_imagen" accept="*.jpg/*.png" class="btn-success py-1" required  :disabled="actualizar_proyecto"/>
                                                 </div>
                                                 <div v-if="imagenes.length>0" class="row">
                                                     <div class="col-12 d-flex justify-content-center">
@@ -335,7 +358,8 @@ if (isset($_SESSION['nombre'])) {
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="boton-cancelar" data-bs-dismiss="modal">Salir</button>
-                                    <button type="button" class="boton-aceptar" @click="verificarAltaProyecto()">Crear</button>
+                                    <button v-if="actualizar_proyecto==false" type="button" class="boton-aceptar" @click="verificarAltaProyecto()">Crear</button>
+                                    <button v-if="actualizar_proyecto==true" type="button" class="boton-actualizar" @click="guardarAltaProyecto('Actualizar Proyecto')">Actualizar</button>
                                 </div>
                             </div>
                         </div>
@@ -564,19 +588,20 @@ if (isset($_SESSION['nombre'])) {
                                 <th>Pilare(s) Estratégico(s)</th>
                                 <th>Objetivo(s) Estratégico(s)</th>
                                 <th>Impacto Ambiental</th>
+                                <th style="min-width:230px;">Valores</th>
                                 <th>Tons CO2 por Evitar <br>(Proyectado)</th>
                                 <th>Ahorro Duro $MXN/Año <br>(Proyectado )</th>
                                 <th>Ahorro Suave $MXN/Año <br>(Proyectado)</th>
                                 <th>Estatus</th>
                                 <?php if ($_SESSION['acceso'] == 'Admin') { ?>
                                     <th>Eliminar</th>
-                                    <!--<th>Actualizar</th>-->
+                                    <th>Actualizar</th>
                                 <?php } ?>
                             </thead>
                             <tbody class=" border:1px solid black" style="text-align: center">
                                 <template v-for="(proyecto,index) in proyectos">
                                     <tr v-if="folioAnteriorSinNumeral(proyecto.folio, index)" :class="{ 'divisor-tr-creados': folioAnteriorSinNumeral(proyecto.folio, index)==true}"><!--ES DIFERENTE--->
-                                        <td colspan="20" v-if="index>0"></td>
+                                        <td colspan="22" v-if="index>0"></td>
                                     </tr>
                                     <tr class="cuerpo-tabla-creados border border-secondary" style="vertical-align: middle;" :class="{ 'fila-ultimo-proyecto': buscandoUltimoProyectoCreado(proyecto.nombre_proyecto) }">
                                         <td class="border border-secondary">{{proyecto.fecha}}</td>
@@ -591,18 +616,26 @@ if (isset($_SESSION['nombre'])) {
                                         <td class="border border-secondary">{{proyecto.correo}}</td>
                                         <td class="border border-secondary">{{proyecto.telefono}}</td>
                                         <td class="border border-secondary text-start">
-                                            <ul>
+                                            <ul v-if="proyecto.pilares">
                                                 <li v-for="pilar in JSON.parse(proyecto.pilares)">{{pilar}}</li>
                                             </ul>
                                         </td>
                                         <td class="border border-secondary text-start">
-                                            <ul>
+                                            <ul v-if="proyecto.objetivos">
                                                 <li v-for="objetivo in JSON.parse(proyecto.objetivos)">{{objetivo}}</li>
                                             </ul>
                                         </td>
                                         <td class="border border-secondary text-start">
-                                            <ul>
+                                            <ul  v-if="proyecto.impacto_ambiental">
                                                 <li v-for="impacto in JSON.parse(proyecto.impacto_ambiental)">{{impacto}}</li>
+                                            </ul>
+                                        </td>
+                                        <td class="border border-secondary text-start">
+                                            <ul v-if="proyecto.valores">
+                                                <li v-for="(valor in JSON.parse(proyecto.valores)">
+                                                    <label :class="{'valor-calidad':'Calidad - Productividad'===valor,'valor-trabajo':'Trabajo en Equipo'===valor, 'valor-compromiso':'Compromiso'===valor,'valor-servicio':'Servicio y Orientación al Cliente'===valor, 'valor-desarrollo':'Desarrollo de Nuestra Gente'===valor,'valor-integridad':'Integridad'===valor,'valor-innovacion':'Innovación'===valor}">
+                                                        {{valor}}
+                                                    <label></li>
                                             </ul>
                                         </td>
                                         <td class="border border-secondary">{{proyecto.tons_co2}}<br> <label class="text-success" v-if="proyectoSumas[proyecto.id]"><b>{{proyectoSumas[proyecto.id].sumaTons}}<b><label></td>
@@ -611,7 +644,7 @@ if (isset($_SESSION['nombre'])) {
                                         <td class="border border-secondary"><b><label v-if="proyecto.status_seguimiento!='Cerrado'" class="text-success">Siguiendo</label><label v-else="proyecto.status_seguimiento!='Cerrado'" class="text-danger">{{proyecto.status_seguimiento}}<label></b></td>
                                         <?php if ($_SESSION['acceso'] == 'Admin') { ?>
                                             <td class="border border-secondary"> <button class="rounded-circle bg-danger border border-secondary btn shadow-sm" @click="eliminarProyecto(proyecto.id,proyecto.nombre_proyecto)"><i class="bi bi-trash3-fill text-white"></i></button></td>
-                                            <!--<td><button type="button" class=" btn boton_actualizar mx-2" @Click="">Actualizar</button></td>-->
+                                            <td><button type="button" class=" btn boton_actualizar mx-2" @Click="abrirModal('Actualizar Proyecto','','',proyecto.id,proyecto.nombre_proyecto)">Actualizar</button></td>
                                         <?php } ?>
                                     </tr>
                                 </template>
@@ -621,9 +654,15 @@ if (isset($_SESSION['nombre'])) {
                 </div>
                 <!--------------------------CREAR PERFILES, PILARES OBJETIVOS---------------------------------->
                 <div class="row" v-if="ventana=='Crear'">
-                    <div class="offset-2 col-8 col-sm-4 offset-sm-4 offset-xl-5 col-xl-2 mt-2 text-center">
-                        <button type="button" class="btn btn-menu w-75 bg-primary " style="min-width:180px;" @click="descargarExcel()" title="Descargar">
-                        <i class="bi bi-file-earmark-arrow-down"></i>Descargar Reporte</button>
+                    <div class="d-flex justify-content-evenly">
+                        <div>
+                            <button type="button" class="btn btn-menu w-50 bg-primary mt-1" style="min-width:180px;" @click="descargarExcel()" title="Descargar">
+                            <i class="bi bi-file-earmark-arrow-down"></i>Descargar Reporte</button>
+                        </div>
+                        <!--<div>
+                            <button type="button" class="btn btn-menu w-100 bg-primary  mt-1 " style="min-width:180px;" @click="descargarExcelValores()" title="Descargar">
+                            <i class="bi bi-file-earmark-arrow-down"></i>Descargar Reporte Valores</button>
+                        </div>-->
                     </div>
                     <!-- <div class=" bg-secondary mt-3 text-white align-items-center ">
                             <div class=" text-center">
@@ -1797,34 +1836,42 @@ if (isset($_SESSION['nombre'])) {
                                             </div>
                                         </div>
                                         <div class="col-3 text-start">
-                                            <div class="mb-2">
-                                                <i class="bi bi-check-circle"></i> Calidad
-                                            </div>
-                                            <div class="lh-1">
-                                                <i class="bi bi-check-circle"></i> Servicio y <br>orientación <br>al cliente
-                                            </div>            
+                                            <div class="mb-2 d-flex ">
+                                                <div class="col-6"><i class="bi bi-check-circle"></i> Calidad</div>
+                                                <div class="col-6"><span class="badge bg-secondary">1</span></div>
+                                            </div>    
+                                            <div class="mb-2 d-flex">
+                                                <div class="col-6 lh-1"><i class="bi bi-check-circle"></i> Servicio y <br>orientación <br>al cliente</div>
+                                                <div class="col-6"><span class="badge bg-secondary">1</span></div>
+                                            </div>       
                                         </div>
                                         <div class="col-3 text-start ">
-                                            <div class="mb-2">
-                                                <i class="bi bi-check-circle"></i> Trabajo en equipo
+                                            <div class="mb-2 d-flex ">
+                                                <div class="col-8 lh-1"><i class="bi bi-check-circle"></i> Trabajo en <br>Equipo</div>
+                                                <div class="col-4"><span class="badge bg-secondary">1</span></div>
                                             </div>
-                                            <div class="mb-2">
-                                                <i class="bi bi-check-circle"></i> Productividad
+                                            <div class="mb-2 d-flex ">
+                                                <div class="col-8"><i class="bi bi-check-circle"></i>Productividad</div>
+                                                <div class="col-4"><span class="badge bg-secondary">1</span></div>
                                             </div>
-                                            <div class="lh-1">
-                                                <i class="bi bi-check-circle"></i> Desarrollo de <br> nuestra gente   
-                                            </div>         
+                                            <div class="mb-2 d-flex ">
+                                                <div class="col-8 lh-1"><i class="bi bi-check-circle"></i> Desarrollo de <br> nuestra gente   </div>
+                                                <div class="col-4"><span class="badge bg-secondary">1</span></div>
+                                            </div>        
                                         </div>
                                         <div class="col-3 text-start">
-                                            <div class="mb-2">
-                                                <i class="bi bi-check-circle"></i> Compromiso
+                                            <div class="mb-2 d-flex">
+                                                <div class="col-8"><i class="bi bi-check-circle"></i> Compromiso</div>
+                                                <div class="col-4"><span class="badge bg-secondary">1</span></div>
                                             </div>
-                                            <div class="mb-2">
-                                                <i class="bi bi-check-circle"></i> Integridad
+                                            <div class="mb-2 d-flex">
+                                                <div class="col-8"><i class="bi bi-check-circle"></i> Integridad</div>
+                                                <div class="col-4"><span class="badge bg-secondary">1</span></div>
                                             </div>
-                                            <div>
-                                            <i class="bi bi-check-circle"></i> Inovación
-                                            </div>         
+                                            <div class="mb-2 d-flex">
+                                                <div class="col-8"><i class="bi bi-check-circle"></i> Innovación</div>
+                                                <div class="col-4"><span class="badge bg-secondary">1</span></div>
+                                            </div>       
                                         </div>
                                     </div>
                                 </div>
@@ -1933,7 +1980,6 @@ if (isset($_SESSION['nombre'])) {
                                                         <hr>
                                                                 <label>Ah. D.: </label>&nbsp;<label> {{ calendarioSumaXMesAnio.sumas_ahorro_duro && calendarioSumaXMesAnio.sumas_ahorro_duro[x.toString()]}}</label>
                                                         </div>
-                                                        
                                                 </td>
                                             </tr>
                                             <tr><!--Fila Total Real-->

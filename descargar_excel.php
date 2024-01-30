@@ -1,28 +1,41 @@
 <?php
 session_start();
-
 include '../excel/Classes/PHPExcel.php'; // al subir en linea
 //include 'PHPExcel/Classes/PHPExcel.php'; //local
+include "conexionGhoner.php";
 
 $objPHPExcel = new PHPExcel();
 $objPHPExcel->getProperties()
-        ->setCreator("Opex Tracking Sytem")
+        ->setCreator("Opex Tracking System")
         ->setLastModifiedBy("GV")
         ->setTitle("Excel en PHP")
         ->setSubject("Reporte Impacto Ambiental")
-        ->setDescription("Documento generado con PHPExcel")
+        ->setDescription("Documento generado")
         ->setKeywords("excel phpexcel php")
-        ->setCategory("Ejemplos");
+        ->setCategory("datos");
 
-// Añadir datos al archivo
+        $nuevaHoja = $objPHPExcel->createSheet()->setTitle('Valores');
 
-include "conexionGhoner.php";
+        $consultaValores = "SELECT * FROM valores";
+        $resultado = $conexion->query($consultaValores);
+        
+        $valores[] = 'Mes/Año';
+        while ($fila = $resultado->fetch_assoc()) {
+            $valores[] = $fila['valor'];
+        }
+        
+        // Agregar los valores a la hoja "Valores" en la fila 1 desde la celda A1 hasta la celda G1
+        $nuevaHoja->fromArray($valores, null, 'A1');
+
 
 $consulta = "SELECT proyectos_creados.id, impacto_ambiental_proyecto.impacto_ambiental, proyectos_creados.nombre_proyecto, registros_impacto_ambiental.dato, registros_impacto_ambiental.ahorro_duro, registros_impacto_ambiental.ahorro_suave, registros_impacto_ambiental.mes, registros_impacto_ambiental.anio 
 FROM registros_impacto_ambiental JOIN impacto_ambiental_proyecto ON registros_impacto_ambiental.id_impacto_ambiental_proyecto = impacto_ambiental_proyecto.id 
-JOIN proyectos_creados ON impacto_ambiental_proyecto.id_proyecto = proyectos_creados.id WHERE impacto_ambiental_proyecto.impacto_ambiental !='Sin Impacto' ORDER BY `registros_impacto_ambiental`.`anio` ASC";
-
+JOIN proyectos_creados ON impacto_ambiental_proyecto.id_proyecto = proyectos_creados.id ORDER BY `registros_impacto_ambiental`.`anio` ASC";
 $query = $conexion->query($consulta);
+
+
+
+
 
 $datos = array(
     array('ID', 'Mes', 'Año','Impacto Ambiental', 'Cántidad','Nombre Proyecto', 'Ahorro Duro','Ahorro Suave'),
