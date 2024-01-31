@@ -7,6 +7,7 @@ const AltaProyectos = {
   data() {
     return {
       /*/////////////////////////////////////////////////////////////////////////////////VARIBLES USUARIOS Y DEPARTAMENTOS INICIO*/
+      opcion:2,
       ventana: 'Altas',
       myModal: '',
       myModalCRUD: '',
@@ -156,6 +157,7 @@ const AltaProyectos = {
 
       sumaGeneralValor:'',
       sumaGeneralSustentable:'',
+      sumaValoresGonher:'',
       //Calendario
       select_anio_calendario:2023,
       proyectosDatosCalendario:[],
@@ -3056,8 +3058,6 @@ const AltaProyectos = {
                         sumaSustentableInvestigacionDesarrollo += parseFloat(elemento.sustentable.replace(/[^\d.-]/g, ''));
                       }
                       
-                      
-                      
 
                     }
                   }
@@ -3099,7 +3099,8 @@ const AltaProyectos = {
       }).finally(() => {
 
       })
-    }, buscarCoincidencias(objetivo_con_siglas) {
+    }, 
+    buscarCoincidencias(objetivo_con_siglas) {
       //console.log("El resultado que llego"+valor1)
       for (let key in this.sumasGenerandoValor) {
         if (key === objetivo_con_siglas) {
@@ -3107,6 +3108,23 @@ const AltaProyectos = {
         }
       }
       return false
+    },
+    valoresProyectos(){
+      axios.get("proyectosController.php",{
+        params:{
+          accion:'sumar valores'
+        }
+      }).then(response =>{
+        console.log("Suma de Valores Gonher",response.data)
+       if(response.data[0][1]){
+          this.sumaValoresGonher = response.data[0][0]
+       }else{
+          alert("Existe un problema con la consulta sumaValoresGonher")
+       }
+       
+      }).catch(error =>{
+        console.log("Error en valoresProyectos "+error)
+      })
     },
     consultarValidacion(){
       axios.get("validacionFinancieraController.php",{

@@ -19,10 +19,13 @@ if (isset($_SESSION['nombre'])) {
                     //$val[] = 'Hola'.$anio;
                     $val[] = consultarCalendarioProyecto($anio);
                 }
+                if($_GET['accion']=='sumar valores'){
+                    $val[] = sumaValoresGonher();
+                }
             }else {
                 $val[] = consultarProyectos();
             }
-
+ 
             break;
         case 'POST':
             // Manejar solicitud POST (creación)

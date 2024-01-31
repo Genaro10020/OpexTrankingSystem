@@ -26,6 +26,49 @@ function consultarProyectos()
     return array($resultado, $estado);
 }
 
+function sumaValoresGonher(){
+    global $conexion;
+    $estado = false;
+
+    $valores = [];
+    $sumaCalidad =0; $sumaTrabajo =0; $sumaCompromiso =0; $sumaServicio =0;  $sumaDesarrollo =0; $sumaIntegridad =0; $sumaInnovacion=0;
+
+    $consulta = "SELECT * FROM proyectos_creados";
+    if($query = $conexion->query($consulta)){
+        $estado = true;
+    }
+    while($fila = $query->fetch_array()) {
+        $valor = $fila['valores'];
+        //contando valores 
+        $cantidad1=substr_count($valor,"Calidad - Productividad");
+        $cantidad2=substr_count($valor,"Trabajo en Equipo");
+        $cantidad3=substr_count($valor,"Compromiso");
+        $cantidad4=substr_count($valor,"Servicio y Orientación al Cliente");
+        $cantidad5=substr_count($valor,"Desarrollo de Nuestra Gente");
+        $cantidad6=substr_count($valor,"Integridad");
+        $cantidad7=substr_count($valor,"Innovación");
+
+        $sumaCalidad += $cantidad1;  
+        $sumaTrabajo += $cantidad2; 
+        $sumaCompromiso += $cantidad3;
+        $sumaServicio += $cantidad4; 
+        $sumaDesarrollo += $cantidad5; 
+        $sumaIntegridad += $cantidad6; 
+        $sumaInnovacion += $cantidad7; 
+    }
+
+    $valores['Calidad'] = $sumaCalidad;
+    $valores['Trabajo'] = $sumaTrabajo;
+    $valores['Compromiso'] = $sumaCompromiso;
+    $valores['Servicio'] = $sumaServicio;
+    $valores['Desarrollo'] = $sumaDesarrollo;
+    $valores['Integridad'] = $sumaIntegridad;
+    $valores['Innovacion'] = $sumaInnovacion;
+
+
+    return array($valores,$estado);
+}
+
 function consultarSumaProyecto()
 {
     global $conexion;

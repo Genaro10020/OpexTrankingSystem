@@ -242,6 +242,15 @@ button {
     border-radius: 5px;
 }
 
+.btn-menu-activo{
+    background-color: #3fa657;
+    color: white;
+    font-size: 0.9em;
+    box-shadow: 1px 1px 10px #151515;
+    border: none;
+    border-radius: 5px;
+}
+
 .boton_actualizar {
     width: 100px;
     background-color: #fbef71;
@@ -696,6 +705,14 @@ button {
 .valor-desarrollo{color:#ebca74 }
 .valor-integridad{color: #99183f;}
 .valor-innovacion{color: #65293b;}
+
+.bg-calidad{background: #e43333;}
+.bg-trabajo{background:#daa523;}
+.bg-compromiso{background:#469c99;}
+.bg-servicio{background:#7fb55a}
+.bg-desarrollo{background:#ebca74 }
+.bg-integridad{background: #99183f;}
+.bg-innovacion{background: #65293b;}
 
 
 

@@ -21,25 +21,30 @@ if (isset($_SESSION['nombre'])) {
                 <!--Bóton-->
                 <div class="text-center">
                     <?php if ($_SESSION['acceso'] == 'Admin') { ?>
-                        <button class="btn-menu " @click="ventana='Crear',consultarMisionesRelacional(),consultarObjetivosRelacional(),consultarMisiones(),consultarImpactoAmbiental(),consultarEstandaresCO2(),consultarFuentes(),mostrarHeader=true,sumarSoloUnaVez=0,buscarDocumentos('Documento CO2'),sumaImpactoAmbiental()">
+                        <button class="btn-menu " @click="ventana='Crear',opcion=1,consultarMisionesRelacional(),consultarObjetivosRelacional(),consultarMisiones(),consultarImpactoAmbiental(),consultarEstandaresCO2(),consultarFuentes(),mostrarHeader=true,sumarSoloUnaVez=0,buscarDocumentos('Documento CO2'),sumaImpactoAmbiental()" 
+                        :class="{'btn-menu-activo': opcion===1,'btn-menu': opcion !== 1}">
                             <i class="bi bi-plus-circle"></i> Crear Catálogos
                         </button>
                     <?php } ?>
-                    <button class="btn-menu me-0  mx-sm-3 mt-sm-3" @click="ventana='Altas',mostrarHeader=true,sumarSoloUnaVez=0">
+                    <button class="btn-menu me-0  mx-sm-3 mt-sm-3" @click="ventana='Altas',opcion=2,mostrarHeader=true,sumarSoloUnaVez=0" 
+                        :class="{'btn-menu-activo': opcion===2,'btn-menu': opcion !== 2}">
                         <i class="bi bi-plus-circle"></i> Proyectos Creados
                     </button>
 
-                    <button class="btn-menu mb-sm-3 mt-sm-3" @click="ventana='Seguimiento',mostrarHeader=true,sumarSoloUnaVez=0,buscarDocumentos('Documento CO2')">
+                    <button class="btn-menu mb-sm-3 mt-sm-3" @click="ventana='Seguimiento',mostrarHeader=true,opcion=3,sumarSoloUnaVez=0,buscarDocumentos('Documento CO2'),opcion=3"
+                    :class="{'btn-menu-activo': opcion===3,'btn-menu': opcion !== 3}">
                         <i class="bi bi-plus-circle"></i> Seguimiento
                     </button>
-                    <button class="btn-menu me-sm-3 ms-sm-3 mb-sm-3" @click="ventana='Generar Valor',consultarObjetivosRelacional(),mostrarHeader=false,consultarSeguimientos()">
+                    <button class="btn-menu me-sm-3 ms-sm-3 mb-sm-3" @click="ventana='Generar Valor',opcion=4,consultarObjetivosRelacional(),mostrarHeader=false,consultarSeguimientos(),valoresProyectos()"
+                    :class="{'btn-menu-activo': opcion===4,'btn-menu': opcion !== 4}">
                         <i class="bi bi-plus-circle"></i> Generando Valor Sustentable
                     </button>
                     <!--<button class="btn-menu" @click="ventana='Reportes'">
                         <i class="bi bi-plus-circle"></i> Reportes
                     </button>-->
                     <?php if ($_SESSION['acceso'] == 'Admin' || $_SESSION['acceso'] == 'Financiero') { ?>
-                    <button class="btn-menu mb-sm-3 " @click="ventana='Calendario',mostrarHeader=true, consultarCalendarioProyectos()">
+                    <button class="btn-menu mb-sm-3 " @click="ventana='Calendario',opcion=5,mostrarHeader=true, consultarCalendarioProyectos()"
+                    :class="{'btn-menu-activo': opcion===5,'btn-menu': opcion !== 5}">
                         <i class="bi bi-plus-circle"></i> Estatus Captura
                     </button>
                     <?php } ?>
@@ -565,9 +570,9 @@ if (isset($_SESSION['nombre'])) {
             <!--Cuerpo-->
             <div :class="{ 'cuerpoNormal': mostrarHeader, 'cuerpoAlto': !mostrarHeader }">
                 <!--AQUI TRABAJA //ALTA DE PROYECTOS-->
-                <div class="text-center mt-3" v-if="ventana=='Altas'">
+                <div class="text-center mt-2" v-if="ventana=='Altas'">
                     <?php if ($_SESSION['acceso'] == 'Admin') { ?>
-                        <button class="btn-menu align-items-center my-2" style=" background:#519f3c; "  @click="abrirModal('Alta')">
+                        <button class="btn btn-menu bg-primary align-items-center mb-2" style=" background:#519f3c; "  @click="abrirModal('Alta')">
                             <i class="bi bi-plus-circle"></i> Alta Proyecto
                         </button>
                     <?php } ?>
@@ -1779,7 +1784,7 @@ if (isset($_SESSION['nombre'])) {
                                             </div>
                                             <div class="tablasBatery4 col-3 px-1 px-lg-2">
                                                 <div class="d-flex text-center text-white pb-1">
-                                                    <span class="col-6 subtitulo" style="margin-top:6px">Investigacion y desarrollo</span>
+                                                    <span class="col-6 subtitulo" style="margin-top:6px">Investigación y desarrollo</span>
                                                     <table class="col-6  mt-1  text-center  table-bordered border-dark  ">
                                                         <thead>
 
@@ -1838,39 +1843,39 @@ if (isset($_SESSION['nombre'])) {
                                         <div class="col-3 text-start">
                                             <div class="mb-2 d-flex ">
                                                 <div class="col-6"><i class="bi bi-check-circle"></i> Calidad</div>
-                                                <div class="col-6"><span class="badge bg-secondary">1</span></div>
+                                                <div class="col-6"><span class="badge bg-light valor-calidad" style="min-width:30px;">{{sumaValoresGonher.Calidad}}</span></div>
                                             </div>    
                                             <div class="mb-2 d-flex">
-                                                <div class="col-6 lh-1"><i class="bi bi-check-circle"></i> Servicio y <br>orientación <br>al cliente</div>
-                                                <div class="col-6"><span class="badge bg-secondary">1</span></div>
+                                                <div class="col-6 lh-1"><i class="bi bi-check-circle"></i> Servicio y <br>Orientación <br>al cliente</div>
+                                                <div class="col-6"><span class="badge bg-light valor-servicio" style="min-width:30px;">{{sumaValoresGonher.Servicio}}</span></div>
                                             </div>       
                                         </div>
                                         <div class="col-3 text-start ">
                                             <div class="mb-2 d-flex ">
                                                 <div class="col-8 lh-1"><i class="bi bi-check-circle"></i> Trabajo en <br>Equipo</div>
-                                                <div class="col-4"><span class="badge bg-secondary">1</span></div>
+                                                <div class="col-4"><span class="badge bg-light valor-trabajo" style="min-width:30px;" >{{sumaValoresGonher.Trabajo}}</span></div>
                                             </div>
                                             <div class="mb-2 d-flex ">
                                                 <div class="col-8"><i class="bi bi-check-circle"></i>Productividad</div>
-                                                <div class="col-4"><span class="badge bg-secondary">1</span></div>
+                                                <div class="col-4"><span class="badge bg-light valor-calidad" style="min-width:30px;">{{sumaValoresGonher.Calidad}}</span></div>
                                             </div>
                                             <div class="mb-2 d-flex ">
                                                 <div class="col-8 lh-1"><i class="bi bi-check-circle"></i> Desarrollo de <br> nuestra gente   </div>
-                                                <div class="col-4"><span class="badge bg-secondary">1</span></div>
+                                                <div class="col-4"><span class="badge bg-light valor-desarrollo" style="min-width:30px;">{{sumaValoresGonher.Desarrollo}}</span></div>
                                             </div>        
                                         </div>
                                         <div class="col-3 text-start">
                                             <div class="mb-2 d-flex">
                                                 <div class="col-8"><i class="bi bi-check-circle"></i> Compromiso</div>
-                                                <div class="col-4"><span class="badge bg-secondary">1</span></div>
+                                                <div class="col-4"><span class="badge bg-light valor-compromiso" style="min-width:30px;">{{sumaValoresGonher.Compromiso}}</span></div>
                                             </div>
                                             <div class="mb-2 d-flex">
                                                 <div class="col-8"><i class="bi bi-check-circle"></i> Integridad</div>
-                                                <div class="col-4"><span class="badge bg-secondary">1</span></div>
+                                                <div class="col-4"><span class="badge bg-light valor-integridad" style="min-width:30px;">{{sumaValoresGonher.Integridad}}</span></div>
                                             </div>
                                             <div class="mb-2 d-flex">
                                                 <div class="col-8"><i class="bi bi-check-circle"></i> Innovación</div>
-                                                <div class="col-4"><span class="badge bg-secondary">1</span></div>
+                                                <div class="col-4"><span class="badge bg-light valor-innovacion" style="min-width:30px;">{{sumaValoresGonher.Innovacion}}</span></div>
                                             </div>       
                                         </div>
                                     </div>

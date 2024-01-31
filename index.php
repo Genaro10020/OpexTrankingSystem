@@ -31,7 +31,7 @@ session_destroy();
 
                             <div class="mb-3">
                                 <label class="form-label label-session ">Contraseña:</label>
-                                <input type="password" class="form-control" id="contrasena" v-model="contrasena" required>
+                                <input type="password" class="form-control" id="contrasena" v-model="contrasena" autocomplete="off" autocomplete="new-password" required>
                             </div>
 
                             <div class="text-center">
