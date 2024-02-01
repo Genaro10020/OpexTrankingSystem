@@ -35,19 +35,22 @@ if (isset($_SESSION['nombre'])) {
                     :class="{'btn-menu-activo': opcion===3,'btn-menu': opcion !== 3}">
                         <i class="bi bi-plus-circle"></i> Seguimiento
                     </button>
-                    <button class="btn-menu me-sm-3 ms-sm-3 mb-sm-3" @click="ventana='Generar Valor',opcion=4,consultarObjetivosRelacional(),mostrarHeader=false,consultarSeguimientos(),valoresProyectos()"
+
+                    <?php if ($_SESSION['acceso'] == 'Admin' || $_SESSION['acceso'] == 'Financiero') { ?>
+                    <button class="btn-menu ms-sm-3 mb-sm-3" @click="ventana='Calendario',opcion=5,mostrarHeader=true, consultarCalendarioProyectos()"
+                    :class="{'btn-menu-activo': opcion===5,'btn-menu': opcion !== 5}">
+                        <i class="bi bi-plus-circle"></i> Estatus Captura
+                    </button>
+                    <?php } ?>
+
+                    <button class="btn-menu mb-sm-3 ms-sm-3  " @click="ventana='Generar Valor',opcion=4,consultarObjetivosRelacional(),mostrarHeader=false,consultarSeguimientos(),valoresProyectos()"
                     :class="{'btn-menu-activo': opcion===4,'btn-menu': opcion !== 4}">
                         <i class="bi bi-plus-circle"></i> Generando Valor Sustentable
                     </button>
                     <!--<button class="btn-menu" @click="ventana='Reportes'">
                         <i class="bi bi-plus-circle"></i> Reportes
                     </button>-->
-                    <?php if ($_SESSION['acceso'] == 'Admin' || $_SESSION['acceso'] == 'Financiero') { ?>
-                    <button class="btn-menu mb-sm-3 " @click="ventana='Calendario',opcion=5,mostrarHeader=true, consultarCalendarioProyectos()"
-                    :class="{'btn-menu-activo': opcion===5,'btn-menu': opcion !== 5}">
-                        <i class="bi bi-plus-circle"></i> Estatus Captura
-                    </button>
-                    <?php } ?>
+                    
                     
                     <!--Modal Alta Proyectos-->
                     <div id="modal-alta-proyecto" class="modal text-start" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
