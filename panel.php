@@ -589,7 +589,7 @@ if (isset($_SESSION['nombre'])) {
                                 <th>Metodología</th>
                                 <th>Responsable</th>
                                 <th>Correo</th>
-                                <th>Telefono</th>
+                                <th>Teléfono</th>
                                 <th>Pilare(s) Estratégico(s)</th>
                                 <th>Objetivo(s) Estratégico(s)</th>
                                 <th>Impacto Ambiental</th>
@@ -757,7 +757,7 @@ if (isset($_SESSION['nombre'])) {
                             <div class=" encabezadoTablas">
                                 <div class=" d-flex justify-content-center align-items-center" style="font-size: 0.9em;">
                                     <div class="d-none d-lg-block col-lg-4"></div>
-                                    <div class="col-6 col-lg-4 mt-2">Pilares Estrategicos</div>
+                                    <div class="col-6 col-lg-4 mt-2">Pilares Estratégicos</div>
                                     <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
                                         <button type="button" class=" btn btn-menu w-50" @Click="modalCatalogos('Crear','Pilar')">Crear</button>
                                     </div>
@@ -814,7 +814,7 @@ if (isset($_SESSION['nombre'])) {
                             <div class=" encabezadoTablas">
                                 <div class=" d-flex justify-content-center align-items-center" style="font-size: 0.9em;">
                                     <div class="d-none d-lg-block col-lg-4"></div>
-                                    <div class="col-6 col-lg-4 mt-2">Objetivos Estrategicos</div>
+                                    <div class="col-6 col-lg-4 mt-2">Objetivos Estratégicos</div>
                                     <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
                                         <button type="button" class=" btn btn-menu w-50" @Click="modalCatalogos('Crear','Objetivo')">Crear</button>
                                     </div>
@@ -924,7 +924,7 @@ if (isset($_SESSION['nombre'])) {
                                 <div class=" d-flex justify-content-center align-items-center " style="font-size: 0.9em;">
                                     <div class="d-none d-lg-block col-lg-4"></div>
                                     <div class="col-6 col-lg-4 mt-2 ">
-                                        Estandares de CO2
+                                        Estándares de CO2
                                     </div>
                                     <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
                                         <button type="button" class=" btn btn-menu w-50" @Click="modalCatalogos('Crear','Estandar')">Crear</button>
