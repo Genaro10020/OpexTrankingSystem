@@ -3109,7 +3109,7 @@ const AltaProyectos = {
       }
       return false
     },
-    valoresProyectos(){
+    valoresProyectos(grafica){
       axios.get("proyectosController.php",{
         params:{
           accion:'sumar valores'
@@ -3118,6 +3118,9 @@ const AltaProyectos = {
         console.log("Suma de Valores Gonher",response.data)
        if(response.data[0][1]){
           this.sumaValoresGonher = response.data[0][0]
+            if(grafica=='grafica'){
+                this.tablaGraficas() //llamo la grafica solo si es la ventana Valores Gonher, esto para llenar primero sumaValoresGonher y despues crear la tabla.
+            }
        }else{
           alert("Existe un problema con la consulta sumaValoresGonher")
        }
@@ -3206,6 +3209,52 @@ const AltaProyectos = {
     },
     darFormatoInputValorReal(mes_o_index){
       this.inputTotalReal[mes_o_index-1]=this.formatMonedaPesos(this.inputTotalReal[mes_o_index-1])
+    },
+    tablaGraficas() {
+
+     
+           
+            const ctx = document.getElementById('myChart');
+            if (!ctx) {
+              console.error("No se pudo obtener la referencia al elemento canvas.");
+              return;
+            }
+            
+                  const data = {
+                    labels: [
+                      'Calidad - Productividad ('+this.sumaValoresGonher.Calidad+')',
+                      'Trabajo en Equipo ('+this.sumaValoresGonher.Trabajo+')',
+                      'Compromiso  ('+this.sumaValoresGonher.Compromiso+')',
+                      'Servicio y Orientación al Cliente  ('+this.sumaValoresGonher.Servicio+')',
+                      'Desarrollo de Nuestra Gente ('+this.sumaValoresGonher.Desarrollo+')',
+                      'Integridad ('+this.sumaValoresGonher.Integridad+')',
+                      'Innovación ('+this.sumaValoresGonher.Innovacion+')',
+                    ],
+                    datasets: [{
+                      label: 'Valores Gonher',
+                      data: [this.sumaValoresGonher.Calidad,this.sumaValoresGonher.Trabajo,this.sumaValoresGonher.Compromiso,this.sumaValoresGonher.Servicio,this.sumaValoresGonher.Desarrollo,this.sumaValoresGonher.Integridad,this.sumaValoresGonher.Innovacion],
+                      fill: true,
+                      backgroundColor: 'rgba( 24, 144, 16, 0.2)',
+                      borderColor: 'rgb(24, 144, 16)',
+                      pointBackgroundColor: ['#e43333','#daa523','#469c99','#7fb55a','#ebca74','#99183f','#65293b'],
+                      pointBorderColor: '#102590',
+                      pointHoverBackgroundColor: '#f102590',  
+                      pointHoverBorderColor: 'rgb(255, 99, 132)',
+                      borderWidth:1
+                    }],
+                  };
+
+              new Chart(ctx, {
+                type: 'radar',
+                data: data,
+                options: {
+                  plugins: {
+                      legend: {
+                          display: true,
+                      }
+                  }
+              }
+              });
     }
   }
 };

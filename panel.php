@@ -43,9 +43,14 @@ if (isset($_SESSION['nombre'])) {
                     </button>
                     <?php } ?>
 
-                    <button class="btn-menu mb-sm-3 ms-sm-3  " @click="ventana='Generar Valor',opcion=4,consultarObjetivosRelacional(),mostrarHeader=false,consultarSeguimientos(),valoresProyectos()"
+                    <button class="btn-menu mb-sm-3 ms-sm-3  " @click="ventana='Generar Valor',opcion=4,consultarObjetivosRelacional(),mostrarHeader=false,consultarSeguimientos(),valoresProyectos('')"
                     :class="{'btn-menu-activo': opcion===4,'btn-menu': opcion !== 4}">
                         <i class="bi bi-plus-circle"></i> Generando Valor Sustentable
+                    </button>
+
+                    <button class="btn-menu mb-sm-3 ms-sm-3  " @click="ventana='Valores Gonher',opcion=6,valoresProyectos('grafica')"
+                    :class="{'btn-menu-activo': opcion===6,'btn-menu': opcion !== 6}">
+                        <i class="bi bi-plus-circle"></i> Valores Gonher
                     </button>
                     <!--<button class="btn-menu" @click="ventana='Reportes'">
                         <i class="bi bi-plus-circle"></i> Reportes
@@ -2097,11 +2102,13 @@ if (isset($_SESSION['nombre'])) {
                             </div>
                     </div>
                 <!--Fin Modal subir seguimiento-->
-
-
-                            
                 </div> 
-                <!--////////////////////////////////////////////// FIN DE COMPETENCIA -->
+                <!--////////////////////////////////////////////// FIN DE CALENDARIO -->
+                <div v-if="ventana=='Valores Gonher'" v-cloak><!--BLOQUE GRAFICA VALORES GONHER-->
+                        <div id="divCanvas" style="height:80vh; justify-content:center; display: flex; align-items:center;">
+                            <canvas id="myChart"></canvas>
+                        </div>
+                </div><!--Fin Valores Gonher-->
             </div><!--cuerpo-->
 
             <div class="footer row" style="min-height:10vh;"> <!--pie-->
@@ -2109,9 +2116,7 @@ if (isset($_SESSION['nombre'])) {
             </div>
         </div><!--div motando js-->
         <script src="js/app.js?<?php echo time(); ?>"></script>
-
     </body>
-
     </html>
 
 <?php

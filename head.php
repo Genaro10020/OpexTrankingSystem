@@ -19,5 +19,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap&family=Rajdhani:wght@500&display=swap&family=Roboto:wght@400&display=swap&family=Onest:wght@300&display=swap&Family=Almarai:wght@400&display=swap&family=Alfa+Slab+One&family=Lexend+Deca&family=Stint+Ultra+Condensed&display=swap" rel="stylesheet"> 
-<!--VUEJS-->
+<!--CHARTJS-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js" integrity="sha512-ZwR1/gSZM3ai6vCdI+LVF1zSq/5HznD3ZSTk7kajkaj4D292NLuduDCO1c/NT8Id+jE58KYLKT7hXnbtryGmMg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
