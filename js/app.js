@@ -3244,17 +3244,29 @@ const AltaProyectos = {
                     }],
                   };
 
-              new Chart(ctx, {
-                type: 'radar',
-                data: data,
-                options: {
-                  plugins: {
-                      legend: {
-                          display: true,
+                  new Chart(ctx, {
+                    type: 'radar',
+                    data: data,
+                    options: {
+                      plugins: {
+                        legend: {
+                          display: false,
+                        }
+                      },
+                      scales: {
+                        r: {
+                          min: 0, // Establecer el valor mínimo en el eje radial a 0
+                          pointLabels: {
+                            fontSize: 14,
+                            font: {
+                              size: 14
+                            },
+                            color: ['#e43333', '#daa523', '#469c99', '#7fb55a', '#ebca74', '#99183f', '#65293b']
+                          }
+                        }
                       }
-                  }
-              }
-              });
+                    }
+                  });
     }
   }
 };

@@ -181,12 +181,14 @@ function consultarCalendarioProyecto($anio)
     $estado2 = false;
     $anioActual=intval($anio);
     $anioAnterior = $anioActual-1;
-    $consulta="SELECT proyectos_creados.nombre_proyecto,proyectos_creados.id, registros_impacto_ambiental.mes,proyectos_creados.status_seguimiento /*Proyectos por año Unicos listado de proyectos a mostrar*/
-    FROM impacto_ambiental_proyecto JOIN proyectos_creados 
+    $consulta="SELECT proyectos_creados.nombre_proyecto,proyectos_creados.id,proyectos_creados.fecha, registros_impacto_ambiental.mes,proyectos_creados.status_seguimiento /*Proyectos por año Unicos listado de proyectos a mostrar*/
+    FROM impacto_ambiental_proyecto LEFT JOIN proyectos_creados 
     ON proyectos_creados.id = impacto_ambiental_proyecto.id_proyecto 
-    JOIN registros_impacto_ambiental 
+    LEFT JOIN registros_impacto_ambiental 
     ON impacto_ambiental_proyecto.id = registros_impacto_ambiental.id_impacto_ambiental_proyecto 
-    WHERE registros_impacto_ambiental.anio = '$anio' OR (registros_impacto_ambiental.anio = '$anioAnterior' AND proyectos_creados.status_seguimiento!='Cerrado') GROUP BY impacto_ambiental_proyecto.id_proyecto";
+    WHERE registros_impacto_ambiental.anio = '$anio' 
+    OR (registros_impacto_ambiental.anio = '$anioAnterior' AND proyectos_creados.status_seguimiento!='Cerrado') 
+    OR (RIGHT(proyectos_creados.fecha, 4) = '$anio') GROUP BY impacto_ambiental_proyecto.id_proyecto"; //le agrege el right para mostrar tambien aquellos que concidan con los ultimos 4 (anio) valores del string en campo fecha
     $query = $conexion->query($consulta);
     if($query){
         $estado2 = true;

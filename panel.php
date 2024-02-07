@@ -2105,9 +2105,19 @@ if (isset($_SESSION['nombre'])) {
                 </div> 
                 <!--////////////////////////////////////////////// FIN DE CALENDARIO -->
                 <div v-if="ventana=='Valores Gonher'" v-cloak><!--BLOQUE GRAFICA VALORES GONHER-->
-                        <div id="divCanvas" style="height:80vh; justify-content:center; display: flex; align-items:center;">
-                            <canvas id="myChart"></canvas>
-                        </div>
+                <div class="row">
+                    <div class="col-1 col-sm-2 d-flex justify-content-center align-items-start align-items-lg-center ">
+                        <img class="w-100 mt-2"  src="img/enerya.png" style="max-width:150px"></img>                                        
+                    </div>
+                    <div id="divCanvas"  class="col-10 col-sm-8   d-flex justify-content-center" style="height:80vh;" >
+                        <canvas id="myChart"></canvas>
+                    </div>
+                    <div class="col-1 col-sm-2 d-flex justify-content-center align-items-start align-items-lg-center">
+                        <img class="w-100 mt-2" src="img/riasa.png" style="max-width:150px"></img>      
+                    </div>
+                </div>
+                 
+                        
                 </div><!--Fin Valores Gonher-->
             </div><!--cuerpo-->
 
