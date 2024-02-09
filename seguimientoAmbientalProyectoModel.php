@@ -94,18 +94,11 @@ function consultarSeguimientos($anio)
             $sumaSustentableFormateada ='0.00';
             // Consultar la tabla impacto_ambiental_proyecto para cada ID de proyecto
             foreach ($idsProyecto as $idProyecto) {
-                /*$seleccionar = "SELECT misiones FROM proyectos_creados WHERE id='$idProyecto'";
-                $obtenido=$conexion->query($seleccionar);
-                if($obtenido){
-                    $recibo=$obtenido ->fetch_assoc(); 
-                    $check[] =  json_decode($recibo['mision']); 
-                    $estadoProyectos = true;
-                }else{
-                    $estadoProyectos=  "Error en la consulta: " . $conexion->error;
-                }*/
-
                 // Realizar la consulta (ajusta según tu estructura de base de datos)
-                $consulta = "SELECT * FROM registros_impacto_ambiental JOIN  impacto_ambiental_proyecto ON impacto_ambiental_proyecto.id = registros_impacto_ambiental.id_impacto_ambiental_proyecto WHERE impacto_ambiental_proyecto.id_proyecto = '$idProyecto' AND registros_impacto_ambiental.anio LIKE '%$anio%'";
+                $consulta = "SELECT 
+                DISTINCT registros_impacto_ambiental.mes,registros_impacto_ambiental.ahorro_suave,registros_impacto_ambiental.ahorro_duro, registros_impacto_ambiental.tons_co2 
+                FROM registros_impacto_ambiental JOIN  impacto_ambiental_proyecto ON impacto_ambiental_proyecto.id = registros_impacto_ambiental.id_impacto_ambiental_proyecto 
+                WHERE impacto_ambiental_proyecto.id_proyecto = '$idProyecto' AND registros_impacto_ambiental.anio LIKE '$anio%'";
                 $resultado = $conexion->query($consulta);
                 // Verificar si la consulta fue exitosa
                 if ($resultado) {
@@ -121,6 +114,8 @@ function consultarSeguimientos($anio)
 
                         $sumaAhorroDuro += floatval($ahorro_duro);
                         $sumaAhorroSuave += floatval($ahorro_suave);
+                        $ahorros[] = $sumaAhorroDuro;
+                        $idProyets[] = $idProyecto;
 
                         $sumaTonsCo2 += floatval($fila['tons_co2']);
                         //$sumaDato += floatval($fila['dato']);
@@ -141,15 +136,15 @@ function consultarSeguimientos($anio)
 
             // Almacenar los resultados específicos de este objetivo en el array principal
             $sumasPorObjetivo[$objetivoNombre] = [
-                'valor' => $sumaSustentableFormateada,
-                'sustentable' => $sustentable,
+                'valor' => $sumaSustentableFormateada,//ahorros (Valor)
+                'sustentable' => $sustentable,//sustentable (Sustentable)
                 'pilar'=>$pilar
             ];
         }
     }
 
     //$objetivosNombre, $idsConcidenConCadaPilar, $posicionNombresconIdsObjetivos
-    return array($pilasconSiglas, $estadoPilar, $estadoObjetivos, $estadoProyectos, $sumasPorObjetivo, $estadoSeguimiento,$pilaresArreglos,$estadoProyectos);
+    return array($pilasconSiglas, $estadoPilar, $estadoObjetivos, $estadoProyectos, $sumasPorObjetivo, $estadoSeguimiento,$pilaresArreglos,$estadoProyectos,$anio,$ahorros,$idProyets);
 }
 
 
