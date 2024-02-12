@@ -104,7 +104,7 @@ const AltaProyectos = {
       id_mision_ligada: '',
       pilar: '',
       objetivos_ligados: '',
-      /*SEGUIMIENTO DE PORYECTO*/
+      /*SEGUIMIENTO DE PROYECTO*/
       id_proyecto: '',
       arregloID: [],
       columnaImpactoAmbiental: [],
@@ -141,6 +141,7 @@ const AltaProyectos = {
       myModalCO2: '',
       myModalStatus: '',
       nombre_de_descarga:'',
+      plan_actualizar:'',
       /*GENERANDO VALOR*/
       select_anio_generando_valor:'',
       sumaClienteValor:'',
@@ -3209,6 +3210,12 @@ const AltaProyectos = {
     },
     darFormatoInputValorReal(mes_o_index){
       this.inputTotalReal[mes_o_index-1]=this.formatMonedaPesos(this.inputTotalReal[mes_o_index-1])
+    },
+    guardarPlanMes(mes){
+      console.log(mes)
+    },
+    editarPlanMes(mes){
+      this.plan_actualizar = mes
     },
     tablaGraficas() {
 

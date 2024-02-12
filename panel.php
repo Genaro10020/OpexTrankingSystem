@@ -1954,10 +1954,10 @@ if (isset($_SESSION['nombre'])) {
                                                 <th>
                                                 <template v-for ="cantidadArchivos in cantidadDocumentos"><!--Contine ID y Cantidad de documentos-->
                                                     <button v-if="cantidadArchivos.id==proyectosXanio.id && parseInt(cantidadArchivos.cantidad)>0" type="button" class="btn btn-success" title="Visualizar"  @click="modal_estatus(proyectosXanio.id)" style="font-size:10px"><i class="bi bi-file-earmark"></i><!--Si el ID es igual-->
-                                                        {{cantidadArchivos.cantidad}} Archivo/s
+                                                        {{cantidadArchivos.cantidad}} Archivo/s 
                                                     </button>
                                                     <button v-if="cantidadArchivos.id==proyectosXanio.id && parseInt(cantidadArchivos.cantidad)<=0" type="button" class="btn btn-secondary" title="Sin Documentos" style="font-size:10px"><i class="bi bi-file-earmark"></i>
-                                                        {{documentos_seguimiento_captura.length}} Archivo/s
+                                                        {{documentos_seguimiento_captura.length}} Archivo/s 
                                                     </button>
                                                 </template>
                                                 </th>
@@ -1983,15 +1983,32 @@ if (isset($_SESSION['nombre'])) {
                                                     <label>No existe seguimiento de proyectos {{select_anio_calendario}}</label>
                                                 </td>
                                             </tr>
-                                            <tr><!--Fila Totales-->
+                                            <tr><!--Fila Plan y Totales-->
                                                 <td></td>
                                                 <td></td>
-                                                <td class="align-middle" style="font-size:10px">Totales</td>
-                                                <td v-for="x in 12" style="font-size:12px" class="text-start"><!--Columna de Sumas X Anio-->
-                                                        <div v-show="calendarioSumaXMesAnio.sumas_ahorro_duro && calendarioSumaXMesAnio.sumas_ahorro_duro[x.toString()]" class="alert alert-dark" role="alert" style="min-width:170px;">
-                                                                <label>Ah. S.: </label>&nbsp;<label> {{ calendarioSumaXMesAnio.sumas_ahorro_suave && calendarioSumaXMesAnio.sumas_ahorro_suave[x.toString()]}}</label>
-                                                        <hr>
-                                                                <label>Ah. D.: </label>&nbsp;<label> {{ calendarioSumaXMesAnio.sumas_ahorro_duro && calendarioSumaXMesAnio.sumas_ahorro_duro[x.toString()]}}</label>
+                                                <td style="font-size:10px">
+                                                        <div class="p-2 pt-1">Plan:</div>
+                                                        <div class="p-2 mt-1">Total:</div>
+                                                </td>
+                                                <td class="align-middle"  v-for="x in 12" style="font-size:12px"><!--Columna de Sumas X Anio-->
+                                                        <div class="d-flex">
+                                                                <div>
+                                                                    <input v-if="plan_actualizar===x"  type="text"> </input>
+                                                                    <input v-else type="text" disabled> </input>
+                                                                </div>
+                                                                <div>
+                                                                    <button v-if="plan_actualizar===x"  style="border-style: outset; border-width: 1.5px; height: 24px;" @click="guardarPlanMes(x)"><i class="bi bi-floppy-fill"></i></button>
+                                                                    <button v-else style="border-style: outset; border-width: 1.5px; height: 24px;"  @click="editarPlanMes(x)"><i class="bi bi-pencil-fill"></i></button>
+                                                                </div>
+                                                        </div>           
+                                                        <div v-show="calendarioSumaXMesAnio.sumas_ahorro_duro && calendarioSumaXMesAnio.sumas_ahorro_duro[x.toString()]" class="alert alert-dark lh-1 p-2 mb-0 d-flex flex-column mt-1" role="alert" style="min-width:170px;">
+                                                               <div class="d-flex align-items-center">
+                                                                    <label>Ah. S.: </label>&nbsp;<label> {{ calendarioSumaXMesAnio.sumas_ahorro_suave && calendarioSumaXMesAnio.sumas_ahorro_suave[x.toString()]}}</label>
+                                                               </div>
+                                                               <hr style="height: 1px; margin: 2px;">
+                                                               <div class="d-flex align-items-center">
+                                                                    <label>Ah. D.: </label>&nbsp;<label> {{ calendarioSumaXMesAnio.sumas_ahorro_duro && calendarioSumaXMesAnio.sumas_ahorro_duro[x.toString()]}}</label>
+                                                               <div>
                                                         </div>
                                                 </td>
                                             </tr>
