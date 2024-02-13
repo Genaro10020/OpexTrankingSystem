@@ -1,7 +1,7 @@
 <?php
 session_start();
 if(isset($_SESSION['nombre'])){
-include 'validacionFinancieraModel.php';
+include 'planModel.php';
 $arreglo = json_decode(file_get_contents('php://input'), true);
 header('Content-Type: application/json');
 $val = [];
@@ -10,24 +10,20 @@ switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
         $anio=$_GET['anio'];
         // Manejar solicitud GET (consultar)
-        $val[] = consultarValidacion($anio);
+        $val[] = consultarPlan($anio);
         break;
     case 'POST':
         // Manejar solicitud POST (creación)
-        if(isset($arreglo['mes']) && isset($arreglo['anio']) && isset($arreglo['suave']) && isset($arreglo['duro']) && isset($arreglo['real_duro']) && isset($arreglo['validar']) ){
+        if(isset($arreglo['mes']) && isset($arreglo['anio']) && isset($arreglo['valor']) && isset($arreglo['id']) ){
             $id = $arreglo['id'];
             $mes = $arreglo['mes'];
             $anio = $arreglo['anio'];
-            $suave = $arreglo['suave'];
-            $duro = $arreglo['duro'];
-            $real_duro = $arreglo['real_duro'];
-            $validar = $arreglo['validar'];
+            $valor = $arreglo['valor'];
             if($id==""){
-                $val [] = insertarValidacion($mes,$anio,$suave,$duro,$real_duro,$validar);    
+                $val [] = insertarPlan($mes,$anio,$valor,$id);    
             }else{
-                $val [] = actualizarValidacion($mes,$anio,$suave,$duro,$real_duro,$validar,$id);    
+                $val [] = actualizarPlan($valor,$id);    
             }
-            
         }else{
             $val [] =  "No existe todas las Variables";
         }

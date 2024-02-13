@@ -1990,14 +1990,14 @@ if (isset($_SESSION['nombre'])) {
                                                         <div class="p-2 pt-1">Plan:</div>
                                                         <div class="p-2 mt-1">Total:</div>
                                                 </td>
-                                                <td class="align-middle"  v-for="x in 12" style="font-size:12px"><!--Columna de Sumas X Anio-->
-                                                        <div class="d-flex">
+                                                <td class="align-middle"  v-for="(x,index) in 12" style="font-size:12px"><!--Columna de Sumas X Anio-->
+                                                        <div class="d-flex"><!--Valor Plan-->
                                                                 <div>
-                                                                    <input v-if="plan_actualizar===x"  type="text"> </input>
-                                                                    <input v-else type="text" disabled> </input>
+                                                                    <input v-if="plan_actualizar===x" v-model="inputValorPlan[index]"  type="text" @blur="darFormatoInputValorPlan(index)"> </input>
+                                                                    <input v-else type="text" :value="inputValorPlan[index]" disabled> </input>
                                                                 </div>
                                                                 <div>
-                                                                    <button v-if="plan_actualizar===x"  style="border-style: outset; border-width: 1.5px; height: 24px;" @click="guardarPlanMes(x)"><i class="bi bi-floppy-fill"></i></button>
+                                                                    <button v-if="plan_actualizar===x"  style="border-style: outset; border-width: 1.5px; height: 24px;" @click="guardarPlanMes(x)" ><i class="bi bi-floppy-fill"></i></button>
                                                                     <button v-else style="border-style: outset; border-width: 1.5px; height: 24px;"  @click="editarPlanMes(x)"><i class="bi bi-pencil-fill"></i></button>
                                                                 </div>
                                                         </div>           
@@ -2015,7 +2015,7 @@ if (isset($_SESSION['nombre'])) {
                                             <tr><!--Fila Total Real-->
                                                 <td></td>
                                                 <td><!--{{checkValidar}}--></td>
-                                                <td class="align-middle" style="font-size:10px">Total Real: </td>
+                                                <td class="align-middle" style="font-size:10px">Total Real:  </td>
                                                 <td v-for="(x,index) in 12" style="font-size:12px" class="text-start"><!--Columna de Sumas X Anio-->
                                                         <div class="text-center" v-show="calendarioSumaXMesAnio.sumas_ahorro_duro && calendarioSumaXMesAnio.sumas_ahorro_duro[x.toString()]">
                                                             <?php if ($_SESSION['acceso']=="Financiero"){ ?>
@@ -2038,7 +2038,6 @@ if (isset($_SESSION['nombre'])) {
                                         </tbody>
                                     </table>
                             </div>
-
                                                 <!-- Modal Eliminar/Actualizar Seguimiento-->
                     <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered modal-xl">

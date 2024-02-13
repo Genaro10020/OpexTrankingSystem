@@ -142,6 +142,8 @@ const AltaProyectos = {
       myModalStatus: '',
       nombre_de_descarga:'',
       plan_actualizar:'',
+      inputValorPlan:[],
+      valoresPlan:[],
       /*GENERANDO VALOR*/
       select_anio_generando_valor:'',
       sumaClienteValor:'',
@@ -203,6 +205,7 @@ const AltaProyectos = {
     },
      /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PROYECTOS*/
      consultarCalendarioProyectos() {
+      this.plan_actualizar=''
       this.documentos_seguimiento_financiero = []
       axios.get('proyectosController.php', {
         params: {
@@ -216,6 +219,7 @@ const AltaProyectos = {
           this.proyectosXanioCalendario = response.data[0][2]
           this.cantidadMesesRegistrados = response.data[0][4]
           this.calendarioSumaXMesAnio = response.data[0][6]
+          this.consultarPlan();//Consutar la parte de plan
           this.consultarValidacion();//Consutar la parte financiera
           this.cantidadDocumentos = []
             for (var i = 0; i < this.proyectosXanioCalendario.length; i++) {
@@ -3211,16 +3215,65 @@ const AltaProyectos = {
     darFormatoInputValorReal(mes_o_index){
       this.inputTotalReal[mes_o_index-1]=this.formatMonedaPesos(this.inputTotalReal[mes_o_index-1])
     },
+    consultarPlan(){
+      this.inputValorPlan=[]
+      axios.get("planController.php",{
+        params:{
+          anio:this.select_anio_calendario
+        }
+      }).then(response =>{
+        console.log('Consulta Plan',response.data)
+        if(response.data[0][1]==true){
+          this.valoresPlan=response.data[0][0]//lo utilizo para extrar datos.
+          var valores = []
+          valores.push(response.data[0][0])
+            if(valores.length>0){
+                for (let index = 1; index <= 12; index++) {
+                  if(valores[0][index]){
+                    this.inputValorPlan[index-1]=valores[0][index].plan
+                  }
+                }
+            }
+        }else{
+          alert("Error en la consulta consultarPlan");
+        }
+      }).catch(error => {
+        console.log("Fallo el metodo consultarValidacion"+error);
+      })
+    },
     guardarPlanMes(mes){
-      console.log(mes)
+      var valor = this.inputValorPlan[mes-1]
+      var id = ''
+      if(this.valoresPlan[mes]){
+        id = this.valoresPlan[mes].id
+      } 
+          axios.post('planController.php',{
+            mes:mes,
+            anio:this.select_anio_calendario,
+            valor: valor,
+            id:id
+          }).then(response =>{
+              if(response.data[0]==true){
+                this.plan_actualizar = ''
+                alert("Plan guardado con éxito.")
+                this.consultarPlan()
+              }else{
+                alert("La del plan no se realizo.");
+              }
+          }).catch(error =>{  
+            console.log("Error en guardarPlanMes"+error)
+          }).finally(()=>{
+
+          })
     },
     editarPlanMes(mes){
       this.plan_actualizar = mes
     },
+    darFormatoInputValorPlan(index){
+      console.log("index: "+index)
+      this.inputValorPlan[index]=this.formatMonedaPesos(this.inputValorPlan[index])
+    },
     tablaGraficas() {
-
-     
-           
             const ctx = document.getElementById('myChart');
             if (!ctx) {
               console.error("No se pudo obtener la referencia al elemento canvas.");
