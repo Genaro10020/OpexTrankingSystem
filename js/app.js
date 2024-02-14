@@ -231,7 +231,7 @@ const AltaProyectos = {
             }
           }
           this.selleva = suma;
-          console.log("SE LLEVA",this.selleva)
+          //console.log("SE LLEVA",this.selleva)
           this.sumaTotales = "$"+suma.toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
           
           this.consultarPlan();//Consutar la parte de plan
@@ -3247,7 +3247,7 @@ const AltaProyectos = {
                   }
                 }
                 this.meta = suma
-                console.log("META",this.meta)
+                //console.log("META",this.meta)
                 this.sumaPlan = "$"+parseFloat(suma).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
             }
         }else{
@@ -3286,7 +3286,7 @@ const AltaProyectos = {
       this.plan_actualizar = mes
     },
     darFormatoInputValorPlan(index){
-      console.log("index: "+index)
+     // console.log("index: "+index)
       this.inputValorPlan[index]=this.formatMonedaPesos(this.inputValorPlan[index])
     },
     calcularPorcentaje(){

@@ -1991,6 +1991,7 @@ if (isset($_SESSION['nombre'])) {
                                                         <div class="p-2 mt-1">Total:</div>
                                                 </td>
                                                 <td class="align-middle"  v-for="(x,index) in 12" style="font-size:12px"><!--Columna de Sumas X Anio-->
+                                                <?php if ($_SESSION['acceso']=="Admin"){ ?>
                                                         <div class="d-flex"><!--Valor Plan-->
                                                                 <div>
                                                                     <input v-if="plan_actualizar===x" v-model="inputValorPlan[index]"  type="text" @blur="darFormatoInputValorPlan(index)"> </input>
@@ -2000,7 +2001,8 @@ if (isset($_SESSION['nombre'])) {
                                                                     <button v-if="plan_actualizar===x"  style="border-style: outset; border-width: 1.5px; height: 24px;" @click="guardarPlanMes(x)" ><i class="bi bi-floppy-fill"></i></button>
                                                                     <button v-else style="border-style: outset; border-width: 1.5px; height: 24px;"  @click="editarPlanMes(x)"><i class="bi bi-pencil-fill"></i></button>
                                                                 </div>
-                                                        </div>           
+                                                        </div> 
+                                                <?php } ?>          
                                                         <div v-show="calendarioSumaXMesAnio.sumas_ahorro_duro && calendarioSumaXMesAnio.sumas_ahorro_duro[x.toString()]" class="alert alert-dark lh-1 p-2 mb-0 d-flex flex-column mt-1" role="alert" style="min-width:170px;">
                                                                <div class="d-flex align-items-center">
                                                                     <label>Ah. S.: </label>&nbsp;<label> {{ calendarioSumaXMesAnio.sumas_ahorro_suave && calendarioSumaXMesAnio.sumas_ahorro_suave[x.toString()]}}</label>
