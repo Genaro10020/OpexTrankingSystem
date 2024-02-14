@@ -1922,12 +1922,37 @@ if (isset($_SESSION['nombre'])) {
                 </table>
             </div>
             <div v-if="ventana == 'Calendario'">
-                    <div class="input-group mt-3 mb-2 ">
-                        <span class="input-group-text">Seleccione año</span>
-                        <select v-model="select_anio_calendario" @change=consultarCalendarioProyectos()>
-                            <option v-for="(year,index) in years" :value="year">{{year}}</option>
-                        </select>
-                    </div>
+                             <div class="col-12">   
+                                    <div class="row">                                                
+                                        <div class="col-2" style="min-width:250px">                    
+                                                    <div class="input-group mt-3 mb-2 ">
+                                                        <span class="input-group-text">Seleccione año</span>
+                                                        <select v-model="select_anio_calendario" @change=consultarCalendarioProyectos()>
+                                                            <option v-for="(year,index) in years" :value="year">{{year}}</option>
+                                                        </select>
+                                                    </div>
+                                        </div>
+                                        <div class="col-8 my-auto text-center" >      
+                                                                                    
+                                                <div class="row m-0 col-4 alert alert-primary p-0" style="font-size:10px;min-width:350px">
+                                                <label class="text-dark">Teorico Acumulado Anual</label>    
+                                                    <div class="col-4  text-start">
+                                                            Suma Planeada:<br>
+                                                            Suma Totales:
+                                                    </div>
+                                                    <div class="col-4 text-start">
+                                                                {{sumaPlan}}<br>
+                                                                {{sumaTotales}}
+                                                    </div>
+                                                    <div class="col-4 text-center my-auto">
+                                                                <div class="progress" style="height: 20px;">
+                                                                    <div class="progress-bar" role="progressbar" :style="'width:'+calcularPorcentaje()+'%!important;'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentaje()}} % </label></div>
+                                                                </div>
+                                                    </div>   
+                                                </div>
+                                        </div>
+                                    </div>
+                            </div>                                                
                             <div class="scroll-dos">
                                     <table class="table table-bordered table-striped table-hover text-center">
                                         <thead>
@@ -2042,21 +2067,7 @@ if (isset($_SESSION['nombre'])) {
                                                 <td><!--{{checkValidar}}--></td>
                                                 <td  style="font-size:10px">Cumplimiento:</td>
                                                 <td colspan="12" class="align-middle text-start"><!--Columna de Sumas X Anio-->
-                                                        <div class="row  col-12 m-0 alert alert-primary p-0" style="font-size:12px;">
-                                                            <div class="col-1">
-                                                                    Suma Planeada:<br>
-                                                                    Suma Totales:
-                                                            </div>
-                                                            <div class="col-1">
-                                                                        {{sumaPlan}}<br>
-                                                                        {{sumaTotales}}
-                                                            </div>
-                                                            <div class="col-6 text-center my-auto">
-                                                                        <div class="progress" style="height: 20px;">
-                                                                            <div class="progress-bar" role="progressbar" :style="'width:'+calcularPorcentaje()+'%!important;'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentaje()}} % </label></div>
-                                                                        </div>
-                                                            </div>   
-                                                        </div>
+                                                        
                                                 </td>
                                             </tr>
                                         </tbody>
