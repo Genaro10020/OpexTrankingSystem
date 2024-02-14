@@ -144,6 +144,7 @@ const AltaProyectos = {
       plan_actualizar:'',
       inputValorPlan:[],
       valoresPlan:[],
+      sumaPlan:'',
       /*GENERANDO VALOR*/
       select_anio_generando_valor:'',
       sumaClienteValor:'',
@@ -3143,15 +3144,15 @@ const AltaProyectos = {
         console.log("validacion")
         console.log(response.data)
         if(response.data[0][1]==true){
-          var checksValidados = [];
-          checksValidados.push(response.data[0][0])
+          var datosValidacion = [];
+          datosValidacion.push(response.data[0][0])
           this.datosFinancieros = response.data[0][0]
-          if(checksValidados.length>0){
+          if(datosValidacion.length>0){
             for (let i = 1; i <= 12; i++) {
               const nombreIndex = i.toString();  // Convertir el número a cadena para acceder a la propiedad
-              if (checksValidados[0][nombreIndex]) {
-                this.checkValidar[i - 1] = checksValidados[0][nombreIndex].validado;
-                this.inputTotalReal[i - 1] = checksValidados[0][nombreIndex].real_duro;
+              if (datosValidacion[0][nombreIndex]) {
+                this.checkValidar[i - 1] = datosValidacion[0][nombreIndex].validado;
+                this.inputTotalReal[i - 1] = datosValidacion[0][nombreIndex].real_duro;
               } else {
                 // Puedes asignar un valor predeterminado o manejar el caso de que la propiedad no exista
                 this.checkValidar[i - 1] = null;
@@ -3174,11 +3175,6 @@ const AltaProyectos = {
       if (this.datosFinancieros[mes.toString()] !== undefined) {
         id=this.datosFinancieros[mes.toString()].id
       }
-  
-      /*console.log("anio"+this.select_anio_calendario)
-      console.log("mes"+mes)
-      console.log("Ahorro Suave"+this.calendarioSumaXMesAnio.sumas_ahorro_suave[mes.toString()])
-      console.log("Ahorro Duro"+this.calendarioSumaXMesAnio.sumas_ahorro_duro[mes.toString()])*/
       var suave = this.calendarioSumaXMesAnio.sumas_ahorro_suave[mes.toString()]
       var duro =this.calendarioSumaXMesAnio.sumas_ahorro_duro[mes.toString()]
       var real_duro = this.inputTotalReal[mes-1];
@@ -3228,11 +3224,14 @@ const AltaProyectos = {
           var valores = []
           valores.push(response.data[0][0])
             if(valores.length>0){
+              var suma =0;
                 for (let index = 1; index <= 12; index++) {
                   if(valores[0][index]){
+                    suma += parseFloat(valores[0][index].plan.replace(/[$,]/g, ''));
                     this.inputValorPlan[index-1]=valores[0][index].plan
                   }
                 }
+                this.sumaPlan = "$"+parseFloat(suma).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
             }
         }else{
           alert("Error en la consulta consultarPlan");

@@ -2035,6 +2035,14 @@ if (isset($_SESSION['nombre'])) {
                                                         </div>
                                                 </td>
                                             </tr>
+                                            <tr><!--Fila Total Planeado-->
+                                                <td></td>
+                                                <td><!--{{checkValidar}}--></td>
+                                                <td class="align-middle" style="font-size:10px">Cumplimiento:</td>
+                                                <td colspan="12" class="text-start"><!--Columna de Sumas X Anio-->
+                                                        Suma Planeada: {{sumaPlan}}
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                             </div>
