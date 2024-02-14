@@ -146,6 +146,8 @@ const AltaProyectos = {
       valoresPlan:[],
       sumaPlan:0,
       sumaTotales:0,
+      meta:0,
+      selleva:0,
       /*GENERANDO VALOR*/
       select_anio_generando_valor:'',
       sumaClienteValor:'',
@@ -221,14 +223,15 @@ const AltaProyectos = {
           this.proyectosXanioCalendario = response.data[0][2]
           this.cantidadMesesRegistrados = response.data[0][4]
           this.calendarioSumaXMesAnio = response.data[0][6]
-          var suma =0;
-
+          var suma =0
+          this.selleva =0
           for (let i = 1; i <= 12; i++) {
             if(this.calendarioSumaXMesAnio.sumas_ahorro_duro[i]){
                suma += parseFloat(this.calendarioSumaXMesAnio.sumas_ahorro_duro[1].replace(/[$,]/g,''))
             }
           }
-          
+          this.selleva = suma;
+          console.log("SE LLEVA",this.selleva)
           this.sumaTotales = "$"+suma.toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
           
           this.consultarPlan();//Consutar la parte de plan
@@ -3234,6 +3237,7 @@ const AltaProyectos = {
           this.valoresPlan=response.data[0][0]//lo utilizo para extrar datos.
           var valores = []
           valores.push(response.data[0][0])
+            this.meta = 0;
             if(valores.length>0){
               var suma =0;
                 for (let index = 1; index <= 12; index++) {
@@ -3242,8 +3246,9 @@ const AltaProyectos = {
                     this.inputValorPlan[index-1]=valores[0][index].plan
                   }
                 }
+                this.meta = suma
+                console.log("META",this.meta)
                 this.sumaPlan = "$"+parseFloat(suma).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
-                
             }
         }else{
           alert("Error en la consulta consultarPlan");
@@ -3283,6 +3288,9 @@ const AltaProyectos = {
     darFormatoInputValorPlan(index){
       console.log("index: "+index)
       this.inputValorPlan[index]=this.formatMonedaPesos(this.inputValorPlan[index])
+    },
+    calcularPorcentaje(){
+        return this.meta === 0  || this.selleva === 0 ? 0 :parseFloat((this.selleva/this.meta)*100).toFixed(2)
     },
     tablaGraficas() {
             const ctx = document.getElementById('myChart');

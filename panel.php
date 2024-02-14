@@ -2035,13 +2035,26 @@ if (isset($_SESSION['nombre'])) {
                                                         </div>
                                                 </td>
                                             </tr>
-                                            <tr><!--Fila Total Planeado-->
+                                            <tr class="align-middle"><!--Fila Total Planeado-->
                                                 <td></td>
                                                 <td><!--{{checkValidar}}--></td>
-                                                <td class="align-middle" style="font-size:10px">Cumplimiento:</td>
-                                                <td colspan="12" class="text-start"><!--Columna de Sumas X Anio-->
-                                                        Suma Planeada: {{sumaPlan}}<br>
-                                                        Suma Totales: {{sumaTotales}}
+                                                <td  style="font-size:10px">Cumplimiento:</td>
+                                                <td colspan="12" class="align-middle text-start"><!--Columna de Sumas X Anio-->
+                                                        <div class="row  col-12 m-0 alert alert-primary p-0" style="font-size:12px;">
+                                                            <div class="col-1">
+                                                                    Suma Planeada:<br>
+                                                                    Suma Totales:
+                                                            </div>
+                                                            <div class="col-1">
+                                                                        {{sumaPlan}}<br>
+                                                                        {{sumaTotales}}
+                                                            </div>
+                                                            <div class="col-6 text-center my-auto">
+                                                                        <div class="progress" style="height: 20px;">
+                                                                            <div class="progress-bar" role="progressbar" :style="'width:'+calcularPorcentaje()+'%!important;'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentaje()}} % </label></div>
+                                                                        </div>
+                                                            </div>   
+                                                        </div>
                                                 </td>
                                             </tr>
                                         </tbody>
