@@ -144,7 +144,8 @@ const AltaProyectos = {
       plan_actualizar:'',
       inputValorPlan:[],
       valoresPlan:[],
-      sumaPlan:'',
+      sumaPlan:0,
+      sumaTotales:0,
       /*GENERANDO VALOR*/
       select_anio_generando_valor:'',
       sumaClienteValor:'',
@@ -220,6 +221,16 @@ const AltaProyectos = {
           this.proyectosXanioCalendario = response.data[0][2]
           this.cantidadMesesRegistrados = response.data[0][4]
           this.calendarioSumaXMesAnio = response.data[0][6]
+          var suma =0;
+
+          for (let i = 1; i <= 12; i++) {
+            if(this.calendarioSumaXMesAnio.sumas_ahorro_duro[i]){
+               suma += parseFloat(this.calendarioSumaXMesAnio.sumas_ahorro_duro[1].replace(/[$,]/g,''))
+            }
+          }
+          
+          this.sumaTotales = "$"+suma.toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+          
           this.consultarPlan();//Consutar la parte de plan
           this.consultarValidacion();//Consutar la parte financiera
           this.cantidadDocumentos = []
@@ -3232,6 +3243,7 @@ const AltaProyectos = {
                   }
                 }
                 this.sumaPlan = "$"+parseFloat(suma).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                
             }
         }else{
           alert("Error en la consulta consultarPlan");
