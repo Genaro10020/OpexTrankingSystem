@@ -1955,15 +1955,15 @@ if (isset($_SESSION['nombre'])) {
                                                 <label class="text-dark">Real Acumulado Anual</label>    
                                                     <div class="col-4  text-start">
                                                             Suma Planeada:<br>
-                                                            Suma Totales:
+                                                            Suma Reales:
                                                     </div>
                                                     <div class="col-4 text-start">
                                                                 {{sumaPlan}}<br>
-                                                                {{sumaTotales}}
+                                                                {{sumaReales}}
                                                     </div>
                                                     <div class="col-4 text-center my-auto">
                                                                 <div class="progress" style="height: 20px;">
-                                                                    <div class="progress-bar" role="progressbar" :style="'width:'+calcularPorcentaje()+'%!important;'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentaje()}} % </label></div>
+                                                                    <div class="progress-bar" role="progressbar" :style="'width:'+calcularPorcentajeRealAnual()+'%!important;'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentajeRealAnual()}} % </label></div>
                                                                 </div>
                                                     </div>   
                                                 </div>   

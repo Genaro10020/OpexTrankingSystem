@@ -148,6 +148,8 @@ const AltaProyectos = {
       sumaTotales:0,
       meta:0,
       selleva:0,
+      sumaReales:"$0.00",
+      SumNumReales:0,
       /*GENERANDO VALOR*/
       select_anio_generando_valor:'',
       sumaClienteValor:'',
@@ -3161,12 +3163,14 @@ const AltaProyectos = {
           var datosValidacion = [];
           datosValidacion.push(response.data[0][0])
           this.datosFinancieros = response.data[0][0]
+          var suma = 0;
           if(datosValidacion.length>0){
             for (let i = 1; i <= 12; i++) {
               const nombreIndex = i.toString();  // Convertir el número a cadena para acceder a la propiedad
               if (datosValidacion[0][nombreIndex]) {
                 this.checkValidar[i - 1] = datosValidacion[0][nombreIndex].validado;
                 this.inputTotalReal[i - 1] = datosValidacion[0][nombreIndex].real_duro;
+                suma += parseFloat(this.formatoSoloNumeros(datosValidacion[0][nombreIndex].real_duro))
               } else {
                 // Puedes asignar un valor predeterminado o manejar el caso de que la propiedad no exista
                 this.checkValidar[i - 1] = null;
@@ -3174,9 +3178,10 @@ const AltaProyectos = {
               }
             }
           }else{
-
             this.checkValidar=[]
           }
+          this.SumNumReales = suma
+          this.sumaReales = this.formatoNumeroApesos(suma);
         }else{
           alert("Error en la consulta");
         }
@@ -3292,6 +3297,11 @@ const AltaProyectos = {
     calcularPorcentaje(){
         return this.meta === 0  || this.selleva === 0 ? 0 :parseFloat((this.selleva/this.meta)*100).toFixed(2)
     },
+    calcularPorcentajeRealAnual(){
+      return this.meta === 0  || this.SumNumReales === 0 ? 0 :parseFloat((this.SumNumReales/this.meta)*100).toFixed(2)
+  },
+
+    
     calcularPorcentajeMensualTeorico(mes){
       if(this.calendarioSumaXMesAnio.sumas_ahorro_duro && this.calendarioSumaXMesAnio.sumas_ahorro_duro[mes.toString()] && this.inputValorPlan[mes-1] ){
         var plan = this.formatoSoloNumeros(this.inputValorPlan[mes-1])
