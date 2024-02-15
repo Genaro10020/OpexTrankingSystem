@@ -1343,8 +1343,8 @@ if (isset($_SESSION['nombre'])) {
                                     <th style="background: #848484; color:white;">Fecha</th>
                                     <th style="background: #848484; color:white;">Tons CO2 (Evitados) </th>
                                     <th style="background: #848484; color:white;" v-if="sinImpacto!='Sin Impacto'" v-for="(impacto,index) in columnaImpactoAmbiental" :key="index">{{impacto}}</th>
-                                    <th style="background: #848484; color:white;">Ahorro Duro $MXN/Año</th>
-                                    <th style="background: #848484; color:white;">Ahorro Suave $MXN/Año</th>
+                                    <th style="background: #848484; color:white;">Ahorro Duro $MXN</th>
+                                    <th style="background: #848484; color:white;">Ahorro Suave $MXN</th>
                                     <th style="background: #848484; color:white;">Estatus</th>
                                 </tr>
                             </thead>
@@ -1932,8 +1932,7 @@ if (isset($_SESSION['nombre'])) {
                                                         </select>
                                                     </div>
                                         </div>
-                                        <div class="col-8 my-auto text-center" >      
-                                                                                    
+                                        <div class="col-4 my-auto text-center" style="font-size:10px;min-width:350px" >                                         
                                                 <div class="row m-0 col-4 alert alert-primary p-0" style="font-size:10px;min-width:350px">
                                                 <label class="text-dark">Teórico Acumulado Anual</label>    
                                                     <div class="col-4  text-start">
@@ -1950,6 +1949,24 @@ if (isset($_SESSION['nombre'])) {
                                                                 </div>
                                                     </div>   
                                                 </div>
+                                        </div>
+                                        <div class="col-4 my-auto text-center" style="font-size:10px;min-width:350px" > 
+                                            <div class="row m-0 col-4 alert alert-primary p-0"style="font-size:10px;min-width:350px" >
+                                                <label class="text-dark">Real Acumulado Anual</label>    
+                                                    <div class="col-4  text-start">
+                                                            Suma Planeada:<br>
+                                                            Suma Totales:
+                                                    </div>
+                                                    <div class="col-4 text-start">
+                                                                {{sumaPlan}}<br>
+                                                                {{sumaTotales}}
+                                                    </div>
+                                                    <div class="col-4 text-center my-auto">
+                                                                <div class="progress" style="height: 20px;">
+                                                                    <div class="progress-bar" role="progressbar" :style="'width:'+calcularPorcentaje()+'%!important;'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentaje()}} % </label></div>
+                                                                </div>
+                                                    </div>   
+                                                </div>   
                                         </div>
                                     </div>
                             </div>                                                
@@ -2017,18 +2034,25 @@ if (isset($_SESSION['nombre'])) {
                                                 </td>
                                                 <td class="align-middle"  v-for="(x,index) in 12" style="font-size:12px"><!--Columna de Sumas X Anio-->
                                                
-                                                        <?php if ($_SESSION['acceso']=="Admin"){ ?>
+                                                       
                                                                 <div class="col d-flex"><!--Valor Plan-->
                                                                         <div>
-                                                                            <input v-if="plan_actualizar===x" v-model="inputValorPlan[index]"  type="text" @blur="darFormatoInputValorPlan(index)"> </input>
-                                                                            <input v-else type="text" :value="inputValorPlan[index]" disabled> </input>
+                                                                            <?php if ($_SESSION['acceso']=="Admin"){ ?>
+                                                                                <input v-if="plan_actualizar===x" v-model="inputValorPlan[index]"  type="text" @blur="darFormatoInputValorPlan(index)"> </input>
+                                                                            <?php } ?>
+                                                                            <?php if ($_SESSION['acceso']=="Admin" || $_SESSION['acceso']=="Financiero"){ ?>
+                                                                                <input v-if="plan_actualizar!==x"  type="text" :value="inputValorPlan[index]" disabled> </input>
+                                                                            <?php } ?>
                                                                         </div>
+                                                                        
                                                                         <div>
+                                                                        <?php if ($_SESSION['acceso']=="Admin"){ ?>
                                                                             <button v-if="plan_actualizar===x"  style="border-style: outset; border-width: 1.5px; height: 24px;" @click="guardarPlanMes(x)" ><i class="bi bi-floppy-fill"></i></button>
                                                                             <button v-else style="border-style: outset; border-width: 1.5px; height: 24px;"  @click="editarPlanMes(x)"><i class="bi bi-pencil-fill"></i></button>
+                                                                            <?php } ?>
                                                                         </div>
                                                                 </div> 
-                                                        <?php } ?>          
+                                                                  
                                                                 <div v-show="calendarioSumaXMesAnio.sumas_ahorro_duro && calendarioSumaXMesAnio.sumas_ahorro_duro[x.toString()]" class="alert alert-dark lh-1 p-2 mb-0 d-flex flex-column mt-1" role="alert" style="min-width:170px;">
                                                                     <div class="d-flex align-items-center">
                                                                             <label>Ah. S.: </label>&nbsp;<label> {{ calendarioSumaXMesAnio.sumas_ahorro_suave && calendarioSumaXMesAnio.sumas_ahorro_suave[x.toString()]}}</label>
@@ -2038,8 +2062,13 @@ if (isset($_SESSION['nombre'])) {
                                                                             <label>Ah. D.: </label>&nbsp;<label> {{ calendarioSumaXMesAnio.sumas_ahorro_duro && calendarioSumaXMesAnio.sumas_ahorro_duro[x.toString()]}}</label>
                                                                     </div>
                                                                 </div>
-                                                                <div>
-                                                                    
+                                                                <div><!--% Teórico Mensual-->
+                                                                    <div class="text-start">
+                                                                        <label style="font-size:8px">Teórico Mensual<label>
+                                                                    </div>
+                                                                    <div class="progress " style="height: 13px;">
+                                                                        <div class="progress-bar" role="progressbar" :style="'width:'+calcularPorcentajeMensualTeorico(x)+'%!important;'"   aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentajeMensualTeorico(x)}} % </label></div>
+                                                                    </div>
                                                                 </div>
                                                 </td>
                                             </tr>
@@ -2063,6 +2092,16 @@ if (isset($_SESSION['nombre'])) {
                                                                         <span  class="badge bg-success" style="font-size: 8px">Liberado</span>
                                                                  </div>
                                                                 <div v-else class="text-primary"><span class="badge bg-secondary" style="font-size: 8px">Sin liberar</span></div>
+                                                                
+                                                                <div><!--% Real Mensual-->
+                                                                    <div class="text-start">
+                                                                        <label style="font-size:8px">Real Mensual<label>
+                                                                        <br>
+                                                                    </div>
+                                                                    <div class="progress" style="height: 13px;">
+                                                                        <div class="progress-bar" role="progressbar" :style="'width:'+calcularPorcentajeMensualReal(x)+'%!important;'"  aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentajeMensualReal(x)}} % </label></div>
+                                                                    </div>
+                                                                </div>
                                                         </div>
                                                 </td>
                                             </tr>

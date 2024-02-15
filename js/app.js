@@ -3292,6 +3292,31 @@ const AltaProyectos = {
     calcularPorcentaje(){
         return this.meta === 0  || this.selleva === 0 ? 0 :parseFloat((this.selleva/this.meta)*100).toFixed(2)
     },
+    calcularPorcentajeMensualTeorico(mes){
+      if(this.calendarioSumaXMesAnio.sumas_ahorro_duro && this.calendarioSumaXMesAnio.sumas_ahorro_duro[mes.toString()] && this.inputValorPlan[mes-1] ){
+        var plan = this.formatoSoloNumeros(this.inputValorPlan[mes-1])
+          if(plan!=0)
+          { 
+            var ahorro_duro = this.formatoSoloNumeros(this.calendarioSumaXMesAnio.sumas_ahorro_duro[mes.toString()])
+            return ((ahorro_duro/plan)*100).toFixed(2) 
+          }
+      }
+    return 0
+   },
+   calcularPorcentajeMensualReal(mes){
+    if(typeof this.inputTotalReal !== 'undefined' && typeof this.inputValorPlan !== 'undefined' && this.inputTotalReal[mes - 1] && this.inputValorPlan[mes - 1]){
+     var real = this.inputTotalReal[mes-1]
+     var plan = this.inputValorPlan[mes-1]
+     real = this.formatoSoloNumeros(this.inputTotalReal[mes-1])
+     plan = this.formatoSoloNumeros(this.inputValorPlan[mes-1])////AQUI ESTOY
+     // return  "real: "+ real + "plan:" +plan;
+        if(real!=0)
+        { 
+          return ((real/plan)*100).toFixed(2) ////AQUI ESTOY
+        }
+    }
+  return 0
+ },
     tablaGraficas() {
             const ctx = document.getElementById('myChart');
             if (!ctx) {
