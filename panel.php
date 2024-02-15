@@ -1935,7 +1935,7 @@ if (isset($_SESSION['nombre'])) {
                                         <div class="col-8 my-auto text-center" >      
                                                                                     
                                                 <div class="row m-0 col-4 alert alert-primary p-0" style="font-size:10px;min-width:350px">
-                                                <label class="text-dark">Teorico Acumulado Anual</label>    
+                                                <label class="text-dark">Teórico Acumulado Anual</label>    
                                                     <div class="col-4  text-start">
                                                             Suma Planeada:<br>
                                                             Suma Totales:
@@ -2016,27 +2016,31 @@ if (isset($_SESSION['nombre'])) {
                                                         <div class="p-2 mt-1">Total:</div>
                                                 </td>
                                                 <td class="align-middle"  v-for="(x,index) in 12" style="font-size:12px"><!--Columna de Sumas X Anio-->
-                                                <?php if ($_SESSION['acceso']=="Admin"){ ?>
-                                                        <div class="d-flex"><!--Valor Plan-->
-                                                                <div>
-                                                                    <input v-if="plan_actualizar===x" v-model="inputValorPlan[index]"  type="text" @blur="darFormatoInputValorPlan(index)"> </input>
-                                                                    <input v-else type="text" :value="inputValorPlan[index]" disabled> </input>
+                                               
+                                                        <?php if ($_SESSION['acceso']=="Admin"){ ?>
+                                                                <div class="col d-flex"><!--Valor Plan-->
+                                                                        <div>
+                                                                            <input v-if="plan_actualizar===x" v-model="inputValorPlan[index]"  type="text" @blur="darFormatoInputValorPlan(index)"> </input>
+                                                                            <input v-else type="text" :value="inputValorPlan[index]" disabled> </input>
+                                                                        </div>
+                                                                        <div>
+                                                                            <button v-if="plan_actualizar===x"  style="border-style: outset; border-width: 1.5px; height: 24px;" @click="guardarPlanMes(x)" ><i class="bi bi-floppy-fill"></i></button>
+                                                                            <button v-else style="border-style: outset; border-width: 1.5px; height: 24px;"  @click="editarPlanMes(x)"><i class="bi bi-pencil-fill"></i></button>
+                                                                        </div>
+                                                                </div> 
+                                                        <?php } ?>          
+                                                                <div v-show="calendarioSumaXMesAnio.sumas_ahorro_duro && calendarioSumaXMesAnio.sumas_ahorro_duro[x.toString()]" class="alert alert-dark lh-1 p-2 mb-0 d-flex flex-column mt-1" role="alert" style="min-width:170px;">
+                                                                    <div class="d-flex align-items-center">
+                                                                            <label>Ah. S.: </label>&nbsp;<label> {{ calendarioSumaXMesAnio.sumas_ahorro_suave && calendarioSumaXMesAnio.sumas_ahorro_suave[x.toString()]}}</label>
+                                                                    </div>
+                                                                    <hr style="height: 1px; margin: 2px;">
+                                                                    <div class="d-flex align-items-center">
+                                                                            <label>Ah. D.: </label>&nbsp;<label> {{ calendarioSumaXMesAnio.sumas_ahorro_duro && calendarioSumaXMesAnio.sumas_ahorro_duro[x.toString()]}}</label>
+                                                                    </div>
                                                                 </div>
                                                                 <div>
-                                                                    <button v-if="plan_actualizar===x"  style="border-style: outset; border-width: 1.5px; height: 24px;" @click="guardarPlanMes(x)" ><i class="bi bi-floppy-fill"></i></button>
-                                                                    <button v-else style="border-style: outset; border-width: 1.5px; height: 24px;"  @click="editarPlanMes(x)"><i class="bi bi-pencil-fill"></i></button>
+                                                                    
                                                                 </div>
-                                                        </div> 
-                                                <?php } ?>          
-                                                        <div v-show="calendarioSumaXMesAnio.sumas_ahorro_duro && calendarioSumaXMesAnio.sumas_ahorro_duro[x.toString()]" class="alert alert-dark lh-1 p-2 mb-0 d-flex flex-column mt-1" role="alert" style="min-width:170px;">
-                                                               <div class="d-flex align-items-center">
-                                                                    <label>Ah. S.: </label>&nbsp;<label> {{ calendarioSumaXMesAnio.sumas_ahorro_suave && calendarioSumaXMesAnio.sumas_ahorro_suave[x.toString()]}}</label>
-                                                               </div>
-                                                               <hr style="height: 1px; margin: 2px;">
-                                                               <div class="d-flex align-items-center">
-                                                                    <label>Ah. D.: </label>&nbsp;<label> {{ calendarioSumaXMesAnio.sumas_ahorro_duro && calendarioSumaXMesAnio.sumas_ahorro_duro[x.toString()]}}</label>
-                                                               <div>
-                                                        </div>
                                                 </td>
                                             </tr>
                                             <tr><!--Fila Total Real-->
@@ -2062,14 +2066,13 @@ if (isset($_SESSION['nombre'])) {
                                                         </div>
                                                 </td>
                                             </tr>
-                                            <tr class="align-middle"><!--Fila Total Planeado-->
+                                            <!--<tr class="align-middle">
                                                 <td></td>
-                                                <td><!--{{checkValidar}}--></td>
+                                                <td></td>
                                                 <td  style="font-size:10px">Cumplimiento:</td>
-                                                <td colspan="12" class="align-middle text-start"><!--Columna de Sumas X Anio-->
-                                                        
+                                                <td colspan="12" class="align-middle text-start"> 
                                                 </td>
-                                            </tr>
+                                            </tr>-->
                                         </tbody>
                                     </table>
                             </div>
