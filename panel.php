@@ -2003,7 +2003,8 @@ if (isset($_SESSION['nombre'])) {
                                                     </button>
                                                 </template>
                                                 </th>
-                                                <td class="text-start" style="font-size:10px;">{{proyectosXanio.nombre_proyecto}}</td>
+                                                <td class="text-start" style="font-size:10px;">{{proyectosXanio.nombre_proyecto}}<br>
+                                                    <span class="badge" style=" background:#0e989a; font-weight: lighter;">{{proyectosXanio.directo}}</span>
                                                 <td>
                                                     <!--<span class="badge bg-dark" style=" font-size: 8px" v-if="cantidadMesesRegistrados[proyectosXanio.id]>11">Finalizado</span><br>-->
                                                     <span v-if="proyectosXanio.status_seguimiento=='Cerrado'" class="badge bg-dark" style="font-size: 8px">Finalizado</span> 
