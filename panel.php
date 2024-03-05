@@ -1849,24 +1849,27 @@ if (isset($_SESSION['nombre'])) {
                                             </div>
                                         </div>
                                         <div class="col-3 text-start">
-                                            <div class="mb-2 d-flex ">
+                                            <!--<div class="mb-2 d-flex ">
                                                 <div class="col-6"><i class="bi bi-check-circle"></i> Calidad</div>
                                                 <div class="col-6"><span class="badge bg-light valor-calidad" style="min-width:30px;">{{sumaValoresGonher.Calidad}}</span></div>
-                                            </div>    
-                                            <div class="mb-2 d-flex">
-                                                <div class="col-6 lh-1"><i class="bi bi-check-circle"></i> Servicio y <br>Orientación <br>al cliente</div>
-                                                <div class="col-6"><span class="badge bg-light valor-servicio" style="min-width:30px;">{{sumaValoresGonher.Servicio}}</span></div>
+                                            </div> -->
+                                            <div class="mb-2 d-flex ">
+                                                <div class="col-8 lh-1"><i class="bi bi-check-circle"></i> Trabajo en <br> Equipo</div>
+                                                <div class="col-4"><span class="badge bg-light valor-trabajo" style="min-width:30px;" >{{sumaValoresGonher.Trabajo}}</span></div>
                                             </div>       
+                                            <div class="mb-2 d-flex">
+                                                <div class="col-8 lh-1"><i class="bi bi-check-circle"></i> Servicio y <br> Orientación <br>al cliente</div>
+                                                <div class="col-4"><span class="badge bg-light valor-servicio" style="min-width:30px;" >{{sumaValoresGonher.Servicio}}</span></div>
+                                            </div>
+   
                                         </div>
                                         <div class="col-3 text-start ">
+
+
                                             <div class="mb-2 d-flex ">
-                                                <div class="col-8 lh-1"><i class="bi bi-check-circle"></i> Trabajo en <br>Equipo</div>
-                                                <div class="col-4"><span class="badge bg-light valor-trabajo" style="min-width:30px;" >{{sumaValoresGonher.Trabajo}}</span></div>
-                                            </div>
-                                            <div class="mb-2 d-flex ">
-                                                <div class="col-8"><i class="bi bi-check-circle"></i>Productividad</div>
+                                                <div class="col-8"><i class="bi bi-check-circle"></i> Calidad - <br> Productividad</div>
                                                 <div class="col-4"><span class="badge bg-light valor-calidad" style="min-width:30px;">{{sumaValoresGonher.Calidad}}</span></div>
-                                            </div>
+                                            </div> 
                                             <div class="mb-2 d-flex ">
                                                 <div class="col-8 lh-1"><i class="bi bi-check-circle"></i> Desarrollo de <br> nuestra gente   </div>
                                                 <div class="col-4"><span class="badge bg-light valor-desarrollo" style="min-width:30px;">{{sumaValoresGonher.Desarrollo}}</span></div>
