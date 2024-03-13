@@ -229,7 +229,8 @@ const AltaProyectos = {
           this.selleva =0
           for (let i = 1; i <= 12; i++) {
             if(this.calendarioSumaXMesAnio.sumas_ahorro_duro[i]){
-               suma += parseFloat(this.calendarioSumaXMesAnio.sumas_ahorro_duro[1].replace(/[$,]/g,''))
+              //console.log(this.calendarioSumaXMesAnio.sumas_ahorro_duro[i])
+               suma += parseFloat(this.calendarioSumaXMesAnio.sumas_ahorro_duro[i].replace(/[$,]/g,''))
             }
           }
           this.selleva = suma;
