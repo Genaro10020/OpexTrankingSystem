@@ -36,12 +36,13 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
     case 'PUT':
         // Manejar solicitud PUT (actualización)
-        if(isset($arreglo['id']) && isset($arreglo['anio']) && isset($arreglo['mes']) && isset($arreglo['validacion'])){
+        if(isset($arreglo['id']) && isset($arreglo['anio']) && isset($arreglo['mes']) && isset($arreglo['validacion']) && isset($arreglo['ahorro_duro'])){
             $id = $arreglo['id'];
             $mes = $arreglo['anio'];
             $anio = $arreglo['mes'];
             $validacion = $arreglo['validacion'];
-            $val [] =  actualizarValidacionProyecto($id,$mes,$anio,$validacion);
+            $ahorro_duro = $arreglo['ahorro_duro'];
+            $val [] =  actualizarValidacionProyecto($id,$mes,$anio,$validacion,$ahorro_duro);
         }else{
             $val [] =  "No existe todas las Variables";
         }

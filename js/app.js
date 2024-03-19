@@ -3151,7 +3151,7 @@ const AltaProyectos = {
         console.log("Error en valoresProyectos "+error)
       })
     },
-    validarProyecto(id_proyecto,mes,validacion){
+    validarProyecto(id_proyecto,mes,validacion,ahorro_duro_validado){
       var dato;
       if(validacion === "Validado"){
         dato = "";
@@ -3162,7 +3162,8 @@ const AltaProyectos = {
         id:id_proyecto,
         anio:this.select_anio_calendario,
         mes:mes,
-        validacion:dato
+        validacion:dato,
+        ahorro_duro:ahorro_duro_validado
       }).then(response =>{
           console.log(response.data);
           this.consultarCalendarioProyectos();

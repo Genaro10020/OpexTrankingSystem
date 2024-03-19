@@ -80,7 +80,7 @@ include("conexionGhoner.php");
         return $estado;
     }
 
-    function actualizarValidacionProyecto($id, $anio, $mes,$validacion){
+    function actualizarValidacionProyecto($id, $anio, $mes,$validacion,$ahorro_duro){
         global $conexion;
         $estado = false;
         $update = "UPDATE registros_impacto_ambiental
@@ -88,12 +88,12 @@ include("conexionGhoner.php");
                    ON registros_impacto_ambiental.id_impacto_ambiental_proyecto = impacto_ambiental_proyecto.id
                    JOIN proyectos_creados 
                    ON impacto_ambiental_proyecto.id_proyecto = proyectos_creados.id
-                   SET registros_impacto_ambiental.validado = ?
+                   SET registros_impacto_ambiental.validado = ?,  registros_impacto_ambiental.ahorro_duro_validado = ?
                    WHERE proyectos_creados.id = ? 
                    AND registros_impacto_ambiental.anio = ? 
                    AND registros_impacto_ambiental.mes = ?";
         $stmt = $conexion->prepare($update);
-        $stmt->bind_param("siii", $validacion, $id, $anio, $mes);
+        $stmt->bind_param("ssiii", $validacion,$ahorro_duro, $id, $anio, $mes);
         if ($stmt->execute()) {
             $estado = true;
         }
