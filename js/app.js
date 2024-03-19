@@ -219,7 +219,7 @@ const AltaProyectos = {
           anio:this.select_anio_calendario
         }
       }).then(response => {
-        console.log(response.data)
+        console.log('ProyectosCalendario',response.data)
         if (response.data[0][1] == true && response.data[0][3]) {
           this.proyectosDatosCalendario = response.data[0][0]
           this.proyectosXanioCalendario = response.data[0][2]
@@ -3107,8 +3107,7 @@ const AltaProyectos = {
                 } else {
                   console.log("this.sumasGenerandoValor no está definido o es nulo.");
                 }
-                //SumaExcelenciaValor:'',
-               // SumaExcelenciaSustentable:'',
+               
 /****************************/
 
 
@@ -3151,6 +3150,28 @@ const AltaProyectos = {
       }).catch(error =>{
         console.log("Error en valoresProyectos "+error)
       })
+    },
+    validarProyecto(id_proyecto,mes,validacion){
+      var dato;
+      if(validacion === "Validado"){
+        dato = "";
+      }else{
+        dato = "Validado"
+      }
+      axios.put("validacionFinancieraController.php",{
+        id:id_proyecto,
+        anio:this.select_anio_calendario,
+        mes:mes,
+        validacion:dato
+      }).then(response =>{
+          console.log(response.data);
+          this.consultarCalendarioProyectos();
+      }).catch(error =>{
+          console.log('Error en axios.')
+      }).finally(()=>{
+
+      })
+      console.log("ID:"+id_proyecto+"Anio:"+this.select_anio_calendario+"Mes:"+mes);
     },
     consultarValidacion(){
       axios.get("validacionFinancieraController.php",{

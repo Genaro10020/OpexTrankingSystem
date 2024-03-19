@@ -1354,7 +1354,8 @@ if (isset($_SESSION['nombre'])) {
                                 <tr v-if="seguimientos>0" style="vertical-align: middle; font-size: 1.1em;" v-for="(proyecto,posicion) in arregloID" :key="posicion">
                                     <?php if($_SESSION['acceso']!="Financiero")  {?>
                                     <td v-if="seguimiento_status">
-                                        <button v-if="actualizar==0 && actualizatabla == false" type="button" class="boton-actualizar" v-if="actualizatabla == false" @Click="asignarDatosActualizar(posicion)">Actualizar</button>
+                                        <button v-if="actualizar==0 && actualizatabla == false && proyecto.validado!='Validado'" type="button" class="boton-actualizar" v-if="actualizatabla == false" @Click="asignarDatosActualizar(posicion)">Actualizar</button>
+                                        <span v-if="actualizar==0 && actualizatabla == false && proyecto.validado=='Validado'" class="badge bg-primary" style="font-size:0.8em;">Mes validado x finanzas</span>
                                         <button v-if="actualizar==(posicion+1)" v-if="actualizatabla == true" class="boton-eliminar mx-2" @Click="actualizar = 0">Cancelar</button>
                                         <button v-if="actualizar==(posicion+1) && proyecto.id_registro " v-if="actualizatabla == true" class="boton-aceptar" @Click="actualizarSeguimiento(posicion)">Guardar</button><!--Guardar Actualizacion cuando existe minimo 1-->
                                     </td>
@@ -2016,9 +2017,14 @@ if (isset($_SESSION['nombre'])) {
                                                 <td v-for="x in 12">
                                                     <template v-for="proyectosDatosCalendario in proyectosDatosCalendario">
                                                         <div v-if="proyectosDatosCalendario.proyectoID==proyectosXanio.id && proyectosDatosCalendario.mes==x && proyectosDatosCalendario.anio==select_anio_calendario" >
-                                                            <i class="bi bi-check2"></i>
                                                             <span class="badge rounded-pill alert-dark"  style=" font-size: 8px">Ahorro Duro:<br><label class="text-dark">{{proyectosDatosCalendario.ahorro_duro}}<label></span>
                                                             <span class="badge rounded-pill alert-warning"  style=" font-size: 8px">Ahorro Suave:<br>{{proyectosDatosCalendario.ahorro_suave}}</span>
+                                                            <div  class="text-center"> 
+                                                                <i v-if="proyectosDatosCalendario.validado=='Validado' && parseInt(proyectosDatosCalendario.mes)===x" class="bi bi-check2-all text-success"></i>
+                                                                <i v-else class="bi bi-check2"></i>
+                                                                <button v-if="proyectosDatosCalendario.validado=='Validado' && parseInt(proyectosDatosCalendario.mes)===x" class="btn-liberado" @click="validarProyecto(proyectosXanio.id,x,proyectosDatosCalendario.validado)">Validado</button>
+                                                                <button v-else class="btn-sin-liberar" @click="validarProyecto(proyectosXanio.id,x,proyectosDatosCalendario.validado)">Sin validar</button>
+                                                            </div>
                                                             <!--<span class="badge bg-dark" style=" font-size: 8px">Finalizado</span>-->
                                                         </div>
                                                     </template>
