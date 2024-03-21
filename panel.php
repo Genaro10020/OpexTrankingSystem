@@ -2022,8 +2022,10 @@ if (isset($_SESSION['nombre'])) {
                                                             <div  class="text-center"> 
                                                                 <i v-if="proyectosDatosCalendario.validado=='Validado' && parseInt(proyectosDatosCalendario.mes)===x" class="bi bi-check2-all text-success"></i>
                                                                 <i v-else class="bi bi-check2"></i>
-                                                                <button v-if="proyectosDatosCalendario.validado=='Validado' && parseInt(proyectosDatosCalendario.mes)===x" class="btn-liberado" @click="validarProyecto(proyectosXanio.id,x,proyectosDatosCalendario.validado,'')">Validado</button>
-                                                                <button v-else class="btn-sin-liberar" @click="validarProyecto(proyectosXanio.id,x,proyectosDatosCalendario.validado,proyectosDatosCalendario.ahorro_duro)">Sin validar</button>
+                                                                <?php if ($_SESSION['acceso']=="Financiero"){ ?>
+                                                                    <button v-if="proyectosDatosCalendario.validado=='Validado' && parseInt(proyectosDatosCalendario.mes)===x" class="btn-liberado" @click="validarProyecto(proyectosXanio.id,x,proyectosDatosCalendario.validado,'')">Validado</button>
+                                                                    <button v-else class="btn-sin-liberar" @click="validarProyecto(proyectosXanio.id,x,proyectosDatosCalendario.validado,proyectosDatosCalendario.ahorro_duro)">Sin validar</button>
+                                                                <?php } ?>
                                                             </div>
                                                             <!--<span class="badge bg-dark" style=" font-size: 8px">Finalizado</span>-->
                                                         </div>
