@@ -2021,7 +2021,9 @@ if (isset($_SESSION['nombre'])) {
                                                     </button>
                                                 </template>
                                                 </th>
-                                                <td class="text-start" style="font-size:10px;">{{proyectosXanio.nombre_proyecto}}<br>
+                                                <td class="text-start" style="font-size:10px;">
+                                                    <i class="bi bi-info-circle-fill me-2 text-primary" style="font-size: 1.3em" :title="' Responsable: '+proyectosXanio.responsable+'\n Correo: '+proyectosXanio.correo+'\n Teléfono: '+proyectosXanio.telefono"></i>
+                                                    {{proyectosXanio.nombre_proyecto}}<br>
                                                     <span class="badge" style=" background:#0e989a; font-weight: lighter;">{{proyectosXanio.directo}}</span>
                                                 <td>
                                                     <!--<span class="badge bg-dark" style=" font-size: 8px" v-if="cantidadMesesRegistrados[proyectosXanio.id]>11">Finalizado</span><br>-->
