@@ -44,7 +44,7 @@ if (!file_exists($path)) {
 
                             // Validar extensiones permitidas
                             if($_POST['cual_documento']=="Seguimiento" || $_POST['cual_documento']=="Documento CO2"){
-                                $valid_ext = array("png","jpeg","jpg","pdf","doc","docx","ppt","pptx","xls","xlsx");
+                                $valid_ext = array("png","jpeg","jpg","pdf","doc","docx","ppt","pptx","xls","xlsx","rar","zip");
                             }else{
                                 $valid_ext = array("jpeg","jpg","png");//entension valida para 
                             }

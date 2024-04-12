@@ -1480,7 +1480,7 @@ if (isset($_SESSION['nombre'])) {
                                                         <div v-if="cual_documento=='Seguimiento'" class="row" >
                                                             <div class="col-12">
                                                                 <div class="custom-file mt-5 mb-3"> 
-                                                                <input type="file" id="input_file_seguimiento" @change="varificandoSelecionSeguimiento()" ref="ref_seguimiento" multiple accept="*.jpg/*.png/*.pdf/*.doc/*.docx/*.ppt/*.pptx/*.xls/*.xlsx" class="btn btn-secondary  ms-2 p-0" required />
+                                                                <input type="file" id="input_file_seguimiento" @change="varificandoSelecionSeguimiento()" ref="ref_seguimiento" multiple accept="*.jpg/*.png/*.pdf/*.doc/*.docx/*.ppt/*.pptx/*.xls/*.xlsx/*.rar/*.zip" class="btn btn-secondary  ms-2 p-0" required />
                                                                 </div>
                                                             </div>
                                                             <div class="col-12" v-if="existeImagenSeleccionadaSeguimiento && login!=true" >
@@ -1536,6 +1536,20 @@ if (isset($_SESSION['nombre'])) {
                                                                     {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br> <!--obtengo el nombre del documento con extension-->
                                                                             <a :href="archivos" :download="nombre_de_descarga">
                                                                             <img  src="img/powerpoint.png" style="width:200px" class="mb-5"></img>
+                                                                            </a>
+                                                                    </div>
+                                                                     <!--Mostrar .RAR-->
+                                                                     <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='rar'" class="col-12 text-center">
+                                                                    {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br> <!--obtengo el nombre del documento con extension-->
+                                                                            <a :href="archivos" :download="nombre_de_descarga">
+                                                                            <img  src="img/rar.png" style="width:200px" class="mb-5"></img>
+                                                                            </a>
+                                                                    </div>
+                                                                     <!--Mostrar .RAR-->
+                                                                     <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='zip'" class="col-12 text-center">
+                                                                    {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br> <!--obtengo el nombre del documento con extension-->
+                                                                            <a :href="archivos" :download="nombre_de_descarga">
+                                                                            <img  src="img/zip.png" style="width:200px" class="mb-5"></img>
                                                                             </a>
                                                                     </div>
                                                                 </div>
@@ -2193,6 +2207,20 @@ if (isset($_SESSION['nombre'])) {
                                                                     {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br> <!--obtengo el nombre del documento con extension-->
                                                                             <a :href="archivos" :download="nombre_de_descarga">
                                                                             <img  src="img/powerpoint.png" style="width:200px" class="mb-5"></img>
+                                                                            </a>
+                                                                    </div>
+                                                                      <!--Mostrar .RAR-->
+                                                                      <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='rar'" class="col-12 text-center">
+                                                                    {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br> <!--obtengo el nombre del documento con extension-->
+                                                                            <a :href="archivos" :download="nombre_de_descarga">
+                                                                            <img  src="img/rar.png" style="width:200px" class="mb-5"></img>
+                                                                            </a>
+                                                                    </div>
+                                                                     <!--Mostrar .RAR-->
+                                                                     <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='zip'" class="col-12 text-center">
+                                                                    {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br> <!--obtengo el nombre del documento con extension-->
+                                                                            <a :href="archivos" :download="nombre_de_descarga">
+                                                                            <img  src="img/zip.png" style="width:200px" class="mb-5"></img>
                                                                             </a>
                                                                     </div>
                                                                 </div>
