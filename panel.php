@@ -2028,7 +2028,7 @@ if (isset($_SESSION['nombre'])) {
                                                 <td>
                                                     <!--<span class="badge bg-dark" style=" font-size: 8px" v-if="cantidadMesesRegistrados[proyectosXanio.id]>11">Finalizado</span><br>-->
                                                     <span v-if="proyectosXanio.status_seguimiento=='Cerrado'" class="badge bg-dark" style="font-size: 8px">Finalizado</span> 
-                                                    <span v-else class="badge bg-success" style=" font-size: 8px">Seguiendo</span>
+                                                    <span v-else class="badge bg-success" style=" font-size: 8px">Siguiendo</span>
                                                 </td>
                                                 <td v-for="x in 12">
                                                     <template v-for="proyectosDatosCalendario in proyectosDatosCalendario">
