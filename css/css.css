@@ -334,6 +334,15 @@ button {
     border-radius: 5px;
 }
 
+.alert-sweet{
+    background: #2c8fc8;
+    color: white;
+}
+
+.alert-sweet:hover{
+    background: #3d77ce;
+    color: white;
+}
 
 .boton-aceptar {
     width: 100px;

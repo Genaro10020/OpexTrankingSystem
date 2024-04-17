@@ -2913,7 +2913,7 @@ const AltaProyectos = {
                 this.actualizatabla = false
                 this.consultarImpactoAmbieltalXProyectoID()
                 this.consultarSumaProyectos()
-                alert("Se inserto con éxito")
+                this.alertaSweet()
               } else {
                 alert("Verifique que los campos no esten vacios, valor minimo 0 ")
               }
@@ -2954,7 +2954,7 @@ const AltaProyectos = {
             this.actualizar = 0
             this.consultarImpactoAmbieltalXProyectoID()
             this.consultarSumaProyectos()
-            alert("Se actualizo con éxito")
+            this.alertaSweet()
             //this.consultarImpactoAmbieltalXProyectoID()
           } else {
             alert("La actualizacion, no se realizo correctamente.")
@@ -2966,6 +2966,27 @@ const AltaProyectos = {
       }).finally(() => {
 
       })
+    },
+    alertaSweet(){
+      Swal.fire({
+        icon: "success",
+        title: "Se guardo con éxito",
+        width: 800,
+        html: `
+          <b>Nota:</b>
+          <div class="text-start" style="font-size:0.7em">
+          <br> <b>1.-</b> Subir solo un archivo por mes, según corresponda.<br>
+          <br> <b>2.-</b> El responsable de cada proyecto, deberá efectuar una revisión exhaustiva, verificando que los datos de su proyecto son confiables y fidedignos.<br>
+          <br> <b>3.-</b> Este archivo deberá contener la información completa, con la información que soporte y justifique el importe y/o el monto del ahorro según corresponda.<br>
+          <br> <b>4.-</b> Anexar al archivo las pantallas de la transacción MB51 (Si aplica), en las cuales se puede identificar el MATERIAL-CENTRO-ALMACEN-CLASE DE MOV. Y FECHA DE CONT. P.D.<br>
+          <br> <b>5.-</b> La información mencionada en el punto 4, deberá ser exportada a excel.<br>
+          </div>
+        `,
+        customClass: {
+          confirmButton: "btn alert-sweet"
+        },
+        buttonsStyling: false
+      });
     },
     guardarStatus() {
       //console.log(this.seguimiento_status + this.id_proyecto);
