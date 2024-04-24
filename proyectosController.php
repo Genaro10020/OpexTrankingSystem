@@ -91,6 +91,15 @@ if (isset($_SESSION['nombre'])) {
                 }else{
                     $val[] = "No llegaron todas la variables para Guardar Estatus";
                 }
+            }else if($arreglo['accion']=="Guardar Rechazo"){
+                if (isset($arreglo['id_proyecto']) && isset($arreglo['motivo']) && isset($arreglo['anio'])) {
+                    $id_proyecto = $arreglo['id_proyecto'];
+                    $motivo = $arreglo['motivo'];
+                    $anio = $arreglo['anio'];
+                    $val[] = actualizarRechazo($id_proyecto,$motivo,$anio);
+                }else{
+                    $val[] = "No llegaron todas la variables para Guardar Rechazo";
+                }
             }else{
                 $val[] = "No existe la varible accion";
             }

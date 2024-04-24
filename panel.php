@@ -2013,12 +2013,20 @@ if (isset($_SESSION['nombre'])) {
                                             <tr v-if="proyectosXanioCalendario.length>0" v-for="(proyectosXanio,indexa) in proyectosXanioCalendario">
                                                 <th>
                                                 <template v-for ="cantidadArchivos in cantidadDocumentos"><!--Contine ID y Cantidad de documentos-->
-                                                    <button v-if="cantidadArchivos.id==proyectosXanio.id && parseInt(cantidadArchivos.cantidad)>0" type="button" class="btn btn-success" title="Visualizar"  @click="modal_estatus(proyectosXanio.id)" style="font-size:10px"><i class="bi bi-file-earmark"></i><!--Si el ID es igual-->
-                                                        {{cantidadArchivos.cantidad}} Archivo/s 
-                                                    </button>
-                                                    <button v-if="cantidadArchivos.id==proyectosXanio.id && parseInt(cantidadArchivos.cantidad)<=0" type="button" class="btn btn-secondary" title="Sin Documentos" style="font-size:10px"><i class="bi bi-file-earmark"></i>
-                                                        {{documentos_seguimiento_captura.length}} Archivo/s 
-                                                    </button>
+                                                    <div v-if="cantidadArchivos.id==proyectosXanio.id && parseInt(cantidadArchivos.cantidad)>0">
+                                                        <button type="button" class="btn btn-success" title="Visualizar"  @click="modal_estatus(proyectosXanio.id)" style="font-size:10px"><i class="bi bi-file-earmark"></i><!--Si el ID es igual-->
+                                                            {{cantidadArchivos.cantidad}} Archivo/s 
+                                                        </button><br>
+                                                        <button class="btn-archivo-aceptado me-1">Aceptar</button>
+                                                        <button class="btn-archivo-rechazado ms-1" @click="modalMotivoRechazo(proyectosXanio.id)">Rechazar</button>
+                                                        <span class="badge alert-success">Estatus</span>
+                                                    </div>   
+                                                    <div v-if="cantidadArchivos.id==proyectosXanio.id && parseInt(cantidadArchivos.cantidad)<=0"> 
+                                                        <button type="button" class="btn btn-secondary" title="Sin Documentos" style="font-size:10px"><i class="bi bi-file-earmark"></i>
+                                                            {{documentos_seguimiento_captura.length}} Archivo/s 
+                                                        </button>
+                                                        <span class="badge alert-success">Estatus</span>
+                                                    </div>
                                                 </template>
                                                 </th>
                                                 <td class="text-start" style="font-size:10px;">
@@ -2143,7 +2151,7 @@ if (isset($_SESSION['nombre'])) {
                                         </tbody>
                                     </table>
                             </div>
-                                                <!-- Modal Eliminar/Actualizar Seguimiento-->
+                     <!-- Modal Eliminar/Actualizar Seguimiento-->
                     <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered modal-xl">
                                 <div class="modal-content">
@@ -2237,6 +2245,27 @@ if (isset($_SESSION['nombre'])) {
                             </div>
                     </div>
                 <!--Fin Modal subir seguimiento-->
+
+                  <!-- Modal Motivo Rechazo-->
+                  <div class="modal fade" id="modal-motivo-rechazo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-xl">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h6 class="modal-title text-danger" id="exampleModalLabel" >Motivo Rechazo</h6>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-center">
+                                    <textarea rows="5" v-model="motivo_rechazo" class="textarea w-100"></textarea>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" @click="guardarRechazo()">Enviar rechazo</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                </div>
+                                </div>
+                            </div>
+                    </div>
+                <!--Fin Modal Motivo Rechazo-->
+
                 </div> 
                 <!--////////////////////////////////////////////// FIN DE CALENDARIO -->
                 <div v-if="ventana=='Valores Gonher'" v-cloak><!--BLOQUE GRAFICA VALORES GONHER-->

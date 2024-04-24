@@ -359,6 +359,21 @@ function actualizarStatusCerradoSiguiendo($id_proyecto, $status)
 }
 
 
+function actualizarRechazo($id_proyecto,$motivo,$anio)
+{
+    global $conexion;
+    $estado = false;
+    $update = "UPDATE proyectos_creados SET motivo_rechazo=?,anio_rechazo=? WHERE id=?";
+    $stmt = $conexion->prepare($update);
+    $stmt->bind_param("sii", $motivo,$anio, $id_proyecto);
+    if ($stmt->execute()) {
+        $estado = true;
+    }
+    $stmt->close();
+    return $estado;
+}
+
+
 function eliminarProyecto($id)
 {
     global $conexion;

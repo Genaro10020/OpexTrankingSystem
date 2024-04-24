@@ -168,6 +168,7 @@ const AltaProyectos = {
       sumaGeneralSustentable:'',
       sumaValoresGonher:'',
       //Calendario
+      motivo_rechazo:'',
       select_anio_calendario:2023,
       proyectosDatosCalendario:[],
       proyectosXanioCalendario:[],
@@ -176,7 +177,8 @@ const AltaProyectos = {
       datosFinancieros:[],
       inputTotalReal:[],
       checkValidar:[],
-      cantidadDocumentos:[]
+      cantidadDocumentos:[],
+      id_proyecto_rechazo:''
     }
   },
   mounted() {
@@ -3040,7 +3042,41 @@ const AltaProyectos = {
       this.input_ahorro_duro = this.arregloID[posicion].ahorro_duro
       this.input_ahorro_suave = this.arregloID[posicion].ahorro_suave
     },
-    /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PROYECTOS*/
+    /*/////////////////////////////////////////////////////////////////////////////////CALENDARIO*/
+    modalMotivoRechazo(id_proyecto){
+      this.myModal = new bootstrap.Modal(document.getElementById("modal-motivo-rechazo"))
+      this.myModal.show()
+      this.id_proyecto_rechazo = id_proyecto
+    },
+    guardarRechazo(){
+      var texto = this.motivo_rechazo
+      this.motivo_rechazo = texto.trim();// Si existen unicamente espacio en blanco los elinará y la cadena será vacia, me ayuda a verificar
+      if(this.motivo_rechazo==""){return alert("Digite un texto")}
+      this.motivo_rechazo = texto.replace(/\s+/g, ' ').trim();// Eliminar espacios en blanco en exceso y despues vuelvo a eliminar los expacio de alado y reacciono
+      axios.put('proyectosController.php', {
+        accion:'Guardar Rechazo',
+        id_proyecto: this.id_proyecto_rechazo,
+        motivo:this.motivo_rechazo,
+        anio:this.select_anio_calendario
+      }).then(response => {
+        console.log(response.data)
+        if (response.data[0] == true) {
+          this.myModal.hide()
+          this.motivo_rechazo = ""
+          alert("Rechazo guardado correctamente")
+          //this.consultarProyectos()
+        } else {
+          alert("La inserción de Rechazo, no se realizó correctamente.")
+        }
+
+      }).catch(error => {
+          console.log('Erro :-('+error)
+      }).finally(() => {
+
+      })
+
+
+    },
     consultarSeguimientos() {
       this.sumarSoloUnaVez = 0
       axios.get('seguimientoAmbientalProyectoController.php', {
@@ -3344,8 +3380,6 @@ const AltaProyectos = {
     calcularPorcentajeRealAnual(){
       return this.meta === 0  || this.SumNumReales === 0 ? 0 :parseFloat((this.SumNumReales/this.meta)*100).toFixed(2)
   },
-
-    
     calcularPorcentajeMensualTeorico(mes){
       if(this.calendarioSumaXMesAnio.sumas_ahorro_duro && this.calendarioSumaXMesAnio.sumas_ahorro_duro[mes.toString()] && this.inputValorPlan[mes-1] ){
         var plan = this.formatoSoloNumeros(this.inputValorPlan[mes-1])
