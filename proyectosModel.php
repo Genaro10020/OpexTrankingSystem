@@ -140,7 +140,7 @@ function consultarCalendarioProyecto($anio)
     $sumasPorMes['sumas_ahorro_suave'] = [];
     $estado1 = false;
     $suma = 0;
-    $consulta = "SELECT DISTINCT proyectos_creados.id AS proyectoID, proyectos_creados.nombre_proyecto, registros_impacto_ambiental.mes, registros_impacto_ambiental.anio, registros_impacto_ambiental.ahorro_duro, registros_impacto_ambiental.ahorro_suave, registros_impacto_ambiental.validado, proyectos_creados.id /*Datos Proyecto */
+    $consulta = "SELECT DISTINCT proyectos_creados.id AS proyectoID, proyectos_creados.nombre_proyecto, registros_impacto_ambiental.mes, registros_impacto_ambiental.anio, registros_impacto_ambiental.ahorro_duro, registros_impacto_ambiental.ahorro_suave, registros_impacto_ambiental.status_rechazo, registros_impacto_ambiental.motivo_rechazo, registros_impacto_ambiental.validado, proyectos_creados.id /*Datos Proyecto */
     FROM impacto_ambiental_proyecto JOIN proyectos_creados ON impacto_ambiental_proyecto.id_proyecto = proyectos_creados.id 
     JOIN registros_impacto_ambiental ON impacto_ambiental_proyecto.id = registros_impacto_ambiental.id_impacto_ambiental_proyecto WHERE registros_impacto_ambiental.anio ='$anio'";
     $query = $conexion->query($consulta);
@@ -359,20 +359,56 @@ function actualizarStatusCerradoSiguiendo($id_proyecto, $status)
 }
 
 
-function actualizarRechazo($id_proyecto,$motivo,$anio)
+function actualizarRechazo($id_proyecto,$status_rechazo,$motivo,$anio,$mes)
 {
     global $conexion;
     $estado = false;
-    $update = "UPDATE proyectos_creados SET motivo_rechazo=?,anio_rechazo=? WHERE id=?";
-    $stmt = $conexion->prepare($update);
-    $stmt->bind_param("sii", $motivo,$anio, $id_proyecto);
-    if ($stmt->execute()) {
-        $estado = true;
-    }
-    $stmt->close();
-    return $estado;
-}
 
+    if($status_rechazo=="Corregida"){
+        $update = "UPDATE registros_impacto_ambiental JOIN impacto_ambiental_proyecto 
+        ON registros_impacto_ambiental.id_impacto_ambiental_proyecto = impacto_ambiental_proyecto.id 
+        JOIN proyectos_creados 
+        ON impacto_ambiental_proyecto.id_proyecto = proyectos_creados.id SET registros_impacto_ambiental.status_rechazo = ? WHERE proyectos_creados.id=? AND registros_impacto_ambiental.mes =? AND registros_impacto_ambiental.anio = ?";
+        $stmt = $conexion->prepare($update);
+        if(!$stmt){
+            return $conexion->error;
+        }else{
+            $stmt->bind_param("siii", $status_rechazo,$id_proyecto,$mes,$anio);
+            if ($stmt->execute()) {
+                $estado = true;
+            }else{
+                $estado = $stmt->error;
+            }
+            $stmt->close();
+            return $estado;
+        }
+
+    }else{
+        $update = "UPDATE registros_impacto_ambiental JOIN impacto_ambiental_proyecto 
+        ON registros_impacto_ambiental.id_impacto_ambiental_proyecto = impacto_ambiental_proyecto.id 
+        JOIN proyectos_creados 
+        ON impacto_ambiental_proyecto.id_proyecto = proyectos_creados.id SET registros_impacto_ambiental.status_rechazo = ?, registros_impacto_ambiental.motivo_rechazo=? WHERE proyectos_creados.id=? AND registros_impacto_ambiental.mes =? AND registros_impacto_ambiental.anio = ?";
+        $stmt = $conexion->prepare($update);
+        if(!$stmt){
+            return $conexion->error;
+        }else{
+            $stmt->bind_param("ssiii", $status_rechazo,$motivo,$id_proyecto,$mes,$anio);
+            if ($stmt->execute()) {
+                $estado = true;
+            }else{
+                $estado = $stmt->error;
+            }
+            $stmt->close();
+            return $estado;
+        }
+
+    }
+   
+
+
+    
+   
+}
 
 function eliminarProyecto($id)
 {

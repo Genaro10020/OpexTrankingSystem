@@ -92,11 +92,13 @@ if (isset($_SESSION['nombre'])) {
                     $val[] = "No llegaron todas la variables para Guardar Estatus";
                 }
             }else if($arreglo['accion']=="Guardar Rechazo"){
-                if (isset($arreglo['id_proyecto']) && isset($arreglo['motivo']) && isset($arreglo['anio'])) {
+                if (isset($arreglo['id_proyecto']) && isset($arreglo['status_rechazo']) && isset($arreglo['motivo']) && isset($arreglo['anio']) && isset($arreglo['mes'])){
                     $id_proyecto = $arreglo['id_proyecto'];
+                    $status_rechazo = $arreglo['status_rechazo'];
                     $motivo = $arreglo['motivo'];
                     $anio = $arreglo['anio'];
-                    $val[] = actualizarRechazo($id_proyecto,$motivo,$anio);
+                    $mes = $arreglo['mes'];
+                    $val[] = actualizarRechazo($id_proyecto,$status_rechazo,$motivo,$anio,$mes);
                 }else{
                     $val[] = "No llegaron todas la variables para Guardar Rechazo";
                 }

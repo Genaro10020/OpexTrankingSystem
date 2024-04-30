@@ -178,7 +178,8 @@ const AltaProyectos = {
       inputTotalReal:[],
       checkValidar:[],
       cantidadDocumentos:[],
-      id_proyecto_rechazo:''
+      id_proyecto_rechazo:'',
+      mes_rechazo:''
     }
   },
   mounted() {
@@ -3043,39 +3044,62 @@ const AltaProyectos = {
       this.input_ahorro_suave = this.arregloID[posicion].ahorro_suave
     },
     /*/////////////////////////////////////////////////////////////////////////////////CALENDARIO*/
-    modalMotivoRechazo(id_proyecto){
+    modalMotivoRechazo(id_proyecto,mes){
       this.myModal = new bootstrap.Modal(document.getElementById("modal-motivo-rechazo"))
       this.myModal.show()
       this.id_proyecto_rechazo = id_proyecto
+      this.mes_rechazo = mes
     },
-    guardarRechazo(){
-      var texto = this.motivo_rechazo
-      this.motivo_rechazo = texto.trim();// Si existen unicamente espacio en blanco los elinará y la cadena será vacia, me ayuda a verificar
-      if(this.motivo_rechazo==""){return alert("Digite un texto")}
-      this.motivo_rechazo = texto.replace(/\s+/g, ' ').trim();// Eliminar espacios en blanco en exceso y despues vuelvo a eliminar los expacio de alado y reacciono
-      axios.put('proyectosController.php', {
+    guardarRechazo(status_rechazo,mes,id_proyecto,anio_rechazo){
+        var anio;
+      if(status_rechazo=='Rechazada'){
+        var texto = this.motivo_rechazo
+        this.motivo_rechazo = texto.trim();// Si existen unicamente espacio en blanco los elinará y la cadena será vacia, me ayuda a verificar
+        if(this.motivo_rechazo==""){return alert("Digite un texto")}
+        this.motivo_rechazo = texto.replace(/\s+/g, ' ').trim();// Eliminar espacios en blanco en exceso y despues vuelvo a eliminar los expacio de alado y reacciono
+        anio = this.select_anio_calendario
+      }else if(status_rechazo=='Aceptada'){
+        this.motivo_rechazo = ''
+        this.mes_rechazo =  mes
+        this.id_proyecto_rechazo = id_proyecto
+        anio = this.select_anio_calendario
+      }else if(status_rechazo=='Corregida'){
+
+        if(!confirm("¿Ya corrigió su evidencia del mes ("+mes+") y año ("+anio_rechazo+")?")){return}
+        this.motivo_rechazo = ''
+        this.mes_rechazo =  mes
+        this.id_proyecto_rechazo = this.id_proyecto
+        anio = anio_rechazo
+      }
+      
+        console.log("id_proyecto: "+this.id_proyecto_rechazo+"mes: "+this.mes_rechazo+"status_rechazo: "+status_rechazo+"Año calendario: "+anio)
+       axios.put('proyectosController.php', {
         accion:'Guardar Rechazo',
         id_proyecto: this.id_proyecto_rechazo,
+        status_rechazo: status_rechazo,
         motivo:this.motivo_rechazo,
-        anio:this.select_anio_calendario
+        mes:this.mes_rechazo,
+        anio:anio
       }).then(response => {
         console.log(response.data)
         if (response.data[0] == true) {
-          this.myModal.hide()
+          if(this.myModal){this.myModal.hide()}
           this.motivo_rechazo = ""
-          alert("Rechazo guardado correctamente")
-          //this.consultarProyectos()
+          alert("Respuesta guardada con éxito")
+                if(status_rechazo=='Corregida'){
+                  this.consultarImpactoAmbieltalXProyectoID();
+                }else{
+                  this.consultarCalendarioProyectos();
+                  this.consultarImpactoAmbieltalXProyectoID();
+                }
         } else {
           alert("La inserción de Rechazo, no se realizó correctamente.")
         }
-
       }).catch(error => {
           console.log('Erro :-('+error)
       }).finally(() => {
 
       })
-
-
     },
     consultarSeguimientos() {
       this.sumarSoloUnaVez = 0

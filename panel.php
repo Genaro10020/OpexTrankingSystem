@@ -1393,7 +1393,7 @@ if (isset($_SESSION['nombre'])) {
                                         <input v-if="actualizar==(posicion+1)" type="text" v-model="input_ahorro_suave" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('input_ahorro_suave')"></input> <!--:value="proyecto.ahorro_suave"-->
                                         <label v-else>{{proyecto.ahorro_suave}}</label>
                                     </td>
-                                    <td style="min-width:150px">
+                                    <td style="min-width:150px" class="align-middle">
                                     <?php if($_SESSION['acceso']!="Financiero")  {?>
                                         <div v-if="posicion === (arregloID.length - 1)" class="form-check form-switch">
                                             <div class="form-check form-switch">
@@ -1403,6 +1403,17 @@ if (isset($_SESSION['nombre'])) {
                                             </div>
                                         </div>
                                         <?php } ?>
+                                        <span v-show="proyecto.status_rechazo=='Aceptada'" class="badge bg-success" style="font-size:0.8em;">Evidencia:  <b>Aceptada</b></span>
+                                        <span v-show="proyecto.status_rechazo=='Rechazada'" class="badge bg-danger" style="font-size:0.8em;">Evidencia: <b>Rechazada</b></span>
+                                        <div v-if="proyecto.status_rechazo=='Rechazada'" class="col-12">
+                                                <i class="bi bi-info-circle-fill text-danger"></i> {{proyecto.motivo_rechazo}}<br>
+                                                <button type="button" class="btn btn-primary" style="font-size: 0.8em" @click="guardarRechazo('Corregida',proyecto.mes,proyecto.id,proyecto.anio)">Listo, corregida!! </button>
+                                        </div>
+                                        <div v-if="proyecto.status_rechazo=='Corregida'" class="col-12">
+                                            <span class="badge bg-warning text-dark" style="font-size:0.8em;"><b>El Financiero está revisando la corrección del rechazo. </b></span><br>
+                                            <i class="bi bi-info-circle-fill text-warning"></i>{{proyecto.motivo_rechazo}} <label  class="text-primary" style="font-size:0.7em;" >(Favor de esperar la aceptación)</label>
+                                           
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr v-if="seguimientos>0" class="align-middle"> <!--Sumatoria y adjuntos-->
@@ -2016,16 +2027,12 @@ if (isset($_SESSION['nombre'])) {
                                                     <div v-if="cantidadArchivos.id==proyectosXanio.id && parseInt(cantidadArchivos.cantidad)>0">
                                                         <button type="button" class="btn btn-success" title="Visualizar"  @click="modal_estatus(proyectosXanio.id)" style="font-size:10px"><i class="bi bi-file-earmark"></i><!--Si el ID es igual-->
                                                             {{cantidadArchivos.cantidad}} Archivo/s 
-                                                        </button><br>
-                                                        <button class="btn-archivo-aceptado me-1">Aceptar</button>
-                                                        <button class="btn-archivo-rechazado ms-1" @click="modalMotivoRechazo(proyectosXanio.id)">Rechazar</button>
-                                                        <span class="badge alert-success">Estatus</span>
+                                                        </button>
                                                     </div>   
                                                     <div v-if="cantidadArchivos.id==proyectosXanio.id && parseInt(cantidadArchivos.cantidad)<=0"> 
                                                         <button type="button" class="btn btn-secondary" title="Sin Documentos" style="font-size:10px"><i class="bi bi-file-earmark"></i>
                                                             {{documentos_seguimiento_captura.length}} Archivo/s 
                                                         </button>
-                                                        <span class="badge alert-success">Estatus</span>
                                                     </div>
                                                 </template>
                                                 </th>
@@ -2048,7 +2055,19 @@ if (isset($_SESSION['nombre'])) {
                                                                 <i v-else class="bi bi-check2"></i>
                                                                 <?php if ($_SESSION['acceso']=="Financiero"){ ?>
                                                                     <button v-if="proyectosDatosCalendario.validado=='Validado' && parseInt(proyectosDatosCalendario.mes)===x" class="btn-liberado" @click="validarProyecto(proyectosXanio.id,x,proyectosDatosCalendario.validado,'')">Validado</button>
-                                                                    <button v-else class="btn-sin-liberar" @click="validarProyecto(proyectosXanio.id,x,proyectosDatosCalendario.validado,proyectosDatosCalendario.ahorro_duro)">Sin validar</button>
+                                                                    <button v-else class="btn-sin-liberar" @click="validarProyecto(proyectosXanio.id,x,proyectosDatosCalendario.validado,proyectosDatosCalendario.ahorro_duro)">Sin validar</button> <br>
+                                                                        <div class="row d-flex" style="font-size:0.6em">
+                                                                            <div class="col-6">
+                                                                                <span class="aceptar-doc rounded px-1 " :class="{'bg-success text-light': proyectosDatosCalendario.status_rechazo=='Aceptada' && parseInt(proyectosDatosCalendario.mes)===x}"  @click="guardarRechazo('Aceptada',proyectosDatosCalendario.mes,proyectosDatosCalendario.id)" style="cursor:pointer;"> <i class="bi bi-check-circle-fill"></i> Acept.</span>
+                                                                            </div>
+                                                                            <div class="col-6">
+                                                                                <span class="rechazar-doc rounded px-1" :class="{'bg-danger text-light': proyectosDatosCalendario.status_rechazo=='Rechazada' && parseInt(proyectosDatosCalendario.mes)===x}"  @click="modalMotivoRechazo(proyectosDatosCalendario.id,proyectosDatosCalendario.mes)" :title="'Motivo: '+proyectosDatosCalendario.motivo_rechazo" style="cursor:pointer"> <i class="bi bi-x-circle-fill"></i> Rech.</span>
+                                                                            </div>
+                                                                            <div class="col-12">
+                                                                                <span v-if="proyectosDatosCalendario.status_rechazo=='Corregida' && parseInt(proyectosDatosCalendario.mes)===x"  :class="{'badge bg-warning text-dark': proyectosDatosCalendario.status_rechazo=='Corregida' && parseInt(proyectosDatosCalendario.mes)===x}" :title="'Motivo: '+proyectosDatosCalendario.motivo_rechazo" style="cursor:pointer">Estatus: <b>Corregida<b></span>
+                                                                                <span v-if="proyectosDatosCalendario.status_rechazo=='Pendiente' && parseInt(proyectosDatosCalendario.mes)===x || proyectosDatosCalendario.status_rechazo=='' && parseInt(proyectosDatosCalendario.mes)===x"  :class="{'badge bg-secondary': proyectosDatosCalendario.status_rechazo=='Pendiente' && parseInt(proyectosDatosCalendario.mes)===x || proyectosDatosCalendario.status_rechazo=='' && parseInt(proyectosDatosCalendario.mes)===x}" style="cursor:pointer">Estatus: <b>Pendiente<b></span>
+                                                                            </div>
+                                                                        </div>
                                                                 <?php } ?>
                                                             </div>
                                                             <!--<span class="badge bg-dark" style=" font-size: 8px">Finalizado</span>-->
@@ -2258,7 +2277,7 @@ if (isset($_SESSION['nombre'])) {
                                     <textarea rows="5" v-model="motivo_rechazo" class="textarea w-100"></textarea>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" @click="guardarRechazo()">Enviar rechazo</button>
+                                    <button type="button" class="btn btn-danger" @click="guardarRechazo('Rechazada')">Enviar rechazo</button>
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                                 </div>
                                 </div>
