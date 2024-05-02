@@ -1394,15 +1394,7 @@ if (isset($_SESSION['nombre'])) {
                                         <label v-else>{{proyecto.ahorro_suave}}</label>
                                     </td>
                                     <td style="min-width:150px" class="align-middle">
-                                    <?php if($_SESSION['acceso']!="Financiero")  {?>
-                                        <div v-if="posicion === (arregloID.length - 1)" class="form-check form-switch">
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" v-model="seguimiento_status" @change="guardarStatus()" style=" background-color: #B3F09B; color:white">
-                                                <label v-if="seguimiento_status" class="form-check-label" for="flexSwitchCheckDefault">Siguiendo</label>
-                                                <label v-else class="form-check-label" for="flexSwitchCheckDefault">Cerrado</label>
-                                            </div>
-                                        </div>
-                                        <?php } ?>
+                                    
                                         <span v-show="proyecto.status_rechazo=='Aceptada'" class="badge bg-success" style="font-size:0.8em;">Evidencia:  <b>Aceptada</b></span>
                                         <span v-show="proyecto.status_rechazo=='Rechazada'" class="badge bg-danger" style="font-size:0.8em;">Evidencia: <b>Rechazada</b></span>
                                         <div v-if="proyecto.status_rechazo=='Rechazada'" class="col-12">
@@ -1412,7 +1404,6 @@ if (isset($_SESSION['nombre'])) {
                                         <div v-if="proyecto.status_rechazo=='Corregida'" class="col-12">
                                             <span class="badge bg-warning text-dark" style="font-size:0.8em;"><b>El Financiero está revisando la corrección del rechazo. </b></span><br>
                                             <i class="bi bi-info-circle-fill text-warning"></i>{{proyecto.motivo_rechazo}} <label  class="text-primary" style="font-size:0.7em;" >(Favor de esperar la aceptación)</label>
-                                           
                                         </div>
                                     </td>
                                 </tr>
@@ -1428,6 +1419,15 @@ if (isset($_SESSION['nombre'])) {
                                     <td><b>{{sumaAhorroDuro}}</b></td>
                                     <td><b>{{sumaAhorroSuave}}<b></td>
                                     <td>
+                                    <?php if($_SESSION['acceso']!="Financiero")  {?>  
+                                        <div class="form-check form-switch">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" v-model="seguimiento_status" @change="guardarStatus()" style=" background-color: #B3F09B; color:white">
+                                                <label v-if="seguimiento_status" class="form-check-label" for="flexSwitchCheckDefault">Siguiendo</label>
+                                                <label v-else class="form-check-label" for="flexSwitchCheckDefault">Cerrado</label>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
                                     </td>
                                 </tr>
                                 <!------------------------------------------------------------------------------PRIMER SEGUIMIETO --------------------------------------------------->
