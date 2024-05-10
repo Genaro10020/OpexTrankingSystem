@@ -3052,7 +3052,9 @@ const AltaProyectos = {
     },
     guardarRechazo(status_rechazo,mes,id_proyecto,anio_rechazo){
         var anio;
+        
       if(status_rechazo=='Rechazada'){
+        this.motivo_rechazo = document.getElementById("motivo_rechazo").value;
         var texto = this.motivo_rechazo
         this.motivo_rechazo = texto.trim();// Si existen unicamente espacio en blanco los elinará y la cadena será vacia, me ayuda a verificar
         if(this.motivo_rechazo==""){return alert("Digite un texto")}

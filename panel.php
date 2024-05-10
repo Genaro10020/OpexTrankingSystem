@@ -2274,7 +2274,7 @@ if (isset($_SESSION['nombre'])) {
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body text-center">
-                                    <textarea rows="5" v-model="motivo_rechazo" class="textarea w-100"></textarea>
+                                    <textarea rows="5" id="motivo_rechazo" class="textarea w-100"></textarea>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-danger" @click="guardarRechazo('Rechazada')">Enviar rechazo</button>
