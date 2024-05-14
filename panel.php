@@ -1436,7 +1436,7 @@ if (isset($_SESSION['nombre'])) {
                                         <td v-if="seguimiento_status">
                                             <button v-if="actualizatabla == false && actualizar==0 " type="button" class="boton-aceptar" @Click="actualizatabla =!actualizatabla,nuevoLimpiarVariables()">Nuevo</button>
                                             <button v-if="actualizatabla == true" class="boton-eliminar mx-2" @Click="actualizatabla =!actualizatabla ">Cancelar</button>
-                                            <button v-if="actualizatabla == true" class="boton-aceptar" @Click="guardarSeguimiento()">Guardar</button><!--Cundo no existe aun ningun registro-->
+                                            <button v-if="actualizatabla == true" class="boton-aceptar" @Click="guardarSeguimiento()">Guardar</button><!--Cuando no existe aun ningun registro-->
                                         </td>
                                     <?php } ?>
                                     <td style="min-width: 351px;">
@@ -1963,7 +1963,7 @@ if (isset($_SESSION['nombre'])) {
                                         </div>
                                         <div class="col-4 my-auto text-center" style="font-size:10px;min-width:350px" >                                         
                                                 <div class="row m-0 col-4 alert alert-primary p-0" style="font-size:10px;min-width:350px">
-                                                <label class="text-dark">Teórico Acumulado Anual</label>    
+                                                <label class="text-dark">Teórico Acumulado Anual (Ahorro Duro / Plan)</label>    
                                                     <div class="col-4  text-start">
                                                             Suma Planeada:<br>
                                                             Suma Totales:
@@ -1974,14 +1974,15 @@ if (isset($_SESSION['nombre'])) {
                                                     </div>
                                                     <div class="col-4 text-center my-auto">
                                                                 <div class="progress" style="height: 20px;">
-                                                                    <div class="progress-bar" role="progressbar" :style="'width:'+calcularPorcentaje()+'%!important;'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentaje()}} % </label></div>
+                                                                    <div v-if="parseInt(calcularPorcentaje())>=100" class="progress-bar bg-success" role="progressbar" :style="'width:'+calcularPorcentaje()+'%!important;'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentaje()}} % </label></div>
+                                                                    <div v-else class="progress-bar bg-primary" role="progressbar" :style="'width:'+calcularPorcentaje()+'%!important;'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentaje()}} % </label></div>
                                                                 </div>
                                                     </div>   
                                                 </div>
                                         </div>
                                         <div class="col-4 my-auto text-center" style="font-size:10px;min-width:350px" > 
                                             <div class="row m-0 col-4 alert alert-primary p-0"style="font-size:10px;min-width:350px" >
-                                                <label class="text-dark">Real Acumulado Anual</label>    
+                                                <label class="text-dark">Real Acumulado Anual (Real / Plan)</label>    
                                                     <div class="col-4  text-start">
                                                             Suma Planeada:<br>
                                                             Suma Reales:
@@ -1992,7 +1993,8 @@ if (isset($_SESSION['nombre'])) {
                                                     </div>
                                                     <div class="col-4 text-center my-auto">
                                                                 <div class="progress" style="height: 20px;">
-                                                                    <div class="progress-bar" role="progressbar" :style="'width:'+calcularPorcentajeRealAnual()+'%!important;'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentajeRealAnual()}} % </label></div>
+                                                                    <div v-if="parseInt(calcularPorcentajeRealAnual())>=100" class="progress-bar bg-success" role="progressbar" :style="'width:'+calcularPorcentajeRealAnual()+'%!important;'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentajeRealAnual()}} % </label></div>
+                                                                    <div v-else class="progress-bar bg-primary" role="progressbar" :style="'width:'+calcularPorcentajeRealAnual()+'%!important;'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentajeRealAnual()}} % </label></div>             
                                                                 </div>
                                                     </div>   
                                                 </div>   
@@ -2119,10 +2121,11 @@ if (isset($_SESSION['nombre'])) {
                                                                 </div>
                                                                 <div><!--% Teórico Mensual-->
                                                                     <div class="text-start">
-                                                                        <label style="font-size:8px">Teórico Mensual<label>
+                                                                        <label style="font-size:8px">Teórico Mensual (Ahorro Duro/Plan)<label>
                                                                     </div>
                                                                     <div class="progress " style="height: 13px;">
-                                                                        <div class="progress-bar" role="progressbar" :style="'width:'+calcularPorcentajeMensualTeorico(x)+'%!important;'"   aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentajeMensualTeorico(x)}} % </label></div>
+                                                                        <div v-if="parseInt(calcularPorcentajeMensualTeorico(x))>=100" class="progress-bar bg-success" role="progressbar " :style="'width:'+calcularPorcentajeMensualTeorico(x)+'%!important;'"   aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentajeMensualTeorico(x)}} % </label></div>
+                                                                        <div v-else class="progress-bar" role="progressbar bg-primary" :style="'width:'+calcularPorcentajeMensualTeorico(x)+'%!important;'"   aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentajeMensualTeorico(x)}} % </label></div>
                                                                     </div>
                                                                 </div>
                                                 </td>
@@ -2150,11 +2153,12 @@ if (isset($_SESSION['nombre'])) {
                                                                 
                                                                 <div><!--% Real Mensual-->
                                                                     <div class="text-start">
-                                                                        <label style="font-size:8px">Real Mensual<label>
+                                                                        <label style="font-size:8px">Real Mensual (Real/Plan)<label>
                                                                         <br>
                                                                     </div>
                                                                     <div class="progress" style="height: 13px;">
-                                                                        <div class="progress-bar" role="progressbar" :style="'width:'+calcularPorcentajeMensualReal(x)+'%!important;'"  aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentajeMensualReal(x)}} % </label></div>
+                                                                        <div v-if="calcularPorcentajeMensualReal(x)>=100" class="progress-bar bg-success" role="progressbar" :style="'width:'+calcularPorcentajeMensualReal(x)+'%!important;'"  aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentajeMensualReal(x)}} % </label></div>
+                                                                        <div v-else class="progress-bar bg-primary" role="progressbar" :style="'width:'+calcularPorcentajeMensualReal(x)+'%!important;'"  aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentajeMensualReal(x)}} % </label></div>
                                                                     </div>
                                                                 </div>
                                                         </div>

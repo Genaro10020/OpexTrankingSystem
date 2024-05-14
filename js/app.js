@@ -124,7 +124,7 @@ const AltaProyectos = {
       months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
       years: [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035, 2036, 2037, 2038, 2039, 2040, 2041, 2042, 2043, 2044, 2045, 2046, 2047, 2048, 2049, 2050],
       mes_select: 1,
-      anio_select: 2023,
+      anio_select: '',
       seguimiento_status: true,
       sinImpacto: '',
       sumaCO2: 0,
@@ -169,7 +169,7 @@ const AltaProyectos = {
       sumaValoresGonher:'',
       //Calendario
       motivo_rechazo:'',
-      select_anio_calendario:2023,
+      select_anio_calendario:'',
       proyectosDatosCalendario:[],
       proyectosXanioCalendario:[],
       cantidadMesesRegistrados:[],
@@ -186,6 +186,7 @@ const AltaProyectos = {
     //  this.consultarUsuarios()
     this.consultarProyectos()
     this.consultarSumaProyectos()
+    this.tomarAnioActual()
   },
   methods: {
     toggleDiv() {
@@ -275,6 +276,15 @@ const AltaProyectos = {
       })
     },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PROYECTOS POR ID PARA QUE TRAEGA DATOS DE CADA PROYECTO*/
+    tomarAnioActual(){
+      var fechaActual = new Date();
+      var dia = fechaActual.getDate().toString().padStart(2, '0');
+      var mes = (fechaActual.getMonth() + 1).toString().padStart(2, '0'); // Se suma 1 porque los meses van de 0 a 11
+      var anio = fechaActual.getFullYear();
+      this.select_anio_calendario = anio
+      this.anio_select = anio
+      this.select_anio_generando_valor = anio
+    },
     consultarProyectoID() {
       axios.post('proyectosController.php', {
         id_proyecto: this.id_proyecto //ID PROYECTO
@@ -3033,6 +3043,7 @@ const AltaProyectos = {
       this.input_tons_co2 = ''
       this.input_ahorro_duro = ''
       this.input_ahorro_suave = ''
+      this.tomarAnioActual()
     },
     asignarDatosActualizar(posicion) {
       this.actualizar = 0
