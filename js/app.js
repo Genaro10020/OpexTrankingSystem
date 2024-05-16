@@ -3067,7 +3067,7 @@ const AltaProyectos = {
       this.correo_proyecto = correo_proyecto
     },
     guardarRechazo(status_rechazo,mes,id_proyecto,anio_rechazo,motivo_rechazo,nombre,correo){
-     var enviar_a = correo;
+      var enviar_a = correo;
       var anio;
       var nombre_proyecto;
       
@@ -3081,6 +3081,7 @@ const AltaProyectos = {
         anio = this.select_anio_calendario
 
       }else if(status_rechazo=='Aceptada'){
+        if(!confirm("Esta seguro que desea aceptar la evidencia del proyecto: "+nombre)){return}
         this.nombre_del_proyecto = nombre
         this.motivo_rechazo = ''
         this.mes_rechazo =  mes
