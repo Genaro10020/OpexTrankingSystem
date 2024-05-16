@@ -1394,12 +1394,11 @@ if (isset($_SESSION['nombre'])) {
                                         <label v-else>{{proyecto.ahorro_suave}}</label>
                                     </td>
                                     <td style="min-width:150px" class="align-middle">
-                                    
                                         <span v-show="proyecto.status_rechazo=='Aceptada'" class="badge bg-success" style="font-size:0.8em;">Evidencia:  <b>Aceptada</b></span>
                                         <span v-show="proyecto.status_rechazo=='Rechazada'" class="badge bg-danger" style="font-size:0.8em;">Evidencia: <b>Rechazada</b></span>
                                         <div v-if="proyecto.status_rechazo=='Rechazada'" class="col-12">
                                                 <i class="bi bi-info-circle-fill text-danger"></i> {{proyecto.motivo_rechazo}}<br>
-                                                <button type="button" class="btn btn-primary" style="font-size: 0.8em" @click="guardarRechazo('Corregida',proyecto.mes,proyecto.id,proyecto.anio)">Listo, corregida!! </button>
+                                                <button type="button" class="btn btn-primary" style="font-size: 0.8em" @click="guardarRechazo('Corregida',proyecto.mes,proyecto.id,proyecto.anio,proyecto.motivo_rechazo,'','')">Listo, corregida!! </button>
                                         </div>
                                         <div v-if="proyecto.status_rechazo=='Corregida'" class="col-12">
                                             <span class="badge bg-warning text-dark" style="font-size:0.8em;"><b>El Financiero está revisando la corrección del rechazo. </b></span><br>
@@ -2060,10 +2059,10 @@ if (isset($_SESSION['nombre'])) {
                                                                     <button v-else class="btn-sin-liberar" @click="validarProyecto(proyectosXanio.id,x,proyectosDatosCalendario.validado,proyectosDatosCalendario.ahorro_duro)">Sin validar</button> <br>
                                                                         <div class="row d-flex" style="font-size:0.6em">
                                                                             <div class="col-6">
-                                                                                <span class="aceptar-doc rounded px-1 " :class="{'bg-success text-light': proyectosDatosCalendario.status_rechazo=='Aceptada' && parseInt(proyectosDatosCalendario.mes)===x}"  @click="guardarRechazo('Aceptada',proyectosDatosCalendario.mes,proyectosDatosCalendario.id)" style="cursor:pointer;"> <i class="bi bi-check-circle-fill"></i> Acept.</span>
+                                                                                <span class="aceptar-doc rounded px-1 " :class="{'bg-success text-light': proyectosDatosCalendario.status_rechazo=='Aceptada' && parseInt(proyectosDatosCalendario.mes)===x}"  @click="guardarRechazo('Aceptada',proyectosDatosCalendario.mes,proyectosDatosCalendario.id,'',proyectosDatosCalendario.motivo_rechazo,proyectosXanio.nombre_proyecto,proyectosXanio.correo)" style="cursor:pointer;"> <i class="bi bi-check-circle-fill"></i> Acept.</span>
                                                                             </div>
                                                                             <div class="col-6">
-                                                                                <span class="rechazar-doc rounded px-1" :class="{'bg-danger text-light': proyectosDatosCalendario.status_rechazo=='Rechazada' && parseInt(proyectosDatosCalendario.mes)===x}"  @click="modalMotivoRechazo(proyectosDatosCalendario.id,proyectosDatosCalendario.mes)" :title="'Motivo: '+proyectosDatosCalendario.motivo_rechazo" style="cursor:pointer"> <i class="bi bi-x-circle-fill"></i> Rech.</span>
+                                                                                <span class="rechazar-doc rounded px-1" :class="{'bg-danger text-light': proyectosDatosCalendario.status_rechazo=='Rechazada' && parseInt(proyectosDatosCalendario.mes)===x}"  @click="modalMotivoRechazo(proyectosDatosCalendario.id,proyectosDatosCalendario.mes,proyectosDatosCalendario.nombre_proyecto,proyectosXanio.correo)" :title="'Motivo: '+proyectosDatosCalendario.motivo_rechazo" style="cursor:pointer"> <i class="bi bi-x-circle-fill"></i> Rech.</span>
                                                                             </div>
                                                                             <div class="col-12">
                                                                                 <span v-if="proyectosDatosCalendario.status_rechazo=='Corregida' && parseInt(proyectosDatosCalendario.mes)===x"  :class="{'badge bg-warning text-dark': proyectosDatosCalendario.status_rechazo=='Corregida' && parseInt(proyectosDatosCalendario.mes)===x}" :title="'Motivo: '+proyectosDatosCalendario.motivo_rechazo" style="cursor:pointer">Estatus: <b>Corregida<b></span>

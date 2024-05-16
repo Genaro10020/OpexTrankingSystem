@@ -394,7 +394,7 @@ function actualizarRechazo($id_proyecto,$status_rechazo,$motivo,$anio,$mes)
         }else{
             $stmt->bind_param("ssiii", $status_rechazo,$motivo,$id_proyecto,$mes,$anio);
             if ($stmt->execute()) {
-                $estado = true;
+                 $estado = true;
             }else{
                 $estado = $stmt->error;
             }
@@ -403,10 +403,6 @@ function actualizarRechazo($id_proyecto,$status_rechazo,$motivo,$anio,$mes)
         }
 
     }
-   
-
-
-    
    
 }
 
@@ -424,3 +420,5 @@ function eliminarProyecto($id)
     $stmt->close();
     return $estado;
 }
+
+

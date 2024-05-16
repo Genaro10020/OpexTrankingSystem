@@ -150,6 +150,8 @@ const AltaProyectos = {
       selleva:0,
       sumaReales:"$0.00",
       SumNumReales:0,
+      nombre_del_proyecto:'',
+      correo_proyecto:'',
       /*GENERANDO VALOR*/
       select_anio_generando_valor:'',
       sumaClienteValor:'',
@@ -3055,23 +3057,31 @@ const AltaProyectos = {
       this.input_ahorro_suave = this.arregloID[posicion].ahorro_suave
     },
     /*/////////////////////////////////////////////////////////////////////////////////CALENDARIO*/
-    modalMotivoRechazo(id_proyecto,mes){
+    modalMotivoRechazo(id_proyecto,mes,nombre_proyecto,correo_proyecto){
       this.myModal = new bootstrap.Modal(document.getElementById("modal-motivo-rechazo"))
       this.myModal.show()
+      this.motivo_rechazo = ""
       this.id_proyecto_rechazo = id_proyecto
       this.mes_rechazo = mes
+      this.nombre_del_proyecto = nombre_proyecto
+      this.correo_proyecto = correo_proyecto
     },
-    guardarRechazo(status_rechazo,mes,id_proyecto,anio_rechazo){
-        var anio;
-        
+    guardarRechazo(status_rechazo,mes,id_proyecto,anio_rechazo,motivo_rechazo,nombre,correo){
+     var enviar_a = correo;
+      var anio;
+      var nombre_proyecto;
+      
       if(status_rechazo=='Rechazada'){
+        enviar_a = this.correo_proyecto //desde la modal
         this.motivo_rechazo = document.getElementById("motivo_rechazo").value;
         var texto = this.motivo_rechazo
         this.motivo_rechazo = texto.trim();// Si existen unicamente espacio en blanco los elinará y la cadena será vacia, me ayuda a verificar
         if(this.motivo_rechazo==""){return alert("Digite un texto")}
         this.motivo_rechazo = texto.replace(/\s+/g, ' ').trim();// Eliminar espacios en blanco en exceso y despues vuelvo a eliminar los expacio de alado y reacciono
         anio = this.select_anio_calendario
+
       }else if(status_rechazo=='Aceptada'){
+        this.nombre_del_proyecto = nombre
         this.motivo_rechazo = ''
         this.mes_rechazo =  mes
         this.id_proyecto_rechazo = id_proyecto
@@ -3082,11 +3092,17 @@ const AltaProyectos = {
         this.motivo_rechazo = ''
         this.mes_rechazo =  mes
         this.id_proyecto_rechazo = this.id_proyecto
+        var id_proyecto_seleccionado = this.id_proyecto
+        var proyectoEncontrado = this.proyectos.find(function(proyecto) {
+          return proyecto.id === id_proyecto_seleccionado;
+        });
+        this.nombre_del_proyecto = proyectoEncontrado.nombre_proyecto
         anio = anio_rechazo
+        this.motivo_rechazo = motivo_rechazo
       }
       
         console.log("id_proyecto: "+this.id_proyecto_rechazo+"mes: "+this.mes_rechazo+"status_rechazo: "+status_rechazo+"Año calendario: "+anio)
-       axios.put('proyectosController.php', {
+        axios.put('proyectosController.php', {
         accion:'Guardar Rechazo',
         id_proyecto: this.id_proyecto_rechazo,
         status_rechazo: status_rechazo,
@@ -3097,7 +3113,7 @@ const AltaProyectos = {
         console.log(response.data)
         if (response.data[0] == true) {
           if(this.myModal){this.myModal.hide()}
-          this.motivo_rechazo = ""
+          
           alert("Respuesta guardada con éxito")
                 if(status_rechazo=='Corregida'){
                   this.consultarImpactoAmbieltalXProyectoID();
@@ -3105,6 +3121,7 @@ const AltaProyectos = {
                   this.consultarCalendarioProyectos();
                   this.consultarImpactoAmbieltalXProyectoID();
                 }
+                this.enviarCorreoRechazo(anio,status_rechazo,enviar_a)
         } else {
           alert("La inserción de Rechazo, no se realizó correctamente.")
         }
@@ -3113,6 +3130,27 @@ const AltaProyectos = {
       }).finally(() => {
 
       })
+    },
+    enviarCorreoRechazo(anio,status_rechazo,enviar_a){
+          axios.post('enviarCorreoRechazo.php',{
+            correo:enviar_a,
+            nombre_proyecto: this.nombre_del_proyecto,
+            status:status_rechazo,
+            motivo:this.motivo_rechazo,
+            mes:this.mes_rechazo,
+            anio:anio
+          }).then(response =>{
+            console.log(response.data)
+              if(response.data==true){
+                console.log("SI, envió el correo")
+              }else{
+                console.log("NO, se envió el corre.")
+              }
+          }).catch(error =>{  
+            console.log("Error en axios"+error)
+          }).finally(()=>{
+
+          })
     },
     consultarSeguimientos() {
       this.sumarSoloUnaVez = 0

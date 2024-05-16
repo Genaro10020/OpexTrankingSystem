@@ -1,0 +1,14 @@
+{
+    "name": "kodetop/phpmailer-samples",
+    "description": "Ejemplos de envío de correos con PHPMailer",
+    "type": "project",
+    "authors": [
+        {
+            "name": "kodetop",
+            "email": "info@kodetop.com"
+        }
+    ],
+    "require": {
+        "phpmailer/phpmailer": "^6.0"
+    }
+}
