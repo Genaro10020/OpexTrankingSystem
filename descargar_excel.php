@@ -28,7 +28,7 @@ $objPHPExcel->getProperties()
         $nuevaHoja->fromArray($valores, null, 'A1');
 
 
-$consulta = "SELECT proyectos_creados.id, impacto_ambiental_proyecto.impacto_ambiental, proyectos_creados.nombre_proyecto, registros_impacto_ambiental.dato, registros_impacto_ambiental.ahorro_duro, registros_impacto_ambiental.ahorro_suave, registros_impacto_ambiental.mes, registros_impacto_ambiental.anio 
+$consulta = "SELECT proyectos_creados.id, proyectos_creados.tons_co2 AS tons_proyectado, impacto_ambiental_proyecto.impacto_ambiental, proyectos_creados.nombre_proyecto, registros_impacto_ambiental.tons_co2,registros_impacto_ambiental.dato, registros_impacto_ambiental.ahorro_duro, registros_impacto_ambiental.ahorro_suave, registros_impacto_ambiental.mes, registros_impacto_ambiental.anio 
 FROM registros_impacto_ambiental JOIN impacto_ambiental_proyecto ON registros_impacto_ambiental.id_impacto_ambiental_proyecto = impacto_ambiental_proyecto.id 
 JOIN proyectos_creados ON impacto_ambiental_proyecto.id_proyecto = proyectos_creados.id ORDER BY `registros_impacto_ambiental`.`anio` ASC";
 $query = $conexion->query($consulta);
@@ -38,7 +38,7 @@ $query = $conexion->query($consulta);
 
 
 $datos = array(
-    array('ID', 'Mes', 'Año','Impacto Ambiental', 'Cántidad','Nombre Proyecto', 'Ahorro Duro','Ahorro Suave'),
+    array('ID', 'Mes', 'Año','Impacto Ambiental', 'Cántidad','Nombre Proyecto','Tons CO2 (Proy.)','Tons CO2','Ahorro Duro','Ahorro Suave'),
 );
 
 // Añadir los resultados de la consulta a la matriz $datos
@@ -50,6 +50,8 @@ while ($fila = $query->fetch_assoc()) {
         $fila['impacto_ambiental'],
         $fila['dato'],
         $fila['nombre_proyecto'],
+        $fila['tons_proyectado'],
+        $fila['tons_co2'],
         $fila['ahorro_duro'],
         $fila['ahorro_suave'],
     );
@@ -73,13 +75,15 @@ $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15); // Ancho
 $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(60); // Ancho
 $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15); // Ancho
 $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15); // Ancho
+$objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15); // Ancho
+$objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(15); // Ancho
 
 // Get the active sheet in your PHPExcel object
 
 
 
 // Aplicar formato en negrita a la fila 1
-$objPHPExcel->getActiveSheet()->getStyle('A1:H1')->getFont()->setBold(true);
+$objPHPExcel->getActiveSheet()->getStyle('A1:J1')->getFont()->setBold(true);
 
 $ruta = "reportes/";
 if(!is_dir($ruta)){
