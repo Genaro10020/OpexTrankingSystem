@@ -845,12 +845,24 @@ button {
     height: 50px;
     background-color: gray;
     color: white;
-
 }
 
 .fija {
     position: sticky;
     z-index: 0;
+}
+
+.sticky1{
+    position:sticky;
+    left: -15px;
+}
+.sticky2{
+    position:sticky;
+    left: 135px;
+}
+.sticky3{
+    position:sticky;
+    left: 383px;
 }
 
 .titulotabla {

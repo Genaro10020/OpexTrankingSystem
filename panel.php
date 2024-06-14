@@ -2003,10 +2003,10 @@ if (isset($_SESSION['nombre'])) {
                             <div class="scroll-dos">
                                     <table class="table table-bordered table-striped table-hover text-center">
                                         <thead>
-                                            <tr  style="font-size:10px;">
-                                                <th style="min-width:150px">Documento</th>
-                                                <th style="min-width:250px">Nombre del Proyecto</th>
-                                                <th>Estatus </th>
+                                            <tr style="font-size:10px;">
+                                                <th class="sticky1" style="min-width:150px; background:#808080">Documento</th>
+                                                <th class="sticky2" style="min-width:250px; background:#808080">Nombre del Proyecto</th>
+                                                <th class="sticky3" style="background:#808080">Estatus </th>
                                                 <th>Enero</th>
                                                 <th>Febrero</th>
                                                 <th>Marzo</th>
@@ -2023,7 +2023,7 @@ if (isset($_SESSION['nombre'])) {
                                         </thead>
                                         <tbody>
                                             <tr v-if="proyectosXanioCalendario.length>0" v-for="(proyectosXanio,indexa) in proyectosXanioCalendario">
-                                                <th>
+                                                <th class="sticky1" style="background:#f4f4f4">
                                                 <template v-for ="cantidadArchivos in cantidadDocumentos"><!--Contine ID y Cantidad de documentos-->
                                                     <div v-if="cantidadArchivos.id==proyectosXanio.id && parseInt(cantidadArchivos.cantidad)>0">
                                                         <button type="button" class="btn btn-success" title="Visualizar"  @click="modal_estatus(proyectosXanio.id)" style="font-size:10px"><i class="bi bi-file-earmark"></i><!--Si el ID es igual-->
@@ -2037,11 +2037,12 @@ if (isset($_SESSION['nombre'])) {
                                                     </div>
                                                 </template>
                                                 </th>
-                                                <td class="text-start" style="font-size:10px;">
+                                                <td class="sticky2 text-start" style="font-size:10px; background:#f4f4f4">
                                                     <i class="bi bi-info-circle-fill me-2 text-primary" style="font-size: 1.3em" :title="' Responsable: '+proyectosXanio.responsable+'\n Correo: '+proyectosXanio.correo+'\n Teléfono: '+proyectosXanio.telefono"></i>
                                                     {{proyectosXanio.nombre_proyecto}}<br>
                                                     <span class="badge" style=" background:#0e989a; font-weight: lighter;">{{proyectosXanio.directo}}</span>
-                                                <td>
+                                                </td>    
+                                                <td class="sticky3" style="background:#f4f4f4">
                                                     <!--<span class="badge bg-dark" style=" font-size: 8px" v-if="cantidadMesesRegistrados[proyectosXanio.id]>11">Finalizado</span><br>-->
                                                     <span v-if="proyectosXanio.status_seguimiento=='Cerrado'" class="badge bg-dark" style="font-size: 8px">Finalizado</span> 
                                                     <span v-else class="badge bg-success" style=" font-size: 8px">Siguiendo</span>
