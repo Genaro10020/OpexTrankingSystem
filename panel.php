@@ -1825,11 +1825,11 @@ if (isset($_SESSION['nombre'])) {
                                                         <tbody class="bg-white text-dark">
                                                             <tr>
                                                                 <td><b>Valor</b></td>
-                                                                <td class="text-primary"><b>$0.0</b></td>
+                                                                <td class="text-primary"><b>{{sumaInvestigacionDesarrolloValor}}</b></td>
                                                             </tr>
                                                             <tr>
                                                                 <td><b>Sust.</b></td>
-                                                                <td class="text-success"><b>0.00</b></td>
+                                                                <td class="text-success"><b>{{sumaInvestigacionDesarrolloSustentable}}</b></td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -1853,7 +1853,7 @@ if (isset($_SESSION['nombre'])) {
                                                             </td>
                                                             <td v-if="objetivos.nombre_pilares == 'Investigación y Desarrollo'">
                                                                 <label class="text-success" v-if="buscarCoincidencias(objetivos.nombre_objetivos + ' (' + objetivos.siglas + ')')">
-                                                                    <b>{{sumasGenerandoValor[objetivos.nombre_objetivos + ' (' + objetivos.siglas + ')'].valor}}</b>
+                                                                    <b>{{sumasGenerandoValor[objetivos.nombre_objetivos + ' (' + objetivos.siglas + ')'].sustentable}}</b>
                                                                 </label>
                                                                 <label class="text-success" v-else>
                                                                     <b>0.00</b>
