@@ -75,6 +75,8 @@ const AltaProyectos = {
       existeImagenSeleccionadaSeguimiento: false,
       existeImagenSeleccionadaCO2: false,
       actualizar_proyecto: false,
+      idsCheckImpacto:[],
+      selectEmisiones:[],
       /*Planta*/ /*Área*/ /*Departamento*/
       nueva: '',
       nuevoNombre: '',
@@ -781,6 +783,28 @@ const AltaProyectos = {
        this.selectObjetivo.push("")
      }*/
     },
+    checkeandoImpactoAmbiental(id_impacto){
+      console.log(this.idsCheckImpacto=this.checkImpactoAmbiental.map(elementos => elementos.split('<->')[0]))//tomando ids
+      
+      
+      if(this.idsCheckImpacto.length<=0){
+        this.selectEmisiones = this.selectEmisiones.map(() => '');// emiciones a vacio si no existe ningun impacto seleccionado
+      }
+
+      //Lo utilizo para limpiar
+      const existe = this.idsCheckImpacto.includes(id_impacto)
+        if (existe == true) {
+          console.log('Existe el impacto '+existe);
+        } else {
+          //Si no existe en idsCheckImpacto pero si el selectEmision limpiala
+          const index = this.selectEmisiones.findIndex(elemento => elemento.startsWith(`${id_impacto}<->`));
+          console.log("index"+index);
+              if(index !== -1) {
+                console.log("Se vacio la poscion "+index+"Se encontraba el id_impacto: "+id_impacto);
+                this.selectEmisiones[index] = ""; 
+              }
+        }
+    },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR OBJETIVOS*/
     consultarObjetivos() {
       axios.get('objetivosController.php', {
@@ -949,7 +973,8 @@ const AltaProyectos = {
         console.log(response.data[0])
         if (response.data[0][1] == true) {
           if (response.data[0][0].length > 0) {
-            this.impactoAmbiental = response.data[0][0]
+             this.impactoAmbiental = response.data[0][0]
+             this.impactoAmbiental.forEach((elemento,index)=>{this.selectEmisiones[index] = ''})
           } else {
             this.impactoAmbiental = []
           }
@@ -2078,6 +2103,56 @@ const AltaProyectos = {
       this.correo = ''
       this.telefono = ''
     },
+    consultaProyectoIDActualizar(id){
+          axios.post('proyectosController.php', {
+          id_proyecto: id //ID PROYECTO
+        }).then(response => {
+          if (response.data[0][1] == true) {
+            this.idsCheckImpacto = []
+            this.checkImpactoAmbiental = []
+            let impactosAmbientaslesBD = this.impactoAmbiental
+
+            let proyecto = response.data[0][0][0]
+
+            let checkImpacto = this.checkImpactoAmbiental
+            let valores=JSON.parse(proyecto.valores)
+            this.valoresCheck = valores //asignando los valores checkeados
+
+            impacto_ambientales=JSON.parse(proyecto.impacto_ambiental)//conviertiendo a arreglo impacto y alcance (si es que tiene)
+            impacto_ambiental=impacto_ambientales.map(impactos=>impactos.split('->')[0]) //si existe alcance solo tomar el impacto
+
+            
+            if(!impacto_ambientales.some(sinImpacto=>sinImpacto == "Sin Impacto")){// Si no hay impacto no hacer nada
+              console.log("Ejecutando")
+                impactos_con_id = impacto_ambiental.flatMap(impactos=>{//busco los impactos para encontrar su id
+                  return impactosAmbientaslesBD.find(elementos => elementos.nombre == impactos);
+                })
+
+                checkImpacto = impactos_con_id.map(impacto => impacto.id+'<->'+impacto.nombre)//para que se checkend
+                this.idsCheckImpacto=checkImpacto.map(impactoids => impactoids.split('<->')[0])//asigno los ids
+                this.checkImpactoAmbiental = checkImpacto
+    
+                let resultado = []
+                impactosAmbientaslesBD.forEach((elementos,index)=>{
+                  resultado[index] = ""
+                  if (impacto_ambientales.some(impactoProyecto => impactoProyecto.split('->')[1]) && impacto_ambientales.some(impactoProyecto => impactoProyecto.split('->')[0] == elementos.nombre)) {
+                    resultado[index] = elementos.id + "<->" + elementos.nombre + "->" + impacto_ambientales.filter(impactoProyecto => impactoProyecto.split('->')[0] == elementos.nombre).map(imp=> imp.split('->')[1]);
+                  }
+                })
+                
+                if(impacto_ambientales.some(verificando => verificando.split('->')[1])){//solo verifico que exista minimo un impacto ambietal con "->"
+                  this.selectEmisiones = resultado;
+                }
+            }
+
+
+          } else {
+            alert("La consulta de proyectos no se realizo correctamente.")
+          }
+        }).catch(error => {
+          console.log('Error consultaProyectoIDActualizar :-(' + error)
+        });
+    },
     abrirModal(modal, tipo, accion,id,nombre_proyecto) {
       
       //this.nombre_proyecto = ''
@@ -2103,6 +2178,7 @@ const AltaProyectos = {
         this.consultarFuentes()
         this.consultarValores()
         this.buscarDocumentos('Alta Proyecto')
+        
 
       }else if(modal=="Actualizar Proyecto"){
         this.valoresCheck = [] //la limpio
@@ -2112,16 +2188,23 @@ const AltaProyectos = {
         this.titulo_modal = "Actualizar Proyecto"
         this.myModal = new bootstrap.Modal(document.getElementById("modal-alta-proyecto"))
         this.myModal.show()
-        this.consultarPlantas()
-        this.consultarAreas()
-        this.consultarDepartamentos()
-        this.consultarMetodologias()
-        this.consultarResponsables()
-        this.consultarImpactoAmbiental()
-        this.consultarMisiones()
-        this.consultarFuentes()
-        this.consultarValores()
-
+        
+      
+        
+            this.consultarPlantas()
+            this.consultarAreas()
+            this.consultarDepartamentos()
+            this.consultarMetodologias()
+            this.consultarResponsables()
+            this.consultarImpactoAmbiental()
+            this.consultarMisiones()
+            this.consultarFuentes()
+            this.consultarValores()
+            setTimeout(()=>{
+              this.consultaProyectoIDActualizar(id)
+            },200)
+            
+ 
       }else if (modal == "CRUD") {
         this.myModalCRUD = new bootstrap.Modal(document.getElementById("modal-alta-crud"))
         if (accion == "Crear") {
@@ -2197,7 +2280,6 @@ const AltaProyectos = {
       } else {
         alert("No encontramos esa modal")
       }
-
     },
     cerrarModal() {
       this.myModal.hide()
@@ -2410,40 +2492,118 @@ const AltaProyectos = {
       this.buscarDocumentosEnFinancieros('Seguimiento',id)//Financieros
     },
     verificarAltaProyecto() {
+      
 
       //Comprobando fecha
-      if (this.fecha_alta == '') { this.respondio = false; alert("Coloque una fecha"); }
-
+      if (this.fecha_alta == '') { this.respondio = false; 
+        //alert("Coloque una fecha");
+        Swal.fire({
+          title: "Seleccione Fecha",
+          text: "Favor de seleccionar una fecha",
+          icon: "warning"
+        });
+      }
       //nombre del proyecto
-      else if (this.nombre_proyecto == '') { this.respondio = false; alert("Agregue un nombre al proyecto"); }
+      else if (this.nombre_proyecto == '') { this.respondio = false; 
+        Swal.fire({
+          title: "Nombre del proyecto",
+          text: "Agregue un nombre al proyecto",
+          icon: "warning"
+        });}
       //Planta
-      else if (this.selectFuente == '') { this.respondio = false; alert("Seleccione una Fuente"); }
+      else if (this.selectFuente == '') { this.respondio = false;
+        Swal.fire({
+          title: "Seleccione Fuente",
+          text: "Favor de seleccionar una Fuente",
+          icon: "warning"
+        });}
       //Planta
-      else if (this.selectPlanta == '') { this.respondio = false; alert("Seleccione una Planta"); }
+      else if (this.selectPlanta == '') { this.respondio = false; 
+        Swal.fire({
+          title: "Seleccione Planta",
+          text: "Favor de seleccionar una Planta",
+          icon: "warning"
+        }); }
       //Area
-      else if (this.selectArea == '') { this.respondio = false; alert("Seleccione una Área") }
+      else if (this.selectArea == '') { this.respondio = false; 
+        Swal.fire({
+          title: "Seleccione Área",
+          text: "Favor de seleccionar una Área",
+          icon: "warning"
+          }); }
       //Departamento
-      else if (this.selectDepartamento == '') { this.respondio = false; alert("Seleccione el Departamento") }
+      else if (this.selectDepartamento == '') { this.respondio = false; 
+        Swal.fire({
+          title: "Seleccione Departamento",
+          text: "Seleccione el Departamento",
+          icon: "warning"
+          }); }
       //Metodologia
-      else if (this.selectMetodologia == '') { this.respondio = false; alert("Seleccione la Metodología") }
+      else if (this.selectMetodologia == '') { this.respondio = false; 
+        Swal.fire({
+          title: "Seleccione la Metodología",
+          text: "Seleccione la Metodología para continuar",
+          icon: "warning"
+          });}
       //Responsable
-      else if (this.selectResponsable == '') { this.respondio = false; alert("Seleccione un Responsable") }
+      else if (this.selectResponsable == '') { this.respondio = false;
+        Swal.fire({
+          title: "Seleccione un Responsable",
+          text: "Seleccione un Responsable para continuar",
+          icon: "warning"
+        });}
       //Misiones
-      else if (this.checkMisiones.length <= 0) { this.respondio = false; alert("Seleccione minimo una Misión") }
+      else if (this.checkMisiones.length <= 0) { this.respondio = false;  
+        Swal.fire({
+        title: "Seleccione una misión",
+        text: "Seleccione minimo una misión",
+        icon: "warning"
+        });}
       //Pilares
-      else if (this.checkPilares.length <= 0) { this.respondio = false; alert("Seleccione Pilar, para visualizarlos seleccione Mision") }
+      else if (this.checkPilares.length <= 0) { this.respondio = false; 
+        Swal.fire({
+          title: "Seleccione un Pilar",
+          text: "para visualizarlos los pilares seleccione una Misión",
+          icon: "warning"
+          });}
       //verificar si existe minimo un directo en Pilar
       /*else if (!this.selectPilar.includes("directo")) { this.respondio = false; alert("Minimo un Pilar tiene que ser 'Directo'") }*/
       //Objetivos
-      else if (this.checkObjetivos.length <= 0) { this.respondio = false; alert("Seleccione Objetivo, para visualizarlos, seleccione Mision y Objetivo") }
+      else if (this.checkObjetivos.length <= 0) { this.respondio = false; 
+        Swal.fire({
+          title: "Seleccione un Objetivo",
+          text: "Seleccione Objetivo, para visualizarlos, seleccione Misión y Objetivo",
+          icon: "warning"
+        });}
       //verificar si existe minimo un directo en Pilar
-      else if (!this.selectObjetivo.includes("directo")) { this.respondio = false; alert("Minimo un Objetivo tiene que ser 'Directo'") }
+      else if (!this.selectObjetivo.includes("directo")) { this.respondio = false; 
+        Swal.fire({
+          title: "Objetivo Directo",
+          text: "Minimo un Objetivo tiene que ser 'Directo'",
+          icon: "warning"
+        });}
       //Impacto Ambiental
       /*else if (this.checkImpactoAmbiental.length <= 0) { this.respondio = false; alert("Seleccione minimo una Impacto Ambiental") }*/
-       //Impacto Ambiental
-      else if (this.valoresCheck.length <= 0) { this.respondio = false; alert("Seleccione minimo un Valor Gonher") }
+       //Impacto Ambiental Comprobando tamanio de Impacto seleccionados y tamanio de emisiones seleccionadas
+      else if(this.selectEmisiones.length>0 && this.checkImpactoAmbiental.length>0 && this.checkImpactoAmbiental.filter(elemento => elemento !='').length != this.selectEmisiones.filter(elemento => elemento !='').length){ this.respondio = false; 
+        Swal.fire({
+          title: "Seleccione un Enlace (Emisión)",
+          text: "Seleccione Enlace (Emisión) del Impacto Ambiental selecionado",
+          icon: "warning"
+        });}
+      else if (this.valoresCheck.length <= 0) { this.respondio = false; 
+        Swal.fire({
+          title: "Seleccione un Valor Gonher",
+          text: "Seleccione minimo un Valor Gonher",
+          icon: "warning"
+        });}
       //Ahorros
-      else if ((this.tons_co2 == "0" || this.tons_co2 == "" || this.tons_co2 == "0.00") && this.ahorro_duro == "$.00" && this.ahorro_suave == "$.00" && (this.objetivo_estrategico == false || this.objetivo_estrategico == true)) { this.respondio = false; alert("Minimo uno debe ser distinto a 0") }
+      else if ((this.tons_co2 == "0" || this.tons_co2 == "" || this.tons_co2 == "0.00") && this.ahorro_duro == "$.00" && this.ahorro_suave == "$.00" && (this.objetivo_estrategico == false || this.objetivo_estrategico == true)) { this.respondio = false; 
+        Swal.fire({
+          title: "Minimo uno debe ser distinto a 0",
+          text: "Verifique los campos",
+          icon: "warning"
+        });}
       //Si algo no se a contestado
       else {
         this.respondio = true
@@ -2522,7 +2682,7 @@ const AltaProyectos = {
         var mision_nom = this.checkMisiones[i].split('<->')[1];
         misiones_nombres.push(mision_nom);
       }
-      console.log(misiones_nombres)
+      //console.log(misiones_nombres)
 
       //Utilizo para tomar todos los nombres.
       console.log(this.checkPilares)
@@ -2537,11 +2697,11 @@ const AltaProyectos = {
         pilarOrden += orden
         siglasPilaresConcatenado += '-' + siglas
       }
-      console.log(pilares_nombres);
-      console.log(pilarOrden);
+     // console.log(pilares_nombres);
+      //console.log(pilarOrden);
 
       //Utilizo para tomar todos los nombres.
-      console.log(this.checkObjetivos)
+      //console.log(this.checkObjetivos)
       var objetivos_nombres = [];
       var objetivoOrden = '';
       var siglasObjetivosConcatenado = ""
@@ -2553,7 +2713,7 @@ const AltaProyectos = {
         objetivoOrden += orden;
         siglasObjetivosConcatenado += '-' + siglas
       }
-      console.log(objetivos_nombres)
+      //console.log(objetivos_nombres)
 
       var objetivosDirectosIndirectos = [];
       for (let i = 0; i < this.selectObjetivo.length; i++) {//insertando directo e indirectos de selectPilares
@@ -2572,7 +2732,7 @@ const AltaProyectos = {
             combinadoObjetivo.push(objetivos_nombres[i]);// si son indirecto no agregar indirecto 
           }
         }
-        console.log("Combinado Objetivos")
+        //console.log("Combinado Objetivos")
         console.log(combinadoObjetivo)
       } else {
         console.log("los nombres del pilar y directos e indirecto de pilar no tienen el mismo tamaño")
@@ -2589,8 +2749,19 @@ const AltaProyectos = {
       if (impacto_ambiental_nombres.length <= 0) {
         impacto_ambiental_nombres.push('Sin Impacto')
       }
-      console.log(arreglo_observador)
+      //console.log("impacto ambienta nombres", impacto_ambiental_nombres)
+
+      let idsImpacto = this.checkImpactoAmbiental.map(element =>element.split('<->')[0]);
+      console.log("Ids",idsImpacto)
+
+      var impacto_ambiental_emisiones = this.selectEmisiones
+      //ordeno las emisiones como el arreglo de impacto ambieltal
+      let emisiones_ordenadas = idsImpacto.flatMap(element => 
+        impacto_ambiental_emisiones.filter(ids => element == ids.split('<->')[0]).map(elementos => elementos.split('<->')[1])//primero reviso que sea igual al id y des tomo el restp
+      )
       
+      console.log("Ya acomodados", emisiones_ordenadas)
+
       var valores = [];
       for (let index = 0; index < this.valoresCheck.length; index++) {
         if(this.valoresCheck[index]!=""){
@@ -2618,7 +2789,8 @@ const AltaProyectos = {
         misiones: misiones_nombres,
         pilares: pilares_nombres,
         objetivos: combinadoObjetivo,
-        impacto_ambiental: impacto_ambiental_nombres,
+        impacto_ambiental: impacto_ambiental_nombres, // utilizada para insertar en tabla impactos ambientales
+        impacto_ambiental_emisiones:emisiones_ordenadas, // utilizada para insertar en tabla proyectos creados
         valores:valores,
         tons_co2: this.tons_co2,
         ahorro_duro: this.ahorro_duro,
@@ -2645,6 +2817,7 @@ const AltaProyectos = {
               this.checkObjetivos = []
               this.selectObjetivo = []
               this.checkImpactoAmbiental = []
+              this.selectEmisiones = []
               this.valoresCheck = []
               this.tons_co2 = ""
               this.ahorro_duro = "$.00"
@@ -2670,7 +2843,7 @@ const AltaProyectos = {
           console.log("No es ni insertar ni actualizar")
         }
       }).catch(error => {
-
+        console.log("Error :-( ", error)
       })
     },
     buscandoUltimoProyectoCreado(nombres) {

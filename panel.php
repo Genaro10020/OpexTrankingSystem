@@ -124,7 +124,7 @@ if (isset($_SESSION['nombre'])) {
 
                                             <!---Departamentos-->
                                             <div class="input-group mb-3">
-                                                <span class="input-group-text w-25">Departamento</span>
+                                                <span class="input-group-text w-25">Gerencias</span>
                                                 <select v-model="selectDepartamento" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectDepartamento === '', '': selectDepartamento !== ''}" :disabled="actualizar_proyecto">
                                                     <option selected disabled>Seleccione..</option>
                                                     <option v-for="departamento in departamentos" :value="departamento.id+'<->'+departamento.nombre+'<->'+departamento.siglas">{{departamento.nombre}} ({{departamento.siglas}})</option>
@@ -250,18 +250,18 @@ if (isset($_SESSION['nombre'])) {
                                                 </div>
 
                                                 <!--<div class="my-auto">
-                                                                                <div class="col-12"><button class="btn-anadir" title="Crear " @click="abrirModal('CRUD','Pilar','Crear')"><i class="bi bi-plus-circle"></i></button></div>
-                                                                                <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Pilar','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
-                                                                                <div class="col-12"><button class="btn-delete" title="Eliminar" @click="eliminarPilar()"><i class="bi bi-x-circle"></i></button></div>
-                                                                            </div>-->
+                                                            <div class="col-12"><button class="btn-anadir" title="Crear " @click="abrirModal('CRUD','Pilar','Crear')"><i class="bi bi-plus-circle"></i></button></div>
+                                                            <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Pilar','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
+                                                            <div class="col-12"><button class="btn-delete" title="Eliminar" @click="eliminarPilar()"><i class="bi bi-x-circle"></i></button></div>
+                                                        </div>-->
                                                 <div v-if="checkPilares.length>0" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
 
                                             <!--Objetivos-->
-
+                                           
                                             <div v-if="checkPilares.length>0" class="input-group mb-3 " :class="{'mostrar':checkPilares.length>0, 'ocultar': checkPilares.length <= 0}">
                                                 <span class="input-group-text w-25 text-start">Objetivos <br>Estratégicos</span>
-                                                <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkObjetivos.length<=0, '': checkObjetivos.length>0}">
+                                                <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkObjetivos.length<=0 || respondio === false && selectObjetivo.length>0 && !selectObjetivo.includes('directo'), '': checkObjetivos.length>0}">
                                                     <div v-for="(objetivo, index) in objetivos" class="form-check border border-1 mt-1" :key="index">
                                                         <input class="form-check-input" v-model="checkObjetivos" type="checkbox" id="checkbox1" :value="objetivo.id+'<->'+objetivo.nombre+'<->'+objetivo.id_pilares+'<->'+objetivo.siglas+'<->'+(index+1)" @change="checkeandoObjetivos()" :disabled="actualizar_proyecto">
                                                         <label class="form-check-label w-75" for="checkbox1">
@@ -276,31 +276,32 @@ if (isset($_SESSION['nombre'])) {
                                                         </label>
                                                     </div>
                                                 </div>
-
                                                 <!--<div>
-                                                                                <div class="col-12"><button class="btn-anadir" title="Crear" @click="abrirModal('CRUD','Objetivo','Crear')"><i class="bi bi-plus-circle"></i></button></div>
-                                                                                <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Objetivo','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
-                                                                                <div class="col-12"><button class="btn-delete" title="Eliminar"  @click="eliminarObjetivo()"><i class="bi bi-x-circle"></i></button></div>
-                                                                            </div>-->
+                                                    <div class="col-12"><button class="btn-anadir" title="Crear" @click="abrirModal('CRUD','Objetivo','Crear')"><i class="bi bi-plus-circle"></i></button></div>
+                                                    <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Objetivo','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
+                                                    <div class="col-12"><button class="btn-delete" title="Eliminar"  @click="eliminarObjetivo()"><i class="bi bi-x-circle"></i></button></div>
+                                                </div>-->
                                                 <div v-if="checkObjetivos.length>0" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
-
                                             <!--Impacto Ambiental-->
                                             <div class="input-group mb-3">
-                                                <span class="input-group-text w-25 text-start">Impacto <br>Ambiental<br><label class="ms-5"><i class="bi bi-question-circle"></label></i></span>
-                                                <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkImpactoAmbiental.length<=0, '': checkImpactoAmbiental.length>0}">
-                                                    <div v-for="impacto in impactoAmbiental" class="form-check border border-1  mt-1">
-                                                        <input class="form-check-input" type="checkbox" id="checkbox1" v-model="checkImpactoAmbiental" :value="impacto.id+'<->'+impacto.nombre" :disabled="actualizar_proyecto">
-                                                        <label class="form-check-label" for="checkbox1">
+                                                <span class="input-group-text w-25 text-start">Impacto <br>Ambiental<br><label class=""><i class="bi bi-question-circle"></label></i></span>
+                                                <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkImpactoAmbiental.length<=0 || respondio === false && checkImpactoAmbiental.length>0 && checkImpactoAmbiental.filter(elemento => elemento !='').length != selectEmisiones.filter(elemento => elemento !='').length, '': checkImpactoAmbiental.length>0}">
+                                                    <div v-for="(impacto,index) in impactoAmbiental" class="form-check border border-1  mt-1">
+                                                        <input class="form-check-input" type="checkbox" id="checkbox1" v-model="checkImpactoAmbiental" :value="impacto.id+'<->'+impacto.nombre"  @change="checkeandoImpactoAmbiental(impacto.id)">
+                                                        <label class="form-check-label w-75" for="checkbox1">
                                                             {{impacto.nombre}}
+                                                        </label>
+                                                        <label class="w-25" v-if="idsCheckImpacto.includes(impacto.id) && checkImpactoAmbiental.length>0">
+                                                            <select v-model="selectEmisiones[index]" class="w-100">
+                                                                <option v-show="!selectEmisiones[index]" value="" selected disabled>Seleccione...</option>
+                                                                <option :value="impacto.id+'<->'+impacto.nombre+'-> Alcance 1'" title="Emisiones directas de GEI">Alcance 1</option>
+                                                                <option :value="impacto.id+'<->'+impacto.nombre+'-> Alcance 2'" title="Emisiones indirectas de GEI asociadas a la electricidad">Alcance 2</option>
+                                                                <option :value="impacto.id+'<->'+impacto.nombre+'-> Alcance 3'" title="Otras emisiones indirectas de GEI">Alcance 3</option>
+                                                            </select>
                                                         </label>
                                                     </div>
                                                 </div>
-                                                <!--<div>
-                                                        <div class="col-12"><button class="btn-anadir" title="Crear "><i class="bi bi-plus-circle"></i></button></div>
-                                                        <div class="col-12"><button class="btn-up" title="Actualizar"><i class="bi bi-arrow-up-circle"></i></button></div>
-                                                        <div class="col-12"><button class="btn-delete" title="Eliminar"><i class="bi bi-x-circle"></i></button></div>
-                                                    </div>-->
                                                 <div v-if="checkImpactoAmbiental.length>0" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
 
@@ -320,7 +321,7 @@ if (isset($_SESSION['nombre'])) {
 
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-50">Tons CO2 por Evitar (Proyectado)</span>
-                                                <input id="tons_co2" type="text" v-model="tons_co2" min="0" class="w-25" :class="{'nocontestado': respondio === false && (tons_co2 == 0 || tons_co2 == '' ), '': tons_co2 !== 0 && tons_co2 !== ''}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputSinPesos('tons_co2')"
+                                                <input id="tons_co2" type="text" v-model="tons_co2" min="0" class="w-25" :class="{'nocontestado': respondio === false && (tons_co2 == 0 || tons_co2 == '' ), '': respondio !== false && tons_co2 !== 0 && tons_co2 !== ''}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputSinPesos('tons_co2')"
                                                 :disabled="actualizar_proyecto">
                                                 <div v-if="tons_co2 !== '' && tons_co2 !== '0'" class="text-center my-auto ms-3">
                                                     <i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i>
@@ -329,7 +330,7 @@ if (isset($_SESSION['nombre'])) {
 
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-50">Ahorro Duro $MXN/Año (Proyectado )</span>
-                                                <input id="ahorro_duro" type="text" v-model="ahorro_duro" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_duro==='$.00', '': ahorro_duro!==0 && ahorro_duro!==''}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('ahorro_duro')"
+                                                <input id="ahorro_duro" type="text" v-model="ahorro_duro" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_duro==='$.00', '': respondio !== false && ahorro_duro!==0 && ahorro_duro!==''}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('ahorro_duro')"
                                                 :disabled="actualizar_proyecto">
                                                 <div v-if="ahorro_duro!=='' && ahorro_duro !== '$0.00' && ahorro_duro !== '$.00' && ahorro_duro !== '$.0' && ahorro_duro !== '$.'  && ahorro_duro !== '$'" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
@@ -337,7 +338,7 @@ if (isset($_SESSION['nombre'])) {
 
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-50">Ahorro Suave $MXN/Año (Proyectado)</span>
-                                                <input id="ahorro_suave" type="text" v-model="ahorro_suave" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_suave==='$.00', '': ahorro_suave!==0 && ahorro_suave!==''}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('ahorro_suave')"
+                                                <input id="ahorro_suave" type="text" v-model="ahorro_suave" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_suave==='$.00', '': respondio === false && ahorro_suave!==0 && ahorro_suave!==''}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('ahorro_suave')"
                                                 :disabled="actualizar_proyecto">
                                                 <div v-if="ahorro_suave!=='' && ahorro_suave !== '$0.00' && ahorro_suave !== '$.00' && ahorro_suave !== '$.0' && ahorro_suave !== '$.'  && ahorro_suave !== '$'" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
@@ -357,14 +358,13 @@ if (isset($_SESSION['nombre'])) {
                                                     </div>
                                                 </div>
                                                 <div v-if="existeImagenSeleccionada==true && login!=true" class="row mx-auto">
-                                                    <input class="btn-success" type="submit" value="Subir" />
+                                                    <input class="btn-success" type="submit" value="Subir"/>
                                                 </div>
                                                 <div v-if="login==true" class="d-flex justify-content-center">
                                                     <div>
                                                         <img class="mx-auto" style="width:50px;" src="img/loading.gif" /><label>Subiendo...</label>
                                                     </div>
                                                 </div>
-
                                             </form>
                                         </div>
                                     </div>
@@ -599,8 +599,8 @@ if (isset($_SESSION['nombre'])) {
                                 <th>Correo</th>
                                 <th>Teléfono</th>
                                 <th>Pilare(s) Estratégico(s)</th>
-                                <th>Objetivo(s) Estratégico(s)</th>
-                                <th>Impacto Ambiental</th>
+                                <th style="min-width:230px;">Objetivo(s) Estratégico(s)</th>
+                                <th style="min-width:230px;">Impacto Ambiental</th>
                                 <th style="min-width:230px;">Valores</th>
                                 <th>Tons CO2 por Evitar <br>(Proyectado)</th>
                                 <th>Ahorro Duro $MXN/Año <br>(Proyectado )</th>
@@ -1342,7 +1342,7 @@ if (isset($_SESSION['nombre'])) {
                                 <?php } ?>
                                     <th style="background: #848484; color:white;">Fecha</th>
                                     <th style="background: #848484; color:white;">Tons CO2 (Evitados) </th>
-                                    <th style="background: #848484; color:white;" v-if="sinImpacto!='Sin Impacto'" v-for="(impacto,index) in columnaImpactoAmbiental" :key="index">{{impacto}}</th>
+                                    <th style="background: #848484; color:white;" v-if="sinImpacto!='Sin Impacto'" v-for="(impacto,index) in columnaImpactoAmbiental" :key="index">{{impacto.split('->')[0]}}</th>
                                     <th style="background: #848484; color:white;">Ahorro Duro $MXN</th>
                                     <th style="background: #848484; color:white;">Ahorro Suave $MXN</th>
                                     <th style="background: #848484; color:white;">Estatus</th>

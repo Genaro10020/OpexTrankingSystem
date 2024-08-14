@@ -257,7 +257,7 @@ function consultarProyectosID($id_proyecto)
     return array($resultado, $estado);
 }
 
-function insertarProyecto($folio, $fecha_alta, $nombre_proyecto, $fuente, $planta, $area, $departamento, $metodologia, $responsable_id, $observador, $misiones, $pilares, $objetivos, $impacto_ambiental, $valores, $tons_co2, $ahorro_duro, $ahorro_suave)
+function insertarProyecto($folio, $fecha_alta, $nombre_proyecto, $fuente, $planta, $area, $departamento, $metodologia, $responsable_id, $observador, $misiones, $pilares, $objetivos, $impacto_ambiental,$impacto_ambiental_emisiones, $valores, $tons_co2, $ahorro_duro, $ahorro_suave)
 {
     global $conexion;
     $folio_sin_numero = "";
@@ -307,7 +307,7 @@ function insertarProyecto($folio, $fecha_alta, $nombre_proyecto, $fuente, $plant
         //Inserto el proyecto
         $query = "INSERT INTO proyectos_creados (folio,fecha, fuente, nombre_proyecto, planta, area, departamento, metodologia,nomina, responsable,correo,telefono, misiones,pilares,objetivos,impacto_ambiental,valores, tons_co2, ahorro_duro, ahorro_suave,observador) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $stmt = $conexion->prepare($query);
-        $stmt->bind_param("sssssssssssssssssssss", $nuevo_folio, $fecha_invertida, $fuente, $nombre_proyecto, $planta, $area, $departamento, $metodologia, $nomina, $nombre_responsable, $correo_responsable, $telefono_responsable, $misiones, $pilares, $objetivos, $impacto_ambiental,$valores, $tons_co2, $ahorro_duro, $ahorro_suave,$observador);
+        $stmt->bind_param("sssssssssssssssssssss", $nuevo_folio, $fecha_invertida, $fuente, $nombre_proyecto, $planta, $area, $departamento, $metodologia, $nomina, $nombre_responsable, $correo_responsable, $telefono_responsable, $misiones, $pilares, $objetivos, $impacto_ambiental_emisiones,$valores, $tons_co2, $ahorro_duro, $ahorro_suave,$observador);
         if ($stmt->execute()) {
             $estado = true;
             //insertado el proyecto, ahora inserto los impactos ambientales en otra tabla
@@ -330,12 +330,12 @@ function insertarProyecto($folio, $fecha_alta, $nombre_proyecto, $fuente, $plant
     return array($estado, $estado_folios, $folio_recuperado, $folio_sin_numero, $igual, $insercion_impacto, $impacto_ambiental_array);
 }
 
-function actualizarProyecto($id,$valores){
+function actualizarProyecto($id,$impacto_ambiental_emisiones,$valores){
     global $conexion;
     $estado = false;
-    $update = "UPDATE proyectos_creados SET valores=? WHERE  id=?";
+    $update = "UPDATE proyectos_creados SET impacto_ambiental=?, valores=? WHERE  id=?";
     $stmt = $conexion->prepare($update);
-    $stmt->bind_param("si", $valores, $id);
+    $stmt->bind_param("ssi",$impacto_ambiental_emisiones, $valores, $id);
     if ($stmt->execute()) {
         $estado = true;
     }
