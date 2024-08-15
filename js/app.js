@@ -77,6 +77,7 @@ const AltaProyectos = {
       actualizar_proyecto: false,
       idsCheckImpacto:[],
       selectEmisiones:[],
+      impactosConDatos:[],
       /*Planta*/ /*Área*/ /*Departamento*/
       nueva: '',
       nuevoNombre: '',
@@ -2103,6 +2104,23 @@ const AltaProyectos = {
       this.correo = ''
       this.telefono = ''
     },
+    consultaImpactosAmbientalesConDatos(id){
+      axios.get("impactoAmbientalController.php",{
+        params:{
+          accion:'impactos con datos',
+          id_proyecto:id
+        }
+      }).then(response =>{
+        if(response.data[0]===true){
+             this.impactosConDatos = response.data[1].map(elementos=>elementos.id+'<->'+elementos.nombre)
+             //console.log(this.impactosConDatos)
+        }else{
+            console.log("No se realizo la consulta Impactos Ambientales con datos",response.data)
+        }
+      }).catch(error=>{
+        console.log("Error en consultaImpactosAmbientalesConDatos: "+error)
+      })
+    },
     consultaProyectoIDActualizar(id){
           axios.post('proyectosController.php', {
           id_proyecto: id //ID PROYECTO
@@ -2153,8 +2171,12 @@ const AltaProyectos = {
           console.log('Error consultaProyectoIDActualizar :-(' + error)
         });
     },
+    verificarImpacto(impacto){
+     let impactosConDatos = this.impactosConDatos;
+      return impactosConDatos.includes(impacto)
+    },
+    //this.impactosConDatos
     abrirModal(modal, tipo, accion,id,nombre_proyecto) {
-      
       //this.nombre_proyecto = ''
       this.tipo = tipo
       this.accion = accion
@@ -2189,8 +2211,8 @@ const AltaProyectos = {
         this.myModal = new bootstrap.Modal(document.getElementById("modal-alta-proyecto"))
         this.myModal.show()
         
-      
-        
+            //lo usos para verificar si el impacto ya contiene datos y evitar que puedan manipularlos al actualizar el proyecto
+            this.consultaImpactosAmbientalesConDatos(id)
             this.consultarPlantas()
             this.consultarAreas()
             this.consultarDepartamentos()
@@ -2200,6 +2222,7 @@ const AltaProyectos = {
             this.consultarMisiones()
             this.consultarFuentes()
             this.consultarValores()
+            
             setTimeout(()=>{
               this.consultaProyectoIDActualizar(id)
             },200)

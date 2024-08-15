@@ -9,7 +9,15 @@ $val = [];
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
         // Manejar solicitud GET (consultar)
+        //accion:'',
+        //id_proyecto:id
+        if(isset($_GET['accion']) && $_GET['accion'] =='impactos con datos'){
+            $id_proyecto = $_GET['id_proyecto'];
+            $val = consultarImpactosAmbientalesConDatos($id_proyecto);
+        }else{
             $val[] = consultarImpactoAmbiental();
+        }
+            
         break;
     case 'POST':
         // Manejar solicitud POST (creación)
@@ -56,6 +64,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
 echo json_encode($val);
 }else{
+    session_destroy();
     header("Location:index.php");
 }
 ?>

@@ -62,6 +62,47 @@ include("conexionGhoner.php");
     
     }
 
+    function consultarImpactosAmbientalesConDatos($id_proyecto){
+        global $conexion; 
+        $respuesta=[];
+        $status = false;
+        $seleccion = "SELECT DISTINCT A.impacto_ambiental FROM impacto_ambiental_proyecto A INNER JOIN registros_impacto_ambiental B ON A.id = B.id_impacto_ambiental_proyecto WHERE A.id_proyecto = ? ";
+        $stmt = $conexion->prepare($seleccion);
+        if($stmt){
+            $stmt->bind_param("i", $id_proyecto);
+            if($stmt->execute()){
+                $status = true;
+                $recuperacion=$stmt->get_result();
+                while($datos = $recuperacion->fetch_array()){
+                    $nombre_impacto=$datos['impacto_ambiental'];
+                    //Despues de recuparar los impactos con registro los busco en la tabla impacto ambiental para recuprar con sus respentivos ids
+                    $selecc = "SELECT * FROM impacto_ambiental WHERE nombre = ?";
+                    $stmt2 = $conexion->prepare($selecc);
+                    if($stmt2){
+                        $stmt2->bind_param("s", $nombre_impacto);
+                        if($stmt2->execute()){
+                            $recuperacion2=$stmt2->get_result();
+                            while($fila = $recuperacion2->fetch_array()){
+                                $respuesta[] = $fila;
+                            }
+                        }else{
+                            $status = "Consulta tabla impacto ambiental: ".$stmt->error;
+                        }
+                    }else{
+                        $status = "Consulta tabla impacto ambiental: ".$conexion->error;
+                    }
+                    
+                }
+            }else{
+                $status = $stmt->error;
+            }
+        }else{
+            $status = $conexion->error;
+        }
+        $stmt->close();
+        return array($status, $respuesta);
+    }
+
     function insertarImpactoAmbiental($nueva){
         global $conexion;
         $query = "INSERT INTO impacto_ambiental (nombre) VALUES (?)";
