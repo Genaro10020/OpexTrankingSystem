@@ -63,7 +63,7 @@ if (isset($_SESSION['nombre'])) {
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h6 class="modal-title me-5"> {{titulo_modal}}</h6><label style="font-size: 16px; color: #ec9826; text-shadow: 0px 1px #fff;" v-show="actualizar_proyecto">{{titulo_nombre_proyecto}}</label>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="verificarSiEsActualizar()"></button>
                                 </div>
                                 <div class="modal-body">
                                         
@@ -370,7 +370,7 @@ if (isset($_SESSION['nombre'])) {
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="boton-cancelar" data-bs-dismiss="modal">Salir</button>
+                                    <button type="button" class="boton-cancelar" data-bs-dismiss="modal" @click="reiniciarVariables()">Salir</button>
                                     <button v-if="actualizar_proyecto==false" type="button" class="boton-aceptar" @click="verificarAltaProyecto()">Crear</button>
                                     <button v-if="actualizar_proyecto==true" type="button" class="boton-actualizar" @click="guardarAltaProyecto('Actualizar Proyecto')">Actualizar</button>
                                 </div>

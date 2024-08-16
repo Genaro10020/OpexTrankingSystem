@@ -2839,7 +2839,9 @@ const AltaProyectos = {
               this.selectPilar = []
               this.checkObjetivos = []
               this.selectObjetivo = []
+              this.idsCheckImpacto = []
               this.checkImpactoAmbiental = []
+              this.impactoAmbiental = []
               this.selectEmisiones = []
               this.valoresCheck = []
               this.tons_co2 = ""
@@ -2854,20 +2856,30 @@ const AltaProyectos = {
             alert("No se dio de alta el proyecto.")
           }
         }else if(insertar_o_actualizar == "Actualizar Proyecto"){
-          
           if (response.data[0] == true) {
+            this.reiniciarVariables()
             this.consultarProyectos()
             this.myModal.hide()
             alert("Actualizado con éxito.")
-
           }
-         
         }else{
           console.log("No es ni insertar ni actualizar")
         }
       }).catch(error => {
         console.log("Error :-( ", error)
       })
+    },
+    reiniciarVariables(){
+      this.idsCheckImpacto = []
+      this.checkImpactoAmbiental = []
+      this.impactoAmbiental = []
+      this.selectEmisiones = []
+      this.valoresCheck = []
+    },
+    verificarSiEsActualizar(){
+      if(this.actualizar_proyecto==true){
+          this.reiniciarVariables()
+      }
     },
     buscandoUltimoProyectoCreado(nombres) {
       //Buscar y comparar si es igual
