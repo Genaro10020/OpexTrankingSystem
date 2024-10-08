@@ -2783,6 +2783,10 @@ const AltaProyectos = {
         impacto_ambiental_emisiones.filter(ids => element == ids.split('<->')[0]).map(elementos => elementos.split('<->')[1])//primero reviso que sea igual al id y des tomo el restp
       )
       
+      if (emisiones_ordenadas.length <= 0) {//Si no hay impactos tambien colocarlo sin impacto
+        emisiones_ordenadas.push('Sin Impacto')
+      }
+
       console.log("Ya acomodados", emisiones_ordenadas)
 
       var valores = [];
@@ -2794,7 +2798,8 @@ const AltaProyectos = {
       }
       //Folio proyecto
       var folio = siglasPlanta + "-" + siglasArea + '-' + siglasDepartamento + '-P' + siglasPilaresConcatenado + '-O' + siglasObjetivosConcatenado;
-      //console.log(fuenteConSiglas);
+      //console.log("nombre",impacto_ambiental_nombres)
+      //console.log("Emision",emisiones_ordenadas)
       //console.log("VALORES ARREGLO",valores,"ID",this.id_actualizar);
       axios.post("proyectosController.php", {
         id_actualizar:this.id_actualizar,
