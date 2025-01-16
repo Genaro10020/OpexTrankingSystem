@@ -40,13 +40,21 @@ function sumaValoresGonher(){
     while($fila = $query->fetch_array()) {
         $valor = $fila['valores'];
         //contando valores 
-        $cantidad1=substr_count($valor,"Calidad - Productividad");
+        $cantidad1=substr_count($valor,"Excelencia");
+        $cantidad2=substr_count($valor,"Colaboración");
+        $cantidad3=substr_count($valor,"Compromiso");
+        $cantidad4=substr_count($valor,"Servicio");
+        $cantidad5=substr_count($valor,"Desarrollo");
+        $cantidad6=substr_count($valor,"Integridad");
+        $cantidad7=substr_count($valor,"Innovación");
+
+        /*$cantidad1=substr_count($valor,"Calidad - Productividad");
         $cantidad2=substr_count($valor,"Trabajo en Equipo");
         $cantidad3=substr_count($valor,"Compromiso");
         $cantidad4=substr_count($valor,"Servicio y Orientación al Cliente");
         $cantidad5=substr_count($valor,"Desarrollo de Nuestra Gente");
         $cantidad6=substr_count($valor,"Integridad");
-        $cantidad7=substr_count($valor,"Innovación");
+        $cantidad7=substr_count($valor,"Innovación");*/
 
         $sumaCalidad += $cantidad1;  
         $sumaTrabajo += $cantidad2; 

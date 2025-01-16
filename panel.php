@@ -311,7 +311,7 @@ if (isset($_SESSION['nombre'])) {
                                                 <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && valoresCheck.length<=0, '': valoresCheck.length>0}">
                                                     <div class="form-check border border-1 mt-1" v-for="(valor, index) in valores" :key="index">
                                                         <input class="form-check-input" type="checkbox" :value="valor.valor" v-model="valoresCheck" >
-                                                        <label class="form-check-label" :class="{'valor-calidad':'Calidad - Productividad'==valor.valor,'valor-trabajo':'Trabajo en Equipo'==valor.valor, 'valor-compromiso':'Compromiso'==valor.valor,'valor-servicio':'Servicio y Orientación al Cliente'==valor.valor, 'valor-desarrollo':'Desarrollo de Nuestra Gente'==valor.valor,'valor-integridad':'Integridad'==valor.valor,'valor-innovacion':'Innovación'==valor.valor}">
+                                                        <label class="form-check-label" :class="{'valor-calidad':'Excelencia'==valor.valor,'valor-trabajo':'Colaboración'==valor.valor, 'valor-compromiso':'Compromiso'==valor.valor,'valor-servicio':'Servicio'==valor.valor, 'valor-desarrollo':'Desarollo'==valor.valor,'valor-integridad':'Integridad'==valor.valor,'valor-innovacion':'Innovación'==valor.valor}">
                                                             {{ valor.valor }}
                                                         </label>
                                                     </div>
@@ -646,7 +646,7 @@ if (isset($_SESSION['nombre'])) {
                                         <td class="border border-secondary text-start">
                                             <ul v-if="proyecto.valores">
                                                 <li v-for="(valor in JSON.parse(proyecto.valores)">
-                                                    <label :class="{'valor-calidad':'Calidad - Productividad'===valor,'valor-trabajo':'Trabajo en Equipo'===valor, 'valor-compromiso':'Compromiso'===valor,'valor-servicio':'Servicio y Orientación al Cliente'===valor, 'valor-desarrollo':'Desarrollo de Nuestra Gente'===valor,'valor-integridad':'Integridad'===valor,'valor-innovacion':'Innovación'===valor}">
+                                                    <label :class="{'valor-calidad':'Excelencia'===valor,'valor-trabajo':'Colaboración'===valor, 'valor-compromiso':'Compromiso'===valor,'valor-servicio':'Servicio'===valor, 'valor-desarrollo':'Desarollo'===valor,'valor-integridad':'Integridad'===valor,'valor-innovacion':'Innovación'===valor}">
                                                         {{valor}}
                                                     <label></li>
                                             </ul>
@@ -1879,11 +1879,11 @@ if (isset($_SESSION['nombre'])) {
                                                 <div class="col-6"><span class="badge bg-light valor-calidad" style="min-width:30px;">{{sumaValoresGonher.Calidad}}</span></div>
                                             </div> -->
                                             <div class="mb-2 d-flex ">
-                                                <div class="col-8 lh-1"><i class="bi bi-check-circle"></i> Trabajo en <br> Equipo</div>
+                                                <div class="col-8 lh-1"><i class="bi bi-check-circle"></i> Colaboración</div>
                                                 <div class="col-4"><span class="badge bg-light valor-trabajo" style="min-width:30px;" >{{sumaValoresGonher.Trabajo}}</span></div>
                                             </div>       
                                             <div class="mb-2 d-flex">
-                                                <div class="col-8 lh-1"><i class="bi bi-check-circle"></i> Servicio y <br> Orientación <br>al cliente</div>
+                                                <div class="col-8 lh-1"><i class="bi bi-check-circle"></i> Servicio</div>
                                                 <div class="col-4"><span class="badge bg-light valor-servicio" style="min-width:30px;" >{{sumaValoresGonher.Servicio}}</span></div>
                                             </div>
    
@@ -1892,11 +1892,11 @@ if (isset($_SESSION['nombre'])) {
 
 
                                             <div class="mb-2 d-flex ">
-                                                <div class="col-8"><i class="bi bi-check-circle"></i> Calidad - <br> Productividad</div>
+                                                <div class="col-8"><i class="bi bi-check-circle"></i> Excelencia</div>
                                                 <div class="col-4"><span class="badge bg-light valor-calidad" style="min-width:30px;">{{sumaValoresGonher.Calidad}}</span></div>
                                             </div> 
                                             <div class="mb-2 d-flex ">
-                                                <div class="col-8 lh-1"><i class="bi bi-check-circle"></i> Desarrollo de <br> nuestra gente   </div>
+                                                <div class="col-8 lh-1"><i class="bi bi-check-circle"></i> Desarrollo</div>
                                                 <div class="col-4"><span class="badge bg-light valor-desarrollo" style="min-width:30px;">{{sumaValoresGonher.Desarrollo}}</span></div>
                                             </div>        
                                         </div>

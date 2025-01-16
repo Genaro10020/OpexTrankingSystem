@@ -3703,13 +3703,20 @@ const AltaProyectos = {
             
                   const data = {
                     labels: [
-                      'Calidad - Productividad ('+this.sumaValoresGonher.Calidad+')',
+                      'Excelencia ('+this.sumaValoresGonher.Calidad+')',
+                      'Colaboración ('+this.sumaValoresGonher.Trabajo+')',
+                      'Compromiso  ('+this.sumaValoresGonher.Compromiso+')',
+                      'Servicio  ('+this.sumaValoresGonher.Servicio+')',
+                      'Desarrollo ('+this.sumaValoresGonher.Desarrollo+')',
+                      'Integridad ('+this.sumaValoresGonher.Integridad+')',
+                      'Innovación ('+this.sumaValoresGonher.Innovacion+')',
+                      /*'Calidad - Productividad ('+this.sumaValoresGonher.Calidad+')',
                       'Trabajo en Equipo ('+this.sumaValoresGonher.Trabajo+')',
                       'Compromiso  ('+this.sumaValoresGonher.Compromiso+')',
                       'Servicio y Orientación al Cliente  ('+this.sumaValoresGonher.Servicio+')',
                       'Desarrollo de Nuestra Gente ('+this.sumaValoresGonher.Desarrollo+')',
                       'Integridad ('+this.sumaValoresGonher.Integridad+')',
-                      'Innovación ('+this.sumaValoresGonher.Innovacion+')',
+                      'Innovación ('+this.sumaValoresGonher.Innovacion+')',*/
                     ],
                     datasets: [{
                       label: 'Valores Gonher',
