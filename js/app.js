@@ -78,6 +78,9 @@ const AltaProyectos = {
       idsCheckImpacto:[],
       selectEmisiones:[],
       impactosConDatos:[],
+      new_proyect_anio:'',
+      mesDinamico:[1,2,3,4,5,6,7,8,9,10,11,12],
+      cantidadMeses:0,
       /*Planta*/ /*Área*/ /*Departamento*/
       nueva: '',
       nuevoNombre: '',
@@ -155,6 +158,7 @@ const AltaProyectos = {
       SumNumReales:0,
       nombre_del_proyecto:'',
       correo_proyecto:'',
+      
       /*GENERANDO VALOR*/
       select_anio_generando_valor:'',
       sumaClienteValor:'',
@@ -2200,6 +2204,7 @@ const AltaProyectos = {
         this.consultarFuentes()
         this.consultarValores()
         this.buscarDocumentos('Alta Proyecto')
+        this.incrementarMeses();
         
 
       }else if(modal=="Actualizar Proyecto"){
@@ -2513,6 +2518,12 @@ const AltaProyectos = {
       this.myModalEstatus = new bootstrap.Modal(document.getElementById('modal'))
       this.myModalEstatus.show()
       this.buscarDocumentosEnFinancieros('Seguimiento',id)//Financieros
+    },
+    incrementarMeses(){
+      this.cantidadMeses+=1
+    },
+    quitarMeses(){
+      this.cantidadMeses-=1
     },
     verificarAltaProyecto() {
       

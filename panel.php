@@ -318,34 +318,95 @@ if (isset($_SESSION['nombre'])) {
                                                 </div>
                                                 <div v-if="valoresCheck.length>0" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
+                                            <div v-if="actualizar_proyecto==true">
+                                                        <div class="input-group mb-3">
+                                                            <span class="input-group-text w-50">Tons CO2 por Evitar (Proyectado)</span>
+                                                            <input id="tons_co2" type="text" v-model="tons_co2" min="0" class="w-25" :class="{'nocontestado': respondio === false && (tons_co2 == 0 || tons_co2 == '' ), '': respondio !== false && tons_co2 !== 0 && tons_co2 !== ''}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputSinPesos('tons_co2')"
+                                                            :disabled="actualizar_proyecto">
+                                                            <div v-if="tons_co2 !== '' && tons_co2 !== '0'" class="text-center my-auto ms-3">
+                                                                <i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i>
+                                                            </div>
+                                                        </div>
 
-                                            <div class="input-group mb-3">
-                                                <span class="input-group-text w-50">Tons CO2 por Evitar (Proyectado)</span>
-                                                <input id="tons_co2" type="text" v-model="tons_co2" min="0" class="w-25" :class="{'nocontestado': respondio === false && (tons_co2 == 0 || tons_co2 == '' ), '': respondio !== false && tons_co2 !== 0 && tons_co2 !== ''}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputSinPesos('tons_co2')"
-                                                :disabled="actualizar_proyecto">
-                                                <div v-if="tons_co2 !== '' && tons_co2 !== '0'" class="text-center my-auto ms-3">
-                                                    <i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i>
+                                                        <div class="input-group mb-3">
+                                                            <span class="input-group-text w-50">Ahorro Duro $MXN/Año (Proyectado )</span>
+                                                            <input id="ahorro_duro" type="text" v-model="ahorro_duro" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_duro==='$.00', '': respondio !== false && ahorro_duro!==0 && ahorro_duro!==''}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('ahorro_duro')"
+                                                            :disabled="actualizar_proyecto">
+                                                            <div v-if="ahorro_duro!=='' && ahorro_duro !== '$0.00' && ahorro_duro !== '$.00' && ahorro_duro !== '$.0' && ahorro_duro !== '$.'  && ahorro_duro !== '$'" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                                        </div>
+                                                        <!--@click="colocarCursor('ahorro_duro')" @blur="asignarValor('ahorro_duro')" @keyUp=" formatoNumero('ahorro_duro', $event)"-->
+                                                
+                                                        <div class="input-group mb-3">
+                                                            <span class="input-group-text w-50">Ahorro Suave $MXN/Año (Proyectado)</span>
+                                                            <input id="ahorro_suave" type="text" v-model="ahorro_suave" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_suave==='$.00', '': respondio === false && ahorro_suave!==0 && ahorro_suave!==''}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('ahorro_suave')"
+                                                            :disabled="actualizar_proyecto">
+                                                            <div v-if="ahorro_suave!=='' && ahorro_suave !== '$0.00' && ahorro_suave !== '$.00' && ahorro_suave !== '$.0' && ahorro_suave !== '$.'  && ahorro_suave !== '$'" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                                        </div>
                                                 </div>
-                                            </div>
+                                                <!--bloque1-->
+                                                <div class="col-12 d-flex ">
+                                                    <div class="text-center d-flex align-items-center pb-3">
+                                                        <div class="rounded-circle bg-success mx-2 text-white d-flex justify-content-center align-items-center btn-menu" @click="incrementarMeses()"  style=" width: 40px;height:40px; font-weight:bold; cursor: pointer;">   
+                                                                <i class="bi bi-plus"></i>
+                                                        </div>
+                                                        <span class="badge alert-info">
+                                                            Presione la cántidad de meses que desea agregar. {{cantidadMeses}} {{anio_select}}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-11 pb-2">
+                                                        <div class="row border border-1 mx-1 mb-1 div-color-cajas" v-for="(item, index) in cantidadMeses" :key="index">
+                                                        <span class="badge alert-secondary mb-2 mx-auto">
+                                                            Mes {{index+1}}
+                                                        </span>
+                                                                    <div class="col-3 mb-3">
+                                                                        <div class="input-group">
+                                                                            <span class="input-group-text w-50">Anio</span>
+                                                                            <select :value="anio_select" class="w-50 bg-white">
+                                                                                <option v-for="year in years" :value="year">{{year}}</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-3 mb-3">
+                                                                        <div class="input-group">
+                                                                            <span class="input-group-text w-50">Mes</span>
+                                                                            <select v-model="mesDinamico[index]" class="w-50 bg-white">
+                                                                                <option v-for="(month, monthIndex) in months" :value="(monthIndex + 1)">{{month}}</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-8">
+                                                                            <div class="input-group mb-3">
+                                                                            <span class="input-group-text w-50">Tons CO2 por Evitar (Proyectado)</span>
+                                                                            <input type="text" min="0" class="w-25" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputSinPesos('tons_co2')"
+                                                                            :disabled="actualizar_proyecto">
+                                                                            </div>
 
-                                            <div class="input-group mb-3">
-                                                <span class="input-group-text w-50">Ahorro Duro $MXN/Año (Proyectado )</span>
-                                                <input id="ahorro_duro" type="text" v-model="ahorro_duro" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_duro==='$.00', '': respondio !== false && ahorro_duro!==0 && ahorro_duro!==''}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('ahorro_duro')"
-                                                :disabled="actualizar_proyecto">
-                                                <div v-if="ahorro_duro!=='' && ahorro_duro !== '$0.00' && ahorro_duro !== '$.00' && ahorro_duro !== '$.0' && ahorro_duro !== '$.'  && ahorro_duro !== '$'" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
-                                            </div>
-                                            <!--@click="colocarCursor('ahorro_duro')" @blur="asignarValor('ahorro_duro')" @keyUp=" formatoNumero('ahorro_duro', $event)"-->
+                                                                            <div class="input-group mb-3">
+                                                                            <span class="input-group-text w-50">Ahorro Duro $MXN/Año (Proyectado )</span>
+                                                                            <input  type="text" min="0" class="w-25" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('ahorro_duro')"
+                                                                            :disabled="actualizar_proyecto">
+                                                                            </div>
 
-                                            <div class="input-group mb-3">
-                                                <span class="input-group-text w-50">Ahorro Suave $MXN/Año (Proyectado)</span>
-                                                <input id="ahorro_suave" type="text" v-model="ahorro_suave" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_suave==='$.00', '': respondio === false && ahorro_suave!==0 && ahorro_suave!==''}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('ahorro_suave')"
-                                                :disabled="actualizar_proyecto">
-                                                <div v-if="ahorro_suave!=='' && ahorro_suave !== '$0.00' && ahorro_suave !== '$.00' && ahorro_suave !== '$.0' && ahorro_suave !== '$.'  && ahorro_suave !== '$'" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
-                                            </div>
-                                            <div class="input-group mb-3">
-                                                <span class="input-group-text w-25 me-2">Objetivo Estrategico</span>
-                                                <input type="checkbox" v-model="objetivo_estrategico" :disabled="actualizar_proyecto">
-                                            </div>
+                                                                            <div class="input-group mb-3">
+                                                                                <span class="input-group-text w-50">Ahorro Suave $MXN/Año (Proyectado)</span>
+                                                                                <input  type="text" min="0" class="w-25" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('ahorro_suave')"
+                                                                                :disabled="actualizar_proyecto">
+                                                                            </div>
+                                                                    </div>
+                                                                    <div class="col-4 text-center">
+                                                                            <div class="rounded-circle bg-danger mx-2 text-white d-flex justify-content-center align-items-center btn-menu" @click="quitarMeses()"  style=" width: 40px;height:40px; font-weight:bold; cursor: pointer;">   
+                                                                                <i class="bi bi-dash"></i>
+                                                                            </div>
+                                                                    </div>
+                                                    </div>
+                                                </div>
+                                                <!--Finbloque-->
+                                                
+                                                <div class="input-group mb-3">
+                                                    <span class="input-group-text w-25 me-2">Objetivo Estrategico</span>
+                                                    <input type="checkbox" v-model="objetivo_estrategico" :disabled="actualizar_proyecto">
+                                                </div>
                                         </div>
                                         <div class="col-3 my-auto mx-auto "><!--bloque imagen Alta Proyecto-->
                                             <form @submit.prevent="uploadFile('Alta Proyecto')">

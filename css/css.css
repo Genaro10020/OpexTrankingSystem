@@ -1048,7 +1048,9 @@ button {
         background-color: gray;
     }
 
-
+    .div-color-cajas{
+        background-color: rgb(242, 242, 242);
+    }
 }
 
 /* Large devices (desktops, 992px and up)*/
