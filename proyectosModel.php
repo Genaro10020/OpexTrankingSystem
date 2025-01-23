@@ -265,7 +265,7 @@ function consultarProyectosID($id_proyecto)
     return array($resultado, $estado);
 }
 
-function insertarProyecto($folio, $fecha_alta, $nombre_proyecto, $fuente, $planta, $area, $departamento, $metodologia, $responsable_id, $observador, $misiones, $pilares, $objetivos, $impacto_ambiental,$impacto_ambiental_emisiones, $valores, $tons_co2, $ahorro_duro, $ahorro_suave)
+function insertarProyecto($folio, $fecha_alta, $nombre_proyecto, $fuente, $planta, $area, $departamento, $metodologia, $responsable_id, $observador, $misiones, $pilares, $objetivos, $impacto_ambiental,$impacto_ambiental_emisiones, $valores, $tons_co2, $ahorro_duro, $ahorro_suave,$anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS)
 {
     global $conexion;
     $folio_sin_numero = "";
@@ -273,6 +273,7 @@ function insertarProyecto($folio, $fecha_alta, $nombre_proyecto, $fuente, $plant
     $igual = "";
     $numero = 1;
     $ultimoNum = "";
+    $impacto_mensual ="";
     if($observador=='[""]'){
         $observador = "";
     }
@@ -329,23 +330,79 @@ function insertarProyecto($folio, $fecha_alta, $nombre_proyecto, $fuente, $plant
                     break;
                 }
             }
+                //insertando impactos mensuales
+                $anioXmes = json_decode($anioXmes, JSON_UNESCAPED_UNICODE); //conviertiendo arreglos en cadena
+                $mesXAnio = json_decode($mesXAnio, JSON_UNESCAPED_UNICODE);//conviertiendo arreglos en cadena
+                $valoresMensualCO = json_decode($valoresMensualCO, JSON_UNESCAPED_UNICODE);//conviertiendo a arreglos
+                $valoresMensualAD = json_decode($valoresMensualAD, JSON_UNESCAPED_UNICODE);//conviertiendo a arreglos
+                $valoresMensualAS = json_decode($valoresMensualAS, JSON_UNESCAPED_UNICODE);//conviertiendo a arreglos
+
+            $cantidad_meses=count($mesXAnio);
+            for ($i=0; $i < $cantidad_meses; $i++) { 
+                $insertar = "INSERT INTO plan_mensual_por_proyecto (id_proyecto, 	mes, 	anio, 	ahorro_co, 	ahorro_d, 	ahorro_s) VALUES ('$ultimo_id','$mesXAnio[$i]','$anioXmes[$i]','$valoresMensualCO[$i]','$valoresMensualAD[$i]','$valoresMensualAS[$i]')";
+                if ($conexion->query($insertar) !== TRUE) {
+                    $impacto_mensual = $conexion->error." Incorreco";
+                    break;
+                }else{
+                    $impacto_mensual = "Correcto";
+                }
+            }
         }
         $stmt->close();
     } else {
         $estado  = false;
     }
 
-    return array($estado, $estado_folios, $folio_recuperado, $folio_sin_numero, $igual, $insercion_impacto, $impacto_ambiental_array);
+    return array($estado, $estado_folios, $folio_recuperado, $folio_sin_numero, $igual, $insercion_impacto, $impacto_ambiental_array,$impacto_mensual);
 }
 
-function actualizarProyecto($id,$impacto_ambiental_emisiones,$valores){
+function actualizarProyecto($id,$impacto_ambiental_emisiones,$valores,$anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS,$idsPlanMesual){
     global $conexion;
     $estado = false;
     $update = "UPDATE proyectos_creados SET impacto_ambiental=?, valores=? WHERE  id=?";
     $stmt = $conexion->prepare($update);
     $stmt->bind_param("ssi",$impacto_ambiental_emisiones, $valores, $id);
     if ($stmt->execute()) {
-        $estado = true;
+         //insertando impactos mensuales
+         $anioXmes = json_decode($anioXmes, JSON_UNESCAPED_UNICODE); //conviertiendo arreglos en cadena
+         $mesXAnio = json_decode($mesXAnio, JSON_UNESCAPED_UNICODE);//conviertiendo arreglos en cadena
+         $valoresMensualCO = json_decode($valoresMensualCO, JSON_UNESCAPED_UNICODE);//conviertiendo a arreglos
+         $valoresMensualAD = json_decode($valoresMensualAD, JSON_UNESCAPED_UNICODE);//conviertiendo a arreglos
+         $valoresMensualAS = json_decode($valoresMensualAS, JSON_UNESCAPED_UNICODE);//conviertiendo a arreglos
+         $idsPlanMesual = json_decode($idsPlanMesual, JSON_UNESCAPED_UNICODE);//conviertiendo a arreglos
+         
+         $estado = true;
+         //con filter elimino todos los "" y si todos estan vacios no se actualizara, de lo contrario actualizara.
+         $cantidad_meses=count($mesXAnio);
+         $cantidad_ids=count($idsPlanMesual);
+        
+            
+            if($cantidad_ids>0){//Existe y actualiza
+                        $cantidad_meses=count($mesXAnio);
+                        for ($i=0; $i < $cantidad_meses; $i++) { 
+                            $insertar = "UPDATE plan_mensual_por_proyecto SET mes='$mesXAnio[$i]',anio ='$anioXmes[$i]',ahorro_co = '$valoresMensualCO[$i]',ahorro_d = '$valoresMensualAD[$i]',ahorro_s = '$valoresMensualAS[$i]' WHERE id='$idsPlanMesual[$i]' AND id_proyecto='$id'";
+                        if ($conexion->query($insertar) !== TRUE) {
+                            $estado = $conexion->error." Incorreco";
+                                break;
+                        }else{
+                            $estado = true;
+                        }   
+                    }  
+                }else{//No existe y si no son vacias inserta
+                    if (!empty(array_filter($valoresMensualCO)) && !empty(array_filter($valoresMensualAD)) && !empty(array_filter($valoresMensualAS))){
+                            for ($i=0; $i < $cantidad_meses; $i++) { 
+                                $insertar = "INSERT INTO plan_mensual_por_proyecto (id_proyecto, mes, anio,	ahorro_co, ahorro_d, ahorro_s) VALUES ('$id','$mesXAnio[$i]','$anioXmes[$i]','$valoresMensualCO[$i]','$valoresMensualAD[$i]','$valoresMensualAS[$i]')";
+                                    if ($conexion->query($insertar) !== TRUE) {
+                                        $estado = $conexion->error." Incorreco";
+                                            break;
+                                    }else{
+                                        $estado = true;
+                                    }
+                            }
+                    }
+                }
+
+
     }
     $stmt->close();
     return $estado;

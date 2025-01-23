@@ -81,6 +81,17 @@ const AltaProyectos = {
       new_proyect_anio:'',
       mesDinamico:[1,2,3,4,5,6,7,8,9,10,11,12],
       cantidadMeses:0,
+      idsPlanMesual:[],
+      AnioXMes:[],
+      MesXAnio:[],
+      select_anios_por_mes:'',
+      inputValorMensualCO:[],
+      inputValorMensualAD:[],
+      inputValorMensualAS:[],
+      flagEditCOMes:'',
+      flagEditAhorroDuroMes:'',
+      flagEditAhorroSuaveMes:'',
+      
       /*Planta*/ /*Área*/ /*Departamento*/
       nueva: '',
       nuevoNombre: '',
@@ -158,7 +169,6 @@ const AltaProyectos = {
       SumNumReales:0,
       nombre_del_proyecto:'',
       correo_proyecto:'',
-      
       /*GENERANDO VALOR*/
       select_anio_generando_valor:'',
       sumaClienteValor:'',
@@ -204,6 +214,7 @@ const AltaProyectos = {
     },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PROYECTOS*/
     consultarProyectos() {
+      plan_actualizar = ''; //solo la reseteo
       axios.get('proyectosController.php', {
       }).then(response => {
         console.log(response.data)
@@ -293,6 +304,7 @@ const AltaProyectos = {
       this.select_anio_calendario = anio
       this.anio_select = anio
       this.select_anio_generando_valor = anio
+      this.select_anios_por_mes = anio
     },
     consultarProyectoID() {
       axios.post('proyectosController.php', {
@@ -2205,6 +2217,7 @@ const AltaProyectos = {
         this.consultarValores()
         this.buscarDocumentos('Alta Proyecto')
         this.incrementarMeses();
+        this.inicializarArreglosPlanMensual();
         
 
       }else if(modal=="Actualizar Proyecto"){
@@ -2227,7 +2240,7 @@ const AltaProyectos = {
             this.consultarMisiones()
             this.consultarFuentes()
             this.consultarValores()
-            
+            this.consultarPlanMensualProyecto(id);
             setTimeout(()=>{
               this.consultaProyectoIDActualizar(id)
             },200)
@@ -2296,7 +2309,6 @@ const AltaProyectos = {
                 this.nuevoNombre = id_nombre_idpilar_siglas[1]//recuperando nombre planta*/
                 this.select_pilar = id_nombre_idpilar_siglas[2]
                 this.siglas = id_nombre_idpilar_siglas[3]//recuperando nombre planta*/
-
               } else {
                 alert("Seleccione solo un Objetivo para actualizar")
               }
@@ -2309,7 +2321,34 @@ const AltaProyectos = {
         alert("No encontramos esa modal")
       }
     },
-    cerrarModal() {
+    consultarPlanMensualProyecto(id){
+      axios.get("planMensualController.php",{
+        params:{
+          id: id
+        }
+      }).then(response => {
+         if(response.data[1]===true){
+            if(response.data[0].length>0){
+                console.log("Response",response.data[0].length)
+                console.log("Response",response.data[0])
+                this.idsPlanMesual = response.data[0].map(items=> items.id)
+                this.AnioXMes = response.data[0].map(items=> items.anio)
+                this.MesXAnio = response.data[0].map(items=> items.mes)
+                this.inputValorMensualCO = response.data[0].map(items=> items.ahorro_co)
+                this.inputValorMensualAD = response.data[0].map(items=> items.ahorro_d)
+                this.inputValorMensualAS = response.data[0].map(items=> items.ahorro_s)
+
+            }else{
+              this.inicializarArreglosPlanMensual()//Si no existen datos inicializarlos
+            }
+         }else{
+          alert("No se consulto lo proyectado mes con mes");
+         }
+      }).catch(error=>{
+          console.log("Error :-(",error);
+      })
+    },
+    cerrarModal(){
       this.myModal.hide()
     },
     cancelar() {
@@ -2630,9 +2669,11 @@ const AltaProyectos = {
           title: "Seleccione un Valor Gonher",
           text: "Seleccione minimo un Valor Gonher",
           icon: "warning"
-        });}
+        });}else{
+          this.respondio = true
+        }
       //Ahorros
-      else if ((this.tons_co2 == "0" || this.tons_co2 == "" || this.tons_co2 == "0.00") && this.ahorro_duro == "$.00" && this.ahorro_suave == "$.00" && (this.objetivo_estrategico == false || this.objetivo_estrategico == true)) { this.respondio = false; 
+      /*else if ((this.tons_co2 == "0" || this.tons_co2 == "" || this.tons_co2 == "0.00") && this.ahorro_duro == "$.00" && this.ahorro_suave == "$.00" && (this.objetivo_estrategico == false || this.objetivo_estrategico == true)) { this.respondio = false; 
         Swal.fire({
           title: "Minimo uno debe ser distinto a 0",
           text: "Verifique los campos",
@@ -2641,7 +2682,7 @@ const AltaProyectos = {
       //Si algo no se a contestado
       else {
         this.respondio = true
-      }
+      }*/
 
       if (this.respondio === true) {
         this.guardarAltaProyecto("Alta Proyecto")
@@ -2809,9 +2850,9 @@ const AltaProyectos = {
       }
       //Folio proyecto
       var folio = siglasPlanta + "-" + siglasArea + '-' + siglasDepartamento + '-P' + siglasPilaresConcatenado + '-O' + siglasObjetivosConcatenado;
-      //console.log("nombre",impacto_ambiental_nombres)
-      //console.log("Emision",emisiones_ordenadas)
-      //console.log("VALORES ARREGLO",valores,"ID",this.id_actualizar);
+
+    
+
       axios.post("proyectosController.php", {
         id_actualizar:this.id_actualizar,
         accion:insertar_o_actualizar,
@@ -2833,9 +2874,15 @@ const AltaProyectos = {
         valores:valores,
         tons_co2: this.tons_co2,
         ahorro_duro: this.ahorro_duro,
-        ahorro_suave: this.ahorro_suave
+        ahorro_suave: this.ahorro_suave,
+        anioXmes:this.AnioXMes,
+        mesXAnio:this.MesXAnio,
+        valoresMensualCO: this.inputValorMensualCO,
+        valoresMensualAD: this.inputValorMensualAD,
+        valoresMensualAS: this.inputValorMensualAS,
+        idsPlanMesual:this.idsPlanMesual
       }).then(response => {
-        console.log(response.data)
+        console.log("Alta resultado",response.data)
         if(insertar_o_actualizar == "Alta Proyecto"){
           if (response.data[0][0] == true) {
             if (response.data[0][1] == true) {
@@ -2884,6 +2931,50 @@ const AltaProyectos = {
       }).catch(error => {
         console.log("Error :-( ", error)
       })
+    },
+    editarCOMes(numero){
+      this.flagEditCOMes = numero
+      this.flagEditAhorroDuroMes =''
+      this.flagEditAhorroSuaveMes = ''
+    },
+    editarADMes(numero){
+      this.flagEditCOMes = ''
+      this.flagEditAhorroDuroMes = numero
+      this.flagEditAhorroSuaveMes = ''
+    },
+    editarASMes(numero){
+      this.flagEditCOMes = ''
+      this.flagEditAhorroDuroMes =''
+      this.flagEditAhorroSuaveMes = numero
+    },
+    inicializarArreglosPlanMensual(){
+      for (let i = 0; i <12; i++){
+        this.inputValorMensualCO[i] = "";
+        this.inputValorMensualAD[i] = "";
+        this.inputValorMensualAS[i] = "";
+        this.AnioXMes[i] = this.select_anios_por_mes
+        this.MesXAnio[i] = (i+1) //Asigno del 1 al 12 para los meses
+      }
+    },
+    darFormatoInputValorMensual(index,WhoIsIt){
+      if(WhoIsIt==='CO'){
+         /*if(this.inputValorMensualCO[index]!==undefined){
+            this.inputValorMensualCO[index]=this.formatMonedaPesos(this.inputValorMensualCO[index])
+          }*/
+        }else if(WhoIsIt==='AD'){
+          if(this.inputValorMensualAD[index]!==''){
+            this.inputValorMensualAD[index]=this.formatMonedaPesos(this.inputValorMensualAD[index])
+          }
+        }else if(WhoIsIt==='AS'){
+          if(this.inputValorMensualAS[index]!==''){
+            this.inputValorMensualAS[index]=this.formatMonedaPesos(this.inputValorMensualAS[index])
+        }
+      }else{
+        console.log("No se encontro QUIEN")
+      }
+        this.flagEditCOMes = ''
+        this.flagEditAhorroDuroMes =''
+        this.flagEditAhorroSuaveMes = ''
     },
     reiniciarVariables(){
       this.idsCheckImpacto = []
@@ -3048,6 +3139,12 @@ const AltaProyectos = {
     },
     formatInputSinPesos(varvue) {
       this[varvue] = this.formatMonedaSinPesos(this[varvue]);
+    },
+    formatInputSinPesosCO(index) {
+      if(this.inputValorMensualCO[index]!==''){
+        let valor = this.inputValorMensualCO[index];
+        this.inputValorMensualCO[index] = this.formatMonedaSinPesos(valor);
+      }
     },
     formatMonedaSinPesos(value) {
       // Obtener el valor actual del campo y eliminar caracteres no deseados
@@ -3671,7 +3768,6 @@ const AltaProyectos = {
       this.plan_actualizar = mes
     },
     darFormatoInputValorPlan(index){
-     // console.log("index: "+index)
       this.inputValorPlan[index]=this.formatMonedaPesos(this.inputValorPlan[index])
     },
     calcularPorcentaje(){

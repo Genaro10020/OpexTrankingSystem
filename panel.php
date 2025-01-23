@@ -344,7 +344,7 @@ if (isset($_SESSION['nombre'])) {
                                                         </div>
                                                 </div>
                                                 <!--bloque1-->
-                                                <div class="col-12 d-flex ">
+                                                <!--<div class="col-12 d-flex ">
                                                     <div class="text-center d-flex align-items-center pb-3">
                                                         <div class="rounded-circle bg-success mx-2 text-white d-flex justify-content-center align-items-center btn-menu" @click="incrementarMeses()"  style=" width: 40px;height:40px; font-weight:bold; cursor: pointer;">   
                                                                 <i class="bi bi-plus"></i>
@@ -353,9 +353,9 @@ if (isset($_SESSION['nombre'])) {
                                                             Presione la cántidad de meses que desea agregar. {{cantidadMeses}} {{anio_select}}
                                                         </span>
                                                     </div>
-                                                </div>
-                                                <div class="col-11 pb-2">
-                                                        <div class="row border border-1 mx-1 mb-1 div-color-cajas" v-for="(item, index) in cantidadMeses" :key="index">
+                                                </div>-->
+                                                
+                                                        <!--<div class="row border border-1 mx-1 mb-1 div-color-cajas" v-for="(item, index) in cantidadMeses" :key="index">
                                                         <span class="badge alert-secondary mb-2 mx-auto">
                                                             Mes {{index+1}}
                                                         </span>
@@ -400,7 +400,7 @@ if (isset($_SESSION['nombre'])) {
                                                                             </div>
                                                                     </div>
                                                     </div>
-                                                </div>
+                                                </div>-->
                                                 <!--Finbloque-->
                                                 
                                                 <div class="input-group mb-3">
@@ -429,6 +429,69 @@ if (isset($_SESSION['nombre'])) {
                                             </form>
                                         </div>
                                     </div>
+                                        <div class="col-12 pb-2">
+                                                <table class="table table-striped table-bordered">
+                                                        <thead  class="text-center">
+                                                            <tr>
+                                                                <th>Año</th>
+                                                                <th scope="col" v-for="numero in 12">
+                                                                    <select v-model="AnioXMes[numero-1]" style="width:70px">
+                                                                        <option v-for="(year,index) in years.slice().reverse()" :value="year">{{year}}</option><!--asi los anio me aparecen del menor al mayor-->
+                                                                    </select>
+                                                                </th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Mes</th>
+                                                                <th scope="col" v-for="numero in 12">
+                                                                    <select v-model="MesXAnio[numero-1]" style="width:70px">
+                                                                        <option v-for="(month,index) in months" :value="index+1">{{month}}</option>
+                                                                    </select>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr class="align-middle">
+                                                                <td scope="row" style="font-size: 0.9em;">Tons CO2 x Evitar</td>
+                                                                <td v-for="numero in 12">
+                                                                    <!--<div v-if="flagEditCOMes!==numero" class="d-flex flex-column">
+                                                                        <button class="w-100" style="border-style: outset; border-width: 1.5px; height: 24px;"  @click="editarCOMes(numero)"><i class="bi bi-pencil-fill"></i></button>
+                                                                        <input class="w-100" type="text" :value="inputValorMensualCO[numero-1]" disabled> </input>
+                                                                    </div>  
+                                                                    <div v-else class="d-flex flex-column">-->
+                                                                        <!--<button class="w-100"  style="border-style: outset; border-width: 1.5px; height: 24px; background:#bae3a3; color:9cc783" ><i class="bi bi-floppy-fill"></i></button>    @click="guardarPlanMes(x)"-->
+                                                                        <input class="w-100"  v-model="inputValorMensualCO[numero-1]"  type="text" @blur="formatInputSinPesosCO(numero-1)"> </input> 
+                                                                    <!--</div>-->
+                                                                </td>
+                                                            </tr>
+                                                            <tr class="align-middle">
+                                                                <td scope="row" style="font-size: 0.9em;">Ahorro Duro $MXN</td>
+                                                                <td v-for="numero in 12">
+                                                                    <!--<div v-if="flagEditAhorroDuroMes!==numero" class="d-flex flex-column">
+                                                                        <button class="w-100" style="border-style: outset; border-width: 1.5px; height: 24px;"  @click="editarADMes(numero)"><i class="bi bi-pencil-fill"></i></button>
+                                                                        <input class="w-100" type="text" :value="inputValorMensualAD[numero-1]" disabled> </input>
+                                                                    </div>  
+                                                                    <div v-else class="d-flex flex-column">
+                                                                        <button class="w-100"  style="border-style: outset; border-width: 1.5px; height: 24px; background:#bae3a3; color:9cc783" ><i class="bi bi-floppy-fill"></i></button>--> <!-- @click="guardarPlanMes(x)"-->
+                                                                        <input class="w-100"  v-model="inputValorMensualAD[numero-1]"  type="text" @blur="darFormatoInputValorMensual(numero-1,'AD')"> </input> 
+                                                                    <!--</div>-->
+                                                                </td>
+                                                            </tr>
+                                                            <tr class="align-middle">
+                                                                <td scope="row" style="font-size: 0.9em;">Ahorro Suave $MXN</td>
+                                                                <td v-for="numero in 12">
+                                                                    <!--<div v-if="flagEditAhorroSuaveMes!==numero" class="d-flex flex-column">
+                                                                        <button class="w-100" style="border-style: outset; border-width: 1.5px; height: 24px;"  @click="editarASMes(numero)"><i class="bi bi-pencil-fill"></i></button>
+                                                                        <input class="w-100" type="text" :value="inputValorMensualAS[numero-1]" disabled> </input>
+                                                                    </div>  
+                                                                    <div v-else class="d-flex flex-column">
+                                                                        <button class="w-100"  style="border-style: outset; border-width: 1.5px; height: 24px; background:#bae3a3; color:9cc783" ><i class="bi bi-floppy-fill"></i></button>--> <!-- @click="guardarPlanMes(x)"-->
+                                                                        <input class="w-100"  v-model="inputValorMensualAS[numero-1]"  type="text" @blur="darFormatoInputValorMensual(numero-1,'AS')"> </input> 
+                                                                    <!--</div>-->
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                </table>
+                                        </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="boton-cancelar" data-bs-dismiss="modal" @click="reiniciarVariables()">Salir</button>
@@ -1490,7 +1553,7 @@ if (isset($_SESSION['nombre'])) {
                                     <?php } ?>
                                     </td>
                                 </tr>
-                                <!------------------------------------------------------------------------------PRIMER SEGUIMIETO --------------------------------------------------->
+                                <!------------------------------------------------------------------------------PRIMER SEGUIMIENTO --------------------------------------------------->
                                 <tr v-if="id_proyecto!='' && seguimiento_status==true" style="vertical-align: middle; font-size: 1.1em;">
                                     <?php if($_SESSION['acceso']!="Financiero")  {?>
                                         <td v-if="seguimiento_status">
@@ -2353,19 +2416,17 @@ if (isset($_SESSION['nombre'])) {
                 </div> 
                 <!--////////////////////////////////////////////// FIN DE CALENDARIO -->
                 <div v-if="ventana=='Valores Gonher'" v-cloak><!--BLOQUE GRAFICA VALORES GONHER-->
-                <div class="row">
-                    <div class="col-1 col-sm-2 d-flex justify-content-center align-items-start align-items-lg-center ">
-                        <img class="w-100 mt-2"  src="img/enerya.png" style="max-width:150px"></img>                                        
+                    <div class="row">
+                        <div class="col-1 col-sm-2 d-flex justify-content-center align-items-start align-items-lg-center ">
+                            <img class="w-100 mt-2"  src="img/enerya.png" style="max-width:150px"></img>                                        
+                        </div>
+                        <div id="divCanvas"  class="col-10 col-sm-8   d-flex justify-content-center" style="height:80vh;" >
+                            <canvas id="myChart"></canvas>
+                        </div>
+                        <div class="col-1 col-sm-2 d-flex justify-content-center align-items-start align-items-lg-center">
+                            <img class="w-100 mt-2" src="img/riasa.png" style="max-width:150px"></img>      
+                        </div>
                     </div>
-                    <div id="divCanvas"  class="col-10 col-sm-8   d-flex justify-content-center" style="height:80vh;" >
-                        <canvas id="myChart"></canvas>
-                    </div>
-                    <div class="col-1 col-sm-2 d-flex justify-content-center align-items-start align-items-lg-center">
-                        <img class="w-100 mt-2" src="img/riasa.png" style="max-width:150px"></img>      
-                    </div>
-                </div>
-                 
-                        
                 </div><!--Fin Valores Gonher-->
             </div><!--cuerpo-->
 
