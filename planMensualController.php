@@ -9,10 +9,14 @@ $val = "";
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
         // Manejar solicitud GET (consultar)
-            $id=$_GET['id'];
-            $val = consultarPlanMensualAnual($id);
+            if(isset($_GET['id'])){
+                $id=$_GET['id'];
+                $val = consultarPlanMensualAnual($id);
+            }else if(isset($_GET['accion']) && isset($_GET['anio']) && $_GET['accion']=="consultar x Anio"){
+                $anio = $_GET['anio'];
+                $val = consultarPlanMensualAnualXAnio($anio);
+            }
         break;
-
     case 'POST':
         // Manejar solicitud POST (creación)
             /*if(isset($arreglo['nueva'])){

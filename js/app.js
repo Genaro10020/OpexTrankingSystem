@@ -260,8 +260,13 @@ const AltaProyectos = {
           this.selleva = suma;
           //console.log("SE LLEVA",this.selleva)
           this.sumaTotales = "$"+suma.toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
-          
-          this.consultarPlan();//Consutar la parte de plan
+          if(this.select_anio_calendario>=2025){
+            this.consultarPlanNuevoModalidad()
+          }else{
+            this.consultarPlan();//Consutar la parte de plan
+          }
+         
+         
           this.consultarValidacion();//Consutar la parte financiera
           this.cantidadDocumentos = []
             for (var i = 0; i < this.proyectosXanioCalendario.length; i++) {
@@ -3228,44 +3233,75 @@ const AltaProyectos = {
 
     /*/////////////////////////////////////////////////////////////////////////////////INSERTAR PLANTA*/
     guardarSeguimiento() {
+      console.log()
+      console.log(this.input_tons_co2)
       console.log(this.inputImpactoAmbientalInicial)
-      axios.post('seguimientoAmbientalProyectoController.php', {
-        id_proyecto: this.id_proyecto,
-        mes: this.mes_select,
-        anio: this.anio_select,//revisando voy aqui
-        input_tons_co2: this.input_tons_co2,
-        inputImpactoAmbiental: this.inputImpactoAmbientalInicial,
-        input_ahorro_suave: this.input_ahorro_suave,
-        input_ahorro_duro: this.input_ahorro_duro,
-      }).then(response => {
-        console.log(response.data)
-        if (response.data[0][3] == true) {
-          alert("Ya existe esa fecha, favor de cambiarla")
-        } else {
-          if (response.data[0][0] == true) {
-            if (response.data[0][1] == true) {
-              if (response.data[0][2] == true) {
-                this.actualizar = 0
-                this.actualizatabla = false
-                this.consultarImpactoAmbieltalXProyectoID()
-                this.consultarSumaProyectos()
-                this.alertaSweet()
-              } else {
-                alert("Verifique que los campos no esten vacios, valor minimo 0 ")
+      console.log(this.input_ahorro_suave)
+      console.log(this.input_ahorro_duro)
+      if(this.input_tons_co2!==''){
+          let sumaVacias = 0;
+            for (let i = 0; i < this.inputImpactoAmbientalInicial.length; i++) {
+              if (!this.inputImpactoAmbientalInicial[i]) {
+                  sumaVacias++;
               }
-            } else {
-              alert("No se realizo correctamente la consulta Relacionada")
             }
-          } else {
-            alert("No se econtro el ID del Proyecto")
-          }
-        }
-      }).catch(error => {
-        console.log('Erro :-(' + error)
-      }).finally(() => {
+            console.log("posiciones vacias",sumaVacias)
+            if(sumaVacias>0){
+                alert("Ningún impacto ambiental tiene que estar vacio, minimo 0")
+            }else{
+              if(this.input_ahorro_suave!==''){
+                  if(this.input_ahorro_duro!==''){
 
-      })
-      //alert("Esta seccion esta en proceso de subir")
+                        axios.post('seguimientoAmbientalProyectoController.php', {
+                        id_proyecto: this.id_proyecto,
+                        mes: this.mes_select,
+                        anio: this.anio_select,
+                        input_tons_co2: this.input_tons_co2,
+                        inputImpactoAmbiental: this.inputImpactoAmbientalInicial,
+                        input_ahorro_suave: this.input_ahorro_suave,
+                        input_ahorro_duro: this.input_ahorro_duro,
+                      }).then(response => {
+                        console.log(response.data)
+                        if (response.data[0][3] == true) {
+                          alert("Ya existe esa fecha, favor de cambiarla")
+                        } else {
+                          if (response.data[0][0] == true) {
+                            if (response.data[0][1] == true) {
+                              if (response.data[0][2] == true) {
+                                this.actualizar = 0
+                                this.actualizatabla = false
+                                this.consultarImpactoAmbieltalXProyectoID()
+                                this.consultarSumaProyectos()
+                                this.alertaSweet()
+                              } else {
+                                alert("Verifique que los campos no esten vacios, valor minimo 0 ")
+                              }
+                            } else {
+                              alert("No se realizo correctamente la consulta Relacionada")
+                            }
+                          } else {
+                            alert("No se econtro el ID del Proyecto")
+                          }
+                        }
+                      }).catch(error => {
+                        console.log('Erro :-(' + error)
+                      }).finally(() => {
+
+                      })
+
+                  }else{
+                    alert("Ahorro duro minimo 0, no debe estar vacio.")
+                  }
+              }else{
+                alert("Ahorro suave minimo 0, no debe estar vacio.")
+              }
+            }
+      }else{
+        alert('Debes ingresar el impacto ambiental, minimo 0')
+      }
+     
+
+  
 
     },
     actualizarSeguimiento(posicion) {
@@ -3737,6 +3773,48 @@ const AltaProyectos = {
         }
       }).catch(error => {
         console.log("Fallo el metodo consultarValidacion"+error);
+      })
+    },
+    consultarPlanNuevoModalidad(){
+      axios.get("planMensualController.php",{
+        params:{
+          accion: "consultar x Anio",
+          anio: this.select_anio_calendario
+        }
+      }).then(response => {
+          console.log("Mi resultado",response.data)
+          let valores = [];
+          let nuevoArreglo = [];
+
+          for (let i = 0; i < 12; i++) {//inicializando
+              this.inputValorPlan[i] ="$0.00";
+          }
+
+          valores = response.data[0];
+            const result = valores.reduce((acc, item) => {
+              const mes = item.mes;
+              const ahorroD = parseFloat(item.ahorro_d.replace(/[$,]/g, '')) || 0;
+              if (!acc[mes]) {// si no exist el mes lo creo e inicializo
+                acc[mes] = 0;
+              }
+              acc[mes] += ahorroD; //voy sumando los del mismo mes
+            
+              return acc;
+            }, {});
+
+            nuevoArreglo = Object.values(result);//objeto arreglo
+            console.log("Nuevo Arreglo",nuevoArreglo)
+            var suma =0;
+              for (let f = 0; f < nuevoArreglo.length; f++) {
+                suma += parseFloat(nuevoArreglo[f])
+                console.log("Suma",suma)
+                this.inputValorPlan[f] = "$"+parseFloat(nuevoArreglo[f]).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+              }
+              
+              this.meta = suma
+              this.sumaPlan = "$"+parseFloat(suma).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+      }).catch(error=>{
+          console.log("Error :-(",error);
       })
     },
     guardarPlanMes(mes){

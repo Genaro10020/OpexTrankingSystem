@@ -2228,7 +2228,7 @@ if (isset($_SESSION['nombre'])) {
                                                                         <div>
                                                                         <?php if ($_SESSION['acceso']=="Admin"){ ?>
                                                                             <button v-if="plan_actualizar===x"  style="border-style: outset; border-width: 1.5px; height: 24px;" @click="guardarPlanMes(x)" ><i class="bi bi-floppy-fill"></i></button>
-                                                                            <button v-else style="border-style: outset; border-width: 1.5px; height: 24px;"  @click="editarPlanMes(x)"><i class="bi bi-pencil-fill"></i></button>
+                                                                            <button v-if="plan_actualizar!==x && select_anio_calendario<2025" style="border-style: outset; border-width: 1.5px; height: 24px;"  @click="editarPlanMes(x)"><i class="bi bi-pencil-fill"></i></button>
                                                                             <?php } ?>
                                                                         </div>
                                                                 </div> 

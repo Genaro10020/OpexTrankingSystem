@@ -15,6 +15,21 @@ include("conexionGhoner.php");
             return array ($resultado,$estado);
     }
 
+    function consultarPlanMensualAnualXAnio($anio){
+        global $conexion;
+        $resultado = [];
+        $estado = false;
+            $consulta = "SELECT * FROM plan_mensual_por_proyecto WHERE anio='$anio' ORDER BY anio ASC";
+            $query = $conexion->query($consulta);
+            if($query){
+                while ($datos=mysqli_fetch_array($query)){
+                    $resultado [] = $datos;
+                }
+                    $estado  = true;
+            }
+            return array ($resultado,$estado);
+    }
+
    /* function insertarPlanta($nueva,$siglas){
         global $conexion;
         $estado = false;
