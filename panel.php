@@ -2209,26 +2209,31 @@ if (isset($_SESSION['nombre'])) {
                                                 <td></td>
                                                 <td></td>
                                                 <td style="font-size:10px">
+                                                        <div class="p-2 pt-1">Pres:</div>
                                                         <div class="p-2 pt-1">Plan:</div>
                                                         <div class="p-2 mt-1">Total:</div>
                                                 </td>
                                                 <td class="align-middle"  v-for="(x,index) in 12" style="font-size:12px"><!--Columna de Sumas X Anio-->
-                                               
+
                                                        
                                                                 <div class="col d-flex"><!--Valor Plan-->
                                                                         <div>
                                                                             <?php if ($_SESSION['acceso']=="Admin"){ ?>
-                                                                                <input v-if="plan_actualizar===x" v-model="inputValorPlan[index]"  type="text" @blur="darFormatoInputValorPlan(index)"> </input>
+                                                                                    <input v-if="plan_actualizar===x" v-model="inputValorPlan[index]"  type="text" @blur="darFormatoInputValorPlan(index)"> </input><!--Mostrado en gerencia solo mostrar-->
+                                                                                    <input v-if="plan_actualizar!==x"  type="text" :value="inputValorPlan[index]" disabled> </input>
+                                                                                    <input v-if="select_anio_calendario>=2025" v-model="inputProyectosMes[index]"  type="text" @blur="darFormatoInputValorPlan(index)" disabled> </input><!--Apartir del 2025 presupuestado-->
                                                                             <?php } ?>
-                                                                            <?php if ($_SESSION['acceso']=="Admin" || $_SESSION['acceso']=="Financiero"){ ?>
-                                                                                <input v-if="plan_actualizar!==x"  type="text" :value="inputValorPlan[index]" disabled> </input>
+                                                                            <?php if ($_SESSION['acceso']=="Financiero"){ ?>
+                                                                                    <input v-if="plan_actualizar!==x"  type="text" :value="inputValorPlan[index]" disabled> </input>
+                                                                                    <input v-if="select_anio_calendario>=2025" v-model="inputProyectosMes[index]"  type="text" @blur="darFormatoInputValorPlan(index)" disabled> </input><!--Apartir del 2025 presupuestado-->
                                                                             <?php } ?>
+                                                                           
                                                                         </div>
                                                                         
                                                                         <div>
-                                                                        <?php if ($_SESSION['acceso']=="Admin"){ ?>
+                                                                            <?php if ($_SESSION['acceso']=="Admin"){ ?>
                                                                             <button v-if="plan_actualizar===x"  style="border-style: outset; border-width: 1.5px; height: 24px;" @click="guardarPlanMes(x)" ><i class="bi bi-floppy-fill"></i></button>
-                                                                            <button v-if="plan_actualizar!==x && select_anio_calendario<2025" style="border-style: outset; border-width: 1.5px; height: 24px;"  @click="editarPlanMes(x)"><i class="bi bi-pencil-fill"></i></button>
+                                                                            <button v-else style="border-style: outset; border-width: 1.5px; height: 24px;"  @click="editarPlanMes(x)"><i class="bi bi-pencil-fill"></i></button>
                                                                             <?php } ?>
                                                                         </div>
                                                                 </div> 

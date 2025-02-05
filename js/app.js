@@ -160,8 +160,10 @@ const AltaProyectos = {
       nombre_de_descarga:'',
       plan_actualizar:'',
       inputValorPlan:[],
+      inputProyectosMes:[],
       valoresPlan:[],
       sumaPlan:0,
+      sumaProyectos:0,
       sumaTotales:0,
       meta:0,
       selleva:0,
@@ -260,12 +262,13 @@ const AltaProyectos = {
           this.selleva = suma;
           //console.log("SE LLEVA",this.selleva)
           this.sumaTotales = "$"+suma.toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
-          if(this.select_anio_calendario>=2025){
-            this.consultarPlanNuevoModalidad()
-          }else{
-            this.consultarPlan();//Consutar la parte de plan
-          }
-         
+            
+            this.consultarPlan();//Se consultara siempre
+            if(this.select_anio_calendario>=2025){
+                this.consultarPlanNuevoModalidad()
+            }
+            
+          
          
           this.consultarValidacion();//Consutar la parte financiera
           this.cantidadDocumentos = []
@@ -3168,10 +3171,13 @@ const AltaProyectos = {
       this.inputImpactoAmbiental[posicion][index] = this.formatMonedaSinPesos(this.inputImpactoAmbiental[posicion][index]);
     },
     formatoSoloNumeros(value) {//formato de pesos limpiar a solo numeros
-      // Obtener el valor actual del campo y eliminar caracteres no deseados
-      var valorCampo = value.replace(/[^\d.]/g, '');
-      let numeroFormateado = parseFloat(valorCampo).toFixed(2);//agregamos los decimales .00
-      return numeroFormateado
+      if(value!=undefined){
+          // Obtener el valor actual del campo y eliminar caracteres no deseados
+          var valorCampo = value.replace(/[^\d.]/g, '');
+          let numeroFormateado = parseFloat(valorCampo).toFixed(2);//agregamos los decimales .00
+          return numeroFormateado
+      }
+     
     },
     formatoNumeroApesos(value) {
       const options2 = { style: 'currency', currency: 'USD', minimumFractionDigits: 2 };
@@ -3744,7 +3750,9 @@ const AltaProyectos = {
       this.inputTotalReal[mes_o_index-1]=this.formatMonedaPesos(this.inputTotalReal[mes_o_index-1])
     },
     consultarPlan(){
-      this.inputValorPlan=[]
+      if(this.select_anio_calendario<2025){// es para que no se me resitie la actualizar despues del 2025 en planeado
+        this.meta = 0;
+      }
       axios.get("planController.php",{
         params:{
           anio:this.select_anio_calendario
@@ -3755,18 +3763,25 @@ const AltaProyectos = {
           this.valoresPlan=response.data[0][0]//lo utilizo para extrar datos.
           var valores = []
           valores.push(response.data[0][0])
-            this.meta = 0;
+            
             if(valores.length>0){
               var suma =0;
                 for (let index = 1; index <= 12; index++) {
                   if(valores[0][index]){
                     suma += parseFloat(valores[0][index].plan.replace(/[$,]/g, ''));
                     this.inputValorPlan[index-1]=valores[0][index].plan
+                  }else{
+                    
+                    this.inputValorPlan[index - 1] = "$0.00"; 
                   }
                 }
-                this.meta = suma
+                console.log("Esto en el",this.inputValorPlan)
                 //console.log("META",this.meta)
-                this.sumaPlan = "$"+parseFloat(suma).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                if(this.select_anio_calendario<2025){
+                  this.meta = suma
+                  this.sumaPlan = "$"+parseFloat(suma).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                }
+                
             }
         }else{
           alert("Error en la consulta consultarPlan");
@@ -3776,6 +3791,7 @@ const AltaProyectos = {
       })
     },
     consultarPlanNuevoModalidad(){
+      this.inputProyectosMes=[]
       axios.get("planMensualController.php",{
         params:{
           accion: "consultar x Anio",
@@ -3787,7 +3803,7 @@ const AltaProyectos = {
           let nuevoArreglo = [];
 
           for (let i = 0; i < 12; i++) {//inicializando
-              this.inputValorPlan[i] ="$0.00";
+              this.inputProyectosMes[i] ="$0.00";
           }
 
           valores = response.data[0];
@@ -3808,11 +3824,14 @@ const AltaProyectos = {
               for (let f = 0; f < nuevoArreglo.length; f++) {
                 suma += parseFloat(nuevoArreglo[f])
                 console.log("Suma",suma)
-                this.inputValorPlan[f] = "$"+parseFloat(nuevoArreglo[f]).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                this.inputProyectosMes[f] = "$"+parseFloat(nuevoArreglo[f]).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
               }
               
-              this.meta = suma
-              this.sumaPlan = "$"+parseFloat(suma).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+             
+              if(this.select_anio_calendario>=2025){
+               this.meta = suma
+               this.sumaPlan = "$"+parseFloat(suma).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+              }
       }).catch(error=>{
           console.log("Error :-(",error);
       })
@@ -3856,8 +3875,14 @@ const AltaProyectos = {
   },
     calcularPorcentajeMensualTeorico(mes){
       if(this.calendarioSumaXMesAnio.sumas_ahorro_duro && this.calendarioSumaXMesAnio.sumas_ahorro_duro[mes.toString()] && this.inputValorPlan[mes-1] ){
-        var plan = this.formatoSoloNumeros(this.inputValorPlan[mes-1])
-          if(plan!=0)
+        if(this.select_anio_calendario>=2025){
+          var plan = this.formatoSoloNumeros(this.inputProyectosMes[mes-1])
+        }else{
+          var plan = this.formatoSoloNumeros(this.inputValorPlan[mes-1])
+        }
+        
+        
+        if(plan!=0)
           { 
             var ahorro_duro = this.formatoSoloNumeros(this.calendarioSumaXMesAnio.sumas_ahorro_duro[mes.toString()])
             return ((ahorro_duro/plan)*100).toFixed(2) 
