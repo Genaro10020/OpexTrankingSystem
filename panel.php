@@ -720,7 +720,7 @@ if (isset($_SESSION['nombre'])) {
                                 <th>Metodología</th>
                                 <th>Responsable</th>
                                 <th>Correo</th>
-                                <th>Teléfono</th>
+                                <!--<th>Teléfono</th>-->
                                 <th>Pilare(s) Estratégico(s)</th>
                                 <th style="min-width:230px;">Objetivo(s) Estratégico(s)</th>
                                 <th style="min-width:230px;">Impacto Ambiental</th>
@@ -737,7 +737,7 @@ if (isset($_SESSION['nombre'])) {
                             <tbody class=" border:1px solid black" style="text-align: center">
                                 <template v-for="(proyecto,index) in proyectos">
                                     <tr v-if="folioAnteriorSinNumeral(proyecto.folio, index)" :class="{ 'divisor-tr-creados': folioAnteriorSinNumeral(proyecto.folio, index)==true}"><!--ES DIFERENTE--->
-                                        <td colspan="22" v-if="index>0"></td>
+                                        <td colspan="21" v-if="index>0"></td>
                                     </tr>
                                     <tr class="cuerpo-tabla-creados border border-secondary" style="vertical-align: middle;" :class="{ 'fila-ultimo-proyecto': buscandoUltimoProyectoCreado(proyecto.nombre_proyecto) }">
                                         <td class="border border-secondary">{{proyecto.fecha}}</td>
@@ -750,7 +750,7 @@ if (isset($_SESSION['nombre'])) {
                                         <td class="border border-secondary">{{proyecto.metodologia}}</td>
                                         <td class="border border-secondary">{{proyecto.responsable}}</td>
                                         <td class="border border-secondary">{{proyecto.correo}}</td>
-                                        <td class="border border-secondary">{{proyecto.telefono}}</td>
+                                        <!--<td class="border border-secondary">{{proyecto.telefono}}</td>-->
                                         <td class="border border-secondary text-start">
                                             <ul v-if="proyecto.pilares">
                                                 <li v-for="pilar in JSON.parse(proyecto.pilares)">{{pilar}}</li>
