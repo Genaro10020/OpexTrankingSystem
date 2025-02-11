@@ -2107,7 +2107,7 @@ if (isset($_SESSION['nombre'])) {
                                         <!--ESTE DIV SE USA DEL 2025 EN ADELANTE 1904371-->
                                         <div v-if="select_anio_calendario >= 2025" class="col-4 my-auto text-center" style="font-size:10px;min-width:350px" >                                         
                                             <div class="row m-0 col-4 alert alert-primary p-0" style="font-size:10px;min-width:350px">
-                                            <label class="text-dark">Préstamo Acumulado Anual (Ahorro Duro / Plan)</label>    
+                                            <label class="text-dark">Pres. Acumulado Anual (Pres. / Totales)</label>    
                                                 <div class="col-4  text-start">
                                                     Suma Pres:<br>
                                                     Suma Totales:
