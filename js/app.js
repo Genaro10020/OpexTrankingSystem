@@ -166,6 +166,7 @@ const AltaProyectos = {
       sumaProyectos:0,
       sumaTotales:0,
       meta:0,
+      metaPres: 0, //es para sacar el porcentaje del prestamos acumulado anual
       selleva:0,
       sumaReales:"$0.00",
       SumNumReales:0,
@@ -200,7 +201,8 @@ const AltaProyectos = {
       checkValidar:[],
       cantidadDocumentos:[],
       id_proyecto_rechazo:'',
-      mes_rechazo:''
+      mes_rechazo:'',
+      sumaPres: '',
     }
   },
   mounted() {
@@ -230,7 +232,7 @@ const AltaProyectos = {
           alert("La consulta de proyectos no se realizo correctamente.")
         }
       }).catch(error => {
-        console.log('Erro :-(' + error)
+        console.log('Error :-(' + error)
       }).finally(() => {
 
       })
@@ -242,7 +244,7 @@ const AltaProyectos = {
       axios.get('proyectosController.php', {
         params: {
           accion: 'calendario',
-          anio:this.select_anio_calendario
+          anio:this.select_anio_calendario //añoooo
         }
       }).then(response => {
         console.log('ProyectosCalendario',response.data)
@@ -262,6 +264,10 @@ const AltaProyectos = {
           this.selleva = suma;
           //console.log("SE LLEVA",this.selleva)
           this.sumaTotales = "$"+suma.toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+         // this.sumaPres = "$"+parseFloat(suma).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+
+         // this.sumaPlan = "$"+parseFloat(suma).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+          //aquu
             
             this.consultarPlan();//Se consultara siempre
             if(this.select_anio_calendario>=2025){
@@ -3749,6 +3755,7 @@ const AltaProyectos = {
     darFormatoInputValorReal(mes_o_index){
       this.inputTotalReal[mes_o_index-1]=this.formatMonedaPesos(this.inputTotalReal[mes_o_index-1])
     },
+
     consultarPlan(){
       if(this.select_anio_calendario<2025){// es para que no se me resitie la actualizar despues del 2025 en planeado
         this.meta = 0;
@@ -3766,22 +3773,32 @@ const AltaProyectos = {
             
             if(valores.length>0){
               var suma =0;
+              var sumaP = 0;
                 for (let index = 1; index <= 12; index++) {
                   if(valores[0][index]){
                     suma += parseFloat(valores[0][index].plan.replace(/[$,]/g, ''));
+                    
                     this.inputValorPlan[index-1]=valores[0][index].plan
+                   
                   }else{
                     
                     this.inputValorPlan[index - 1] = "$0.00"; 
                   }
-                }
+                this.sumaPres = "$"+parseFloat(suma).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                
+              }
+                //console.log('el total de los valores es:',this.sumaPres);
                 console.log("Esto en el",this.inputValorPlan)
+
                 //console.log("META",this.meta)
                 if(this.select_anio_calendario<2025){
                   this.meta = suma
                   this.sumaPlan = "$"+parseFloat(suma).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                }else{
+                  this.metaPres = suma;
+               //   console.log('meta es:',this.metaPres)
                 }
-                
+          //1904371
             }
         }else{
           alert("Error en la consulta consultarPlan");
@@ -3790,6 +3807,7 @@ const AltaProyectos = {
         console.log("Fallo el metodo consultarValidacion"+error);
       })
     },
+
     consultarPlanNuevoModalidad(){
       this.inputProyectosMes=[]
       axios.get("planMensualController.php",{
@@ -3861,6 +3879,7 @@ const AltaProyectos = {
 
           })
     },
+
     editarPlanMes(mes){
       this.plan_actualizar = mes
     },
@@ -3868,8 +3887,16 @@ const AltaProyectos = {
       this.inputValorPlan[index]=this.formatMonedaPesos(this.inputValorPlan[index])
     },
     calcularPorcentaje(){
-        return this.meta === 0  || this.selleva === 0 ? 0 :parseFloat((this.selleva/this.meta)*100).toFixed(2)
+        if(this.select_anio_calendario >= 2025){
+        // console.log('meta:',this.metaPres,'se lleva:',this.selleva)
+        //  console.log('pres:',parseFloat((this.selleva/this.metaPres)*100).toFixed(2))
+          return this.metaPres === 0  || this.selleva === 0 ? 0 :parseFloat((this.selleva/this.metaPres)*100).toFixed(2)
+       
+        }else{
+          return this.meta === 0  || this.selleva === 0 ? 0 :parseFloat((this.selleva/this.meta)*100).toFixed(2)
+        }
     },
+
     calcularPorcentajeRealAnual(){
       return this.meta === 0  || this.SumNumReales === 0 ? 0 :parseFloat((this.SumNumReales/this.meta)*100).toFixed(2)
   },

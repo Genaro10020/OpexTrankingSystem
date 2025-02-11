@@ -2083,25 +2083,48 @@ if (isset($_SESSION['nombre'])) {
                                                         </select>
                                                     </div>
                                         </div>
-                                        <div class="col-4 my-auto text-center" style="font-size:10px;min-width:350px" >                                         
-                                                <div class="row m-0 col-4 alert alert-primary p-0" style="font-size:10px;min-width:350px">
-                                                <label class="text-dark">Teórico Acumulado Anual (Ahorro Duro / Plan)</label>    
-                                                    <div class="col-4  text-start">
-                                                            Suma Planeada:<br>
-                                                            Suma Totales:
-                                                    </div>
-                                                    <div class="col-4 text-start">
-                                                                {{sumaPlan}}<br>
-                                                                {{sumaTotales}}
-                                                    </div>
-                                                    <div class="col-4 text-center my-auto">
-                                                                <div class="progress" style="height: 20px;">
-                                                                    <div v-if="parseInt(calcularPorcentaje())>=100" class="progress-bar bg-success" role="progressbar" :style="'width:'+calcularPorcentaje()+'%!important;'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentaje()}} % </label></div>
-                                                                    <div v-else class="progress-bar bg-primary" role="progressbar" :style="'width:'+calcularPorcentaje()+'%!important;'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentaje()}} % </label></div>
-                                                                </div>
-                                                    </div>   
+                                        <!--ESTE DIV SE USA PARA AÑOS MENORES AL 2025 -->
+                                        <div v-if="select_anio_calendario < 2025" class="col-4 my-auto text-center" style="font-size:10px;min-width:350px" >                                         
+                                            <div class="row m-0 col-4 alert alert-primary p-0" style="font-size:10px;min-width:350px">
+                                            <label class="text-dark">Teórico Acumulado Anual (Ahorro Duro / Plan)</label>    
+                                                <div class="col-4  text-start">
+                                                        Suma Planeada:<br>
+                                                        Suma Totales:
                                                 </div>
+                                                <div class="col-4 text-start">
+                                                            {{sumaPlan}}<br>
+                                                            {{sumaTotales}}
+                                                </div>
+                                                <div class="col-4 text-center my-auto">
+                                                            <div class="progress" style="height: 20px;">
+                                                                <div v-if="parseInt(calcularPorcentaje())>=100" class="progress-bar bg-success" role="progressbar" :style="'width:'+calcularPorcentaje()+'%!important;'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentaje()}} % </label></div>
+                                                                <div v-else class="progress-bar bg-primary" role="progressbar" :style="'width:'+calcularPorcentaje()+'%!important;'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentaje()}} % </label></div>
+                                                            </div>
+                                                </div>   
+                                            </div>
                                         </div>
+
+                                        <!--ESTE DIV SE USA DEL 2025 EN ADELANTE 1904371-->
+                                        <div v-if="select_anio_calendario >= 2025" class="col-4 my-auto text-center" style="font-size:10px;min-width:350px" >                                         
+                                            <div class="row m-0 col-4 alert alert-primary p-0" style="font-size:10px;min-width:350px">
+                                            <label class="text-dark">Préstamo Acumulado Anual (Ahorro Duro / Plan)</label>    
+                                                <div class="col-4  text-start">
+                                                    Suma Pres:<br>
+                                                    Suma Totales:
+                                                </div>
+                                                <div class="col-4 text-start">
+                                                    {{sumaPres}}<br>
+                                                    {{sumaTotales}}
+                                                </div>
+                                                <div class="col-4 text-center my-auto">
+                                                    <div class="progress" style="height: 20px;">
+                                                        <div v-if="parseInt(calcularPorcentaje())>=100" class="progress-bar bg-success" role="progressbar" :style="'width:'+calcularPorcentaje()+'%!important;'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentaje()}} % </label></div>
+                                                        <div v-else class="progress-bar bg-primary" role="progressbar" :style="'width:'+calcularPorcentaje()+'%!important;'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentaje()}} % </label></div>
+                                                    </div>
+                                                </div>   
+                                            </div>
+                                        </div>
+
                                         <div class="col-4 my-auto text-center" style="font-size:10px;min-width:350px" > 
                                             <div class="row m-0 col-4 alert alert-primary p-0"style="font-size:10px;min-width:350px" >
                                                 <label class="text-dark">Real Acumulado Anual (Real / Plan)</label>    
@@ -2209,7 +2232,7 @@ if (isset($_SESSION['nombre'])) {
                                                 <td></td>
                                                 <td></td>
                                                 <td style="font-size:10px">
-                                                        <div class="p-2 pt-1">Pres:</div>
+                                                        <div v-if="select_anio_calendario >= 2025" class="p-2 pt-1">Pres:</div> <!--desaparecer si es menor a 2025 -->
                                                         <div class="p-2 pt-1">Plan:</div>
                                                         <div class="p-2 mt-1">Total:</div>
                                                 </td>
