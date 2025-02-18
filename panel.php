@@ -2235,6 +2235,7 @@ if (isset($_SESSION['nombre'])) {
                                                         <div v-if="select_anio_calendario >= 2025" class="p-2 pt-1">Pres:</div> <!--desaparecer si es menor a 2025 -->
                                                         <div class="p-2 pt-1">Plan:</div>
                                                         <div class="p-2 mt-1">Total:</div>
+                                                        <div v-if="select_anio_calendario >= 2025" class="p-2 mt-1">Cumplimiento Plan:</div>
                                                 </td>
                                                 <td class="align-middle"  v-for="(x,index) in 12" style="font-size:12px"><!--Columna de Sumas X Anio-->
 
@@ -2284,9 +2285,25 @@ if (isset($_SESSION['nombre'])) {
                                             <tr><!--Fila Total Real-->
                                                 <td></td>
                                                 <td><!--{{checkValidar}}--></td>
-                                                <td class="align-middle" style="font-size:10px">Total Real:  </td>
+                                                <td style="font-size:10px" v-if="select_anio_calendario >= 2025">
+                                                    <div class="p-2 mt-1"> Cumplimiento Presupuesto:</div>
+                                                    <div class="p-2 mt-1">Total Real:</div>  
+                                                </td>
+                                                <td v-else style="font-size:10px" class="align-middle"> Total Real </td>
                                                 <td v-for="(x,index) in 12" style="font-size:12px" class="text-start"><!--Columna de Sumas X Anio-->
                                                         <div class="text-center" v-show="calendarioSumaXMesAnio.sumas_ahorro_duro && calendarioSumaXMesAnio.sumas_ahorro_duro[x.toString()]">
+
+                                                            <div class="mb-2"><!--% Real Mensual-->
+                                                                <div class="text-start">
+                                                                    <label style="font-size:8px">Real Mensual (Real/Plan)<label>
+                                                                    <br>
+                                                                </div>
+                                                                <div class="progress" style="height: 13px;">
+                                                                    <div v-if="calcularPorcentajeMensualReal(x)>=100" class="progress-bar bg-success" role="progressbar" :style="'width:'+calcularPorcentajeMensualReal(x)+'%!important;'"  aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentajeMensualReal(x)}} % </label></div>
+                                                                    <div v-else class="progress-bar bg-primary" role="progressbar" :style="'width:'+calcularPorcentajeMensualReal(x)+'%!important;'"  aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentajeMensualReal(x)}} % </label></div>
+                                                                </div>
+                                                            </div>
+
                                                             <?php if ($_SESSION['acceso']=="Financiero"){ ?>
                                                                 <input class="text-primary" type="text" v-model="inputTotalReal[index]" @blur="darFormatoInputValorReal(x)" :disabled="checkValidar[index]"></input><br><!--Input activado solo para financieros-->
                                                                 <label>Validar</label>&nbsp;
@@ -2302,16 +2319,7 @@ if (isset($_SESSION['nombre'])) {
                                                                  </div>
                                                                 <div v-else class="text-primary"><span class="badge bg-secondary" style="font-size: 8px">Sin liberar</span></div>
                                                                 
-                                                                <div><!--% Real Mensual-->
-                                                                    <div class="text-start">
-                                                                        <label style="font-size:8px">Real Mensual (Real/Plan)<label>
-                                                                        <br>
-                                                                    </div>
-                                                                    <div class="progress" style="height: 13px;">
-                                                                        <div v-if="calcularPorcentajeMensualReal(x)>=100" class="progress-bar bg-success" role="progressbar" :style="'width:'+calcularPorcentajeMensualReal(x)+'%!important;'"  aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentajeMensualReal(x)}} % </label></div>
-                                                                        <div v-else class="progress-bar bg-primary" role="progressbar" :style="'width:'+calcularPorcentajeMensualReal(x)+'%!important;'"  aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentajeMensualReal(x)}} % </label></div>
-                                                                    </div>
-                                                                </div>
+
                                                         </div>
                                                 </td>
                                             </tr>
