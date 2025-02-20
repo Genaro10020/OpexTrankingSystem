@@ -16,8 +16,9 @@ if (isset($_SESSION['nombre'])) {
                 }
                 if($_GET['accion']=='calendario'){
                     $anio=$_GET['anio'];
+                    $planta=$_GET['planta'];
                     //$val[] = 'Hola'.$anio;
-                    $val[] = consultarCalendarioProyecto($anio);
+                    $val[] = consultarCalendarioProyecto($anio,$planta);
                 }
                 if($_GET['accion']=='sumar valores'){
                     $val[] = sumaValoresGonher();

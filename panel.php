@@ -37,7 +37,7 @@ if (isset($_SESSION['nombre'])) {
                     </button>
 
                     <?php if ($_SESSION['acceso'] == 'Admin' || $_SESSION['acceso'] == 'Financiero') { ?>
-                    <button class="btn-menu ms-sm-3 mb-sm-3" @click="ventana='Calendario',opcion=5,mostrarHeader=true, consultarCalendarioProyectos()"
+                    <button class="btn-menu ms-sm-3 mb-sm-3" @click="ventana='Calendario',opcion=5,mostrarHeader=true, consultarCalendarioProyectos(),consultarPlantas()"
                     :class="{'btn-menu-activo': opcion===5,'btn-menu': opcion !== 5}">
                         <i class="bi bi-plus-circle"></i> Estatus Captura
                     </button>
@@ -2075,11 +2075,18 @@ if (isset($_SESSION['nombre'])) {
             <div v-if="ventana == 'Calendario'">
                              <div class="col-12">   
                                     <div class="row">                                                
-                                        <div class="col-2" style="min-width:250px">                    
-                                                    <div class="input-group mt-3 mb-2 ">
-                                                        <span class="input-group-text">Seleccione año</span>
-                                                        <select v-model="select_anio_calendario" @change=consultarCalendarioProyectos()>
+                                        <div class="col-3" style="min-width:250px">                    
+                                                    <div class="input-group mt-3 mb-2">
+                                                        <span class="input-group-text" style="width: 150px;">Seleccione año</span>
+                                                        <select  style="width: 100px;" v-model="select_anio_calendario" @change=consultarCalendarioProyectos()>
                                                             <option v-for="(year,index) in years" :value="year">{{year}}</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="input-group mt-3 mb-2" >
+                                                        <span class="input-group-text" style="width: 150px; font-size:0.8em;">Seleccione Planta</span>
+                                                        <select style="width: 100px;" v-model="select_planta_calendario" @change=consultarCalendarioProyectos()>
+                                                            <option value="">Ver todos..</option>
+                                                            <option v-for="planta in plantas" :value="planta.nombre">{{planta.nombre}}</option>
                                                         </select>
                                                     </div>
                                         </div>
@@ -2291,11 +2298,12 @@ if (isset($_SESSION['nombre'])) {
                                                 </td>
                                                 <td v-else style="font-size:10px" class="align-middle"> Total Real </td>
                                                 <td v-for="(x,index) in 12" style="font-size:12px" class="text-start"><!--Columna de Sumas X Anio-->
-                                                        <div class="text-center" v-show="calendarioSumaXMesAnio.sumas_ahorro_duro && calendarioSumaXMesAnio.sumas_ahorro_duro[x.toString()]">
+                                                        <div class="text-center"><!--v-show="calendarioSumaXMesAnio.sumas_ahorro_duro && calendarioSumaXMesAnio.sumas_ahorro_duro[x.toString()]" Por el momento si presenta erro aqui colocarlo-->
 
                                                             <div class="mb-2"><!--% Real Mensual-->
                                                                 <div class="text-start">
-                                                                    <label style="font-size:8px">Real Mensual (Real/Plan)<label>
+                                                                    <label v-if="select_anio_calendario >= 2025" style="font-size:8px">Real Mensual (Real/Presupuesto)<label>
+                                                                    <label v-if="select_anio_calendario < 2025" style="font-size:8px">Real Mensual (Real/Plan)<label>
                                                                     <br>
                                                                 </div>
                                                                 <div class="progress" style="height: 13px;">

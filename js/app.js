@@ -192,6 +192,7 @@ const AltaProyectos = {
       //Calendario
       motivo_rechazo:'',
       select_anio_calendario:'',
+      select_planta_calendario:'',
       proyectosDatosCalendario:[],
       proyectosXanioCalendario:[],
       cantidadMesesRegistrados:[],
@@ -244,7 +245,8 @@ const AltaProyectos = {
       axios.get('proyectosController.php', {
         params: {
           accion: 'calendario',
-          anio:this.select_anio_calendario //añoooo
+          anio:this.select_anio_calendario, //añoooo
+          planta:this.select_planta_calendario
         }
       }).then(response => {
         console.log('ProyectosCalendario',response.data)
@@ -498,24 +500,6 @@ const AltaProyectos = {
       })
     },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PLANTAS*/
-    consultarPlantas() {
-      axios.get('plantasController.php', {
-      }).then(response => {
-        console.log(response.data[0])
-        if (!response.data[0][1] == false) {
-          if (response.data[0][0].length > 0) {
-            this.plantas = response.data[0][0]
-          }
-        } else {
-          alert("La consulta  plantas no se realizo correctamente.")
-        }
-
-      }).catch(error => {
-        console.log('Erro :-(' + error)
-      }).finally(() => {
-
-      })
-    },
     consultarPlantas() {
       axios.get('plantasController.php', {
       }).then(response => {
@@ -3762,7 +3746,8 @@ const AltaProyectos = {
       }
       axios.get("planController.php",{
         params:{
-          anio:this.select_anio_calendario
+          anio:this.select_anio_calendario,
+          planta:this.select_planta_calendario
         }
       }).then(response =>{
         console.log('Consulta Plan',response.data)
@@ -3813,7 +3798,8 @@ const AltaProyectos = {
       axios.get("planMensualController.php",{
         params:{
           accion: "consultar x Anio",
-          anio: this.select_anio_calendario
+          anio: this.select_anio_calendario,
+          planta: this.select_planta_calendario
         }
       }).then(response => {
           console.log("Mi resultado",response.data)

@@ -15,11 +15,12 @@ include("conexionGhoner.php");
             return array ($resultado,$estado);
     }
 
-    function consultarPlanMensualAnualXAnio($anio){
+    function consultarPlanMensualAnualXAnio($anio,$planta){
         global $conexion;
         $resultado = [];
         $estado = false;
-            $consulta = "SELECT * FROM plan_mensual_por_proyecto WHERE anio='$anio' ORDER BY anio ASC";
+            //$consulta = "SELECT * FROM plan_mensual_por_proyecto WHERE anio='$anio' ORDER BY anio ASC"; //consulta original sin planta
+            $consulta = "SELECT plan_mensual_por_proyecto.* FROM plan_mensual_por_proyecto INNER JOIN proyectos_creados ON plan_mensual_por_proyecto.id_proyecto = proyectos_creados.id WHERE plan_mensual_por_proyecto.anio='$anio' AND proyectos_creados.planta LIKE '%$planta%' ORDER BY anio ASC";
             $query = $conexion->query($consulta);
             if($query){
                 while ($datos=mysqli_fetch_array($query)){

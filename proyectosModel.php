@@ -140,7 +140,7 @@ function consultarSumaProyecto()
     return array($sumasXProyecto, $estado1, $estado2);
 }
 
-function consultarCalendarioProyecto($anio)
+function consultarCalendarioProyecto($anio,$planta)
 {
     global $conexion;
     $resultado1 = [];
@@ -150,7 +150,7 @@ function consultarCalendarioProyecto($anio)
     $suma = 0;
     $consulta = "SELECT DISTINCT proyectos_creados.id AS proyectoID, proyectos_creados.nombre_proyecto, registros_impacto_ambiental.mes, registros_impacto_ambiental.anio, registros_impacto_ambiental.ahorro_duro, registros_impacto_ambiental.ahorro_suave, registros_impacto_ambiental.status_rechazo, registros_impacto_ambiental.motivo_rechazo, registros_impacto_ambiental.validado, proyectos_creados.id /*Datos Proyecto */
     FROM impacto_ambiental_proyecto JOIN proyectos_creados ON impacto_ambiental_proyecto.id_proyecto = proyectos_creados.id 
-    JOIN registros_impacto_ambiental ON impacto_ambiental_proyecto.id = registros_impacto_ambiental.id_impacto_ambiental_proyecto WHERE registros_impacto_ambiental.anio ='$anio'";
+    JOIN registros_impacto_ambiental ON impacto_ambiental_proyecto.id = registros_impacto_ambiental.id_impacto_ambiental_proyecto WHERE registros_impacto_ambiental.anio ='$anio' AND  proyectos_creados.planta LIKE '%$planta%'";
     $query = $conexion->query($consulta);
     if ($query) {
         while ($datos = mysqli_fetch_array($query)) {
@@ -194,10 +194,14 @@ function consultarCalendarioProyecto($anio)
     ON proyectos_creados.id = impacto_ambiental_proyecto.id_proyecto 
     LEFT JOIN registros_impacto_ambiental 
     ON impacto_ambiental_proyecto.id = registros_impacto_ambiental.id_impacto_ambiental_proyecto 
-    WHERE registros_impacto_ambiental.anio = '$anio' 
-    OR (registros_impacto_ambiental.anio = '$anioAnterior' AND proyectos_creados.status_seguimiento!='Cerrado') 
-    OR (RIGHT(proyectos_creados.fecha, 4) = '$anio')
-     GROUP BY impacto_ambiental_proyecto.id_proyecto"; //le agrege el right para mostrar tambien aquellos que concidan con los ultimos 4 (anio) valores del string en campo fecha
+   WHERE (
+        registros_impacto_ambiental.anio = '$anio' AND proyectos_creados.planta LIKE '%$planta%'
+    ) OR (
+        registros_impacto_ambiental.anio = '$anioAnterior' AND proyectos_creados.status_seguimiento != 'Cerrado' AND proyectos_creados.planta LIKE '%$planta%'
+    ) OR (
+        RIGHT(proyectos_creados.fecha, 4) = '$anio' AND proyectos_creados.planta LIKE '%$planta%'
+    )
+    GROUP BY impacto_ambiental_proyecto.id_proyecto"; //le agrege el right para mostrar tambien aquellos que concidan con los ultimos 4 (anio) valores del string en campo fecha
     $query = $conexion->query($consulta);
     if($query){
         $estado2 = true;

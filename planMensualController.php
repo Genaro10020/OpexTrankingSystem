@@ -14,7 +14,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 $val = consultarPlanMensualAnual($id);
             }else if(isset($_GET['accion']) && isset($_GET['anio']) && $_GET['accion']=="consultar x Anio"){
                 $anio = $_GET['anio'];
-                $val = consultarPlanMensualAnualXAnio($anio);
+                $planta = $_GET['planta'];
+                $val = consultarPlanMensualAnualXAnio($anio,$planta);
             }
         break;
     case 'POST':
