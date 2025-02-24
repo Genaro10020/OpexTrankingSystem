@@ -1441,7 +1441,7 @@ if (isset($_SESSION['nombre'])) {
                                                     <span class="input-group-text w-5">Seleccione Proyecto</span>
                                                     <select class="w-50" @keydown.up="cancelarEvento" @keydown.down="cancelarEvento" @keydown.left="cancelarEvento" @keydown.right="cancelarEvento" @change="consultarImpactoAmbieltalXProyectoID()" v-model="id_proyecto">
                                                         <option value="" disabled>Seleccione...</option>
-                                                        <option v-for="proyecto in proyectos" :value="proyecto.id" style="font-size:15px;">{{proyecto.nombre_proyecto}}</option>
+                                                        <option v-for="proyecto in proyectos.sort((a, b) => a.nombre_proyecto.localeCompare(b.nombre_proyecto))" :value="proyecto.id" style="font-size:15px;">{{proyecto.nombre_proyecto}}</option>
                                                     </select>
                                                     <button v-show="id_proyecto!=''" v-if="documentos_seguimiento.length>0" type="button" class="btn btn-success" title="Visualizar/Subir Archivos"  @click="modal_seguimiento()" style="font-size:10px"><i class="bi bi-paperclip"></i>{{documentos_seguimiento.length}} Archivos Encontrados</button>
                                                     <button v-show="id_proyecto!=''" v-else type="button" class="btn btn-secondary" title="Visualizar/Subir Archivos"  @click="modal_seguimiento()" style="font-size:10px"><i class="bi bi-paperclip"></i>{{documentos_seguimiento.length}} Archivos Encontrados</button>
