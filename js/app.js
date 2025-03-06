@@ -7,7 +7,7 @@ const AltaProyectos = {
   data() {
     return {
       /*/////////////////////////////////////////////////////////////////////////////////VARIBLES USUARIOS Y DEPARTAMENTOS INICIO*/
-      opcion:2,
+      opcion: 2,
       ventana: 'Altas',
       myModal: '',
       myModalCRUD: '',
@@ -22,20 +22,20 @@ const AltaProyectos = {
       responsables: [],
       plantas: [],
       areas: [],
-      cual_documento:'',
+      cual_documento: '',
       proyectoSumas: [],
       documentos_co2: [],
       /*Alta Proyectos */
-      id_actualizar:'',
-      titulo_nombre_proyecto:'',
-      titulo_modal:'',
+      id_actualizar: '',
+      titulo_nombre_proyecto: '',
+      titulo_modal: '',
       fecha_alta: '',
       nombre_proyecto: '',
       nombre_fuente: '',
       fuentes: [],
       departamentos: [],
       metodologias: [],
-      checkObservadores:[],
+      checkObservadores: [],
       pilares: [],
       pilaresRelacion: [],
       allPilares: [],
@@ -46,8 +46,8 @@ const AltaProyectos = {
       checkObjetivos: [],
       checkImpactoAmbiental: [],
       impactoAmbiental: [],
-      valores:[],
-      valoresCheck:[],
+      valores: [],
+      valoresCheck: [],
       sumasImpactoAmbiental: [],
       selectImpactoAmbiental: '',
       misiones: [],
@@ -75,23 +75,23 @@ const AltaProyectos = {
       existeImagenSeleccionadaSeguimiento: false,
       existeImagenSeleccionadaCO2: false,
       actualizar_proyecto: false,
-      idsCheckImpacto:[],
-      selectEmisiones:[],
-      impactosConDatos:[],
-      new_proyect_anio:'',
-      mesDinamico:[1,2,3,4,5,6,7,8,9,10,11,12],
-      cantidadMeses:0,
-      idsPlanMesual:[],
-      AnioXMes:[],
-      MesXAnio:[],
-      select_anios_por_mes:'',
-      inputValorMensualCO:[],
-      inputValorMensualAD:[],
-      inputValorMensualAS:[],
-      flagEditCOMes:'',
-      flagEditAhorroDuroMes:'',
-      flagEditAhorroSuaveMes:'',
-      
+      idsCheckImpacto: [],
+      selectEmisiones: [],
+      impactosConDatos: [],
+      new_proyect_anio: '',
+      mesDinamico: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      cantidadMeses: 0,
+      idsPlanMesual: [],
+      AnioXMes: [],
+      MesXAnio: [],
+      select_anios_por_mes: '',
+      inputValorMensualCO: [],
+      inputValorMensualAD: [],
+      inputValorMensualAS: [],
+      flagEditCOMes: '',
+      flagEditAhorroDuroMes: '',
+      flagEditAhorroSuaveMes: '',
+
       /*Planta*/ /*Área*/ /*Departamento*/
       nueva: '',
       nuevoNombre: '',
@@ -103,7 +103,7 @@ const AltaProyectos = {
       numero_nomina: '',
       correo: '',
       telefono: '',
-      financiero:false,
+      financiero: false,
       responsableID: [],
       random: '',
       /*Impacto Ambiental */
@@ -157,53 +157,54 @@ const AltaProyectos = {
       myModalSeguimiento: '',
       myModalCO2: '',
       myModalStatus: '',
-      nombre_de_descarga:'',
-      plan_actualizar:'',
-      inputValorPlan:[],
-      inputProyectosMes:[],
-      valoresPlan:[],
-      sumaPlan:0,
-      sumaProyectos:0,
-      sumaTotales:0,
-      meta:0,
+      nombre_de_descarga: '',
+      plan_actualizar: '',
+      inputValorPlan: [],
+      inputProyectosMes: [],
+      valoresPlan: [],
+      sumaPlan: 0,
+      sumaProyectos: 0,
+      sumaTotales: 0,
+      meta: 0,
       metaPres: 0, //es para sacar el porcentaje del prestamos acumulado anual
-      selleva:0,
-      sumaReales:"$0.00",
-      SumNumReales:0,
-      nombre_del_proyecto:'',
-      correo_proyecto:'',
+      selleva: 0,
+      sumaReales: "$0.00",
+      SumNumReales: 0,
+      nombre_del_proyecto: '',
+      correo_proyecto: '',
       /*GENERANDO VALOR*/
-      select_anio_generando_valor:'',
-      sumaClienteValor:'',
-      sumaClienteSustentable:'',
+      select_anio_generando_valor: '',
+      sumaClienteValor: '',
+      sumaClienteSustentable: '',
 
-      sumaExcelenciaValor:'',
-      sumaExcelenciaSustentable:'',
+      sumaExcelenciaValor: '',
+      sumaExcelenciaSustentable: '',
 
-      sumaCapitalHumanoValor:'',
-      sumaCapitalHumanoSustentable:'',
+      sumaCapitalHumanoValor: '',
+      sumaCapitalHumanoSustentable: '',
 
-      sumaInvestigacionDesarrolloValor:'',
-      sumaInvestigacionDesarrolloSustentable:'',
+      sumaInvestigacionDesarrolloValor: '',
+      sumaInvestigacionDesarrolloSustentable: '',
 
-      sumaGeneralValor:'',
-      sumaGeneralSustentable:'',
-      sumaValoresGonher:'',
+      sumaGeneralValor: '',
+      sumaGeneralSustentable: '',
+      sumaValoresGonher: '',
       //Calendario
-      motivo_rechazo:'',
-      select_anio_calendario:'',
-      select_planta_calendario:'',
-      proyectosDatosCalendario:[],
-      proyectosXanioCalendario:[],
-      cantidadMesesRegistrados:[],
-      calendarioSumaXMesAnio:[],
-      datosFinancieros:[],
-      inputTotalReal:[],
-      checkValidar:[],
-      cantidadDocumentos:[],
-      id_proyecto_rechazo:'',
-      mes_rechazo:'',
+      motivo_rechazo: '',
+      select_anio_calendario: '',
+      select_planta_calendario: '',
+      proyectosDatosCalendario: [],
+      proyectosXanioCalendario: [],
+      cantidadMesesRegistrados: [],
+      calendarioSumaXMesAnio: [],
+      datosFinancieros: [],
+      inputTotalReal: [],
+      checkValidar: [],
+      cantidadDocumentos: [],
+      id_proyecto_rechazo: '',
+      mes_rechazo: '',
       sumaPres: '',
+      plan_mes_mes_por_proyecto: [],
     }
   },
   mounted() {
@@ -238,51 +239,51 @@ const AltaProyectos = {
 
       })
     },
-     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PROYECTOS*/
-     consultarCalendarioProyectos() {
-      this.plan_actualizar=''
+    /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PROYECTOS*/
+    consultarCalendarioProyectos() {
+      this.plan_actualizar = ''
       this.documentos_seguimiento_financiero = []
       axios.get('proyectosController.php', {
         params: {
           accion: 'calendario',
-          anio:this.select_anio_calendario, //añoooo
-          planta:this.select_planta_calendario
+          anio: this.select_anio_calendario, //añoooo
+          planta: this.select_planta_calendario
         }
       }).then(response => {
-        console.log('ProyectosCalendario',response.data)
+        console.log('ProyectosCalendario', response.data)
         if (response.data[0][1] == true && response.data[0][3]) {
           this.proyectosDatosCalendario = response.data[0][0]
           this.proyectosXanioCalendario = response.data[0][2]
           this.cantidadMesesRegistrados = response.data[0][4]
           this.calendarioSumaXMesAnio = response.data[0][6]
-          var suma =0
-          this.selleva =0
+          var suma = 0
+          this.selleva = 0
           for (let i = 1; i <= 12; i++) {
-            if(this.calendarioSumaXMesAnio.sumas_ahorro_duro[i]){
+            if (this.calendarioSumaXMesAnio.sumas_ahorro_duro[i]) {
               //console.log(this.calendarioSumaXMesAnio.sumas_ahorro_duro[i])
-               suma += parseFloat(this.calendarioSumaXMesAnio.sumas_ahorro_duro[i].replace(/[$,]/g,''))
+              suma += parseFloat(this.calendarioSumaXMesAnio.sumas_ahorro_duro[i].replace(/[$,]/g, ''))
             }
           }
           this.selleva = suma;
           //console.log("SE LLEVA",this.selleva)
-          this.sumaTotales = "$"+suma.toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
-         // this.sumaPres = "$"+parseFloat(suma).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+          this.sumaTotales = "$" + suma.toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+          // this.sumaPres = "$"+parseFloat(suma).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
 
-         // this.sumaPlan = "$"+parseFloat(suma).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+          // this.sumaPlan = "$"+parseFloat(suma).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
           //aquu
-            
-            this.consultarPlan();//Se consultara siempre
-            if(this.select_anio_calendario>=2025){
-                this.consultarPlanNuevoModalidad()
-            }
-            
-          
-         
+
+          this.consultarPlan();//Se consultara siempre
+          if (this.select_anio_calendario >= 2025) {
+            this.consultarPlanNuevoModalidad()
+          }
+
+
+
           this.consultarValidacion();//Consutar la parte financiera
           this.cantidadDocumentos = []
-            for (var i = 0; i < this.proyectosXanioCalendario.length; i++) {
-              this.buscarDocumentos('Estatus',this.proyectosXanioCalendario[i].id);
-            }    
+          for (var i = 0; i < this.proyectosXanioCalendario.length; i++) {
+            this.buscarDocumentos('Estatus', this.proyectosXanioCalendario[i].id);
+          }
         } else {
           alert("En la consulta calendario total por proyecto, no se logro")
         }
@@ -312,7 +313,7 @@ const AltaProyectos = {
       })
     },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PROYECTOS POR ID PARA QUE TRAEGA DATOS DE CADA PROYECTO*/
-    tomarAnioActual(){
+    tomarAnioActual() {
       var fechaActual = new Date();
       var dia = fechaActual.getDate().toString().padStart(2, '0');
       var mes = (fechaActual.getMonth() + 1).toString().padStart(2, '0'); // Se suma 1 porque los meses van de 0 a 11
@@ -592,7 +593,7 @@ const AltaProyectos = {
               this.numero_nomina = this.responsableID[0].numero_nomina
               this.correo = this.responsableID[0].correo
               this.telefono = this.responsableID[0].telefono
-              if(this.responsableID[0].tipo_usuario=="Financiero"){this.financiero = true;}else{this.financiero = false;}
+              if (this.responsableID[0].tipo_usuario == "Financiero") { this.financiero = true; } else { this.financiero = false; }
             }
           } else {
             alert("La consulta responsables no se realizo correctamente.")
@@ -798,27 +799,27 @@ const AltaProyectos = {
        this.selectObjetivo.push("")
      }*/
     },
-    checkeandoImpactoAmbiental(id_impacto){
-      console.log(this.idsCheckImpacto=this.checkImpactoAmbiental.map(elementos => elementos.split('<->')[0]))//tomando ids
-      
-      
-      if(this.idsCheckImpacto.length<=0){
+    checkeandoImpactoAmbiental(id_impacto) {
+      console.log(this.idsCheckImpacto = this.checkImpactoAmbiental.map(elementos => elementos.split('<->')[0]))//tomando ids
+
+
+      if (this.idsCheckImpacto.length <= 0) {
         this.selectEmisiones = this.selectEmisiones.map(() => '');// emiciones a vacio si no existe ningun impacto seleccionado
       }
 
       //Lo utilizo para limpiar
       const existe = this.idsCheckImpacto.includes(id_impacto)
-        if (existe == true) {
-          console.log('Existe el impacto '+existe);
-        } else {
-          //Si no existe en idsCheckImpacto pero si el selectEmision limpiala
-          const index = this.selectEmisiones.findIndex(elemento => elemento.startsWith(`${id_impacto}<->`));
-          console.log("index"+index);
-              if(index !== -1) {
-                console.log("Se vacio la poscion "+index+"Se encontraba el id_impacto: "+id_impacto);
-                this.selectEmisiones[index] = ""; 
-              }
+      if (existe == true) {
+        console.log('Existe el impacto ' + existe);
+      } else {
+        //Si no existe en idsCheckImpacto pero si el selectEmision limpiala
+        const index = this.selectEmisiones.findIndex(elemento => elemento.startsWith(`${id_impacto}<->`));
+        console.log("index" + index);
+        if (index !== -1) {
+          console.log("Se vacio la poscion " + index + "Se encontraba el id_impacto: " + id_impacto);
+          this.selectEmisiones[index] = "";
         }
+      }
     },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR OBJETIVOS*/
     consultarObjetivos() {
@@ -988,8 +989,8 @@ const AltaProyectos = {
         console.log(response.data[0])
         if (response.data[0][1] == true) {
           if (response.data[0][0].length > 0) {
-             this.impactoAmbiental = response.data[0][0]
-             this.impactoAmbiental.forEach((elemento,index)=>{this.selectEmisiones[index] = ''})
+            this.impactoAmbiental = response.data[0][0]
+            this.impactoAmbiental.forEach((elemento, index) => { this.selectEmisiones[index] = '' })
           } else {
             this.impactoAmbiental = []
           }
@@ -1003,8 +1004,8 @@ const AltaProyectos = {
 
       })
     },
-     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR VALORES*/
-     consultarValores() {
+    /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR VALORES*/
+    consultarValores() {
       axios.get('valoresController.php', {
       }).then(response => {
         console.log(response.data[0])
@@ -1025,23 +1026,23 @@ const AltaProyectos = {
       })
     },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL*/
-    descargarExcel(){
+    descargarExcel() {
       axios.post('descargar_excel.php', {
       }).then(response => {
         console.log(response.data)
-        if(response.data.success){
-           // Crear un enlace temporal para descargar el archivo
-        const link = document.createElement('a');
-        link.href = 'reportes/'+response.data.archivo;
-        link.download = response.data.archivo;
+        if (response.data.success) {
+          // Crear un enlace temporal para descargar el archivo
+          const link = document.createElement('a');
+          link.href = 'reportes/' + response.data.archivo;
+          link.download = response.data.archivo;
 
-        // Agregar el enlace al DOM y hacer clic en él
-        document.body.appendChild(link);
-        link.click();
+          // Agregar el enlace al DOM y hacer clic en él
+          document.body.appendChild(link);
+          link.click();
 
-        // Eliminar el enlace del DOM después de la descarga
-        document.body.removeChild(link);
-        }else{
+          // Eliminar el enlace del DOM después de la descarga
+          document.body.removeChild(link);
+        } else {
           alert("No se genero el archivo.")
         }
       }).catch(error => {
@@ -1049,17 +1050,17 @@ const AltaProyectos = {
       }).finally(() => {
 
       })
-    
+
     },
-     /*/////////////////////////////////////////////////////////////////////////////////SUMA IMPACTO AMBIENTAL*/
-     sumaImpactoAmbiental() {
+    /*/////////////////////////////////////////////////////////////////////////////////SUMA IMPACTO AMBIENTAL*/
+    sumaImpactoAmbiental() {
       axios.post('impactoAmbientalController.php', {
-       suma:'suma'
+        suma: 'suma'
       }).then(response => {
         console.log("SUMAS")
         console.log(response.data)
         if (response.data[0][1] == true) {
-            this.sumasImpactoAmbiental = response.data[0][0]
+          this.sumasImpactoAmbiental = response.data[0][0]
         } else {
           alert("La consulta sumaImpactoAmbiental, no se realizo correctamente.")
         }
@@ -2055,8 +2056,8 @@ const AltaProyectos = {
         })
       }
     },
-    eliminarProyecto(id,nombre_proyecto) {
-      if (confirm("¿Desea eliminar el Proyecto '"+nombre_proyecto+"'?")) {
+    eliminarProyecto(id, nombre_proyecto) {
+      if (confirm("¿Desea eliminar el Proyecto '" + nombre_proyecto + "'?")) {
         axios.delete('proyectosController.php', {
           data: {
             id: id
@@ -2066,9 +2067,9 @@ const AltaProyectos = {
           if (response.data[0] == true) {
             this.consultarProyectos();
             this.id = ''
-            alert("Se elimino Correctamente el proyecto '"+nombre_proyecto+"'.")
+            alert("Se elimino Correctamente el proyecto '" + nombre_proyecto + "'.")
           } else {
-            alert("No se elimino el proyecto '"+nombre_proyecto+"'.")
+            alert("No se elimino el proyecto '" + nombre_proyecto + "'.")
           }
         }).catch(error => {
           //console.log('Erro :-('+error)
@@ -2118,83 +2119,83 @@ const AltaProyectos = {
       this.correo = ''
       this.telefono = ''
     },
-    consultaImpactosAmbientalesConDatos(id){
-      axios.get("impactoAmbientalController.php",{
-        params:{
-          accion:'impactos con datos',
-          id_proyecto:id
+    consultaImpactosAmbientalesConDatos(id) {
+      axios.get("impactoAmbientalController.php", {
+        params: {
+          accion: 'impactos con datos',
+          id_proyecto: id
         }
-      }).then(response =>{
-        if(response.data[0]===true){
-             this.impactosConDatos = response.data[1].map(elementos=>elementos.id+'<->'+elementos.nombre)
-             //console.log(this.impactosConDatos)
-        }else{
-            console.log("No se realizo la consulta Impactos Ambientales con datos",response.data)
+      }).then(response => {
+        if (response.data[0] === true) {
+          this.impactosConDatos = response.data[1].map(elementos => elementos.id + '<->' + elementos.nombre)
+          //console.log(this.impactosConDatos)
+        } else {
+          console.log("No se realizo la consulta Impactos Ambientales con datos", response.data)
         }
-      }).catch(error=>{
-        console.log("Error en consultaImpactosAmbientalesConDatos: "+error)
+      }).catch(error => {
+        console.log("Error en consultaImpactosAmbientalesConDatos: " + error)
       })
     },
-    consultaProyectoIDActualizar(id){
-          axios.post('proyectosController.php', {
-          id_proyecto: id //ID PROYECTO
-        }).then(response => {
-          if (response.data[0][1] == true) {
-            this.idsCheckImpacto = []
-            this.checkImpactoAmbiental = []
-            let impactosAmbientaslesBD = this.impactoAmbiental
+    consultaProyectoIDActualizar(id) {
+      axios.post('proyectosController.php', {
+        id_proyecto: id //ID PROYECTO
+      }).then(response => {
+        if (response.data[0][1] == true) {
+          this.idsCheckImpacto = []
+          this.checkImpactoAmbiental = []
+          let impactosAmbientaslesBD = this.impactoAmbiental
 
-            let proyecto = response.data[0][0][0]
+          let proyecto = response.data[0][0][0]
 
-            let checkImpacto = this.checkImpactoAmbiental
-            let valores=JSON.parse(proyecto.valores)
-            this.valoresCheck = valores //asignando los valores checkeados
+          let checkImpacto = this.checkImpactoAmbiental
+          let valores = JSON.parse(proyecto.valores)
+          this.valoresCheck = valores //asignando los valores checkeados
 
-            impacto_ambientales=JSON.parse(proyecto.impacto_ambiental)//conviertiendo a arreglo impacto y alcance (si es que tiene)
-            impacto_ambiental=impacto_ambientales.map(impactos=>impactos.split('->')[0]) //si existe alcance solo tomar el impacto
+          impacto_ambientales = JSON.parse(proyecto.impacto_ambiental)//conviertiendo a arreglo impacto y alcance (si es que tiene)
+          impacto_ambiental = impacto_ambientales.map(impactos => impactos.split('->')[0]) //si existe alcance solo tomar el impacto
 
-            
-            if(!impacto_ambientales.some(sinImpacto=>sinImpacto == "Sin Impacto")){// Si no hay impacto no hacer nada
-              console.log("Ejecutando")
-                impactos_con_id = impacto_ambiental.flatMap(impactos=>{//busco los impactos para encontrar su id
-                  return impactosAmbientaslesBD.find(elementos => elementos.nombre == impactos);
-                })
 
-                checkImpacto = impactos_con_id.map(impacto => impacto.id+'<->'+impacto.nombre)//para que se checkend
-                this.idsCheckImpacto=checkImpacto.map(impactoids => impactoids.split('<->')[0])//asigno los ids
-                this.checkImpactoAmbiental = checkImpacto
-    
-                let resultado = []
-                impactosAmbientaslesBD.forEach((elementos,index)=>{
-                  resultado[index] = ""
-                  if (impacto_ambientales.some(impactoProyecto => impactoProyecto.split('->')[1]) && impacto_ambientales.some(impactoProyecto => impactoProyecto.split('->')[0] == elementos.nombre)) {
-                    resultado[index] = elementos.id + "<->" + elementos.nombre + "->" + impacto_ambientales.filter(impactoProyecto => impactoProyecto.split('->')[0] == elementos.nombre).map(imp=> imp.split('->')[1]);
-                  }
-                })
-                
-                if(impacto_ambientales.some(verificando => verificando.split('->')[1])){//solo verifico que exista minimo un impacto ambietal con "->"
-                  this.selectEmisiones = resultado;
-                }
+          if (!impacto_ambientales.some(sinImpacto => sinImpacto == "Sin Impacto")) {// Si no hay impacto no hacer nada
+            console.log("Ejecutando")
+            impactos_con_id = impacto_ambiental.flatMap(impactos => {//busco los impactos para encontrar su id
+              return impactosAmbientaslesBD.find(elementos => elementos.nombre == impactos);
+            })
+
+            checkImpacto = impactos_con_id.map(impacto => impacto.id + '<->' + impacto.nombre)//para que se checkend
+            this.idsCheckImpacto = checkImpacto.map(impactoids => impactoids.split('<->')[0])//asigno los ids
+            this.checkImpactoAmbiental = checkImpacto
+
+            let resultado = []
+            impactosAmbientaslesBD.forEach((elementos, index) => {
+              resultado[index] = ""
+              if (impacto_ambientales.some(impactoProyecto => impactoProyecto.split('->')[1]) && impacto_ambientales.some(impactoProyecto => impactoProyecto.split('->')[0] == elementos.nombre)) {
+                resultado[index] = elementos.id + "<->" + elementos.nombre + "->" + impacto_ambientales.filter(impactoProyecto => impactoProyecto.split('->')[0] == elementos.nombre).map(imp => imp.split('->')[1]);
+              }
+            })
+
+            if (impacto_ambientales.some(verificando => verificando.split('->')[1])) {//solo verifico que exista minimo un impacto ambietal con "->"
+              this.selectEmisiones = resultado;
             }
-
-
-          } else {
-            alert("La consulta de proyectos no se realizo correctamente.")
           }
-        }).catch(error => {
-          console.log('Error consultaProyectoIDActualizar :-(' + error)
-        });
+
+
+        } else {
+          alert("La consulta de proyectos no se realizo correctamente.")
+        }
+      }).catch(error => {
+        console.log('Error consultaProyectoIDActualizar :-(' + error)
+      });
     },
-    verificarImpacto(impacto){
-     let impactosConDatos = this.impactosConDatos;
+    verificarImpacto(impacto) {
+      let impactosConDatos = this.impactosConDatos;
       return impactosConDatos.includes(impacto)
     },
     //this.impactosConDatos
-    abrirModal(modal, tipo, accion,id,nombre_proyecto) {
+    abrirModal(modal, tipo, accion, id, nombre_proyecto) {
       //this.nombre_proyecto = ''
       this.tipo = tipo
       this.accion = accion
-      
+
       //resetando variables
       this.titulo_modal = ''
       this.nueva = ''
@@ -2216,9 +2217,9 @@ const AltaProyectos = {
         this.buscarDocumentos('Alta Proyecto')
         this.incrementarMeses();
         this.inicializarArreglosPlanMensual();
-        
 
-      }else if(modal=="Actualizar Proyecto"){
+
+      } else if (modal == "Actualizar Proyecto") {
         this.valoresCheck = [] //la limpio
         this.titulo_nombre_proyecto = nombre_proyecto
         this.id_actualizar = id
@@ -2226,25 +2227,25 @@ const AltaProyectos = {
         this.titulo_modal = "Actualizar Proyecto"
         this.myModal = new bootstrap.Modal(document.getElementById("modal-alta-proyecto"))
         this.myModal.show()
-        
-            //lo usos para verificar si el impacto ya contiene datos y evitar que puedan manipularlos al actualizar el proyecto
-            this.consultaImpactosAmbientalesConDatos(id)
-            this.consultarPlantas()
-            this.consultarAreas()
-            this.consultarDepartamentos()
-            this.consultarMetodologias()
-            this.consultarResponsables()
-            this.consultarImpactoAmbiental()
-            this.consultarMisiones()
-            this.consultarFuentes()
-            this.consultarValores()
-            this.consultarPlanMensualProyecto(id);
-            setTimeout(()=>{
-              this.consultaProyectoIDActualizar(id)
-            },200)
-            
- 
-      }else if (modal == "CRUD") {
+
+        //lo usos para verificar si el impacto ya contiene datos y evitar que puedan manipularlos al actualizar el proyecto
+        this.consultaImpactosAmbientalesConDatos(id)
+        this.consultarPlantas()
+        this.consultarAreas()
+        this.consultarDepartamentos()
+        this.consultarMetodologias()
+        this.consultarResponsables()
+        this.consultarImpactoAmbiental()
+        this.consultarMisiones()
+        this.consultarFuentes()
+        this.consultarValores()
+        this.consultarPlanMensualProyecto(id);
+        setTimeout(() => {
+          this.consultaProyectoIDActualizar(id)
+        }, 200)
+
+
+      } else if (modal == "CRUD") {
         this.myModalCRUD = new bootstrap.Modal(document.getElementById("modal-alta-crud"))
         if (accion == "Crear") {
           this.select_pilar = '';
@@ -2319,34 +2320,34 @@ const AltaProyectos = {
         alert("No encontramos esa modal")
       }
     },
-    consultarPlanMensualProyecto(id){
-      axios.get("planMensualController.php",{
-        params:{
+    consultarPlanMensualProyecto(id) {
+      axios.get("planMensualController.php", {
+        params: {
           id: id
         }
       }).then(response => {
-         if(response.data[1]===true){
-            if(response.data[0].length>0){
-                console.log("Response",response.data[0].length)
-                console.log("Response",response.data[0])
-                this.idsPlanMesual = response.data[0].map(items=> items.id)
-                this.AnioXMes = response.data[0].map(items=> items.anio)
-                this.MesXAnio = response.data[0].map(items=> items.mes)
-                this.inputValorMensualCO = response.data[0].map(items=> items.ahorro_co)
-                this.inputValorMensualAD = response.data[0].map(items=> items.ahorro_d)
-                this.inputValorMensualAS = response.data[0].map(items=> items.ahorro_s)
+        if (response.data[1] === true) {
+          if (response.data[0].length > 0) {
+            console.log("Response", response.data[0].length)
+            console.log("Response", response.data[0])
+            this.idsPlanMesual = response.data[0].map(items => items.id)
+            this.AnioXMes = response.data[0].map(items => items.anio)
+            this.MesXAnio = response.data[0].map(items => items.mes)
+            this.inputValorMensualCO = response.data[0].map(items => items.ahorro_co)
+            this.inputValorMensualAD = response.data[0].map(items => items.ahorro_d)
+            this.inputValorMensualAS = response.data[0].map(items => items.ahorro_s)
 
-            }else{
-              this.inicializarArreglosPlanMensual()//Si no existen datos inicializarlos
-            }
-         }else{
+          } else {
+            this.inicializarArreglosPlanMensual()//Si no existen datos inicializarlos
+          }
+        } else {
           alert("No se consulto lo proyectado mes con mes");
-         }
-      }).catch(error=>{
-          console.log("Error :-(",error);
+        }
+      }).catch(error => {
+        console.log("Error :-(", error);
       })
     },
-    cerrarModal(){
+    cerrarModal() {
       this.myModal.hide()
     },
     cancelar() {
@@ -2369,18 +2370,18 @@ const AltaProyectos = {
       var imagen_seleccion = document.getElementById('input_file_co2').value;
       if (imagen_seleccion != null) {
         this.existeImagenSeleccionadaCO2 = true;
-        
+
       }
     },
-    buscarDocumentos(cual_documento,ids) {
+    buscarDocumentos(cual_documento, ids) {
       this.imagenes = []
       axios.post("buscar_documentos.php", {
         documento: cual_documento,
         id: this.id_proyecto,
-        ids:ids
+        ids: ids
       })
         .then(response => {
-          if(cual_documento=="Alta Proyecto"){
+          if (cual_documento == "Alta Proyecto") {
             this.imagenes = response.data
             if (this.imagenes.length > 0) {
               console.log(this.imagenes + "Archivos encontrados.")
@@ -2389,7 +2390,7 @@ const AltaProyectos = {
               console.log(this.imagenes + "Sin imagen encontrada.")
             }
           }
-          if(cual_documento=="Seguimiento"){
+          if (cual_documento == "Seguimiento") {
             this.documentos_seguimiento = response.data
             if (this.documentos_seguimiento.length > 0) {
               console.log(this.documentos_seguimiento + "Archivos encontrados.")
@@ -2398,7 +2399,7 @@ const AltaProyectos = {
               console.log(this.documentos_seguimiento + "Sin imagen encontrada.")
             }
           }
-          if(cual_documento=="Documento CO2"){
+          if (cual_documento == "Documento CO2") {
             this.documentos_co2 = response.data
             if (this.documentos_co2.length > 0) {
               console.log(this.documentos_co2 + "Archivos encontrados.")
@@ -2407,8 +2408,8 @@ const AltaProyectos = {
               console.log(this.documentos_co2 + "Sin imagen encontrada.")
             }
           }
-          if(cual_documento=="Estatus"){
-            var objeto = {"id":ids,"cantidad":response.data.length}
+          if (cual_documento == "Estatus") {
+            var objeto = { "id": ids, "cantidad": response.data.length }
             this.cantidadDocumentos.push(objeto)
           }
         })
@@ -2416,14 +2417,14 @@ const AltaProyectos = {
           console.log(error);
         });
     },
-    buscarDocumentosEnFinancieros(cual_documento,id) {
+    buscarDocumentosEnFinancieros(cual_documento, id) {
       this.imagenes = []
       axios.post("buscar_documentos.php", {
         documento: cual_documento,
         id: id
       })
         .then(response => {
-          if(cual_documento=="Seguimiento"){
+          if (cual_documento == "Seguimiento") {
             this.documentos_seguimiento_financiero = response.data
             if (this.documentos_seguimiento_financiero.length > 0) {
               console.log(this.documentos_seguimiento_financiero + "Archivos encontrados.")
@@ -2440,21 +2441,21 @@ const AltaProyectos = {
     uploadFile(cual_documento) {
       this.login = true
       let formData = new FormData();
-      if(cual_documento=='Alta Proyecto'){
+      if (cual_documento == 'Alta Proyecto') {
         var files = this.$refs.ref_imagen.files;
         var totalfiles = this.$refs.ref_imagen.files.length;
       }
 
-      if(cual_documento=='Seguimiento'){
+      if (cual_documento == 'Seguimiento') {
         var files = this.$refs.ref_seguimiento.files;
         var totalfiles = this.$refs.ref_seguimiento.files.length;
       }
 
-      if(cual_documento=='Documento CO2'){
+      if (cual_documento == 'Documento CO2') {
         var files = this.$refs.ref_co2.files;
         var totalfiles = this.$refs.ref_co2.files.length;
       }
-     
+
       for (var index = 0; index < totalfiles; index++) {
         formData.append("files[]", files[index]);//arreglo de documentos_seguimiento
       }
@@ -2466,26 +2467,25 @@ const AltaProyectos = {
         })
         .then(response => {
           console.log(response.data);
-          if(response.data.length>0){
-            if(cual_documento == "Alta Proyecto")
-            {
-                this.imagenes = response.data;
-                  if (this.imagenes.length > 0) {
-                    document.getElementById("input_file_subir").value = ""
-                    this.existeImagenSeleccionada = false;
-                    this.random = Math.random()
-                  }
+          if (response.data.length > 0) {
+            if (cual_documento == "Alta Proyecto") {
+              this.imagenes = response.data;
+              if (this.imagenes.length > 0) {
+                document.getElementById("input_file_subir").value = ""
+                this.existeImagenSeleccionada = false;
+                this.random = Math.random()
+              }
             }
-            if(cual_documento == "Seguimiento"){
-                if (response.data.length > 0) {
-                  document.getElementById("input_file_seguimiento").value = ""
-                  this.existeImagenSeleccionadaSeguimiento = false;
-                  this.random = Math.random()
-                  alert("Se agregaron con Éxito")
-                  this.buscarDocumentos('Seguimiento')
-                }
+            if (cual_documento == "Seguimiento") {
+              if (response.data.length > 0) {
+                document.getElementById("input_file_seguimiento").value = ""
+                this.existeImagenSeleccionadaSeguimiento = false;
+                this.random = Math.random()
+                alert("Se agregaron con Éxito")
+                this.buscarDocumentos('Seguimiento')
+              }
             }
-            if(cual_documento == "Documento CO2"){
+            if (cual_documento == "Documento CO2") {
               if (response.data.length > 0) {
                 document.getElementById("input_file_co2").value = ""
                 this.existeImagenSeleccionadaCO2 = false;
@@ -2493,8 +2493,8 @@ const AltaProyectos = {
                 alert("Se agregaron con Éxito")
                 this.buscarDocumentos('Documento CO2')
               }
-          }
-          }else{
+            }
+          } else {
             this.login = false
             alert("Verifique la extension del archivo o Intente nuevamente.")
           }
@@ -2509,64 +2509,65 @@ const AltaProyectos = {
           }, 3000)*/
         });
     },
-    eliminarDocumento(ruta){
-        axios.post("eliminar_documento.php",{
-            ruta_eliminar: ruta
-        }).then( reponse=>{
-            console.log(reponse)
-            if(reponse.data=="Archivo Eliminado"){
+    eliminarDocumento(ruta) {
+      axios.post("eliminar_documento.php", {
+        ruta_eliminar: ruta
+      }).then(reponse => {
+        console.log(reponse)
+        if (reponse.data == "Archivo Eliminado") {
 
-              if(this.cual_documento=="Seguimiento"){
-                console.log("eline a seguimiento")
-                this.buscarDocumentos('Seguimiento')
-              }
-              if(this.cual_documento=="Documento CO2"){
-                console.log("se elimino DOCUMENTO CO2")
-                this.buscarDocumentos('Documento CO2')
-              }
-              alert("Archivo/Documento Eliminado con Éxito")
-                
-            }else if(reponse.data=="No Eliminado"){
-                alert("Algo no salio bien no se logro Eliminar.")
-            }else{
-                alert("Error al eliminar el Documento.")
-            }
-        }).catch(error =>{
-            console.log("Error :-("+error)
-        })
-       }, 
-    modal_seguimiento(){
+          if (this.cual_documento == "Seguimiento") {
+            console.log("eline a seguimiento")
+            this.buscarDocumentos('Seguimiento')
+          }
+          if (this.cual_documento == "Documento CO2") {
+            console.log("se elimino DOCUMENTO CO2")
+            this.buscarDocumentos('Documento CO2')
+          }
+          alert("Archivo/Documento Eliminado con Éxito")
+
+        } else if (reponse.data == "No Eliminado") {
+          alert("Algo no salio bien no se logro Eliminar.")
+        } else {
+          alert("Error al eliminar el Documento.")
+        }
+      }).catch(error => {
+        console.log("Error :-(" + error)
+      })
+    },
+    modal_seguimiento() {
       this.myModalSeguimiento = new bootstrap.Modal(document.getElementById('modal'))
       this.myModalSeguimiento.show()
       this.cual_documento = "Seguimiento"
       //this.buscarDocumentos('Seguimiento')
-      
+
     },
-    modal_co2(){
+    modal_co2() {
       this.myModalCO2 = new bootstrap.Modal(document.getElementById('modal'))
       this.myModalCO2.show()
       this.cual_documento = "Documento CO2"
       //this.buscarDocumentos('Documento CO2')
-      
+
     },
-    modal_estatus(id){
+    modal_estatus(id) {
       this.documentos_seguimiento_financiero = []
       this.cual_documento = "Seguimiento"
       this.myModalEstatus = new bootstrap.Modal(document.getElementById('modal'))
       this.myModalEstatus.show()
-      this.buscarDocumentosEnFinancieros('Seguimiento',id)//Financieros
+      this.buscarDocumentosEnFinancieros('Seguimiento', id)//Financieros
     },
-    incrementarMeses(){
-      this.cantidadMeses+=1
+    incrementarMeses() {
+      this.cantidadMeses += 1
     },
-    quitarMeses(){
-      this.cantidadMeses-=1
+    quitarMeses() {
+      this.cantidadMeses -= 1
     },
     verificarAltaProyecto() {
-      
+
 
       //Comprobando fecha
-      if (this.fecha_alta == '') { this.respondio = false; 
+      if (this.fecha_alta == '') {
+        this.respondio = false;
         //alert("Coloque una fecha");
         Swal.fire({
           title: "Seleccione Fecha",
@@ -2575,101 +2576,127 @@ const AltaProyectos = {
         });
       }
       //nombre del proyecto
-      else if (this.nombre_proyecto == '') { this.respondio = false; 
+      else if (this.nombre_proyecto == '') {
+        this.respondio = false;
         Swal.fire({
           title: "Nombre del proyecto",
           text: "Agregue un nombre al proyecto",
           icon: "warning"
-        });}
+        });
+      }
       //Planta
-      else if (this.selectFuente == '') { this.respondio = false;
+      else if (this.selectFuente == '') {
+        this.respondio = false;
         Swal.fire({
           title: "Seleccione Fuente",
           text: "Favor de seleccionar una Fuente",
           icon: "warning"
-        });}
+        });
+      }
       //Planta
-      else if (this.selectPlanta == '') { this.respondio = false; 
+      else if (this.selectPlanta == '') {
+        this.respondio = false;
         Swal.fire({
           title: "Seleccione Planta",
           text: "Favor de seleccionar una Planta",
           icon: "warning"
-        }); }
+        });
+      }
       //Area
-      else if (this.selectArea == '') { this.respondio = false; 
+      else if (this.selectArea == '') {
+        this.respondio = false;
         Swal.fire({
           title: "Seleccione Área",
           text: "Favor de seleccionar una Área",
           icon: "warning"
-          }); }
+        });
+      }
       //Departamento
-      else if (this.selectDepartamento == '') { this.respondio = false; 
+      else if (this.selectDepartamento == '') {
+        this.respondio = false;
         Swal.fire({
           title: "Seleccione Departamento",
           text: "Seleccione el Departamento",
           icon: "warning"
-          }); }
+        });
+      }
       //Metodologia
-      else if (this.selectMetodologia == '') { this.respondio = false; 
+      else if (this.selectMetodologia == '') {
+        this.respondio = false;
         Swal.fire({
           title: "Seleccione la Metodología",
           text: "Seleccione la Metodología para continuar",
           icon: "warning"
-          });}
+        });
+      }
       //Responsable
-      else if (this.selectResponsable == '') { this.respondio = false;
+      else if (this.selectResponsable == '') {
+        this.respondio = false;
         Swal.fire({
           title: "Seleccione un Responsable",
           text: "Seleccione un Responsable para continuar",
           icon: "warning"
-        });}
+        });
+      }
       //Misiones
-      else if (this.checkMisiones.length <= 0) { this.respondio = false;  
+      else if (this.checkMisiones.length <= 0) {
+        this.respondio = false;
         Swal.fire({
-        title: "Seleccione una misión",
-        text: "Seleccione minimo una misión",
-        icon: "warning"
-        });}
+          title: "Seleccione una misión",
+          text: "Seleccione minimo una misión",
+          icon: "warning"
+        });
+      }
       //Pilares
-      else if (this.checkPilares.length <= 0) { this.respondio = false; 
+      else if (this.checkPilares.length <= 0) {
+        this.respondio = false;
         Swal.fire({
           title: "Seleccione un Pilar",
           text: "para visualizarlos los pilares seleccione una Misión",
           icon: "warning"
-          });}
+        });
+      }
       //verificar si existe minimo un directo en Pilar
       /*else if (!this.selectPilar.includes("directo")) { this.respondio = false; alert("Minimo un Pilar tiene que ser 'Directo'") }*/
       //Objetivos
-      else if (this.checkObjetivos.length <= 0) { this.respondio = false; 
+      else if (this.checkObjetivos.length <= 0) {
+        this.respondio = false;
         Swal.fire({
           title: "Seleccione un Objetivo",
           text: "Seleccione Objetivo, para visualizarlos, seleccione Misión y Objetivo",
           icon: "warning"
-        });}
+        });
+      }
       //verificar si existe minimo un directo en Pilar
-      else if (!this.selectObjetivo.includes("directo")) { this.respondio = false; 
+      else if (!this.selectObjetivo.includes("directo")) {
+        this.respondio = false;
         Swal.fire({
           title: "Objetivo Directo",
           text: "Minimo un Objetivo tiene que ser 'Directo'",
           icon: "warning"
-        });}
+        });
+      }
       //Impacto Ambiental
       /*else if (this.checkImpactoAmbiental.length <= 0) { this.respondio = false; alert("Seleccione minimo una Impacto Ambiental") }*/
-       //Impacto Ambiental Comprobando tamanio de Impacto seleccionados y tamanio de emisiones seleccionadas
-      else if(this.selectEmisiones.length>0 && this.checkImpactoAmbiental.length>0 && this.checkImpactoAmbiental.filter(elemento => elemento !='').length != this.selectEmisiones.filter(elemento => elemento !='').length){ this.respondio = false; 
+      //Impacto Ambiental Comprobando tamanio de Impacto seleccionados y tamanio de emisiones seleccionadas
+      else if (this.selectEmisiones.length > 0 && this.checkImpactoAmbiental.length > 0 && this.checkImpactoAmbiental.filter(elemento => elemento != '').length != this.selectEmisiones.filter(elemento => elemento != '').length) {
+        this.respondio = false;
         Swal.fire({
           title: "Seleccione un Enlace (Emisión)",
           text: "Seleccione Enlace (Emisión) del Impacto Ambiental selecionado",
           icon: "warning"
-        });}
-      else if (this.valoresCheck.length <= 0) { this.respondio = false; 
+        });
+      }
+      else if (this.valoresCheck.length <= 0) {
+        this.respondio = false;
         Swal.fire({
           title: "Seleccione un Valor Gonher",
           text: "Seleccione minimo un Valor Gonher",
           icon: "warning"
-        });}else{
-          this.respondio = true
-        }
+        });
+      } else {
+        this.respondio = true
+      }
       //Ahorros
       /*else if ((this.tons_co2 == "0" || this.tons_co2 == "" || this.tons_co2 == "0.00") && this.ahorro_duro == "$.00" && this.ahorro_suave == "$.00" && (this.objetivo_estrategico == false || this.objetivo_estrategico == true)) { this.respondio = false; 
         Swal.fire({
@@ -2692,16 +2719,16 @@ const AltaProyectos = {
       var fuente = ''
       var siglasFuente = ''
       var fuenteConSiglas = ''
-      if(this.selectFuente.length>=3){
+      if (this.selectFuente.length >= 3) {
         const separandoFuente = this.selectFuente.split('<->');//separando
         fuente = separandoFuente[1];
         siglasFuente = separandoFuente[2];
         fuenteConSiglas = fuente + siglasFuente;
       }
-      
+
       var planta = ''
       var siglasPlanta = ''
-      if(this.selectPlanta.length>=3){
+      if (this.selectPlanta.length >= 3) {
         const separandoPlanta = this.selectPlanta.split('<->');//separando
         planta = separandoPlanta[1];
         siglasPlanta = separandoPlanta[2];
@@ -2709,41 +2736,41 @@ const AltaProyectos = {
 
       var area = '';
       var siglasArea = '';
-      if(this.selectArea.length>=3){
+      if (this.selectArea.length >= 3) {
         const separandoArea = this.selectArea.split('<->');//separando const */
         area = separandoArea[1];
         siglasArea = separandoArea[2];
       }
-      
+
       var metodologia = '';
-      if(this.selectMetodologia.length>=2){
+      if (this.selectMetodologia.length >= 2) {
         const separandoMetodologia = this.selectMetodologia.split('<->');//separando */
         metodologia = separandoMetodologia[1];
       }
 
       var departamento = '';
-      var siglasDepartamento= '';
-      if(this.selectDepartamento.length>=3){
+      var siglasDepartamento = '';
+      if (this.selectDepartamento.length >= 3) {
         const separandoDepartamento = this.selectDepartamento.split('<->');//separando*/;
         departamento = separandoDepartamento[1];
         siglasDepartamento = separandoDepartamento[2];
       }
-      
+
       var responsable_id = '';
-      if(this.selectResponsable.length>=1){
+      if (this.selectResponsable.length >= 1) {
         const separandoResponsable = this.selectResponsable.split('<->');
         var responsable_id = separandoResponsable[0];
       }
-     
+
 
       //Observador 
       var arreglo_observador = [];
-      for (let i = 0; i < this.checkObservadores.length; i++){
+      for (let i = 0; i < this.checkObservadores.length; i++) {
         var observador = this.checkObservadores[i].split('<->')[1];
         arreglo_observador.push(observador);
       }
 
-      if(arreglo_observador.length<=0){
+      if (arreglo_observador.length <= 0) {
         arreglo_observador.push('');
       }
 
@@ -2770,7 +2797,7 @@ const AltaProyectos = {
         pilarOrden += orden
         siglasPilaresConcatenado += '-' + siglas
       }
-     // console.log(pilares_nombres);
+      // console.log(pilares_nombres);
       //console.log(pilarOrden);
 
       //Utilizo para tomar todos los nombres.
@@ -2824,15 +2851,15 @@ const AltaProyectos = {
       }
       //console.log("impacto ambienta nombres", impacto_ambiental_nombres)
 
-      let idsImpacto = this.checkImpactoAmbiental.map(element =>element.split('<->')[0]);
-      console.log("Ids",idsImpacto)
+      let idsImpacto = this.checkImpactoAmbiental.map(element => element.split('<->')[0]);
+      console.log("Ids", idsImpacto)
 
       var impacto_ambiental_emisiones = this.selectEmisiones
       //ordeno las emisiones como el arreglo de impacto ambieltal
-      let emisiones_ordenadas = idsImpacto.flatMap(element => 
+      let emisiones_ordenadas = idsImpacto.flatMap(element =>
         impacto_ambiental_emisiones.filter(ids => element == ids.split('<->')[0]).map(elementos => elementos.split('<->')[1])//primero reviso que sea igual al id y des tomo el restp
       )
-      
+
       if (emisiones_ordenadas.length <= 0) {//Si no hay impactos tambien colocarlo sin impacto
         emisiones_ordenadas.push('Sin Impacto')
       }
@@ -2841,7 +2868,7 @@ const AltaProyectos = {
 
       var valores = [];
       for (let index = 0; index < this.valoresCheck.length; index++) {
-        if(this.valoresCheck[index]!=""){
+        if (this.valoresCheck[index] != "") {
           var valor = this.valoresCheck[index]
           valores.push(valor)
         }
@@ -2849,11 +2876,11 @@ const AltaProyectos = {
       //Folio proyecto
       var folio = siglasPlanta + "-" + siglasArea + '-' + siglasDepartamento + '-P' + siglasPilaresConcatenado + '-O' + siglasObjetivosConcatenado;
 
-    
+
 
       axios.post("proyectosController.php", {
-        id_actualizar:this.id_actualizar,
-        accion:insertar_o_actualizar,
+        id_actualizar: this.id_actualizar,
+        accion: insertar_o_actualizar,
         folio: folio,
         fecha_alta: this.fecha_alta,
         nombre_proyecto: this.nombre_proyecto,
@@ -2863,25 +2890,25 @@ const AltaProyectos = {
         select_departamento: departamento,
         select_metodologia: metodologia,
         responsable_id: responsable_id,
-        observador:arreglo_observador,
+        observador: arreglo_observador,
         misiones: misiones_nombres,
         pilares: pilares_nombres,
         objetivos: combinadoObjetivo,
         impacto_ambiental: impacto_ambiental_nombres, // utilizada para insertar en tabla impactos ambientales
-        impacto_ambiental_emisiones:emisiones_ordenadas, // utilizada para insertar en tabla proyectos creados
-        valores:valores,
+        impacto_ambiental_emisiones: emisiones_ordenadas, // utilizada para insertar en tabla proyectos creados
+        valores: valores,
         tons_co2: this.tons_co2,
         ahorro_duro: this.ahorro_duro,
         ahorro_suave: this.ahorro_suave,
-        anioXmes:this.AnioXMes,
-        mesXAnio:this.MesXAnio,
+        anioXmes: this.AnioXMes,
+        mesXAnio: this.MesXAnio,
         valoresMensualCO: this.inputValorMensualCO,
         valoresMensualAD: this.inputValorMensualAD,
         valoresMensualAS: this.inputValorMensualAS,
-        idsPlanMesual:this.idsPlanMesual
+        idsPlanMesual: this.idsPlanMesual
       }).then(response => {
-        console.log("Alta resultado",response.data)
-        if(insertar_o_actualizar == "Alta Proyecto"){
+        console.log("Alta resultado", response.data)
+        if (insertar_o_actualizar == "Alta Proyecto") {
           if (response.data[0][0] == true) {
             if (response.data[0][1] == true) {
               this.myModal.hide()
@@ -2894,7 +2921,7 @@ const AltaProyectos = {
               this.selectDepartamento = ''
               this.selectMetodologia = ''
               this.selectResponsable = ''
-              this.checkObservadores =[]
+              this.checkObservadores = []
               this.checkMisiones = []
               this.checkPilares = []
               this.selectPilar = []
@@ -2909,81 +2936,81 @@ const AltaProyectos = {
               this.ahorro_duro = "$.00"
               this.ahorro_suave = "$.00"
               this.objetivo_estrategico = false
-              setTimeout(()=>{
+              setTimeout(() => {
                 this.nombre_proyecto = ''
-              },4000)
+              }, 4000)
             }
           } else {
             alert("No se dio de alta el proyecto.")
           }
-        }else if(insertar_o_actualizar == "Actualizar Proyecto"){
+        } else if (insertar_o_actualizar == "Actualizar Proyecto") {
           if (response.data[0] == true) {
             this.reiniciarVariables()
             this.consultarProyectos()
             this.myModal.hide()
             alert("Actualizado con éxito.")
           }
-        }else{
+        } else {
           console.log("No es ni insertar ni actualizar")
         }
       }).catch(error => {
         console.log("Error :-( ", error)
       })
     },
-    editarCOMes(numero){
+    editarCOMes(numero) {
       this.flagEditCOMes = numero
-      this.flagEditAhorroDuroMes =''
+      this.flagEditAhorroDuroMes = ''
       this.flagEditAhorroSuaveMes = ''
     },
-    editarADMes(numero){
+    editarADMes(numero) {
       this.flagEditCOMes = ''
       this.flagEditAhorroDuroMes = numero
       this.flagEditAhorroSuaveMes = ''
     },
-    editarASMes(numero){
+    editarASMes(numero) {
       this.flagEditCOMes = ''
-      this.flagEditAhorroDuroMes =''
+      this.flagEditAhorroDuroMes = ''
       this.flagEditAhorroSuaveMes = numero
     },
-    inicializarArreglosPlanMensual(){
-      for (let i = 0; i <12; i++){
+    inicializarArreglosPlanMensual() {
+      for (let i = 0; i < 12; i++) {
         this.inputValorMensualCO[i] = "";
         this.inputValorMensualAD[i] = "";
         this.inputValorMensualAS[i] = "";
         this.AnioXMes[i] = this.select_anios_por_mes
-        this.MesXAnio[i] = (i+1) //Asigno del 1 al 12 para los meses
+        this.MesXAnio[i] = (i + 1) //Asigno del 1 al 12 para los meses
       }
     },
-    darFormatoInputValorMensual(index,WhoIsIt){
-      if(WhoIsIt==='CO'){
-         /*if(this.inputValorMensualCO[index]!==undefined){
-            this.inputValorMensualCO[index]=this.formatMonedaPesos(this.inputValorMensualCO[index])
-          }*/
-        }else if(WhoIsIt==='AD'){
-          if(this.inputValorMensualAD[index]!==''){
-            this.inputValorMensualAD[index]=this.formatMonedaPesos(this.inputValorMensualAD[index])
-          }
-        }else if(WhoIsIt==='AS'){
-          if(this.inputValorMensualAS[index]!==''){
-            this.inputValorMensualAS[index]=this.formatMonedaPesos(this.inputValorMensualAS[index])
+    darFormatoInputValorMensual(index, WhoIsIt) {
+      if (WhoIsIt === 'CO') {
+        /*if(this.inputValorMensualCO[index]!==undefined){
+           this.inputValorMensualCO[index]=this.formatMonedaPesos(this.inputValorMensualCO[index])
+         }*/
+      } else if (WhoIsIt === 'AD') {
+        if (this.inputValorMensualAD[index] !== '') {
+          this.inputValorMensualAD[index] = this.formatMonedaPesos(this.inputValorMensualAD[index])
         }
-      }else{
+      } else if (WhoIsIt === 'AS') {
+        if (this.inputValorMensualAS[index] !== '') {
+          this.inputValorMensualAS[index] = this.formatMonedaPesos(this.inputValorMensualAS[index])
+        }
+      } else {
         console.log("No se encontro QUIEN")
       }
-        this.flagEditCOMes = ''
-        this.flagEditAhorroDuroMes =''
-        this.flagEditAhorroSuaveMes = ''
+      this.flagEditCOMes = ''
+      this.flagEditAhorroDuroMes = ''
+      this.flagEditAhorroSuaveMes = ''
     },
-    reiniciarVariables(){
+    reiniciarVariables() {
       this.idsCheckImpacto = []
       this.checkImpactoAmbiental = []
       this.impactoAmbiental = []
       this.selectEmisiones = []
       this.valoresCheck = []
     },
-    verificarSiEsActualizar(){
-      if(this.actualizar_proyecto==true){
-          this.reiniciarVariables()
+    verificarSiEsActualizar() {
+      if (this.actualizar_proyecto == true) {
+        this.reiniciarVariables()
       }
     },
     buscandoUltimoProyectoCreado(nombres) {
@@ -2992,14 +3019,14 @@ const AltaProyectos = {
         return true
       }
     },
-    actualizarProyecto(id){
+    actualizarProyecto(id) {
       axios.post('proyectosController.php', {
-        accion:'Actualizar Proyecto',
+        accion: 'Actualizar Proyecto',
         id: id,
       }).then(response => {
         console.log(response.data)
         if (response.data[0] == true) {
-             this.consultarProyectos()
+          this.consultarProyectos()
         } else {
           alert("La actualización, no se realizo correctamente.")
         }
@@ -3139,7 +3166,7 @@ const AltaProyectos = {
       this[varvue] = this.formatMonedaSinPesos(this[varvue]);
     },
     formatInputSinPesosCO(index) {
-      if(this.inputValorMensualCO[index]!==''){
+      if (this.inputValorMensualCO[index] !== '') {
         let valor = this.inputValorMensualCO[index];
         this.inputValorMensualCO[index] = this.formatMonedaSinPesos(valor);
       }
@@ -3161,13 +3188,13 @@ const AltaProyectos = {
       this.inputImpactoAmbiental[posicion][index] = this.formatMonedaSinPesos(this.inputImpactoAmbiental[posicion][index]);
     },
     formatoSoloNumeros(value) {//formato de pesos limpiar a solo numeros
-      if(value!=undefined){
-          // Obtener el valor actual del campo y eliminar caracteres no deseados
-          var valorCampo = value.replace(/[^\d.]/g, '');
-          let numeroFormateado = parseFloat(valorCampo).toFixed(2);//agregamos los decimales .00
-          return numeroFormateado
+      if (value != undefined) {
+        // Obtener el valor actual del campo y eliminar caracteres no deseados
+        var valorCampo = value.replace(/[^\d.]/g, '');
+        let numeroFormateado = parseFloat(valorCampo).toFixed(2);//agregamos los decimales .00
+        return numeroFormateado
       }
-     
+
     },
     formatoNumeroApesos(value) {
       const options2 = { style: 'currency', currency: 'USD', minimumFractionDigits: 2 };
@@ -3234,70 +3261,70 @@ const AltaProyectos = {
       console.log(this.inputImpactoAmbientalInicial)
       console.log(this.input_ahorro_suave)
       console.log(this.input_ahorro_duro)
-      if(this.input_tons_co2!==''){
-          let sumaVacias = 0;
-            for (let i = 0; i < this.inputImpactoAmbientalInicial.length; i++) {
-              if (!this.inputImpactoAmbientalInicial[i]) {
-                  sumaVacias++;
-              }
-            }
-            console.log("posiciones vacias",sumaVacias)
-            if(sumaVacias>0){
-                alert("Ningún impacto ambiental tiene que estar vacio, minimo 0")
-            }else{
-              if(this.input_ahorro_suave!==''){
-                  if(this.input_ahorro_duro!==''){
+      if (this.input_tons_co2 !== '') {
+        let sumaVacias = 0;
+        for (let i = 0; i < this.inputImpactoAmbientalInicial.length; i++) {
+          if (!this.inputImpactoAmbientalInicial[i]) {
+            sumaVacias++;
+          }
+        }
+        console.log("posiciones vacias", sumaVacias)
+        if (sumaVacias > 0) {
+          alert("Ningún impacto ambiental tiene que estar vacio, minimo 0")
+        } else {
+          if (this.input_ahorro_suave !== '') {
+            if (this.input_ahorro_duro !== '') {
 
-                        axios.post('seguimientoAmbientalProyectoController.php', {
-                        id_proyecto: this.id_proyecto,
-                        mes: this.mes_select,
-                        anio: this.anio_select,
-                        input_tons_co2: this.input_tons_co2,
-                        inputImpactoAmbiental: this.inputImpactoAmbientalInicial,
-                        input_ahorro_suave: this.input_ahorro_suave,
-                        input_ahorro_duro: this.input_ahorro_duro,
-                      }).then(response => {
-                        console.log(response.data)
-                        if (response.data[0][3] == true) {
-                          alert("Ya existe esa fecha, favor de cambiarla")
-                        } else {
-                          if (response.data[0][0] == true) {
-                            if (response.data[0][1] == true) {
-                              if (response.data[0][2] == true) {
-                                this.actualizar = 0
-                                this.actualizatabla = false
-                                this.consultarImpactoAmbieltalXProyectoID()
-                                this.consultarSumaProyectos()
-                                this.alertaSweet()
-                              } else {
-                                alert("Verifique que los campos no esten vacios, valor minimo 0 ")
-                              }
-                            } else {
-                              alert("No se realizo correctamente la consulta Relacionada")
-                            }
-                          } else {
-                            alert("No se econtro el ID del Proyecto")
-                          }
-                        }
-                      }).catch(error => {
-                        console.log('Erro :-(' + error)
-                      }).finally(() => {
-
-                      })
-
-                  }else{
-                    alert("Ahorro duro minimo 0, no debe estar vacio.")
+              axios.post('seguimientoAmbientalProyectoController.php', {
+                id_proyecto: this.id_proyecto,
+                mes: this.mes_select,
+                anio: this.anio_select,
+                input_tons_co2: this.input_tons_co2,
+                inputImpactoAmbiental: this.inputImpactoAmbientalInicial,
+                input_ahorro_suave: this.input_ahorro_suave,
+                input_ahorro_duro: this.input_ahorro_duro,
+              }).then(response => {
+                console.log(response.data)
+                if (response.data[0][3] == true) {
+                  alert("Ya existe esa fecha, favor de cambiarla")
+                } else {
+                  if (response.data[0][0] == true) {
+                    if (response.data[0][1] == true) {
+                      if (response.data[0][2] == true) {
+                        this.actualizar = 0
+                        this.actualizatabla = false
+                        this.consultarImpactoAmbieltalXProyectoID()
+                        this.consultarSumaProyectos()
+                        this.alertaSweet()
+                      } else {
+                        alert("Verifique que los campos no esten vacios, valor minimo 0 ")
+                      }
+                    } else {
+                      alert("No se realizo correctamente la consulta Relacionada")
+                    }
+                  } else {
+                    alert("No se econtro el ID del Proyecto")
                   }
-              }else{
-                alert("Ahorro suave minimo 0, no debe estar vacio.")
-              }
+                }
+              }).catch(error => {
+                console.log('Erro :-(' + error)
+              }).finally(() => {
+
+              })
+
+            } else {
+              alert("Ahorro duro minimo 0, no debe estar vacio.")
             }
-      }else{
+          } else {
+            alert("Ahorro suave minimo 0, no debe estar vacio.")
+          }
+        }
+      } else {
         alert('Debes ingresar el impacto ambiental, minimo 0')
       }
-     
 
-  
+
+
 
     },
     actualizarSeguimiento(posicion) {
@@ -3335,7 +3362,7 @@ const AltaProyectos = {
 
       })
     },
-    alertaSweet(){
+    alertaSweet() {
       Swal.fire({
         icon: "success",
         title: "Se guardo con éxito",
@@ -3366,7 +3393,7 @@ const AltaProyectos = {
       }
 
       axios.put('proyectosController.php', {
-        accion:'Guardar Estatus',
+        accion: 'Guardar Estatus',
         id_proyecto: this.id_proyecto,
         status: status,
       }).then(response => {
@@ -3410,7 +3437,7 @@ const AltaProyectos = {
       this.input_ahorro_suave = this.arregloID[posicion].ahorro_suave
     },
     /*/////////////////////////////////////////////////////////////////////////////////CALENDARIO*/
-    modalMotivoRechazo(id_proyecto,mes,nombre_proyecto,correo_proyecto){
+    modalMotivoRechazo(id_proyecto, mes, nombre_proyecto, correo_proyecto) {
       this.myModal = new bootstrap.Modal(document.getElementById("modal-motivo-rechazo"))
       this.myModal.show()
       this.motivo_rechazo = ""
@@ -3419,98 +3446,98 @@ const AltaProyectos = {
       this.nombre_del_proyecto = nombre_proyecto
       this.correo_proyecto = correo_proyecto
     },
-    guardarRechazo(status_rechazo,mes,id_proyecto,anio_rechazo,motivo_rechazo,nombre,correo){
+    guardarRechazo(status_rechazo, mes, id_proyecto, anio_rechazo, motivo_rechazo, nombre, correo) {
       var enviar_a = correo;
       var anio;
       var nombre_proyecto;
-      
-      if(status_rechazo=='Rechazada'){
+
+      if (status_rechazo == 'Rechazada') {
         enviar_a = this.correo_proyecto //desde la modal
         this.motivo_rechazo = document.getElementById("motivo_rechazo").value;
         var texto = this.motivo_rechazo
         this.motivo_rechazo = texto.trim();// Si existen unicamente espacio en blanco los elinará y la cadena será vacia, me ayuda a verificar
-        if(this.motivo_rechazo==""){return alert("Digite un texto")}
+        if (this.motivo_rechazo == "") { return alert("Digite un texto") }
         this.motivo_rechazo = texto.replace(/\s+/g, ' ').trim();// Eliminar espacios en blanco en exceso y despues vuelvo a eliminar los expacio de alado y reacciono
         anio = this.select_anio_calendario
 
-      }else if(status_rechazo=='Aceptada'){
-        if(!confirm("Esta seguro que desea aceptar la evidencia del proyecto: "+nombre)){return}
+      } else if (status_rechazo == 'Aceptada') {
+        if (!confirm("Esta seguro que desea aceptar la evidencia del proyecto: " + nombre)) { return }
         this.nombre_del_proyecto = nombre
         this.motivo_rechazo = ''
-        this.mes_rechazo =  mes
+        this.mes_rechazo = mes
         this.id_proyecto_rechazo = id_proyecto
         anio = this.select_anio_calendario
-      }else if(status_rechazo=='Corregida'){
+      } else if (status_rechazo == 'Corregida') {
 
-        if(!confirm("¿Ya corrigió su evidencia del mes ("+mes+") y año ("+anio_rechazo+")?")){return}
+        if (!confirm("¿Ya corrigió su evidencia del mes (" + mes + ") y año (" + anio_rechazo + ")?")) { return }
         this.motivo_rechazo = ''
-        this.mes_rechazo =  mes
+        this.mes_rechazo = mes
         this.id_proyecto_rechazo = this.id_proyecto
         var id_proyecto_seleccionado = this.id_proyecto
-        var proyectoEncontrado = this.proyectos.find(function(proyecto) {
+        var proyectoEncontrado = this.proyectos.find(function (proyecto) {
           return proyecto.id === id_proyecto_seleccionado;
         });
         this.nombre_del_proyecto = proyectoEncontrado.nombre_proyecto
         anio = anio_rechazo
         this.motivo_rechazo = motivo_rechazo
       }
-      
-        console.log("id_proyecto: "+this.id_proyecto_rechazo+"mes: "+this.mes_rechazo+"status_rechazo: "+status_rechazo+"Año calendario: "+anio)
-        axios.put('proyectosController.php', {
-        accion:'Guardar Rechazo',
+
+      console.log("id_proyecto: " + this.id_proyecto_rechazo + "mes: " + this.mes_rechazo + "status_rechazo: " + status_rechazo + "Año calendario: " + anio)
+      axios.put('proyectosController.php', {
+        accion: 'Guardar Rechazo',
         id_proyecto: this.id_proyecto_rechazo,
         status_rechazo: status_rechazo,
-        motivo:this.motivo_rechazo,
-        mes:this.mes_rechazo,
-        anio:anio
+        motivo: this.motivo_rechazo,
+        mes: this.mes_rechazo,
+        anio: anio
       }).then(response => {
         console.log(response.data)
         if (response.data[0] == true) {
-          if(this.myModal){this.myModal.hide()}
-          
+          if (this.myModal) { this.myModal.hide() }
+
           alert("Respuesta guardada con éxito")
-                if(status_rechazo=='Corregida'){
-                  this.consultarImpactoAmbieltalXProyectoID();
-                }else{
-                  this.consultarCalendarioProyectos();
-                  this.consultarImpactoAmbieltalXProyectoID();
-                }
-                this.enviarCorreoRechazo(anio,status_rechazo,enviar_a)
+          if (status_rechazo == 'Corregida') {
+            this.consultarImpactoAmbieltalXProyectoID();
+          } else {
+            this.consultarCalendarioProyectos();
+            this.consultarImpactoAmbieltalXProyectoID();
+          }
+          this.enviarCorreoRechazo(anio, status_rechazo, enviar_a)
         } else {
           alert("La inserción de Rechazo, no se realizó correctamente.")
         }
       }).catch(error => {
-          console.log('Erro :-('+error)
+        console.log('Erro :-(' + error)
       }).finally(() => {
 
       })
     },
-    enviarCorreoRechazo(anio,status_rechazo,enviar_a){
-          axios.post('enviarCorreoRechazo.php',{
-            correo:enviar_a,
-            nombre_proyecto: this.nombre_del_proyecto,
-            status:status_rechazo,
-            motivo:this.motivo_rechazo,
-            mes:this.mes_rechazo,
-            anio:anio
-          }).then(response =>{
-            console.log(response.data)
-              if(response.data==true){
-                console.log("SI, envió el correo")
-              }else{
-                console.log("NO, se envió el corre.")
-              }
-          }).catch(error =>{  
-            console.log("Error en axios"+error)
-          }).finally(()=>{
+    enviarCorreoRechazo(anio, status_rechazo, enviar_a) {
+      axios.post('enviarCorreoRechazo.php', {
+        correo: enviar_a,
+        nombre_proyecto: this.nombre_del_proyecto,
+        status: status_rechazo,
+        motivo: this.motivo_rechazo,
+        mes: this.mes_rechazo,
+        anio: anio
+      }).then(response => {
+        console.log(response.data)
+        if (response.data == true) {
+          console.log("SI, envió el correo")
+        } else {
+          console.log("NO, se envió el corre.")
+        }
+      }).catch(error => {
+        console.log("Error en axios" + error)
+      }).finally(() => {
 
-          })
+      })
     },
     consultarSeguimientos() {
       this.sumarSoloUnaVez = 0
       axios.get('seguimientoAmbientalProyectoController.php', {
-        params:{
-          anio:this.select_anio_generando_valor
+        params: {
+          anio: this.select_anio_generando_valor
         }
       }).then(response => {
         console.log(response.data)
@@ -3522,79 +3549,79 @@ const AltaProyectos = {
               console.log(this.todosSeguimientos)
               this.sumasGenerandoValor = response.data[0][4];
 
-                //******************************** */
-                if (this.sumasGenerandoValor) {
-                  var sumaValorExcelecia =0
-                  var sumaSustentableExcelecia =0
+              //******************************** */
+              if (this.sumasGenerandoValor) {
+                var sumaValorExcelecia = 0
+                var sumaSustentableExcelecia = 0
 
-                  var sumaValorCliente =0
-                  var sumaSustentableCliente =0
+                var sumaValorCliente = 0
+                var sumaSustentableCliente = 0
 
-                  var sumaValorCapitalHumano =0
-                  var sumaSustentableCapitalHumano =0
+                var sumaValorCapitalHumano = 0
+                var sumaSustentableCapitalHumano = 0
 
-                  var sumaValorInvestigacionDesarrollo =0
-                  var sumaSustentableInvestigacionDesarrollo =0
+                var sumaValorInvestigacionDesarrollo = 0
+                var sumaSustentableInvestigacionDesarrollo = 0
 
-                  var sumaGeneralV =0
-                  var sumaGeneralS =0
-                  // Recorro cada propiedad en this.sumasGenerandoValor
-                  for (const key in this.sumasGenerandoValor) {
-                    if (this.sumasGenerandoValor.hasOwnProperty(key)) {//verifico que exista
-                      const elemento = this.sumasGenerandoValor[key];
-                      /* // Imprimo las propiedades del objeto
-                       console.log("Nombre:", key);
-                      console.log("Valor:", elemento.valor);
-                      console.log("Sustentable:", elemento.sustentable);
-                      console.log("Pilar:", elemento.pilar);
-                      console.log("-------------------------");*/
+                var sumaGeneralV = 0
+                var sumaGeneralS = 0
+                // Recorro cada propiedad en this.sumasGenerandoValor
+                for (const key in this.sumasGenerandoValor) {
+                  if (this.sumasGenerandoValor.hasOwnProperty(key)) {//verifico que exista
+                    const elemento = this.sumasGenerandoValor[key];
+                    /* // Imprimo las propiedades del objeto
+                     console.log("Nombre:", key);
+                    console.log("Valor:", elemento.valor);
+                    console.log("Sustentable:", elemento.sustentable);
+                    console.log("Pilar:", elemento.pilar);
+                    console.log("-------------------------");*/
 
-                      if(elemento.pilar.includes("Cliente")){
-                         sumaValorCliente += parseFloat(elemento.valor.replace(/[^\d.-]/g, ''));
-                         sumaSustentableCliente += parseFloat(elemento.sustentable.replace(/[^\d.-]/g, ''));
-                      }
-                      if(elemento.pilar.includes("Capital Humano")){
-                        sumaValorCapitalHumano += parseFloat(elemento.valor.replace(/[^\d.-]/g, ''));
-                        sumaSustentableCapitalHumano += parseFloat(elemento.sustentable.replace(/[^\d.-]/g, ''));
-
-                      }
-                      if(elemento.pilar.includes("Excelencia Operativa")){
-                            sumaValorExcelecia += parseFloat(elemento.valor.replace(/[^\d.-]/g, ''));
-                            sumaSustentableExcelecia += parseFloat(elemento.sustentable.replace(/[^\d.-]/g, ''));
-                       }
-                      if(elemento.pilar.includes("Investigación y Desarrollo")){
-                        sumaValorInvestigacionDesarrollo += parseFloat(elemento.valor.replace(/[^\d.-]/g, ''));
-                        sumaSustentableInvestigacionDesarrollo += parseFloat(elemento.sustentable.replace(/[^\d.-]/g, ''));
-                      }
-                      
+                    if (elemento.pilar.includes("Cliente")) {
+                      sumaValorCliente += parseFloat(elemento.valor.replace(/[^\d.-]/g, ''));
+                      sumaSustentableCliente += parseFloat(elemento.sustentable.replace(/[^\d.-]/g, ''));
+                    }
+                    if (elemento.pilar.includes("Capital Humano")) {
+                      sumaValorCapitalHumano += parseFloat(elemento.valor.replace(/[^\d.-]/g, ''));
+                      sumaSustentableCapitalHumano += parseFloat(elemento.sustentable.replace(/[^\d.-]/g, ''));
 
                     }
-                  }
+                    if (elemento.pilar.includes("Excelencia Operativa")) {
+                      sumaValorExcelecia += parseFloat(elemento.valor.replace(/[^\d.-]/g, ''));
+                      sumaSustentableExcelecia += parseFloat(elemento.sustentable.replace(/[^\d.-]/g, ''));
+                    }
+                    if (elemento.pilar.includes("Investigación y Desarrollo")) {
+                      sumaValorInvestigacionDesarrollo += parseFloat(elemento.valor.replace(/[^\d.-]/g, ''));
+                      sumaSustentableInvestigacionDesarrollo += parseFloat(elemento.sustentable.replace(/[^\d.-]/g, ''));
+                    }
 
-                this.sumaClienteValor = "$"+parseFloat(sumaValorCliente).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+
+                  }
+                }
+
+                this.sumaClienteValor = "$" + parseFloat(sumaValorCliente).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
                 this.sumaClienteSustentable = parseFloat(sumaSustentableCliente).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
 
-                this.sumaCapitalHumanoValor = "$"+parseFloat(sumaValorCapitalHumano).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                this.sumaCapitalHumanoValor = "$" + parseFloat(sumaValorCapitalHumano).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
                 this.sumaCapitalHumanoSustentable = parseFloat(sumaSustentableCapitalHumano).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
 
-                this.sumaExcelenciaValor = "$"+parseFloat(sumaValorExcelecia).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                this.sumaExcelenciaValor = "$" + parseFloat(sumaValorExcelecia).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
                 this.sumaExcelenciaSustentable = parseFloat(sumaSustentableExcelecia).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
 
-                this.sumaInvestigacionDesarrolloValor = "$"+parseFloat(sumaValorInvestigacionDesarrollo).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                this.sumaInvestigacionDesarrolloValor = "$" + parseFloat(sumaValorInvestigacionDesarrollo).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
                 this.sumaInvestigacionDesarrolloSustentable = parseFloat(sumaSustentableInvestigacionDesarrollo).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
 
-                sumaGeneralV = sumaValorCliente + sumaValorCapitalHumano +sumaValorExcelecia + sumaValorInvestigacionDesarrollo;
+                sumaGeneralV = sumaValorCliente + sumaValorCapitalHumano + sumaValorExcelecia + sumaValorInvestigacionDesarrollo;
                 sumaGeneralS = sumaSustentableCliente + sumaSustentableCapitalHumano + sumaSustentableExcelecia + sumaSustentableInvestigacionDesarrollo;
 
-                this.sumaGeneralValor = "$"+parseFloat(sumaGeneralV).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+                this.sumaGeneralValor = "$" + parseFloat(sumaGeneralV).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
                 this.sumaGeneralSustentable = parseFloat(sumaGeneralS).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
 
 
-                } else {
-                  console.log("this.sumasGenerandoValor no está definido o es nulo.");
-                }
-               
-/****************************/
+              } else {
+                console.log("this.sumasGenerandoValor no está definido o es nulo.");
+              }
+
+              /****************************/
 
 
             } else {
@@ -3607,7 +3634,7 @@ const AltaProyectos = {
       }).finally(() => {
 
       })
-    }, 
+    },
     buscarCoincidencias(objetivo_con_siglas) {
       //console.log("El resultado que llego"+valor1)
       for (let key in this.sumasGenerandoValor) {
@@ -3617,63 +3644,63 @@ const AltaProyectos = {
       }
       return false
     },
-    valoresProyectos(grafica){
-      axios.get("proyectosController.php",{
-        params:{
-          accion:'sumar valores'
+    valoresProyectos(grafica) {
+      axios.get("proyectosController.php", {
+        params: {
+          accion: 'sumar valores'
         }
-      }).then(response =>{
-        console.log("Suma de Valores Gonher",response.data)
-       if(response.data[0][1]){
+      }).then(response => {
+        console.log("Suma de Valores Gonher", response.data)
+        if (response.data[0][1]) {
           this.sumaValoresGonher = response.data[0][0]
-            if(grafica=='grafica'){
-                this.tablaGraficas() //llamo la grafica solo si es la ventana Valores Gonher, esto para llenar primero sumaValoresGonher y despues crear la tabla.
-            }
-       }else{
+          if (grafica == 'grafica') {
+            this.tablaGraficas() //llamo la grafica solo si es la ventana Valores Gonher, esto para llenar primero sumaValoresGonher y despues crear la tabla.
+          }
+        } else {
           alert("Existe un problema con la consulta sumaValoresGonher")
-       }
-       
-      }).catch(error =>{
-        console.log("Error en valoresProyectos "+error)
+        }
+
+      }).catch(error => {
+        console.log("Error en valoresProyectos " + error)
       })
     },
-    validarProyecto(id_proyecto,mes,validacion,ahorro_duro_validado){
+    validarProyecto(id_proyecto, mes, validacion, ahorro_duro_validado) {
       var dato;
-      if(validacion === "Validado"){
+      if (validacion === "Validado") {
         dato = "";
-      }else{
+      } else {
         dato = "Validado"
       }
-      axios.put("validacionFinancieraController.php",{
-        id:id_proyecto,
-        anio:this.select_anio_calendario,
-        mes:mes,
-        validacion:dato,
-        ahorro_duro:ahorro_duro_validado
-      }).then(response =>{
-          console.log(response.data);
-          this.consultarCalendarioProyectos();
-      }).catch(error =>{
-          console.log('Error en axios.')
-      }).finally(()=>{
+      axios.put("validacionFinancieraController.php", {
+        id: id_proyecto,
+        anio: this.select_anio_calendario,
+        mes: mes,
+        validacion: dato,
+        ahorro_duro: ahorro_duro_validado
+      }).then(response => {
+        console.log(response.data);
+        this.consultarCalendarioProyectos();
+      }).catch(error => {
+        console.log('Error en axios.')
+      }).finally(() => {
 
       })
-      console.log("ID:"+id_proyecto+"Anio:"+this.select_anio_calendario+"Mes:"+mes);
+      console.log("ID:" + id_proyecto + "Anio:" + this.select_anio_calendario + "Mes:" + mes);
     },
-    consultarValidacion(){
-      axios.get("validacionFinancieraController.php",{
-        params:{
-          anio:this.select_anio_calendario
+    consultarValidacion() {
+      axios.get("validacionFinancieraController.php", {
+        params: {
+          anio: this.select_anio_calendario
         }
-      }).then(response =>{
+      }).then(response => {
         console.log("validacion")
         console.log(response.data)
-        if(response.data[0][1]==true){
+        if (response.data[0][1] == true) {
           var datosValidacion = [];
           datosValidacion.push(response.data[0][0])
           this.datosFinancieros = response.data[0][0]
           var suma = 0;
-          if(datosValidacion.length>0){
+          if (datosValidacion.length > 0) {
             for (let i = 1; i <= 12; i++) {
               const nombreIndex = i.toString();  // Convertir el número a cadena para acceder a la propiedad
               if (datosValidacion[0][nombreIndex]) {
@@ -3686,298 +3713,339 @@ const AltaProyectos = {
                 this.inputTotalReal[i - 1] = '$0.00';
               }
             }
-          }else{
-            this.checkValidar=[]
+          } else {
+            this.checkValidar = []
           }
           this.SumNumReales = suma
           this.sumaReales = this.formatoNumeroApesos(suma);
-        }else{
+        } else {
           alert("Error en la consulta");
         }
       }).catch(error => {
-        console.log("Fallo el metodo consultarValidacion"+error);
+        console.log("Fallo el metodo consultarValidacion" + error);
       })
     },
-    guardarValidacionFinanciera(mes){//guardar y actualizar
-      id="";
+    guardarValidacionFinanciera(mes) {//guardar y actualizar
+      id = "";
       if (this.datosFinancieros[mes.toString()] !== undefined) {
-        id=this.datosFinancieros[mes.toString()].id
+        id = this.datosFinancieros[mes.toString()].id
       }
       var suave = this.calendarioSumaXMesAnio.sumas_ahorro_suave[mes.toString()]
-      var duro =this.calendarioSumaXMesAnio.sumas_ahorro_duro[mes.toString()]
-      var real_duro = this.inputTotalReal[mes-1];
-      var validar=this.checkValidar[mes-1];
-       axios.post('validacionFinancieraController.php',{
-        mes:mes,
-        anio:this.select_anio_calendario,
+      var duro = this.calendarioSumaXMesAnio.sumas_ahorro_duro[mes.toString()]
+      var real_duro = this.inputTotalReal[mes - 1];
+      var validar = this.checkValidar[mes - 1];
+      axios.post('validacionFinancieraController.php', {
+        mes: mes,
+        anio: this.select_anio_calendario,
         suave: suave,
-        duro:duro,
-        real_duro:real_duro,
+        duro: duro,
+        real_duro: real_duro,
         validar: validar,
-        id:id
-      }).then(response =>{
+        id: id
+      }).then(response => {
         console.log(response.data)
-          if(response.data[0]==true){
-            if(validar==true){
-              alert("Validación guardada con éxito.")
-            }else{
-              alert("Validación desactivada con éxito.")
-            }
-              this.consultarValidacion();
-          }else{
-            alert("La insercion no se realizo con éxito");
+        if (response.data[0] == true) {
+          if (validar == true) {
+            alert("Validación guardada con éxito.")
+          } else {
+            alert("Validación desactivada con éxito.")
           }
-      }).catch(error =>{  
-        console.log("Error en guardarValidacionFinanciera"+error)
-      }).finally(()=>{
+          this.consultarValidacion();
+        } else {
+          alert("La insercion no se realizo con éxito");
+        }
+      }).catch(error => {
+        console.log("Error en guardarValidacionFinanciera" + error)
+      }).finally(() => {
 
       })
     },
-    buscarEstatusSeguimiento(id_proyecto){
-      console.log("ID: "+id_proyecto)
+    buscarEstatusSeguimiento(id_proyecto) {
+      console.log("ID: " + id_proyecto)
     },
-    darFormatoInputValorReal(mes_o_index){
-      this.inputTotalReal[mes_o_index-1]=this.formatMonedaPesos(this.inputTotalReal[mes_o_index-1])
+    darFormatoInputValorReal(mes_o_index) {
+      this.inputTotalReal[mes_o_index - 1] = this.formatMonedaPesos(this.inputTotalReal[mes_o_index - 1])
     },
 
-    consultarPlan(){
-      if(this.select_anio_calendario<2025){// es para que no se me resitie la actualizar despues del 2025 en planeado
+    consultarPlan() {
+      if (this.select_anio_calendario < 2025) {// es para que no se me resitie la actualizar despues del 2025 en planeado
         this.meta = 0;
       }
-      axios.get("planController.php",{
-        params:{
-          anio:this.select_anio_calendario,
-          planta:this.select_planta_calendario
+      axios.get("planController.php", {
+        params: {
+          anio: this.select_anio_calendario,
+          planta: this.select_planta_calendario
         }
-      }).then(response =>{
-        console.log('Consulta Plan',response.data)
-        if(response.data[0][1]==true){
-          this.valoresPlan=response.data[0][0]//lo utilizo para extrar datos.
+      }).then(response => {
+        console.log('Consulta Plan', response.data)
+        if (response.data[0][1] == true) {
+          this.valoresPlan = response.data[0][0]//lo utilizo para extrar datos.
           var valores = []
           valores.push(response.data[0][0])
-            
-            if(valores.length>0){
-              var suma =0;
-              var sumaP = 0;
-                for (let index = 1; index <= 12; index++) {
-                  if(valores[0][index]){
-                    suma += parseFloat(valores[0][index].plan.replace(/[$,]/g, ''));
-                    
-                    this.inputValorPlan[index-1]=valores[0][index].plan
-                   
-                  }else{
-                    
-                    this.inputValorPlan[index - 1] = "$0.00"; 
-                  }
-                this.sumaPres = "$"+parseFloat(suma).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
-                
-              }
-                //console.log('el total de los valores es:',this.sumaPres);
-                console.log("Esto en el",this.inputValorPlan)
 
-                //console.log("META",this.meta)
-                if(this.select_anio_calendario<2025){
-                  this.meta = suma
-                  this.sumaPlan = "$"+parseFloat(suma).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
-                }else{
-                  this.metaPres = suma;
-               //   console.log('meta es:',this.metaPres)
-                }
-          //1904371
+          if (valores.length > 0) {
+            var suma = 0;
+            var sumaP = 0;
+            for (let index = 1; index <= 12; index++) {
+              if (valores[0][index]) {
+                suma += parseFloat(valores[0][index].plan.replace(/[$,]/g, ''));
+
+                this.inputValorPlan[index - 1] = valores[0][index].plan
+
+              } else {
+
+                this.inputValorPlan[index - 1] = "$0.00";
+              }
+              this.sumaPres = "$" + parseFloat(suma).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+
             }
-        }else{
+            //console.log('el total de los valores es:',this.sumaPres);
+            console.log("Presentado modalidad >=2025", this.inputValorPlan)
+
+            //console.log("META",this.meta)
+            if (this.select_anio_calendario < 2025) {
+              this.meta = suma
+              this.sumaPlan = "$" + parseFloat(suma).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+            } else {
+              this.metaPres = suma;
+              //   console.log('meta es:',this.metaPres)
+            }
+            //1904371
+          }
+        } else {
           alert("Error en la consulta consultarPlan");
         }
       }).catch(error => {
-        console.log("Fallo el metodo consultarValidacion"+error);
+        console.log("Fallo el metodo consultarValidacion" + error);
       })
     },
 
-    consultarPlanNuevoModalidad(){
-      this.inputProyectosMes=[]
-      axios.get("planMensualController.php",{
-        params:{
+    consultarPlanNuevoModalidad() {
+      this.inputProyectosMes = []
+      axios.get("planMensualController.php", {
+        params: {
           accion: "consultar x Anio",
           anio: this.select_anio_calendario,
           planta: this.select_planta_calendario
         }
       }).then(response => {
-          console.log("Mi resultado",response.data)
-          let valores = [];
-          let nuevoArreglo = [];
+        console.log("Plan nueva modalidad", response.data)
+        let valores = [];
+        let nuevoArreglo = [];
 
-          for (let i = 0; i < 12; i++) {//inicializando
-              this.inputProyectosMes[i] ="$0.00";
+        for (let i = 0; i < 12; i++) {//inicializando
+          this.inputProyectosMes[i] = "$0.00";
+        }
+
+        valores = response.data[0];
+        const result = valores.reduce((acc, item) => {
+          const mes = item.mes;
+          const ahorroD = parseFloat(item.ahorro_d.replace(/[$,]/g, '')) || 0;
+          if (!acc[mes]) {// si no exist el mes lo creo e inicializo
+            acc[mes] = 0;
           }
+          acc[mes] += ahorroD; //voy sumando los del mismo mes
+          return acc;
+        }, {});
 
-          valores = response.data[0];
-            const result = valores.reduce((acc, item) => {
-              const mes = item.mes;
-              const ahorroD = parseFloat(item.ahorro_d.replace(/[$,]/g, '')) || 0;
-              if (!acc[mes]) {// si no exist el mes lo creo e inicializo
-                acc[mes] = 0;
-              }
-              acc[mes] += ahorroD; //voy sumando los del mismo mes
-            
-              return acc;
-            }, {});
+        //tomo el ID de cada proyecto.
+        let arregloSoloIDs = this.proyectosXanioCalendario.map(items => items.id);
+        console.log(arregloSoloIDs)
 
-            nuevoArreglo = Object.values(result);//objeto arreglo
-            console.log("Nuevo Arreglo",nuevoArreglo)
-            var suma =0;
-              for (let f = 0; f < nuevoArreglo.length; f++) {
-                suma += parseFloat(nuevoArreglo[f])
-                console.log("Suma",suma)
-                this.inputProyectosMes[f] = "$"+parseFloat(nuevoArreglo[f]).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
-              }
-              
-             
-              if(this.select_anio_calendario>=2025){
-               this.meta = suma
-               this.sumaPlan = "$"+parseFloat(suma).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
-              }
-      }).catch(error=>{
-          console.log("Error :-(",error);
+
+        //ESTOS AHORROS SE AGREGAN CUANDO SE CREA EL PROYECTO y aqui consulto cada ahorro por ID de proyecto y sus meses 
+        let arregloIDconPosiciones = [];
+        for (let index = 0; index < arregloSoloIDs.length; index++) {
+          // Inicializa un nuevo arreglo para cada id_proyecto
+          let ahorroProyectoMes = Array(12).fill(null); // Suponiendo que hay 12 meses
+          // Busca el objeto que coincida con el id_proyecto
+          const items = response.data[0].filter(intems => intems.id_proyecto === arregloSoloIDs[index]);
+          // Si se encuentra el objeto, extrae el ahorro_d
+
+          // Recorre los elementos encontrados y asigna el ahorro_d a la posición correspondiente
+          items.forEach(item => {
+            const mes = item.mes; // Asegúrate de que 'mes' sea un índice válido (0-11)
+            ahorroProyectoMes[mes - 1] = item.ahorro_d; // Asigna el valor de ahorro_d a la posición correspondiente
+          });
+          // Si no hay ahorros, ya está inicializado con null
+          // Agrega el resultado al arreglo
+          arregloIDconPosiciones.push({
+            'id': arregloSoloIDs[index],
+            'ahorro_proyecto_mes': ahorroProyectoMes
+          });
+        }
+        console.log("IDs con ahorro por proyecto por mes:", arregloIDconPosiciones);
+        this.plan_mes_mes_por_proyecto = arregloIDconPosiciones;
+
+
+
+        nuevoArreglo = Object.values(result);//objeto arreglo plan 2025
+        //console.log("Planeado 2025", nuevoArreglo)
+        var suma = 0;
+        for (let f = 0; f < nuevoArreglo.length; f++) {
+          suma += parseFloat(nuevoArreglo[f])
+          this.inputProyectosMes[f] = "$" + parseFloat(nuevoArreglo[f]).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+        }
+
+        if (this.select_anio_calendario >= 2025) {
+          this.meta = suma
+          this.sumaPlan = "$" + parseFloat(suma).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });
+        }
+      }).catch(error => {
+        console.log("Error :-(", error);
       })
     },
-    guardarPlanMes(mes){
-      var valor = this.inputValorPlan[mes-1]
+    mesAmesProyecto(id_nesecito, posicion) {
+      const proyecto = this.plan_mes_mes_por_proyecto.find(item => item.id === id_nesecito);
+      // Verificar si se encontró el proyecto
+      if (proyecto) {
+        const valor = proyecto.ahorro_proyecto_mes[posicion - 1]; // Accede al valor en la posición especificad
+        // Verificar si el valor existe y no es una cadena vacía
+        if (valor) {
+          return "Plan mes: " + valor; // Retorna el valor en la posición especificada
+        } else {
+          return "Sin plan"; // Retorna "No hay nada" si el valor es undefined, null o una cadena vacía
+        }
+      } else {
+        return ""; // Retorna "No hay nada" si no se encuentra el proyecto
+      }
+    },
+    guardarPlanMes(mes) {
+      var valor = this.inputValorPlan[mes - 1]
       var id = ''
-      if(this.valoresPlan[mes]){
+      if (this.valoresPlan[mes]) {
         id = this.valoresPlan[mes].id
-      } 
-          axios.post('planController.php',{
-            mes:mes,
-            anio:this.select_anio_calendario,
-            valor: valor,
-            id:id
-          }).then(response =>{
-              if(response.data[0]==true){
-                this.plan_actualizar = ''
-                alert("Plan guardado con éxito.")
-                this.consultarPlan()
-              }else{
-                alert("La del plan no se realizo.");
-              }
-          }).catch(error =>{  
-            console.log("Error en guardarPlanMes"+error)
-          }).finally(()=>{
+      }
+      axios.post('planController.php', {
+        mes: mes,
+        anio: this.select_anio_calendario,
+        valor: valor,
+        id: id
+      }).then(response => {
+        if (response.data[0] == true) {
+          this.plan_actualizar = ''
+          alert("Plan guardado con éxito.")
+          this.consultarPlan()
+        } else {
+          alert("La del plan no se realizo.");
+        }
+      }).catch(error => {
+        console.log("Error en guardarPlanMes" + error)
+      }).finally(() => {
 
-          })
+      })
     },
 
-    editarPlanMes(mes){
+    editarPlanMes(mes) {
       this.plan_actualizar = mes
     },
-    darFormatoInputValorPlan(index){
-      this.inputValorPlan[index]=this.formatMonedaPesos(this.inputValorPlan[index])
+    darFormatoInputValorPlan(index) {
+      this.inputValorPlan[index] = this.formatMonedaPesos(this.inputValorPlan[index])
     },
-    calcularPorcentaje(){
-        if(this.select_anio_calendario >= 2025){
+    calcularPorcentaje() {
+      if (this.select_anio_calendario >= 2025) {
         // console.log('meta:',this.metaPres,'se lleva:',this.selleva)
         //  console.log('pres:',parseFloat((this.selleva/this.metaPres)*100).toFixed(2))
-          return this.metaPres === 0  || this.selleva === 0 ? 0 :parseFloat((this.selleva/this.metaPres)*100).toFixed(2)
-       
-        }else{
-          return this.meta === 0  || this.selleva === 0 ? 0 :parseFloat((this.selleva/this.meta)*100).toFixed(2)
-        }
+        return this.metaPres === 0 || this.selleva === 0 ? 0 : parseFloat((this.selleva / this.metaPres) * 100).toFixed(2)
+
+      } else {
+        return this.meta === 0 || this.selleva === 0 ? 0 : parseFloat((this.selleva / this.meta) * 100).toFixed(2)
+      }
     },
 
-    calcularPorcentajeRealAnual(){
-      return this.meta === 0  || this.SumNumReales === 0 ? 0 :parseFloat((this.SumNumReales/this.meta)*100).toFixed(2)
-  },
-    calcularPorcentajeMensualTeorico(mes){
-      if(this.calendarioSumaXMesAnio.sumas_ahorro_duro && this.calendarioSumaXMesAnio.sumas_ahorro_duro[mes.toString()] && this.inputValorPlan[mes-1] ){
-        if(this.select_anio_calendario>=2025){
-          var plan = this.formatoSoloNumeros(this.inputProyectosMes[mes-1])
-        }else{
-          var plan = this.formatoSoloNumeros(this.inputValorPlan[mes-1])
+    calcularPorcentajeRealAnual() {
+      return this.meta === 0 || this.SumNumReales === 0 ? 0 : parseFloat((this.SumNumReales / this.meta) * 100).toFixed(2)
+    },
+    calcularPorcentajeMensualTeorico(mes) {
+      if (this.calendarioSumaXMesAnio.sumas_ahorro_duro && this.calendarioSumaXMesAnio.sumas_ahorro_duro[mes.toString()] && this.inputValorPlan[mes - 1]) {
+        if (this.select_anio_calendario >= 2025) {
+          var plan = this.formatoSoloNumeros(this.inputProyectosMes[mes - 1])
+        } else {
+          var plan = this.formatoSoloNumeros(this.inputValorPlan[mes - 1])
         }
-        
-        
-        if(plan!=0)
-          { 
-            var ahorro_duro = this.formatoSoloNumeros(this.calendarioSumaXMesAnio.sumas_ahorro_duro[mes.toString()])
-            return ((ahorro_duro/plan)*100).toFixed(2) 
-          }
-      }
-    return 0
-   },
-   calcularPorcentajeMensualReal(mes){
-    if(typeof this.inputTotalReal !== 'undefined' && typeof this.inputValorPlan !== 'undefined' && this.inputTotalReal[mes - 1] && this.inputValorPlan[mes - 1]){
-     var real = this.inputTotalReal[mes-1]
-     var plan = this.inputValorPlan[mes-1]
-     real = this.formatoSoloNumeros(this.inputTotalReal[mes-1])
-     plan = this.formatoSoloNumeros(this.inputValorPlan[mes-1])////AQUI ESTOY
-     // return  "real: "+ real + "plan:" +plan;
-        if(real!=0)
-        { 
-          return ((real/plan)*100).toFixed(2) ////AQUI ESTOY
-        }
-    }
-  return 0
- },
-    tablaGraficas() {
-            const ctx = document.getElementById('myChart');
-            if (!ctx) {
-              console.error("No se pudo obtener la referencia al elemento canvas.");
-              return;
-            }
-            
-                  const data = {
-                    labels: [
-                      'Excelencia ('+this.sumaValoresGonher.Calidad+')',
-                      'Colaboración ('+this.sumaValoresGonher.Trabajo+')',
-                      'Compromiso  ('+this.sumaValoresGonher.Compromiso+')',
-                      'Servicio  ('+this.sumaValoresGonher.Servicio+')',
-                      'Desarrollo ('+this.sumaValoresGonher.Desarrollo+')',
-                      'Integridad ('+this.sumaValoresGonher.Integridad+')',
-                      'Innovación ('+this.sumaValoresGonher.Innovacion+')',
-                      /*'Calidad - Productividad ('+this.sumaValoresGonher.Calidad+')',
-                      'Trabajo en Equipo ('+this.sumaValoresGonher.Trabajo+')',
-                      'Compromiso  ('+this.sumaValoresGonher.Compromiso+')',
-                      'Servicio y Orientación al Cliente  ('+this.sumaValoresGonher.Servicio+')',
-                      'Desarrollo de Nuestra Gente ('+this.sumaValoresGonher.Desarrollo+')',
-                      'Integridad ('+this.sumaValoresGonher.Integridad+')',
-                      'Innovación ('+this.sumaValoresGonher.Innovacion+')',*/
-                    ],
-                    datasets: [{
-                      label: 'Valores Gonher',
-                      data: [this.sumaValoresGonher.Calidad,this.sumaValoresGonher.Trabajo,this.sumaValoresGonher.Compromiso,this.sumaValoresGonher.Servicio,this.sumaValoresGonher.Desarrollo,this.sumaValoresGonher.Integridad,this.sumaValoresGonher.Innovacion],
-                      fill: true,
-                      backgroundColor: 'rgba( 24, 144, 16, 0.2)',
-                      borderColor: 'rgb(24, 144, 16)',
-                      pointBackgroundColor: ['#e43333','#daa523','#469c99','#7fb55a','#ebca74','#99183f','#65293b'],
-                      pointBorderColor: '#102590',
-                      pointHoverBackgroundColor: '#f102590',  
-                      pointHoverBorderColor: 'rgb(255, 99, 132)',
-                      borderWidth:1
-                    }],
-                  };
 
-                  new Chart(ctx, {
-                    type: 'radar',
-                    data: data,
-                    options: {
-                      plugins: {
-                        legend: {
-                          display: false,
-                        }
-                      },
-                      scales: {
-                        r: {
-                          min: 0, // Establecer el valor mínimo en el eje radial a 0
-                          pointLabels: {
-                            fontSize: 14,
-                            font: {
-                              size: 14
-                            },
-                            color: ['#e43333', '#daa523', '#469c99', '#7fb55a', '#ebca74', '#99183f', '#65293b']
-                          }
-                        }
-                      }
-                    }
-                  });
+
+        if (plan != 0) {
+          var ahorro_duro = this.formatoSoloNumeros(this.calendarioSumaXMesAnio.sumas_ahorro_duro[mes.toString()])
+          return ((ahorro_duro / plan) * 100).toFixed(2)
+        }
+      }
+      return 0
+    },
+    calcularPorcentajeMensualReal(mes) {
+      if (typeof this.inputTotalReal !== 'undefined' && typeof this.inputValorPlan !== 'undefined' && this.inputTotalReal[mes - 1] && this.inputValorPlan[mes - 1]) {
+        var real = this.inputTotalReal[mes - 1]
+        var plan = this.inputValorPlan[mes - 1]
+        real = this.formatoSoloNumeros(this.inputTotalReal[mes - 1])
+        plan = this.formatoSoloNumeros(this.inputValorPlan[mes - 1])////AQUI ESTOY
+        // return  "real: "+ real + "plan:" +plan;
+        if (real != 0) {
+          return ((real / plan) * 100).toFixed(2) ////AQUI ESTOY
+        }
+      }
+      return 0
+    },
+    tablaGraficas() {
+      const ctx = document.getElementById('myChart');
+      if (!ctx) {
+        console.error("No se pudo obtener la referencia al elemento canvas.");
+        return;
+      }
+
+      const data = {
+        labels: [
+          'Excelencia (' + this.sumaValoresGonher.Calidad + ')',
+          'Colaboración (' + this.sumaValoresGonher.Trabajo + ')',
+          'Compromiso  (' + this.sumaValoresGonher.Compromiso + ')',
+          'Servicio  (' + this.sumaValoresGonher.Servicio + ')',
+          'Desarrollo (' + this.sumaValoresGonher.Desarrollo + ')',
+          'Integridad (' + this.sumaValoresGonher.Integridad + ')',
+          'Innovación (' + this.sumaValoresGonher.Innovacion + ')',
+          /*'Calidad - Productividad ('+this.sumaValoresGonher.Calidad+')',
+          'Trabajo en Equipo ('+this.sumaValoresGonher.Trabajo+')',
+          'Compromiso  ('+this.sumaValoresGonher.Compromiso+')',
+          'Servicio y Orientación al Cliente  ('+this.sumaValoresGonher.Servicio+')',
+          'Desarrollo de Nuestra Gente ('+this.sumaValoresGonher.Desarrollo+')',
+          'Integridad ('+this.sumaValoresGonher.Integridad+')',
+          'Innovación ('+this.sumaValoresGonher.Innovacion+')',*/
+        ],
+        datasets: [{
+          label: 'Valores Gonher',
+          data: [this.sumaValoresGonher.Calidad, this.sumaValoresGonher.Trabajo, this.sumaValoresGonher.Compromiso, this.sumaValoresGonher.Servicio, this.sumaValoresGonher.Desarrollo, this.sumaValoresGonher.Integridad, this.sumaValoresGonher.Innovacion],
+          fill: true,
+          backgroundColor: 'rgba( 24, 144, 16, 0.2)',
+          borderColor: 'rgb(24, 144, 16)',
+          pointBackgroundColor: ['#e43333', '#daa523', '#469c99', '#7fb55a', '#ebca74', '#99183f', '#65293b'],
+          pointBorderColor: '#102590',
+          pointHoverBackgroundColor: '#f102590',
+          pointHoverBorderColor: 'rgb(255, 99, 132)',
+          borderWidth: 1
+        }],
+      };
+
+      new Chart(ctx, {
+        type: 'radar',
+        data: data,
+        options: {
+          plugins: {
+            legend: {
+              display: false,
+            }
+          },
+          scales: {
+            r: {
+              min: 0, // Establecer el valor mínimo en el eje radial a 0
+              pointLabels: {
+                fontSize: 14,
+                font: {
+                  size: 14
+                },
+                color: ['#e43333', '#daa523', '#469c99', '#7fb55a', '#ebca74', '#99183f', '#65293b']
+              }
+            }
+          }
+        }
+      });
     }
   }
 };
