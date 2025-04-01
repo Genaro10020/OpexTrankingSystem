@@ -205,6 +205,8 @@ const AltaProyectos = {
       mes_rechazo: '',
       sumaPres: '',
       plan_mes_mes_por_proyecto: [],
+      ahorro_co2_mes_por_proyecto: [],
+      ahorro_co2_mes_mes: [],
     }
   },
   mounted() {
@@ -241,6 +243,7 @@ const AltaProyectos = {
     },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PROYECTOS*/
     consultarCalendarioProyectos() {
+      this.ahorro_co2_mes_mes = []
       this.plan_actualizar = ''
       this.documentos_seguimiento_financiero = []
       axios.get('proyectosController.php', {
@@ -277,6 +280,40 @@ const AltaProyectos = {
             this.consultarPlanNuevoModalidad()
           }
 
+
+          //////////////////////////////
+          // Suponiendo que `this.proyectosDatosCalendario` contiene la respuesta que has mostrado
+          const proyectosDatosCalendario = response.data[0][0];
+          // Crear un objeto para almacenar las sumas por proyecto
+          const sumaPorProyecto = {};
+          // Iterar sobre cada proyecto
+          proyectosDatosCalendario.forEach(proyecto => {
+              const { mes, tons_co2 } = proyecto;
+              // Convertir tons_co2 a un número
+              const tonsNumerico = parseFloat(tons_co2);
+              // Si el proyectoID no existe en el objeto, inicializarlo
+              if (!sumaPorProyecto[mes]) {
+                  sumaPorProyecto[mes] = {
+                      mes,
+                      suma: 0
+                  };
+              }
+              // Sumar el tons_co2
+              sumaPorProyecto[mes].suma += tonsNumerico;
+          });
+
+          // Convertir el objeto a un array para facilitar su uso
+          const resultadoFinal = Object.values(sumaPorProyecto).map(item => ({
+            mes: item.mes,
+            suma: item.suma.toFixed(2) // Limitar a dos decimales
+          }));
+          // Mostrar el resultado
+
+          console.log("SUMA TOTAL DE CO2 POR PROYECTO", resultadoFinal);
+          this.ahorro_co2_mes_mes = resultadoFinal
+
+
+          /////////////////////////////
 
 
           this.consultarValidacion();//Consutar la parte financiera
@@ -3855,27 +3892,58 @@ const AltaProyectos = {
 
         //ESTOS AHORROS SE AGREGAN CUANDO SE CREA EL PROYECTO y aqui consulto cada ahorro por ID de proyecto y sus meses 
         let arregloIDconPosiciones = [];
+        let arregloIDconPosicionesCO2 = [];
         for (let index = 0; index < arregloSoloIDs.length; index++) {
           // Inicializa un nuevo arreglo para cada id_proyecto
           let ahorroProyectoMes = Array(12).fill(null); // Suponiendo que hay 12 meses
+          let CO2ProyectoMes = Array(12).fill(null); // Suponiendo que hay 12 meses
           // Busca el objeto que coincida con el id_proyecto
           const items = response.data[0].filter(intems => intems.id_proyecto === arregloSoloIDs[index]);
           // Si se encuentra el objeto, extrae el ahorro_d
 
           // Recorre los elementos encontrados y asigna el ahorro_d a la posición correspondiente
           items.forEach(item => {
-            const mes = item.mes; // Asegúrate de que 'mes' sea un índice válido (0-11)
+            const mes = item.mes; // (0-11)
             ahorroProyectoMes[mes - 1] = item.ahorro_d; // Asigna el valor de ahorro_d a la posición correspondiente
+            CO2ProyectoMes[mes - 1] = item.ahorro_co; // Asigna el valor de CO2 a la posición correspondiente
           });
           // Si no hay ahorros, ya está inicializado con null
+          arregloIDconPosicionesCO2.push({//Ahorro CO2
+            'id': arregloSoloIDs[index],
+            'ahorro_co2_proyecto_mes': CO2ProyectoMes
+          });
           // Agrega el resultado al arreglo
-          arregloIDconPosiciones.push({
+          arregloIDconPosiciones.push({//Ahorro Duro
             'id': arregloSoloIDs[index],
             'ahorro_proyecto_mes': ahorroProyectoMes
           });
+        
         }
-        console.log("IDs con ahorro por proyecto por mes:", arregloIDconPosiciones);
+        console.log("IDs con ahorro CO2 por proyecto por mes Proyectado:", arregloIDconPosicionesCO2);
+        console.log("IDs con ahorro Duro por proyecto por mes:", arregloIDconPosiciones);
+      
+        this.ahorro_co2_mes_por_proyecto = arregloIDconPosicionesCO2;
         this.plan_mes_mes_por_proyecto = arregloIDconPosiciones;
+
+
+       /* 
+      // Inicializa un arreglo de suma con 12 posiciones
+        const sumaPorMes = Array(12).fill(0);
+        // Recorre cada objeto en el arreglo
+          arregloIDconPosicionesCO2.forEach(proyecto => {
+            proyecto.ahorro_co2_proyecto_mes.forEach((valor, index) => {
+              // Verifica que el valor no esté vacío o sea nulo
+              if (valor) {
+                // Suma el valor convertido a número a la posición correspondiente
+                sumaPorMes[index] += parseFloat(valor);
+              }
+            });
+        });
+    // Limita los valores a 2 decimales
+    console.log("ahorro CO2 por mes:", sumaPorMes);
+    const sumaPorMesConDosDecimales = sumaPorMes.map(valor => parseFloat(valor.toFixed(2)));*/
+    // Imprime el resultado
+   // console.log("Suma de ahorro CO2 por mes:", sumaPorMesConDosDecimales);
 
 
 
@@ -3895,6 +3963,21 @@ const AltaProyectos = {
         console.log("Error :-(", error);
       })
     },
+    mesAmesProyectoCO2(id_nesecito, posicion) {
+      const proyecto = this.ahorro_co2_mes_por_proyecto.find(item => item.id === id_nesecito);
+      // Verificar si se encontró el proyecto
+      if (proyecto) {
+        const valor = proyecto.ahorro_co2_proyecto_mes[posicion - 1]; // Accede al valor en la posición especificad
+        // Verificar si el valor existe y no es una cadena vacía
+        if (valor) {
+          return "CO2 mes: " + valor; // Retorna el valor en la posición especificada
+        } else {
+          return "Sin CO2"; // Retorna "No hay nada" si el valor es undefined, null o una cadena vacía
+        }
+      } else {
+        return ""; // Retorna "No hay nada" si no se encuentra el proyecto
+      }
+    },
     mesAmesProyecto(id_nesecito, posicion) {
       const proyecto = this.plan_mes_mes_por_proyecto.find(item => item.id === id_nesecito);
       // Verificar si se encontró el proyecto
@@ -3910,6 +3993,7 @@ const AltaProyectos = {
         return ""; // Retorna "No hay nada" si no se encuentra el proyecto
       }
     },
+
     guardarPlanMes(mes) {
       var valor = this.inputValorPlan[mes - 1]
       var id = ''

@@ -148,7 +148,7 @@ function consultarCalendarioProyecto($anio,$planta)
     $sumasPorMes['sumas_ahorro_suave'] = [];
     $estado1 = false;
     $suma = 0;
-    $consulta = "SELECT DISTINCT proyectos_creados.id AS proyectoID, proyectos_creados.nombre_proyecto, registros_impacto_ambiental.mes, registros_impacto_ambiental.anio, registros_impacto_ambiental.ahorro_duro, registros_impacto_ambiental.ahorro_suave, registros_impacto_ambiental.status_rechazo, registros_impacto_ambiental.motivo_rechazo, registros_impacto_ambiental.validado, proyectos_creados.id /*Datos Proyecto */
+    $consulta = "SELECT DISTINCT proyectos_creados.id AS proyectoID, proyectos_creados.nombre_proyecto, registros_impacto_ambiental.mes, registros_impacto_ambiental.tons_co2, registros_impacto_ambiental.anio, registros_impacto_ambiental.ahorro_duro, registros_impacto_ambiental.ahorro_suave, registros_impacto_ambiental.status_rechazo, registros_impacto_ambiental.motivo_rechazo, registros_impacto_ambiental.validado, proyectos_creados.id /*Datos Proyecto */
     FROM impacto_ambiental_proyecto JOIN proyectos_creados ON impacto_ambiental_proyecto.id_proyecto = proyectos_creados.id 
     JOIN registros_impacto_ambiental ON impacto_ambiental_proyecto.id = registros_impacto_ambiental.id_impacto_ambiental_proyecto WHERE registros_impacto_ambiental.anio ='$anio' AND  proyectos_creados.planta LIKE '%$planta%'";
     $query = $conexion->query($consulta);
