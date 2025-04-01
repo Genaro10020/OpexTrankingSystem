@@ -2087,7 +2087,7 @@ if (isset($_SESSION['nombre'])) {
                                     <span class="input-group-text" style="width: 150px; font-size:0.8em;">Seleccione Planta</span>
                                     <select style="width: 100px;" v-model="select_planta_calendario" @change=consultarCalendarioProyectos()>
                                         <option value="">Ver todos..</option>
-                                        <option v-for="planta in plantas" :value="planta.nombre">{{planta.nombre}}</option>
+                                        <option v-for="planta in plantas" :value="planta.nombre">{{planta.nombre.toUpperCase()}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -2229,7 +2229,7 @@ if (isset($_SESSION['nombre'])) {
                                                         </div>
                                                     <?php } ?>
                                                     <?php if ($_SESSION['acceso'] == "Admin") { ?>
-                                                        <span class="badge alert-success" style="font-size: 0.6em;width: 100%;"> CO2 Evitado: {{proyectosDatosCalendario.tons_co2}}</span>
+                                                        <span class="badge alert-success" style="font-size: 0.6em;width: 100%;"> tCO2 Evitado: {{proyectosDatosCalendario.tons_co2}}</span>
                                                         <span class="badge alert-primary" style="font-size: 0.6em;width: 100%;"> {{mesAmesProyecto(proyectosDatosCalendario.proyectoID,x)}}</span>
                                                         <!--<span class="badge alert-success" style="font-size: 0.6em;width: 100%;"> {{mesAmesProyectoCO2(proyectosDatosCalendario.proyectoID,x)}}</span>-->
                                                     <?php } ?>
@@ -2248,7 +2248,7 @@ if (isset($_SESSION['nombre'])) {
                                     <td></td>
                                     <td></td>
                                     <td style="font-size:10px; min-width:120px">
-                                        <div class="p-2 pt-1 mt-2">CO2 Evitado:</div> <!--desaparecer si es menor a 2025 -->
+                                        <div class="p-2 pt-1 mt-2">tCO2 Evitado:</div> <!--desaparecer si es menor a 2025 -->
                                         <div v-if="select_anio_calendario >= 2025" class="p-2 pt-1">Pres:</div> <!--desaparecer si es menor a 2025 -->
                                         <div class="p-2 pt-1">Plan:</div>
                                         <div class="p-2 mt-1">Total:</div>
