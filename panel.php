@@ -1542,7 +1542,7 @@ if (isset($_SESSION['nombre'])) {
                                     <td><b>{{sumaAhorroDuro}}</b></td>
                                     <td><b>{{sumaAhorroSuave}}<b></td>
                                     <td>
-                                        <?php if ($_SESSION['acceso'] != "Financiero") { ?>
+                                        <?php if ($_SESSION['acceso'] == "Admin") { ?>
                                             <div class="form-check form-switch">
                                                 <div class="form-check form-switch">
                                                     <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" v-model="seguimiento_status" @change="guardarStatus()" style=" background-color: #B3F09B; color:white">
