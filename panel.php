@@ -73,7 +73,7 @@ if (isset($_SESSION['nombre'])) {
                                             <!--Formulario Alta Proyecto-->
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-25">Fecha</span>
-                                                <input type="date" class="w-50" v-model="fecha_alta" :class="{'nocontestado': respondio === false && fecha_alta === '', '': fecha_alta !== ''}" :disabled="actualizar_proyecto">
+                                                <input type="date" class="w-50" v-model="fecha_alta" :class="{'nocontestado': respondio === false && fecha_alta === '', '': fecha_alta !== ''}">
                                                 <div v-show="fecha_alta !==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
 

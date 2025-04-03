@@ -2184,6 +2184,19 @@ const AltaProyectos = {
 
           let proyecto = response.data[0][0][0]
 
+
+          //console.log('Proyecto encontradi ID', proyecto.fecha, 'Fecha', proyecto.fecha.replace(/-/g, "/"))
+          
+          //this.fecha_alta=proyecto.fecha.replace(/-/g, "/")
+          
+          //console.log("Change", proyecto.fecha.split("-").join("/"))
+          
+          let [dia,mes,año]=proyecto.fecha.split("-")
+          let ordenar = [año,mes,dia].join("-")
+          console.log(ordenar)
+
+          this.fecha_alta=ordenar
+
           let checkImpacto = this.checkImpactoAmbiental
           let valores = JSON.parse(proyecto.valores)
           this.valoresCheck = valores //asignando los valores checkeados
@@ -2774,21 +2787,21 @@ const AltaProyectos = {
       var area = '';
       var siglasArea = '';
       if (this.selectArea.length >= 3) {
-        const separandoArea = this.selectArea.split('<->');//separando const */
+        const separandoArea = this.selectArea.split('<->');//separando const 
         area = separandoArea[1];
         siglasArea = separandoArea[2];
       }
 
       var metodologia = '';
       if (this.selectMetodologia.length >= 2) {
-        const separandoMetodologia = this.selectMetodologia.split('<->');//separando */
+        const separandoMetodologia = this.selectMetodologia.split('<->');//separando 
         metodologia = separandoMetodologia[1];
       }
 
       var departamento = '';
       var siglasDepartamento = '';
       if (this.selectDepartamento.length >= 3) {
-        const separandoDepartamento = this.selectDepartamento.split('<->');//separando*/;
+        const separandoDepartamento = this.selectDepartamento.split('<->');//separando
         departamento = separandoDepartamento[1];
         siglasDepartamento = separandoDepartamento[2];
       }
