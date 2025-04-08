@@ -79,13 +79,13 @@ if (isset($_SESSION['nombre'])) {
 
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-25">Nombre Proyecto</span>
-                                                <input type="text" class="w-50" v-model="nombre_proyecto" :class="{'nocontestado': respondio === false && nombre_proyecto === '', '':nombre_proyecto !== ''}" :disabled="actualizar_proyecto">
+                                                <input type="text" class="w-50" v-model="nombre_proyecto" :class="{'nocontestado': respondio === false && nombre_proyecto === '', '':nombre_proyecto !== ''}">
                                                 <div v-if="nombre_proyecto !==''" class=" text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
 
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-25">Fuente</span>
-                                                <select v-model="selectFuente" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectFuente === '', '': selectFuente !== ''}" :disabled="actualizar_proyecto">
+                                                <select v-model="selectFuente" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectFuente === '', '': selectFuente !== ''}">
                                                     <option value="" selected disabled>Seleccione..</option>
                                                     <option v-for="fuente in fuentes" :value="fuente.id +'<->'+ fuente.nombre+'<->'+fuente.siglas">{{fuente.nombre}} ({{fuente.siglas}})</option>
                                                 </select>
@@ -95,7 +95,7 @@ if (isset($_SESSION['nombre'])) {
                                             <!---Planta-->
                                             <div class="input-group mb-3 ">
                                                 <span class="input-group-text w-25">Planta</span>
-                                                <select v-model="selectPlanta" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectPlanta === '', '': selectPlanta !== ''}" :disabled="actualizar_proyecto">
+                                                <select v-model="selectPlanta" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectPlanta === '', '': selectPlanta !== ''}">
                                                     <option value="" selected disabled>Seleccione..</option>
                                                     <option v-for="planta in plantas" :value="planta.id +'<->'+ planta.nombre+'<->'+planta.siglas">{{planta.nombre}} ({{planta.siglas}})</option>
                                                 </select>
@@ -110,7 +110,7 @@ if (isset($_SESSION['nombre'])) {
                                             <!---Área-->
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-25">Área</span>
-                                                <select v-model="selectArea" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectArea === '', '': selectArea !== ''}" :disabled="actualizar_proyecto">
+                                                <select v-model="selectArea" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectArea === '', '': selectArea !== ''}">
                                                     <option selected disabled>Seleccione..</option>
                                                     <option v-for="area in areas" :value="area.id +'<->'+ area.nombre+'<->'+ area.siglas">{{area.nombre}} ({{area.siglas}})</option>
                                                 </select>
@@ -125,7 +125,7 @@ if (isset($_SESSION['nombre'])) {
                                             <!---Departamentos-->
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-25">Gerencia</span>
-                                                <select v-model="selectDepartamento" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectDepartamento === '', '': selectDepartamento !== ''}" :disabled="actualizar_proyecto">
+                                                <select v-model="selectDepartamento" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectDepartamento === '', '': selectDepartamento !== ''}">
                                                     <option selected disabled>Seleccione..</option>
                                                     <option v-for="departamento in departamentos" :value="departamento.id+'<->'+departamento.nombre+'<->'+departamento.siglas">{{departamento.nombre}} ({{departamento.siglas}})</option>
                                                 </select>
@@ -139,7 +139,7 @@ if (isset($_SESSION['nombre'])) {
                                             <!---Metodologías-->
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-25">Metodología</span>
-                                                <select v-model="selectMetodologia" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectMetodologia === '', '': selectMetodologia !== ''}" :disabled="actualizar_proyecto">
+                                                <select v-model="selectMetodologia" size="3" class="w-50" :class="{'nocontestado': respondio === false && selectMetodologia === '', '': selectMetodologia !== ''}">
                                                     <option selected disabled>Seleccione..</option>
                                                     <option v-for="metodologia in metodologias" :value="metodologia.id+'<->'+metodologia.nombre">{{metodologia.nombre}}</option>
                                                 </select>
@@ -159,7 +159,7 @@ if (isset($_SESSION['nombre'])) {
 
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-25">Responsable</span>
-                                                <select v-model="selectResponsable" class="w-50" :class="{'nocontestado': respondio === false && selectResponsable === '', '': selectResponsable !== ''}" :disabled="actualizar_proyecto">
+                                                <select v-model="selectResponsable" class="w-50" :class="{'nocontestado': respondio === false && selectResponsable === '', '': selectResponsable !== ''}">
                                                     <option value="" disabled selected>Seleccione..</option>
                                                     <option v-for="responsable in responsables" :value="responsable.id+'<->'+responsable.nombre">{{responsable.nombre}}</option>
                                                 </select>
@@ -706,6 +706,7 @@ if (isset($_SESSION['nombre'])) {
                         <button class="btn btn-menu bg-primary align-items-center mb-2" style=" background:#519f3c; " @click="abrirModal('Alta')">
                             <i class="bi bi-plus-circle"></i> Alta Proyecto
                         </button>
+                    
                     <?php } ?>
                     <div class="scroll-dos px-2">
                         <table class="mx-auto  mb-5 tabla-proyectos">
@@ -735,6 +736,7 @@ if (isset($_SESSION['nombre'])) {
                                 <?php } ?>
                             </thead>
                             <tbody class=" border:1px solid black" style="text-align: center">
+                               
                                 <template v-for="(proyecto,index) in proyectos">
                                     <tr v-if="folioAnteriorSinNumeral(proyecto.folio, index)" :class="{ 'divisor-tr-creados': folioAnteriorSinNumeral(proyecto.folio, index)==true}"><!--ES DIFERENTE--->
                                         <td colspan="21" v-if="index>0"></td>

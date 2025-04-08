@@ -255,21 +255,115 @@ function consultarProyectosID($id_proyecto)
 {
     global $conexion;
     $resultado = [];
+    $fuente = "";
+    $planta = "";
+    $area = "";
+    $responsable = "";
     $estado = false;
+    $soloSiglas="";
     $consulta = "SELECT * FROM proyectos_creados WHERE id ='$id_proyecto'";
     $query = $conexion->query($consulta);
     if ($query) {
         while ($datos = mysqli_fetch_array($query)) {
             $resultado[] = $datos;
+            $fuenteBuscar = $datos['fuente'];
+            $plantaBuscar = $datos['planta'];
+            $areaBuscar = $datos['area'];
+            $departamentoBuscar = $datos['departamento'];
+            $metodologiaBuscar = $datos['metodologia'];
+            $responsableBuscar = $datos['responsable'];
         }
         $estado = true;
     } else {
         $estado = false;
     }
-    return array($resultado, $estado);
+   
+    if(preg_match('/\(([^)]+)\)/', $fuenteBuscar, $matches)){
+        $soloSiglas = $matches[1];
+
+        $consulta2 = "SELECT * FROM fuentes WHERE siglas ='$soloSiglas'";
+        $query2 = $conexion->query($consulta2);
+        if ($query2) {
+        while ($datos2 = mysqli_fetch_array($query2)) {
+            $fuente = $datos2;
+        }
+        $estado = true;
+        } else {
+        $estado = false;
+        }
+    }else{
+        $soloSiglas = "No se encontró ninguna sigla";
+    }
+
+
+
+        $consulta3 = "SELECT * FROM plantas WHERE nombre ='$plantaBuscar'";
+        $query3 = $conexion->query($consulta3);
+        if ($query3) {
+        while ($datos3 = mysqli_fetch_array($query3)) {
+            $planta = $datos3;
+        }
+        $estado = true;
+        } else {
+        $estado = false;
+        }
+
+        $consulta4 = "SELECT * FROM areas WHERE nombre ='$areaBuscar'";
+        $query4 = $conexion->query($consulta4);
+        if ($query4) {
+        while ($datos4 = mysqli_fetch_array($query4)) {
+            $area = $datos4;
+        }
+        $estado = true;
+        } else {
+        $estado = false;
+        }
+
+        $consulta5 = "SELECT * FROM departamentos WHERE nombre ='$departamentoBuscar'";
+        $query5 = $conexion->query($consulta5);
+        if ($query5) {
+        while ($datos5 = mysqli_fetch_array($query5)) {
+            $departamento = $datos5;
+        }
+        $estado = true;
+        } else {
+        $estado = false;
+        }
+
+        $consulta6 = "SELECT * FROM metodologias WHERE nombre ='$metodologiaBuscar'";
+        $query6 = $conexion->query($consulta6);
+        if ($query6) {
+        while ($datos6 = mysqli_fetch_array($query6)) {
+            $metodologia = $datos6;
+        }
+        $estado = true;
+        } else {
+        $estado = false;
+        }
+
+        $consulta7 = "SELECT * FROM responsables WHERE nombre ='$responsableBuscar'";
+        $query7 = $conexion->query($consulta7);
+        if ($query7) {
+        while ($datos7 = mysqli_fetch_array($query7)) {
+            $responsable = $datos7;
+        }
+        $estado = true;
+        } else {
+        $estado = false;
+        }
+    
+   
+    /*$fuenteBuscar //rescar lo que este dentro de los parentesis seran las SIGLAS
+    //$aquiSiglas //nueva varibale con las siglas
+
+    //bucar en la BD siglas que sean iguales WHERE id ='$id_proyecto'*/
+   
+    
+
+    return array($resultado, $estado,$fuenteBuscar, $soloSiglas, $fuente, $plantaBuscar, $planta, $areaBuscar, $area, $departamentoBuscar, $departamento, $metodologiaBuscar, $metodologia, $responsableBuscar, $responsable);
 }
 
-function insertarProyecto($folio, $fecha_alta, $nombre_proyecto, $fuente, $planta, $area, $departamento, $metodologia, $responsable_id, $observador, $misiones, $pilares, $objetivos, $impacto_ambiental,$impacto_ambiental_emisiones, $valores, $tons_co2, $ahorro_duro, $ahorro_suave,$anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS)
+function insertarProyecto($folio, $fecha_alta_invertida, $nombre_proyecto, $fuente, $planta, $area, $departamento, $metodologia, $responsable_id, $observador, $misiones, $pilares, $objetivos, $impacto_ambiental,$impacto_ambiental_emisiones, $valores, $tons_co2, $ahorro_duro, $ahorro_suave,$anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS)
 {
     global $conexion;
     $folio_sin_numero = "";
@@ -314,13 +408,11 @@ function insertarProyecto($folio, $fecha_alta, $nombre_proyecto, $fuente, $plant
         $correo_responsable =  $fila['correo'];
         $telefono_responsable =  $fila['telefono'];
 
-        $separando = explode("-", $fecha_alta);
-        $fecha_invertida = $separando[2] . "-" . $separando[1] . "-" . $separando[0];
         $estado  = true;
         //Inserto el proyecto
         $query = "INSERT INTO proyectos_creados (folio,fecha, fuente, nombre_proyecto, planta, area, departamento, metodologia,nomina, responsable,correo,telefono, misiones,pilares,objetivos,impacto_ambiental,valores, tons_co2, ahorro_duro, ahorro_suave,observador) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $stmt = $conexion->prepare($query);
-        $stmt->bind_param("sssssssssssssssssssss", $nuevo_folio, $fecha_invertida, $fuente, $nombre_proyecto, $planta, $area, $departamento, $metodologia, $nomina, $nombre_responsable, $correo_responsable, $telefono_responsable, $misiones, $pilares, $objetivos, $impacto_ambiental_emisiones,$valores, $tons_co2, $ahorro_duro, $ahorro_suave,$observador);
+        $stmt->bind_param("sssssssssssssssssssss", $nuevo_folio, $fecha_alta_invertida, $fuente, $nombre_proyecto, $planta, $area, $departamento, $metodologia, $nomina, $nombre_responsable, $correo_responsable, $telefono_responsable, $misiones, $pilares, $objetivos, $impacto_ambiental_emisiones,$valores, $tons_co2, $ahorro_duro, $ahorro_suave,$observador);
         if ($stmt->execute()) {
             $estado = true;
             //insertado el proyecto, ahora inserto los impactos ambientales en otra tabla
@@ -360,12 +452,31 @@ function insertarProyecto($folio, $fecha_alta, $nombre_proyecto, $fuente, $plant
     return array($estado, $estado_folios, $folio_recuperado, $folio_sin_numero, $igual, $insercion_impacto, $impacto_ambiental_array,$impacto_mensual);
 }
 
-function actualizarProyecto($id,$impacto_ambiental_emisiones,$valores,$anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS,$idsPlanMesual){
+function actualizarProyecto($id,$fecha_alta_invertida, $nombre_proyecto, $selectFuente, $planta, $area, $departamento, $metodologia, $responsable_id, $impacto_ambiental_emisiones,$valores,$anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS,$idsPlanMesual){
     global $conexion;
     $estado = false;
-    $update = "UPDATE proyectos_creados SET impacto_ambiental=?, valores=? WHERE  id=?";
+
+
+
+
+    ////////////////////////////
+    $consulta = "SELECT * FROM responsables WHERE id = $responsable_id";
+    $query = $conexion->query($consulta);
+    if ($query->num_rows > 0) {
+        //Recuperado el responsable inserto
+        $fila = $query->fetch_assoc();
+        $nomina = $fila['numero_nomina'];
+        $nombre_responsable = $fila['nombre'];
+        $correo_responsable =  $fila['correo'];
+        $telefono_responsable =  $fila['telefono'];
+        $estado  = true;
+        }else {
+        $estado  = false;
+    }
+///////////////////////////
+    $update = "UPDATE proyectos_creados SET fecha=?, nombre_proyecto=?, fuente=?, planta=?, area=?, departamento=?, metodologia=?, responsable=?, nomina=?, correo=?, telefono=?, impacto_ambiental=?, valores=? WHERE  id=?";
     $stmt = $conexion->prepare($update);
-    $stmt->bind_param("ssi",$impacto_ambiental_emisiones, $valores, $id);
+    $stmt->bind_param("sssssssssssssi",$fecha_alta_invertida, $nombre_proyecto, $selectFuente, $planta, $area, $departamento, $metodologia,$nombre_responsable, $nomina, $correo_responsable, $telefono_responsable, $impacto_ambiental_emisiones, $valores, $id);
     if ($stmt->execute()) {
          //insertando impactos mensuales
          $anioXmes = json_decode($anioXmes, JSON_UNESCAPED_UNICODE); //conviertiendo arreglos en cadena
@@ -374,7 +485,7 @@ function actualizarProyecto($id,$impacto_ambiental_emisiones,$valores,$anioXmes,
          $valoresMensualAD = json_decode($valoresMensualAD, JSON_UNESCAPED_UNICODE);//conviertiendo a arreglos
          $valoresMensualAS = json_decode($valoresMensualAS, JSON_UNESCAPED_UNICODE);//conviertiendo a arreglos
          $idsPlanMesual = json_decode($idsPlanMesual, JSON_UNESCAPED_UNICODE);//conviertiendo a arreglos
-         
+
          $estado = true;
          //con filter elimino todos los "" y si todos estan vacios no se actualizara, de lo contrario actualizara.
          $cantidad_meses=count($mesXAnio);

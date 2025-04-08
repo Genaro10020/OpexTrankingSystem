@@ -75,6 +75,7 @@ const AltaProyectos = {
       existeImagenSeleccionadaSeguimiento: false,
       existeImagenSeleccionadaCO2: false,
       actualizar_proyecto: false,
+      ultimo_proyecto_actualizado_o_creado: '',
       idsCheckImpacto: [],
       selectEmisiones: [],
       impactosConDatos: [],
@@ -225,7 +226,7 @@ const AltaProyectos = {
       plan_actualizar = ''; //solo la reseteo
       axios.get('proyectosController.php', {
       }).then(response => {
-        console.log(response.data)
+        console.log("consultar proyectos",response.data)
         if (response.data[0][1] == true) {
           if (response.data[0][0].length > 0) {
             this.proyectos = response.data[0][0];
@@ -2177,13 +2178,55 @@ const AltaProyectos = {
       axios.post('proyectosController.php', {
         id_proyecto: id //ID PROYECTO
       }).then(response => {
+
+        console.log("RESPUESTA CONSULTA PROYECTO",response.data[0])
+        //
+        if (typeof response.data[0][4] === 'object' && !Array.isArray(response.data[0][4]) && response.data[0][4] !== null) {
+         this.selectFuente = response.data[0][4].id +'<->'+ response.data[0][4].nombre+'<->'+response.data[0][4].siglas
+        } else {
+          console.log("No es un objeto fuente");
+        }
+        if (typeof response.data[0][6] === 'object' && !Array.isArray(response.data[0][6]) && response.data[0][6] !== null) {
+          this.selectPlanta = response.data[0][6].id +'<->'+ response.data[0][6].nombre+'<->'+response.data[0][6].siglas
+         } else {
+           console.log("No es un objeto planta");
+         }
+         if (typeof response.data[0][8] === 'object' && !Array.isArray(response.data[0][8]) && response.data[0][8] !== null) {
+          this.selectArea = response.data[0][8].id +'<->'+ response.data[0][8].nombre+'<->'+response.data[0][8].siglas
+         } else {
+           console.log("No es un objeto area");
+         }
+         if (typeof response.data[0][10] === 'object' && !Array.isArray(response.data[0][10]) && response.data[0][10] !== null) {
+          this.selectDepartamento = response.data[0][10].id +'<->'+ response.data[0][10].nombre+'<->'+response.data[0][10].siglas
+         } else {
+           console.log("No es un objeto departamento");
+         }
+         if (typeof response.data[0][12] === 'object' && !Array.isArray(response.data[0][12]) && response.data[0][12] !== null) {
+          this.selectMetodologia = response.data[0][12].id +'<->'+ response.data[0][12].nombre
+         } else {
+           console.log("No es un objeto metodologia");
+         }
+         if (typeof response.data[0][14] === 'object' && !Array.isArray(response.data[0][14]) && response.data[0][14] !== null) {
+          this.selectResponsable = response.data[0][14].id +'<->'+ response.data[0][14].nombre
+         } else {
+           console.log("No es un objeto responsable");
+         }
+
+       
+
+        /*if(response.data[0][4].length>0){
+          console.log("Si es un arreglo")
+        }else{
+          console.log("No es un arreglo")
+        }*/
+
         if (response.data[0][1] == true) {
           this.idsCheckImpacto = []
           this.checkImpactoAmbiental = []
           let impactosAmbientaslesBD = this.impactoAmbiental
 
           let proyecto = response.data[0][0][0]
-
+          console.log("pROYECTO: ",proyecto);
 
           //console.log('Proyecto encontradi ID', proyecto.fecha, 'Fecha', proyecto.fecha.replace(/-/g, "/"))
           
@@ -2191,11 +2234,14 @@ const AltaProyectos = {
           
           //console.log("Change", proyecto.fecha.split("-").join("/"))
           
-          let [dia,mes,año]=proyecto.fecha.split("-")
-          let ordenar = [año,mes,dia].join("-")
-          console.log(ordenar)
+          let separando = proyecto.fecha.split("-");
+          console.log("Separando",separando);
+          ordenado = separando[2]+"-"+separando[1]+"-"+separando[0]
+          console.log("Ordenado",ordenado);
+          this.fecha_alta=ordenado
 
-          this.fecha_alta=ordenar
+          this.nombre_proyecto=proyecto.nombre_proyecto
+
 
           let checkImpacto = this.checkImpactoAmbiental
           let valores = JSON.parse(proyecto.valores)
@@ -2773,7 +2819,7 @@ const AltaProyectos = {
         const separandoFuente = this.selectFuente.split('<->');//separando
         fuente = separandoFuente[1];
         siglasFuente = separandoFuente[2];
-        fuenteConSiglas = fuente + siglasFuente;
+        fuenteConSiglas = fuente + ' ('+ siglasFuente+')';
       }
 
       var planta = ''
@@ -2810,6 +2856,7 @@ const AltaProyectos = {
       if (this.selectResponsable.length >= 1) {
         const separandoResponsable = this.selectResponsable.split('<->');
         var responsable_id = separandoResponsable[0];
+        var responsable_nombre = separandoResponsable[1];
       }
 
 
@@ -2859,7 +2906,7 @@ const AltaProyectos = {
         var nombre_objetivo = this.checkObjetivos[i].split('<->')[1];//tomo el nombre 
         var siglas = this.checkObjetivos[i].split('<->')[3];
         var orden = this.checkObjetivos[i].split('<->')[4];
-        objetivos_nombres.push(nombre_objetivo + ' (' + siglas + ')');
+        objetivos_nombres.push(nombre_objetivo + '  ' + siglas + ' ');
         objetivoOrden += orden;
         siglasObjetivosConcatenado += '-' + siglas
       }
@@ -2926,7 +2973,7 @@ const AltaProyectos = {
       //Folio proyecto
       var folio = siglasPlanta + "-" + siglasArea + '-' + siglasDepartamento + '-P' + siglasPilaresConcatenado + '-O' + siglasObjetivosConcatenado;
 
-
+      
 
       axios.post("proyectosController.php", {
         id_actualizar: this.id_actualizar,
@@ -2986,9 +3033,11 @@ const AltaProyectos = {
               this.ahorro_duro = "$.00"
               this.ahorro_suave = "$.00"
               this.objetivo_estrategico = false
+              this.ultimo_proyecto_actualizado_o_creado =  this.nombre_proyecto
               setTimeout(() => {
+                this.ultimo_proyecto_actualizado_o_creado =  ''
                 this.nombre_proyecto = ''
-              }, 4000)
+              }, 10000)
             }
           } else {
             alert("No se dio de alta el proyecto.")
@@ -2999,6 +3048,11 @@ const AltaProyectos = {
             this.consultarProyectos()
             this.myModal.hide()
             alert("Actualizado con éxito.")
+            this.ultimo_proyecto_actualizado_o_creado =  this.nombre_proyecto
+            setTimeout(() => {
+              this.ultimo_proyecto_actualizado_o_creado =  ''
+              this.nombre_proyecto = ''
+            }, 10000)
           }
         } else {
           console.log("No es ni insertar ni actualizar")
@@ -3052,6 +3106,13 @@ const AltaProyectos = {
       this.flagEditAhorroSuaveMes = ''
     },
     reiniciarVariables() {
+      this.fecha_alta = ''
+      this.selectFuente = ''
+      this.selectPlanta = ''
+      this.selectArea = ''
+      this.selectDepartamento = ''
+      this.selectMetodologia = ''
+      this.selectResponsable = ''
       this.idsCheckImpacto = []
       this.checkImpactoAmbiental = []
       this.impactoAmbiental = []
@@ -3060,12 +3121,13 @@ const AltaProyectos = {
     },
     verificarSiEsActualizar() {
       if (this.actualizar_proyecto == true) {
+        this.nombre_proyecto =''
         this.reiniciarVariables()
       }
     },
-    buscandoUltimoProyectoCreado(nombres) {
+    buscandoUltimoProyectoCreado(nombre) {
       //Buscar y comparar si es igual
-      if (nombres === this.nombre_proyecto) {
+      if (this.ultimo_proyecto_actualizado_o_creado==nombre) {
         return true
       }
     },

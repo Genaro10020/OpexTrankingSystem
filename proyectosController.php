@@ -35,7 +35,11 @@ if (isset($_SESSION['nombre'])) {
                 && isset($arreglo['pilares']) && isset($arreglo['objetivos']) && isset($arreglo['impacto_ambiental']) && isset($arreglo['impacto_ambiental_emisiones']) && isset($arreglo['valores']) && isset($arreglo['tons_co2'])
                 && isset($arreglo['ahorro_duro']) && isset($arreglo['ahorro_suave']) && isset($arreglo['anioXmes']) && isset($arreglo['mesXAnio']) && isset($arreglo['valoresMensualCO']) && isset($arreglo['valoresMensualAD']) && isset($arreglo['valoresMensualAS']) && isset($arreglo['idsPlanMesual']) || isset($arreglo['accion'])) {
                 $folio = $arreglo['folio'];
+
                 $fecha_alta = $arreglo['fecha_alta'];
+                $separando = explode("-", $fecha_alta);
+                $fecha_alta_invertida = $separando[2] . "-" . $separando[1] . "-" . $separando[0];
+
                 $nombre_proyecto = $arreglo['nombre_proyecto'];
                 $fuente = $arreglo['fuente'];
                 $planta = $arreglo['select_planta'];
@@ -80,13 +84,13 @@ if (isset($_SESSION['nombre'])) {
 
 
                     if($arreglo['accion']=="Alta Proyecto"){
-                        $val[] = insertarProyecto($folio, $fecha_alta, $nombre_proyecto, $fuente, $planta, $area, $departamento, $metodologia, $responsable_id,$observador, $misiones, $pilares, $objetivos, $impacto_ambiental, $impacto_ambiental_emisiones, $valores, $tons_co2, $ahorro_duro, $ahorro_suave, 
+                        $val[] = insertarProyecto($folio, $fecha_alta_invertida, $nombre_proyecto, $fuente, $planta, $area, $departamento, $metodologia, $responsable_id,$observador, $misiones, $pilares, $objetivos, $impacto_ambiental, $impacto_ambiental_emisiones, $valores, $tons_co2, $ahorro_duro, $ahorro_suave, 
                         $anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS);
                     }
                     else if($arreglo['accion']=="Actualizar Proyecto"){//ACTUALIZAR PROYECTO
                         if(isset($arreglo['id_actualizar'])){
                         $id=$arreglo['id_actualizar'];
-                        $val[] = actualizarProyecto($id,$impacto_ambiental_emisiones,$valores,$anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS,$idsPlanMesual);
+                        $val[] = actualizarProyecto($id,$fecha_alta_invertida, $nombre_proyecto, $fuente, $planta, $area, $departamento, $metodologia, $responsable_id, $impacto_ambiental_emisiones,$valores,$anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS,$idsPlanMesual);
                         }else{
                         $val[] = "No llego el ID proyecto actualizar";
                         }
