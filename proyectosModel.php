@@ -261,6 +261,7 @@ function consultarProyectosID($id_proyecto)
     $responsable = "";
     $estado = false;
     $soloSiglas="";
+    $responsablesArreglo = [];
     $consulta = "SELECT * FROM proyectos_creados WHERE id ='$id_proyecto'";
     $query = $conexion->query($consulta);
     if ($query) {
@@ -272,6 +273,8 @@ function consultarProyectosID($id_proyecto)
             $departamentoBuscar = $datos['departamento'];
             $metodologiaBuscar = $datos['metodologia'];
             $responsableBuscar = $datos['responsable'];
+            $observadorBuscar = $datos['observador'];
+            //necesito declarar o agregar las variables de la consulta dnetro del for en agunlugar por aqui?
         }
         $estado = true;
     } else {
@@ -351,6 +354,51 @@ function consultarProyectosID($id_proyecto)
         } else {
         $estado = false;
         }
+
+        $consulta8 = "SELECT observador FROM proyectos_creados WHERE observador ='$observadorBuscar'";
+        $query8 = $conexion->query($consulta8);
+        if ($query8) {
+        while ($datos8 = mysqli_fetch_array($query8)) {
+            $observador = $datos8;
+            $textoObservador = $datos8['observador']; // Solo la columna observador
+        }
+        $estado = true;
+        } else {
+        $estado = false;
+        }
+
+        $arregloObservador = json_decode($textoObservador, true); // Convertimos el JSON a arreglo PHP
+        $cantidad = count($arregloObservador);
+
+        for($i=0; $i<$cantidad; $i++){
+            $nomina=$arregloObservador[$i];
+            $consulta9 = "SELECT * FROM responsables WHERE numero_nomina ='$nomina'";
+            $query9 = $conexion->query($consulta9);
+            if ($query9) {
+                 while ($datos9 = mysqli_fetch_array($query9)) {
+                    $responsablesArreglo[] = $datos9;
+                }
+                $estado = true;
+            } else {
+                $estado = false;
+            }
+        }
+
+
+
+        /*$consulta8 = "SELECT nombre, numero_nomina FROM responsables WHERE nombre ='$observadorBuscar'";
+        $query8 = $conexion->query($consulta8);
+        if ($query8) {
+        while ($datos8 = mysqli_fetch_array($query8)) {
+            $observador[] = [
+                'nombre' => $datos8['nombre'],
+                'numero_nomina' => $datos8['numero_nomina'] 
+            ];
+        }
+        $estado = true;
+        } else {
+        $estado = false;
+        }*/
     
    
     /*$fuenteBuscar //rescar lo que este dentro de los parentesis seran las SIGLAS
@@ -360,7 +408,8 @@ function consultarProyectosID($id_proyecto)
    
     
 
-    return array($resultado, $estado,$fuenteBuscar, $soloSiglas, $fuente, $plantaBuscar, $planta, $areaBuscar, $area, $departamentoBuscar, $departamento, $metodologiaBuscar, $metodologia, $responsableBuscar, $responsable);
+    return array($resultado, $estado,$fuenteBuscar, $soloSiglas, $fuente, $plantaBuscar, $planta, $areaBuscar, $area, $departamentoBuscar, $departamento, $metodologiaBuscar, $metodologia, $responsableBuscar, $responsable,
+     $observadorBuscar, $observador, $arregloObservador, $cantidad, $responsablesArreglo);
 }
 
 function insertarProyecto($folio, $fecha_alta_invertida, $nombre_proyecto, $fuente, $planta, $area, $departamento, $metodologia, $responsable_id, $observador, $misiones, $pilares, $objetivos, $impacto_ambiental,$impacto_ambiental_emisiones, $valores, $tons_co2, $ahorro_duro, $ahorro_suave,$anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS)
@@ -372,9 +421,9 @@ function insertarProyecto($folio, $fecha_alta_invertida, $nombre_proyecto, $fuen
     $numero = 1;
     $ultimoNum = "";
     $impacto_mensual ="";
-    if($observador=='[""]'){
+    /*if($observador=='[""]'){
         $observador = "";
-    }
+    }*/
     $select = "SELECT folio FROM proyectos_creados WHERE folio LIKE '$folio%' ORDER BY id DESC LIMIT 1";//Consulta para buscar si existe un folio simiar y sumarle 1;
     $query = $conexion->query($select);
     if ($query) {
@@ -452,7 +501,7 @@ function insertarProyecto($folio, $fecha_alta_invertida, $nombre_proyecto, $fuen
     return array($estado, $estado_folios, $folio_recuperado, $folio_sin_numero, $igual, $insercion_impacto, $impacto_ambiental_array,$impacto_mensual);
 }
 
-function actualizarProyecto($id,$fecha_alta_invertida, $nombre_proyecto, $selectFuente, $planta, $area, $departamento, $metodologia, $responsable_id, $impacto_ambiental_emisiones,$valores,$anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS,$idsPlanMesual){
+function actualizarProyecto($id,$fecha_alta_invertida, $nombre_proyecto, $selectFuente, $planta, $area, $departamento, $metodologia, $responsable_id, $observador, $impacto_ambiental_emisiones,$valores,$anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS,$idsPlanMesual){
     global $conexion;
     $estado = false;
 
@@ -474,9 +523,9 @@ function actualizarProyecto($id,$fecha_alta_invertida, $nombre_proyecto, $select
         $estado  = false;
     }
 ///////////////////////////
-    $update = "UPDATE proyectos_creados SET fecha=?, nombre_proyecto=?, fuente=?, planta=?, area=?, departamento=?, metodologia=?, responsable=?, nomina=?, correo=?, telefono=?, impacto_ambiental=?, valores=? WHERE  id=?";
+    $update = "UPDATE proyectos_creados SET fecha=?, nombre_proyecto=?, fuente=?, planta=?, area=?, departamento=?, metodologia=?, responsable=?, nomina=?, correo=?, telefono=?, observador =?, impacto_ambiental=?, valores=? WHERE  id=?";
     $stmt = $conexion->prepare($update);
-    $stmt->bind_param("sssssssssssssi",$fecha_alta_invertida, $nombre_proyecto, $selectFuente, $planta, $area, $departamento, $metodologia,$nombre_responsable, $nomina, $correo_responsable, $telefono_responsable, $impacto_ambiental_emisiones, $valores, $id);
+    $stmt->bind_param("ssssssssssssssi",$fecha_alta_invertida, $nombre_proyecto, $selectFuente, $planta, $area, $departamento, $metodologia, $nombre_responsable, $nomina, $correo_responsable, $telefono_responsable, $observador, $impacto_ambiental_emisiones, $valores, $id);
     if ($stmt->execute()) {
          //insertando impactos mensuales
          $anioXmes = json_decode($anioXmes, JSON_UNESCAPED_UNICODE); //conviertiendo arreglos en cadena
@@ -518,9 +567,11 @@ function actualizarProyecto($id,$fecha_alta_invertida, $nombre_proyecto, $select
                 }
 
 
+    }else{
+        return  "ME RETORNO".$stmt->error;
     }
     $stmt->close();
-    return $estado;
+   return $estado;
 }
 
 

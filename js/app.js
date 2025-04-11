@@ -2212,7 +2212,63 @@ const AltaProyectos = {
            console.log("No es un objeto responsable");
          }
 
-       
+         if (Array.isArray(response.data[0][19]) && response.data[0][19] !== null) {
+          for (let index = 0; index < response.data[0][19].length; index++) {
+            if(response.data[0][19][index].nombre !=='Pte'){
+              this.checkObservadores.push(response.data[0][19][index].nombre +'<->'+ response.data[0][19][index].numero_nomina)
+            }
+          }
+          
+         } else {
+           console.log("No es un objeto observador");
+         }
+
+        
+
+         /*if (
+          Array.isArray(response.data[0][19]) &&
+          response.data[0][19].length > 0
+        ) {
+          this.checkObservadores = response.data[0][19]
+            .filter(obs => typeof obs === 'object' && obs !== null)
+            .map(obs => {
+              const nombre = obs.nombre || "Sin nombre";
+              const nomina = obs.numero_nomina || "Sin nómina";
+              return `${nombre}<->${nomina}`;
+            })
+            .join(', ');
+        } else {
+          console.warn("No hay observadores válidos en el arreglo");
+        }*/
+        
+         
+         /*if (
+          Array.isArray(response.data[0][19]) &&
+          response.data[0][19] !== null &&
+          typeof response.data[0][19][0] === 'object' &&
+          response.data[0][19][0] !== null
+        ) {
+          const observador = response.data[0][19][0];
+        
+          // Verifica que existan las propiedades antes de usarlas
+          const nombre = observador.nombre || "Sin nombre";
+          const nomina = observador.numero_nomina || "Sin nómina";
+        
+          this.checkObservadores = `${nombre}<->${nomina}`;
+        } else {
+          console.warn("No es un objeto observador válido o está vacío");
+        }*/
+        
+         
+         /*if (Array.isArray(response.data[0][19]) && response.data[0][19] !== null) {
+          this.checkObservadores = response.data[0][19][0].nombre +'<->'+ response.data[0][19][0].numero_nomina
+         } else {
+           console.log("No es un objeto observador");
+         }*/
+
+         //console.log()
+
+         //this.responsablesArreglo=["Hector Lara Ponce+'<->'+66199"]
 
         /*if(response.data[0][4].length>0){
           console.log("Si es un arreglo")
@@ -3051,8 +3107,9 @@ const AltaProyectos = {
             this.ultimo_proyecto_actualizado_o_creado =  this.nombre_proyecto
             setTimeout(() => {
               this.ultimo_proyecto_actualizado_o_creado =  ''
-              this.nombre_proyecto = ''
+              
             }, 10000)
+            this.nombre_proyecto = ''
           }
         } else {
           console.log("No es ni insertar ni actualizar")
@@ -3113,6 +3170,7 @@ const AltaProyectos = {
       this.selectDepartamento = ''
       this.selectMetodologia = ''
       this.selectResponsable = ''
+      this.checkObservadores = []
       this.idsCheckImpacto = []
       this.checkImpactoAmbiental = []
       this.impactoAmbiental = []

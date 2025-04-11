@@ -191,7 +191,7 @@ if (isset($_SESSION['nombre'])) {
                                                 </div>
                                                 <div class="col-2 my-auto text-center">
                                                     <button type="button" v-if="nuevoResponsable==true && actualizarResponsable==false" class="btn-nuevo-responsable" @click="insertarResponsable()">Crear</button>
-                                                    <button type="button" v-if="actualizarResponsable" class="btn-actualizar-responsable" @click="actualizandoResponsable()">Actualiazar</button>
+                                                    <button type="button" v-if="actualizarResponsable" class="btn-actualizar-responsable" @click="actualizandoResponsable()">Actualizar</button>
                                                     <button type="button" class="btn-cancelar-responsable mt-3" @click="cancelar()">Cancelar</button>
                                                 </div>
                                             </div>
@@ -200,9 +200,9 @@ if (isset($_SESSION['nombre'])) {
                                                 <span class="input-group-text w-25">Observador (Opcional)</span>
                                                 <div class="scroll w-50">
                                                     <div class="form-check border border-1 mt-1" v-for="(responsable, index) in responsables" :key="index">
-                                                        <input class="form-check-input" type="checkbox" :value="responsable.nombre+'<->'+responsable.numero_nomina" v-model="checkObservadores" :disabled="actualizar_proyecto">
-                                                        <label class="form-check-label">
-                                                            {{ responsable.nombre }}
+                                                        <input class="form-check-input" type="checkbox" :value="responsable.nombre+'<->'+responsable.numero_nomina" v-model="checkObservadores">
+                                                        <label :class="{'text-danger  fw-bold':responsable.numero_nomina=='Pte'}" class="form-check-label ">
+                                                            {{ responsable.nombre }} <span v-show="responsable.numero_nomina=='Pte'" class="badge bg-danger text-white ">(Sin Nómina)</span>
                                                         </label>
                                                     </div>
                                                 </div>
@@ -741,7 +741,7 @@ if (isset($_SESSION['nombre'])) {
                                     <tr v-if="folioAnteriorSinNumeral(proyecto.folio, index)" :class="{ 'divisor-tr-creados': folioAnteriorSinNumeral(proyecto.folio, index)==true}"><!--ES DIFERENTE--->
                                         <td colspan="21" v-if="index>0"></td>
                                     </tr>
-                                    <tr class="cuerpo-tabla-creados border border-secondary" style="vertical-align: middle;" :class="{ 'fila-ultimo-proyecto': buscandoUltimoProyectoCreado(proyecto.nombre_proyecto) }">
+                                    <tr class="cuerpo-tabla-creados border border-secondary" style="vertical-align: middle;" :class="{ 'fila-ultimo-proyecto': buscandoUltimoProyectoCreado(proyecto.nombre_proyecto)}">
                                         <td class="border border-secondary">{{proyecto.fecha}}</td>
                                         <td class="border border-secondary" style="min-width:150px;">{{proyecto.folio}}</td>
                                         <td class="border border-secondary">{{proyecto.fuente}}</td>
