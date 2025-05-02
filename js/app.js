@@ -116,6 +116,17 @@ const AltaProyectos = {
       unidadMedida: '',
       descripcionCa: '',
       descripcionUM: '',
+
+      //Ahorro que pone el financiero
+      ahorroFinanciero: [],
+      ahorrosMexMesFinanciero:[],
+      //NO LA ESTAS USANDO
+      //ahorro_mes_financiero: [],
+      //isEditMode: false,
+      /*id_proyecto: 0,
+      anio: null,
+      mes: '',*/
+      
       /*ACTUALIZAR MISIONES LIGADAS A PILARES */
       misionLigada: '',
       n_mision: '',
@@ -173,6 +184,8 @@ const AltaProyectos = {
       SumNumReales: 0,
       nombre_del_proyecto: '',
       correo_proyecto: '',
+      ahorroMesFinanzas:[],
+      editarMesFinanzas:'',
       /*GENERANDO VALOR*/
       select_anio_generando_valor: '',
       sumaClienteValor: '',
@@ -263,6 +276,7 @@ const AltaProyectos = {
           var suma = 0
           this.selleva = 0
           for (let i = 1; i <= 12; i++) {
+            this.ahorroMesFinanzas[i-1] = 0
             if (this.calendarioSumaXMesAnio.sumas_ahorro_duro[i]) {
               //console.log(this.calendarioSumaXMesAnio.sumas_ahorro_duro[i])
               suma += parseFloat(this.calendarioSumaXMesAnio.sumas_ahorro_duro[i].replace(/[$,]/g, ''))
@@ -278,8 +292,10 @@ const AltaProyectos = {
 
           this.consultarPlan();//Se consultara siempre
           if (this.select_anio_calendario >= 2025) {
+            console.log("nueva modalidad")
             this.consultarPlanNuevoModalidad()
-          }
+        }
+          this.consultarValidacion();
 
 
           //////////////////////////////
@@ -317,11 +333,14 @@ const AltaProyectos = {
           /////////////////////////////
 
 
-          this.consultarValidacion();//Consutar la parte financiera
+        
+
+          
           this.cantidadDocumentos = []
           for (var i = 0; i < this.proyectosXanioCalendario.length; i++) {
             this.buscarDocumentos('Estatus', this.proyectosXanioCalendario[i].id);
           }
+          this.consultarAhorro()
         } else {
           alert("En la consulta calendario total por proyecto, no se logro")
         }
@@ -331,6 +350,120 @@ const AltaProyectos = {
 
       })
     },
+
+    /*Ahorro por financiero boton guardar y actualizar
+    guardarEdicion() {
+
+      if (this.isEditMode) {
+        // Lógica para guardar (si es necesario)
+        console.log('Guardado:', this.ahorro_mes_financiero);
+      } else {
+        // Cambiar a modo edición después de guardar
+        console.log('Valor guardado, ahora puedes editar.');
+      }
+      this.isEditMode = !this.isEditMode; // Cambiar entre modo edición y guardar
+    },*/
+
+    guardarAhorro(id_proyecto, mes){
+      let input = document.getElementById(id_proyecto + '-' + mes);
+      ahorroFinanciero = input.value;
+      ahorroFinanciero = this.desformatearValor(ahorroFinanciero);
+      ahorroFinanciero = parseFloat(ahorroFinanciero).toFixed(3);
+
+      console.log("Id del proyecto: ",id_proyecto);
+      console.log("Año del proyecto: ", this.select_anio_calendario);
+
+      console.log("Mes del proyecto: ", mes);
+      console.log("Ahorro del proyecto: ", ahorroFinanciero);
+
+      axios.post('ahorroFinancieroController.php',{
+        id_proyecto:id_proyecto,
+        select_anio_calendario:this.select_anio_calendario,
+        mes:mes,
+        ahorroFinanciero:ahorroFinanciero
+      }).then(response=>{
+        console.log("Response:",response.data)
+        this.editarMesFinanzas= ''
+        this.consultarAhorro()
+        // Volver a escribir el valor formateado en el input
+        //input.value = this.formatoValorApesos(ahorroFinanciero);
+      }).catch(error=>{
+        console.log("Algo salio muy mal :-( ",error)
+      })
+      
+    },
+
+    //////////////////////////////////////////////Consulta Ahorro
+    consultarAhorro() {
+    
+      axios.get('ahorroFinancieroController.php', {
+        params: {
+          anio: this.select_anio_calendario
+        }
+      }).then(response => {
+        console.log("ESTOO LLEGA DE MI CONTROLADOR: ", response.data[0])
+        this.ahorrosMexMesFinanciero = response.data[0]
+
+        if(this.ahorrosMexMesFinanciero.length>0){
+          this.inputTotalReal = []
+          console.log("MesxMesFinanzas")
+          let sumaMensual = [];
+          for(let i = 1; i <= 12; i++){
+          let sumaMes =  response.data[0].filter(item => item.mes == i).reduce((total, actual) => total + parseFloat(actual.valor || 0), 0);
+          sumaMensual[i-1] = this.formatoValorApesos(sumaMes);
+          }
+            this.inputTotalReal = sumaMensual
+          //console.log("sumaMensual",sumaMensual)
+        }
+        
+        /*if (response.data[0][1] == true) {
+          this.proyectoSumas = response.data[0][0]
+        } else {
+          alert("En la consulta sumar total por proyecto, no se logro")
+        }*/
+      }).catch(error => {
+        console.log('Erro :-(' + error)
+      }).finally(() => {
+
+      })
+    },
+    ///////////////////////////////////////////////////////////////////////////////////busca el valor para luego mostraarlo, se da formato al num en input se y quita formato al guardar o actualizar
+    buscarValor(id, mes){
+
+      let AhorroFinanzas = this.ahorrosMexMesFinanciero.filter(element=> element.id_proyecto==id && element.mes==mes)
+   
+      let valores = AhorroFinanzas.map(element => element.valor);
+      if(valores !=='' || valores !==0){
+        //document.getElementById(id+'-'+mes).value =  valores;
+        return this.formatoValorApesos(valores)
+      }else{
+        //return ''
+      }
+      
+      //return AhorroFinanzas ? AhorroFinanzas.valor : '';
+      //let valor = valores.length > 0 ? valores[0] : '';
+      //return valor !== '' ? this.formatoValorApesos(valor) : '';
+    },
+
+    formatoValorApesos(value) {
+      const numericValue = parseFloat(value);
+      if (isNaN(numericValue)) return ''; // Maneja casos vacíos o inválidos
+    
+      const options = { style: 'currency', currency: 'USD', minimumFractionDigits: 2 };
+      const numberFormat = new Intl.NumberFormat('en-US', options);
+      return numberFormat.format(numericValue);
+    },
+
+    desformatearValor(valorFormateado){
+      if (!valorFormateado) return 0;
+      return parseFloat(valorFormateado.replace(/[$,]/g, '')) || 0;
+    },
+
+    editarAhorroF(id, mes){
+      this.editarMesFinanzas = id+"_"+mes
+
+    },
+
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PROYECTOS*/
     consultarSumaProyectos() {
       axios.get('proyectosController.php', {
@@ -3372,6 +3505,7 @@ const AltaProyectos = {
       // Obtener el valor actual del campo y eliminar caracteres no deseados
       return numberFormat2.format(value);
     },
+
     modalCatalogos(accion, tipo, id, nombre, cantidad, siglas, unidadMedida, misionLigada, n_mision, id_mision_ligada) {//accion: es CREAR, ACTUALIZAR, ELIMINAR y tipo: es Pilares, Misiones, Objetivos.
       this.id = ''
       this.accion = accion

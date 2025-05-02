@@ -37,7 +37,7 @@ if (isset($_SESSION['nombre'])) {
                     </button>
 
                     <?php if ($_SESSION['acceso'] == 'Admin' || $_SESSION['acceso'] == 'Financiero') { ?>
-                        <button class="btn-menu ms-sm-3 mb-sm-3" @click="ventana='Calendario',opcion=5,mostrarHeader=true, consultarCalendarioProyectos(),consultarPlantas()"
+                        <button class="btn-menu ms-sm-3 mb-sm-3" @click="ventana='Calendario',opcion=5,mostrarHeader=true,consultarPlantas(),  consultarCalendarioProyectos()"
                             :class="{'btn-menu-activo': opcion===5,'btn-menu': opcion !== 5}">
                             <i class="bi bi-plus-circle"></i> Estatus Captura
                         </button>
@@ -2081,7 +2081,7 @@ if (isset($_SESSION['nombre'])) {
                             <div class="col-3" style="min-width:250px">
                                 <div class="input-group mt-3 mb-2">
                                     <span class="input-group-text" style="width: 150px;">Seleccione año</span>
-                                    <select style="width: 100px;" v-model="select_anio_calendario" @change=consultarCalendarioProyectos()>
+                                    <select style="width: 100px;" v-model="select_anio_calendario" @change="consultarCalendarioProyectos()">
                                         <option v-for="(year,index) in years" :value="year">{{year}}</option>
                                     </select>
                                 </div>
@@ -2209,9 +2209,27 @@ if (isset($_SESSION['nombre'])) {
 
                                                 <span class=" badge rounded-pill alert-dark" style=" font-size: 8px">Ahorro Duro:<br><label class="text-dark">{{proyectosDatosCalendario.ahorro_duro}}<label></span>
                                                 <span class="badge rounded-pill alert-warning" style=" font-size: 8px">Ahorro Suave:<br>{{proyectosDatosCalendario.ahorro_suave}}</span>
-                                               
-                                                <div class="text-center">
 
+                                                <!--¡¡¡¡¡¡¡¡¡¡¡SERENA TE QUEDASTE AQUÍ,!!!!!!!!!!!-->
+                                                <?php if ($_SESSION['acceso'] == "Financiero") { ?>
+                                                <div v-if= "select_anio_calendario >= 2025" class = "input-group input-group-sm">
+                                                    <input :id="proyectosXanio.id+'-'+x" :value="buscarValor(proyectosXanio.id, x)" :key="indexa" type= "text" class ="form-control" style="height:20px; font-size: 8px;" placeholder="Ahorro por financiero" :disabled="editarMesFinanzas!=proyectosXanio.id+'_'+x"/>
+                                                    <!--<button class ="btn btn-outline-secondary d-flex align-items-center justify-content-center p-1" type="button" style="height:20px; width: 25px">
+                                                        <i class="bi bi-floppy" style="font-size: 0.9em;"></i>
+                                                    </button>-->
+                                                    <button type="button" v-if="editarMesFinanzas==proyectosXanio.id+'_'+x" class ="btn btn-outline-secondary d-flex align-items-center justify-content-center p-1"  style="height:20px; width: 25px" @click="guardarAhorro(proyectosXanio.id,x)">
+                                                        <i class= "bi bi-floppy" style="font-size: 0.9em;"></i>
+                                                    </button>
+                                                    <button type="button" v-if="editarMesFinanzas!=proyectosXanio.id+'_'+x" class ="btn btn-outline-secondary d-flex align-items-center justify-content-center p-1"  style="height:20px; width: 25px" @click="editarAhorroF(proyectosXanio.id,x)">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </button>
+                                                </div>
+                                                <?php }else{
+                                                    ?>
+                                                    <input :id="proyectosXanio.id+'-'+x" :value="buscarValor(proyectosXanio.id, x)" :key="indexa" type= "text" class ="form-control" style="height:20px; font-size: 8px;" placeholder="Ahorro por financiero" @blur="guardarAhorro(proyectosXanio.id, x)" disabled="true"/>
+                                                    <?php } ?>
+
+                                                <div class="text-center">
                                                     <i v-if="proyectosDatosCalendario.validado=='Validado' && parseInt(proyectosDatosCalendario.mes)===x" class="bi bi-check2-all text-success"></i>
                                                     <i v-else class="bi bi-check2"></i>
                                                     <?php if ($_SESSION['acceso'] == "Financiero") { ?>
@@ -2231,8 +2249,8 @@ if (isset($_SESSION['nombre'])) {
                                                         </div>
                                                     <?php } ?>
                                                     <?php if ($_SESSION['acceso'] == "Admin") { ?>
-                                                        <span class="badge alert-success" style="font-size: 0.6em;width: 100%;"> tCO2 Evitado: {{proyectosDatosCalendario.tons_co2}}</span>
-                                                        <span class="badge alert-primary" style="font-size: 0.6em;width: 100%;"> {{mesAmesProyecto(proyectosDatosCalendario.proyectoID,x)}}</span>
+                                                        <span class="badge alert-success py-1" style="font-size: 0.6em; display: block; width: 100%; padding: 0; margin: 0;"> tCO2 Evitado: {{proyectosDatosCalendario.tons_co2}}</span>
+                                                        <span class="badge alert-primary py-1" style="font-size: 0.6em; display: block; width: 100%; padding: 0; margin: 0;"> {{mesAmesProyecto(proyectosDatosCalendario.proyectoID,x)}}</span>
                                                         <!--<span class="badge alert-success" style="font-size: 0.6em;width: 100%;"> {{mesAmesProyectoCO2(proyectosDatosCalendario.proyectoID,x)}}</span>-->
                                                     <?php } ?>
                                                 </div>
@@ -2249,6 +2267,7 @@ if (isset($_SESSION['nombre'])) {
                                 <tr><!--Fila Plan y Totales-->
                                     <td></td>
                                     <td></td>
+
                                     <td style="font-size:10px; min-width:120px">
                                         <div class="p-2 pt-1 mt-2">tCO2 Evitado:</div> <!--desaparecer si es menor a 2025 -->
                                         <div v-if="select_anio_calendario >= 2025" class="p-2 pt-1">Pres:</div> <!--desaparecer si es menor a 2025 -->
