@@ -1504,19 +1504,19 @@ if (isset($_SESSION['nombre'])) {
                                     </td>
 
                                     <td style="background: #bfe49b;">
-                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="input_tons_co2" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputSinPesos('input_tons_co2')"></input><!--:value="proyecto.tons_co2"-->
+                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="input_tons_co2" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44 || (event.target.selectionStart === 0 && event.charCode === 45))" @blur="formatInputSinPesos('input_tons_co2')"></input><!--:value="proyecto.tons_co2"-->
                                         <label v-else>{{proyecto.tons_co2}}</label>
                                     </td>
                                     <td v-if="sinImpacto!='Sin Impacto'" v-for="(cantidad,index) in columnaImpactoAmbiental.length" :key="index"><!--columa v-for"-->
-                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="inputImpactoAmbiental[posicion][index]" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputSinPesosImpactoAmbientalPosicion(posicion,index)"> </input>
+                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="inputImpactoAmbiental[posicion][index]" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44 || (event.target.selectionStart === 0 && event.charCode === 45))" @blur="formatInputSinPesosImpactoAmbientalPosicion(posicion,index)"> </input>
                                         <label v-else>{{inputImpactoAmbiental[posicion][index]}}</label>
                                     </td>
                                     <td>
-                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="input_ahorro_duro" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('input_ahorro_duro')"></input> <!--:value="proyecto.ahorro_duro"-->
+                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="input_ahorro_duro" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44 || (event.target.selectionStart === 0 && event.charCode === 45))" @blur="formatInputPesos('input_ahorro_duro')"></input> <!--:value="proyecto.ahorro_duro"-->
                                         <label v-else>{{proyecto.ahorro_duro}}</label>
                                     </td>
                                     <td>
-                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="input_ahorro_suave" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('input_ahorro_suave')"></input> <!--:value="proyecto.ahorro_suave"-->
+                                        <input v-if="actualizar==(posicion+1)" type="text" v-model="input_ahorro_suave" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44 ||(event.target.selectionStart === 0 && event.charCode === 45))" @blur="formatInputPesos('input_ahorro_suave')"></input> <!--:value="proyecto.ahorro_suave"-->
                                         <label v-else>{{proyecto.ahorro_suave}}</label>
                                     </td>
                                     <td style="min-width:150px" class="align-middle">
@@ -1541,8 +1541,8 @@ if (isset($_SESSION['nombre'])) {
                                     <td v-if="sinImpacto!='Sin Impacto'" v-for="(cantidad,index) in columnaImpactoAmbiental.length" :key="index"><!--columa v-for"-->
                                         <b>{{sumaColumnasImpacto['suma'+index]}}<b>
                                     </td>
-                                    <td><b>{{sumaAhorroDuro}}</b></td>
-                                    <td><b>{{sumaAhorroSuave}}<b></td>
+                                    <td><b>{{ sumaAhorroDuro }}</b></td>
+                                    <td><b>{{ sumaAhorroSuave }}</b></td>
                                     <td>
                                         <?php if ($_SESSION['acceso'] == "Admin") { ?>
                                             <div class="form-check form-switch">
@@ -1576,19 +1576,19 @@ if (isset($_SESSION['nombre'])) {
                                         <!--<input class="mx-1" v-if="actualizatabla==true" type="date" v-model="fecha_desde"></input>--><!--:value="proyecto.fecha_inicial"-->
                                     </td>
                                     <td style="background: #bfe49b;">
-                                        <input v-if="actualizatabla==true" type="text" v-model="input_tons_co2" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputSinPesos('input_tons_co2')"></input><!--:value="proyecto.tons_co2"-->
+                                        <input v-if="actualizatabla==true" type="text" v-model="input_tons_co2" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44 || (event.target.selectionStart === 0 && event.charCode === 45))" @blur="formatInputSinPesos('input_tons_co2')"></input><!--:value="proyecto.tons_co2"-->
                                         <label v-else></label>
                                     </td>
                                     <td v-if="sinImpacto!='Sin Impacto'" v-for="(cantidad,index) in columnaImpactoAmbiental.length" :key="index"><!--columa v-for"-->
-                                        <input v-if="actualizatabla==true" type="text" v-model="inputImpactoAmbientalInicial[index]" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputSinPesosImpactoAmbiental(index)"> </input>
+                                        <input v-if="actualizatabla==true" type="text" v-model="inputImpactoAmbientalInicial[index]" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44 || (event.target.selectionStart === 0 && event.charCode === 45))" @blur="formatInputSinPesosImpactoAmbiental(index)"> </input>
                                         <label v-else></label>
                                     </td>
                                     <td>
-                                        <input v-if="actualizatabla==true" type="text" v-model="input_ahorro_duro" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('input_ahorro_duro')"></input> <!--:value="proyecto.ahorro_suave"-->
+                                        <input v-if="actualizatabla==true" type="text" v-model="input_ahorro_duro" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44 || (event.target.selectionStart === 0 && event.charCode === 45))" @blur="formatInputPesos('input_ahorro_duro')"></input> <!--:value="proyecto.ahorro_suave"-->
                                         <label v-else></label>
                                     </td>
                                     <td>
-                                        <input v-if="actualizatabla==true" type="text" v-model="input_ahorro_suave" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('input_ahorro_suave')"></input> <!--:value="proyecto.ahorro_duro"-->
+                                        <input v-if="actualizatabla==true" type="text" v-model="input_ahorro_suave" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44 || (event.target.selectionStart === 0 && event.charCode === 45))" @blur="formatInputPesos('input_ahorro_suave')"></input> <!--:value="proyecto.ahorro_duro"-->
                                         <label v-else></label>
                                     </td>
                                     <td style="min-width:150px">

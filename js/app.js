@@ -3456,13 +3456,16 @@ const AltaProyectos = {
     formatMonedaPesos(value) {
       const options2 = { style: 'currency', currency: 'USD', minimumFractionDigits: 2 };
       const numberFormat2 = new Intl.NumberFormat('en-US', options2);
-      // Obtener el valor actual del campo y eliminar caracteres no deseados
-
-      var valorCampo = value.replace(/[^\d.]/g, '');
-      if (valorCampo == '') { valorCampo = 0 }
-      // Formatear el valor como un número
+      // Eliminar caracteres no deseados, permitiendo el signo negativo
+      var valorCampo = value.replace(/[^\d.-]/g, ''); 
+      if (valorCampo === '') { valorCampo = 0; }
+      // Asegurarse de que el valor tiene formato de número (número flotante)
       let numeroFormateado = parseFloat(valorCampo).toFixed(2);
-      // Aplicar el formato de número
+      // Verificar si el número es negativo, si es así, se conserva el signo negativo
+      if (numeroFormateado < 0) {
+        numeroFormateado = `-${Math.abs(parseFloat(valorCampo)).toFixed(2)}`;
+      }
+      // Aplicar el formato de número con el signo negativo, si lo tiene
       return numberFormat2.format(numeroFormateado);
     },
     formatInputSinPesos(varvue) {
@@ -3475,29 +3478,44 @@ const AltaProyectos = {
       }
     },
     formatMonedaSinPesos(value) {
-      // Obtener el valor actual del campo y eliminar caracteres no deseados
-      if (value == '' || value == undefined) { value = '0' }
-      var valorCampo = value.replace(/[^\d.]/g, '');
-      if (valorCampo == '') { valorCampo = 0 }
-      // Formatear el valor como un número
-      let numeroFormateado = parseFloat(valorCampo).toFixed(2); // Se ajusta para tener dos decimales
-      // Devolver el valor formateado sin el signo de dólar
-      return numeroFormateado.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    },
+  // Si el valor está vacío o indefinido, asignamos '0'
+        if (value == '' || value == undefined) { value = '0' }
+
+        // Si el valor es negativo, lo manejamos adecuadamente
+        let esNegativo = value.startsWith('-');
+        let valorCampo = value.replace(/[^\d.-]/g, ''); // Permitir solo números, punto y signo negativo
+
+        if (valorCampo === '') { valorCampo = '0'; }
+
+        // Si el número es negativo, mantenemos el signo
+        let numeroFormateado = parseFloat(valorCampo).toFixed(2); // Se asegura de que haya 2 decimales
+
+        // Formatear el valor con separadores de miles
+        let valorFinal = numeroFormateado.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+        // Devolver el valor con el signo negativo si es necesario
+        return esNegativo ?  valorFinal : valorFinal;
+      },
     formatInputSinPesosImpactoAmbiental(index) {//Primer y Nuevo Registro
       this.inputImpactoAmbientalInicial[index] = this.formatMonedaSinPesos(this.inputImpactoAmbientalInicial[index]);
     },
     formatInputSinPesosImpactoAmbientalPosicion(posicion, index) {//Actualizacion
       this.inputImpactoAmbiental[posicion][index] = this.formatMonedaSinPesos(this.inputImpactoAmbiental[posicion][index]);
     },
-    formatoSoloNumeros(value) {//formato de pesos limpiar a solo numeros
+    formatoSoloNumeros(value) {
       if (value != undefined) {
-        // Obtener el valor actual del campo y eliminar caracteres no deseados
-        var valorCampo = value.replace(/[^\d.]/g, '');
-        let numeroFormateado = parseFloat(valorCampo).toFixed(2);//agregamos los decimales .00
-        return numeroFormateado
+        // Limpiar cualquier carácter no numérico, permitiendo el punto decimal y el signo negativo al principio
+        var valorCampo = value.replace(/[^0-9.-]/g, '');
+        // Convertir a número flotante y asegurarnos de que sea un número válido
+        let numeroFormateado = parseFloat(valorCampo);
+        // Verificar si el número es válido y devolverlo con 2 decimales
+        if (!isNaN(numeroFormateado)) {
+          return numeroFormateado.toFixed(2); // Asegurarse de que siempre tenga dos decimales
+        } else {
+          return '0.00'; // Si el valor no es un número válido, devolver 0.00
+        }
       }
-
+      return '0.00'; // En caso de que el valor sea undefined
     },
     formatoNumeroApesos(value) {
       const options2 = { style: 'currency', currency: 'USD', minimumFractionDigits: 2 };
