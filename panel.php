@@ -2160,21 +2160,21 @@ if (isset($_SESSION['nombre'])) {
                         <table class="table table-bordered table-striped table-hover text-center">
                             <thead>
                                 <tr style="font-size:10px;">
-                                    <th class="sticky1" style="min-width:150px; background:#808080">Documento</th>
-                                    <th class="sticky2" style="min-width:250px; background:#808080">Nombre del Proyecto</th>
-                                    <th class="sticky3" style="background:#808080">Estatus </th>
-                                    <th>Enero</th>
-                                    <th>Febrero</th>
-                                    <th>Marzo</th>
-                                    <th>Abril</th>
-                                    <th>Mayo</th>
-                                    <th>Junio</th>
-                                    <th>Julio</th>
-                                    <th>Agosto</th>
-                                    <th>Septiembre</th>
-                                    <th>Octubre</th>
-                                    <th>Noviembre</th>
-                                    <th>Diciembre</th>
+                                    <th class="sticky1" style=" top: 0;min-width:150px; background:#808080; z-index:1">Documento</th>
+                                    <th class="sticky2" style="top: 0; min-width:250px; background:#808080; z-index:1">Nombre del Proyecto</th>
+                                    <th class="sticky3" style=" top: 0; background:#808080; z-index:1">Estatus </th>
+                                    <th style="position: sticky; top: 0; background:#808080; z-index:0">Enero</th>
+                                    <th style="position: sticky; top: 0; background:#808080; z-index:0">Febrero</th>
+                                    <th style="position: sticky; top: 0; background:#808080; z-index:0">Marzo</th>
+                                    <th style="position: sticky; top: 0; background:#808080; z-index:0">Abril</th>
+                                    <th style="position: sticky; top: 0; background:#808080; z-index:0">Mayo</th>
+                                    <th style="position: sticky; top: 0; background:#808080; z-index:0">Junio</th>
+                                    <th style="position: sticky; top: 0; background:#808080; z-index:0">Julio</th>
+                                    <th style="position: sticky; top: 0; background:#808080; z-index:0">Agosto</th>
+                                    <th style="position: sticky; top: 0; background:#808080; z-index:0">Septiembre</th>
+                                    <th style="position: sticky; top: 0; background:#808080; z-index:0">Octubre</th>
+                                    <th style="position: sticky; top: 0; background:#808080; z-index:0">Noviembre</th>
+                                    <th style="position: sticky; top: 0; background:#808080; z-index:0">Diciembre</th>
                                 </tr>
                             </thead>
                             <tbody>
