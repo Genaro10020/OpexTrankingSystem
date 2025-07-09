@@ -221,6 +221,7 @@ const AltaProyectos = {
       plan_mes_mes_por_proyecto: [],
       ahorro_co2_mes_por_proyecto: [],
       ahorro_co2_mes_mes: [],
+      fechaAltaProyecto:''
     }
   },
   mounted() {
@@ -2422,12 +2423,14 @@ const AltaProyectos = {
           //this.fecha_alta=proyecto.fecha.replace(/-/g, "/")
           
           //console.log("Change", proyecto.fecha.split("-").join("/"))
+          //console.log("hey",proyecto.fecha);
           
           let separando = proyecto.fecha.split("-");
           console.log("Separando",separando);
           ordenado = separando[2]+"-"+separando[1]+"-"+separando[0]
           console.log("Ordenado",ordenado);
           this.fecha_alta=ordenado
+          this.fechaAltaProyecto = separando;
 
           this.nombre_proyecto=proyecto.nombre_proyecto
 
@@ -2463,7 +2466,7 @@ const AltaProyectos = {
             }
           }
 
-
+          this.calculandoMesesDesdeFechaCredaEnProyecto()
         } else {
           alert("La consulta de proyectos no se realizo correctamente.")
         }
@@ -3275,6 +3278,28 @@ const AltaProyectos = {
         this.MesXAnio[i] = (i + 1) //Asigno del 1 al 12 para los meses
       }
     },
+    calculandoMesesDesdeFechaCredaEnProyecto(){
+      console.log("FECHA DEL PROYECTO:", this.fechaAltaProyecto);
+      let mesProyecto = parseInt(this.fechaAltaProyecto[1])
+      let anioProyecto = parseInt(this.fechaAltaProyecto[2])
+      console.log("Mes: ", mesProyecto)
+      console.log("Año: ", anioProyecto)
+      let asignadoAnio = []
+      let asignadoMeses = []
+      for(i=0; i<=11; i++){
+        if(mesProyecto == 13){
+          mesProyecto = 1
+          anioProyecto++
+        }
+        asignadoMeses[i]=mesProyecto
+        asignadoAnio[i]=anioProyecto
+        mesProyecto++
+      }
+      this.MesXAnio = asignadoMeses
+      this.AnioXMes = asignadoAnio
+      console.log("meses: ", this.MesXAnio)
+      console.log("Año: ", this.AnioXMes)
+    },
     darFormatoInputValorMensual(index, WhoIsIt) {
       if (WhoIsIt === 'CO') {
         /*if(this.inputValorMensualCO[index]!==undefined){
@@ -3291,6 +3316,8 @@ const AltaProyectos = {
       } else {
         console.log("No se encontro QUIEN")
       }
+
+
       this.flagEditCOMes = ''
       this.flagEditAhorroDuroMes = ''
       this.flagEditAhorroSuaveMes = ''
