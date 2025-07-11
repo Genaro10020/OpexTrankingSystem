@@ -221,7 +221,8 @@ const AltaProyectos = {
       plan_mes_mes_por_proyecto: [],
       ahorro_co2_mes_por_proyecto: [],
       ahorro_co2_mes_mes: [],
-      fechaAltaProyecto:''
+      fechaAltaProyecto:'',
+      hayDatos:false
     }
   },
   mounted() {
@@ -2465,8 +2466,13 @@ const AltaProyectos = {
               this.selectEmisiones = resultado;
             }
           }
-
-          this.calculandoMesesDesdeFechaCredaEnProyecto()
+          
+          let mesProyecto = parseInt(this.fechaAltaProyecto[1])
+          let anioProyecto = parseInt(this.fechaAltaProyecto[2])
+          if(mesProyecto >= 7 && anioProyecto >= 2025 && this.hayDatos==false){
+                this.calculandoMesesDesdeFechaCredaEnProyecto()
+          }
+          
         } else {
           alert("La consulta de proyectos no se realizo correctamente.")
         }
@@ -2483,6 +2489,7 @@ const AltaProyectos = {
       //this.nombre_proyecto = ''
       this.tipo = tipo
       this.accion = accion
+      this.hayDatos = false
 
       //resetando variables
       this.titulo_modal = ''
@@ -2625,7 +2632,22 @@ const AltaProyectos = {
             this.inputValorMensualAD = response.data[0].map(items => items.ahorro_d)
             this.inputValorMensualAS = response.data[0].map(items => items.ahorro_s)
 
-          } else {
+            /*let todosVaciosCO = response.data[0].map(items => items.ahorro_co=='')
+            let todosVaciosHD= response.data[0].map(items => items.ahorro_d=='')
+            let todosVaciosHS= response.data[0].map(items => items.ahorro_s=='')
+            console.log(todosVaciosCO,todosVaciosHD,todosVaciosHS)
+            console.log(todosVaciosCO==true && todosVaciosHD==true && todosVaciosHS==true)
+            this.hayDatos = (todosVaciosCO==true && todosVaciosHD==true && todosVaciosHS==true)*/
+
+            let todosVaciosCO = response.data[0].every(item => item.ahorro_co === '')
+            let todosVaciosHD = response.data[0].every(item => item.ahorro_d === '')
+            let todosVaciosHS = response.data[0].every(item => item.ahorro_s === '')
+
+            console.log(todosVaciosCO, todosVaciosHD, todosVaciosHS)
+
+            this.hayDatos = !(todosVaciosCO && todosVaciosHD && todosVaciosHS)
+            console.log(this.hayDatos)
+          }else{
             this.inicializarArreglosPlanMensual()//Si no existen datos inicializarlos
           }
         } else {
@@ -2849,6 +2871,22 @@ const AltaProyectos = {
     },
     quitarMeses() {
       this.cantidadMeses -= 1
+    },
+
+    cambiandoMes(numeroMes, anio){
+        for (let i = 0; i < this.MesXAnio.length; i++) {
+          this.MesXAnio[i] = numeroMes;
+          this.AnioXMes[i] = anio;
+
+          numeroMes++;
+          if (numeroMes > 12) {
+            numeroMes = 1;
+            anio++
+          }
+        }
+
+      console.log("Meses actualizados:", this.MesXAnio);
+      
     },
     verificarAltaProyecto() {
 

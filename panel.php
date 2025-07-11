@@ -433,16 +433,16 @@ if (isset($_SESSION['nombre'])) {
                                             <thead class="text-center">
                                                 <tr>
                                                     <th>Año</th>
-                                                    <th scope="col" v-for="numero in 12">
-                                                        <select v-model="AnioXMes[numero-1]" style="width:70px">
+                                                    <th scope="col" v-for="(numero,index) in 12">
+                                                        <select v-model="AnioXMes[numero-1]" style="width:70px" @change="cambiandoMes(MesXAnio[0], AnioXMes[0])" :disabled="index!=0 || hayDatos==true">
                                                             <option v-for="(year,index) in years.slice().reverse()" :value="year">{{year}}</option><!--asi los anio me aparecen del menor al mayor-->
                                                         </select>
                                                     </th>
                                                 </tr>
                                                 <tr>
                                                     <th>Mes</th>
-                                                    <th scope="col" v-for="numero in 12">
-                                                        <select v-model="MesXAnio[numero-1]" style="width:70px">
+                                                    <th scope="col" v-for="(valor, index) in 12">
+                                                        <select v-model="MesXAnio[index]" style="width:70px" :disabled="index!=0 || hayDatos==true" @change="cambiandoMes(MesXAnio[0], AnioXMes[0]) ">
                                                             <option v-for="(month,index) in months" :value="index+1">{{month}}</option>
                                                         </select>
                                                     </th>
