@@ -2157,7 +2157,7 @@ if (isset($_SESSION['nombre'])) {
                         </div>
                     </div>
                     <div class="scroll-dos">
-                        <table class="table table-bordered table-striped table-hover text-center">
+                        <table class="table table-bordered table-striped table-hover tabla-proyectos text-center">
                             <thead>
                                 <tr style="font-size:10px;">
                                     <th class="sticky1" style=" top: 0;min-width:150px; background:#808080; z-index:1">Documento</th>
@@ -2178,7 +2178,7 @@ if (isset($_SESSION['nombre'])) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-if="proyectosXanioCalendario.length>0" v-for="(proyectosXanio,indexa) in proyectosXanioCalendario">
+                                <tr v-if="proyectosXanioCalendario.length>0" v-for="(proyectosXanio,indexa) in proyectosXanioCalendario" class="tabla-filas" >
                                     <th class="sticky1" style="background:#f4f4f4">
                                         <template v-for="cantidadArchivos in cantidadDocumentos"><!--Contine ID y Cantidad de documentos-->
                                             <div v-if="cantidadArchivos.id==proyectosXanio.id && parseInt(cantidadArchivos.cantidad)>0">

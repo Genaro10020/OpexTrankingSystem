@@ -378,6 +378,12 @@ button {
     font-size: 0.8em;
 }
 
+.tabla-filas{
+    border-bottom: 4px solid #7c7d82;
+}
+.tabla-proyectos.table-hover tbody tr:hover {
+  background-color: #cce5ff ; /* cambia este color por el que desees */
+}
 
 .btn-anadir {
     height: 30px;
