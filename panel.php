@@ -2181,7 +2181,7 @@ if (isset($_SESSION['nombre'])) {
                                 <tr v-if="proyectosXanioCalendario.length>0" v-for="(proyectosXanio,indexa) in proyectosXanioCalendario" class="tabla-filas" >
                                     <th class="sticky1" style="background:#f4f4f4">
                                         <template v-for="cantidadArchivos in cantidadDocumentos"><!--Contine ID y Cantidad de documentos-->
-                                            <div v-if="cantidadArchivos.id==proyectosXanio.id && parseInt(cantidadArchivos.cantidad)>0">
+                                            <div v-if="cantidadArchivos.id==proyectosXanio.id && parseInt(cantidadArchivos.cantidad)>0">             
                                                 <button type="button" class="btn btn-success" title="Visualizar" @click="modal_estatus(proyectosXanio.id)" style="font-size:10px"><i class="bi bi-file-earmark"></i><!--Si el ID es igual-->
                                                     {{cantidadArchivos.cantidad}} Archivo/s
                                                 </button>
@@ -2200,8 +2200,13 @@ if (isset($_SESSION['nombre'])) {
                                     </td>
                                     <td class="sticky3" style="background:#f4f4f4">
                                         <!--<span class="badge bg-dark" style=" font-size: 8px" v-if="cantidadMesesRegistrados[proyectosXanio.id]>11">Finalizado</span><br>-->
+                                        <span style="font-size: 8px"> {{retornandoMesesCapturados(proyectosXanio.id)}} </span><br>
+                                        <span style="font-size: 8px">Suma actual Proyecto</span><br>
+                                        <span class="badge text-white fw-normal" style="background:#4da255; font-size: 10px">{{retornandoSumaTotalCapturada(proyectosXanio.id)}}</span><br>
                                         <span v-if="proyectosXanio.status_seguimiento=='Cerrado'" class="badge bg-dark" style="font-size: 8px">Finalizado</span>
-                                        <span v-else class="badge bg-success" style=" font-size: 8px">Siguiendo</span>
+                                        <span v-else class="badge bg-success" style=" font-size: 8px">Siguiendo</span><br>
+                                       
+
                                     </td>
                                     <td v-for="x in 12">
                                         <template v-for="proyectosDatosCalendario in proyectosDatosCalendario">
