@@ -3378,6 +3378,7 @@ const AltaProyectos = {
           mesProyecto = 1
           anioProyecto++
         }
+
         asignadoMeses[i]=mesProyecto
         asignadoAnio[i]=anioProyecto
         mesProyecto++
@@ -3402,7 +3403,9 @@ const AltaProyectos = {
         default:
           break;
       } */
+     
       this.mesProyecto = parseInt(mes)
+      this.anioProyecto= parseInt(anio)
 
 
       this.mes_select = this.mesProyecto

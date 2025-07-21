@@ -1488,7 +1488,7 @@ if (isset($_SESSION['nombre'])) {
                                     <td style="min-width: 351px;">
                                         <div v-if="actualizar==(posicion+1)">
                                             <label class="ms-1"> Mes: </label>
-                                            <select v-model=" mes_select" class="me-3" ><!--  @change="verMes" -->
+                                            <select v-model="mes_select" class="me-3" ><!--  @change="verMes" -->
                                                <option v-for="(month,index) in months" :value="(index+1)" :disabled="anio_select <= anioProyecto  && (index + 1) < mesProyecto">{{month}}</option><!-- AQUI (mesProyecto>(index+1))-->
                                             </select>
                                             <label class="ms-1 "> Año: </label>
