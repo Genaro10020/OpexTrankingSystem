@@ -188,6 +188,7 @@ const AltaProyectos = {
       correo_proyecto: '',
       ahorroMesFinanzas:[],
       editarMesFinanzas:'',
+      idsProyectosXAnioSelect:[],
       /*GENERANDO VALOR*/
       select_anio_generando_valor: '',
       sumaClienteValor: '',
@@ -224,7 +225,8 @@ const AltaProyectos = {
       ahorro_co2_mes_por_proyecto: [],
       ahorro_co2_mes_mes: [],
       fechaAltaProyecto:'',
-      hayDatos:false
+      hayDatos:false,
+      mesesCapturadoYSumaXProyecto:[]
     }
   },
   mounted() {
@@ -332,19 +334,19 @@ const AltaProyectos = {
 
           console.log("SUMA TOTAL DE CO2 POR PROYECTO", resultadoFinal);
           this.ahorro_co2_mes_mes = resultadoFinal
-
-
           /////////////////////////////
-
-
-        
-
           
           this.cantidadDocumentos = []
+          let idsProyectosXAnioSelect = [];
           for (var i = 0; i < this.proyectosXanioCalendario.length; i++) {
             this.buscarDocumentos('Estatus', this.proyectosXanioCalendario[i].id);
+            idsProyectosXAnioSelect.push(this.proyectosXanioCalendario[i].id)
+           
           }
+          this.idsProyectosXAnioSelect = idsProyectosXAnioSelect;
+          console.log("ID DEL PROYETO ES",this.idsProyectosXAnioSelect);
           this.consultarAhorro()
+          this.consultarMesesCapturadosYsumaXProyecto()
         } else {
           alert("En la consulta calendario total por proyecto, no se logro")
         }
@@ -355,6 +357,51 @@ const AltaProyectos = {
       })
     },
 
+
+    consultarMesesCapturadosYsumaXProyecto(){
+      axios.get('impactoAmbientalProyectoController.php',{
+        params:{
+        accion:'ConsultarCapturasProyecto',
+        idsProyectos:this.idsProyectosXAnioSelect
+        }
+      }).then(response=>{
+            let resultado = response.data[0][0];
+            console.log("RespuestaCapturados: ", resultado);
+              for (let idProyecto in resultado) {
+                      let sumaTotal = resultado[idProyecto].sumaTotal;
+                      resultado[idProyecto].sumaTotal = parseFloat(sumaTotal.toFixed(2)).toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+              }
+              console.log("Respuesta formateada: ", resultado);
+              this.mesesCapturadoYSumaXProyecto = resultado
+        
+      }).catch(error =>{
+        console.log("Error axios",error)
+      })
+    },
+   retornandoMesesCapturados(idProyecto) {
+    let result = this.mesesCapturadoYSumaXProyecto[idProyecto]
+    // Verifica si el proyecto existe y tiene la propiedad 'mesesCapturados'
+    if (result) {
+      return result.mesesCapturados+"/12"; // Retorna la cantidad de meses capturados
+    } else {
+      return ""; // Si no existe o no tiene la propiedad, retorna 0
+    }
+  },
+  retornandoSumaTotalCapturada(idProyecto) {
+    if(this.mesesCapturadoYSumaXProyecto.length<=0){
+      return "Sumando..";
+    }else{
+    let result = this.mesesCapturadoYSumaXProyecto[idProyecto]
+    // Verifica si el proyecto existe y tiene la propiedad 'mesesCapturados'
+    if (result) {
+      return result.sumaTotal; // Retorna la cantidad de meses capturados
+    } else {
+      return '$0.00'; // Si no existe o no tiene la propiedad, retorna 0
+    }
+
+    }
+
+  },
     /*Ahorro por financiero boton guardar y actualizar
     guardarEdicion() {
 
@@ -399,7 +446,6 @@ const AltaProyectos = {
 
     //////////////////////////////////////////////Consulta Ahorro
     consultarAhorro() {
-    
       axios.get('ahorroFinancieroController.php', {
         params: {
           anio: this.select_anio_calendario

@@ -8,6 +8,12 @@ if (isset($_SESSION['nombre'])) {
 
     switch ($_SERVER['REQUEST_METHOD']) {
         case 'GET':
+            if(isset($_GET['accion']) && $_GET['accion']=='ConsultarCapturasProyecto'){
+                $idsProyectos=$_GET['idsProyectos'];
+               $val[]  = consultarCapturaTotalMesesXProyectoXAnio($idsProyectos);
+            }else{
+                 $val[] = "NO llegaron: ";
+            }
             // Manejar solicitud GET (consultar)
 
             break;
