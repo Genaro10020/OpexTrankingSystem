@@ -134,6 +134,8 @@ const AltaProyectos = {
       pilar: '',
       objetivos_ligados: '',
       /*SEGUIMIENTO DE PROYECTO*/
+      mesProyecto: 0,
+      anioProyecto: 0,
       id_proyecto: '',
       arregloID: [],
       columnaImpactoAmbiental: [],
@@ -517,6 +519,7 @@ const AltaProyectos = {
             }
 
           }
+          this.verProyecto()
         } else {
           alert("La consulta de proyectos no se realizo correctamente.")
         }
@@ -3338,6 +3341,33 @@ const AltaProyectos = {
       console.log("meses: ", this.MesXAnio)
       console.log("Año: ", this.AnioXMes)
     },
+    verProyecto() {
+      this.proyecto = this.proyectos.find(p => p.id === this.id_proyecto);
+      var fechaDeProyecto=this.proyecto.fecha
+      console.log("fecha", fechaDeProyecto);
+      const [dia, mes, anio] = fechaDeProyecto.split("-");
+      console.log("Mes:", mes); 
+      console.log("Año:", anio);
+      /* let mes = 0;
+      switch (mes) {
+        case 1:
+
+          break;
+        default:
+          break;
+      } */
+      this.mesProyecto = parseInt(mes)
+
+
+      this.mes_select = this.mesProyecto
+      console.log("mesProyecto:",this.mesProyecto)
+    },
+    /* verMes(){
+      console.log("Mes:", this.mes_select)
+    },
+    verAnio(){
+      console.log("año:", this.anio_select)
+    }, */
     darFormatoInputValorMensual(index, WhoIsIt) {
       if (WhoIsIt === 'CO') {
         /*if(this.inputValorMensualCO[index]!==undefined){
@@ -3645,7 +3675,7 @@ const AltaProyectos = {
     guardarSeguimiento() {
       console.log()
       console.log(this.input_tons_co2)
-      console.log(this.inputImpactoAmbientalInicial)
+      console.log("esto trae: ",this.inputImpactoAmbientalInicial)
       console.log(this.input_ahorro_suave)
       console.log(this.input_ahorro_duro)
       if (this.input_tons_co2 !== '') {

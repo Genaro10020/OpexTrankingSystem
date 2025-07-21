@@ -501,7 +501,7 @@ function insertarProyecto($folio, $fecha_alta_invertida, $nombre_proyecto, $fuen
     return array($estado, $estado_folios, $folio_recuperado, $folio_sin_numero, $igual, $insercion_impacto, $impacto_ambiental_array,$impacto_mensual);
 }
 
-function actualizarProyecto($id,$fecha_alta_invertida, $nombre_proyecto, $selectFuente, $planta, $area, $departamento, $metodologia, $responsable_id, $observador, $impacto_ambiental_emisiones,$valores,$anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS,$idsPlanMesual){
+function actualizarProyecto($id,$fecha_alta_invertida, $nombre_proyecto, $selectFuente, $planta, $area, $departamento, $metodologia, $responsable_id, $observador,$impacto_ambiental, $impacto_ambiental_emisiones,$valores,$anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS,$idsPlanMesual){
     global $conexion;
     $estado = false;
 
@@ -534,8 +534,36 @@ function actualizarProyecto($id,$fecha_alta_invertida, $nombre_proyecto, $select
          $valoresMensualAD = json_decode($valoresMensualAD, JSON_UNESCAPED_UNICODE);//conviertiendo a arreglos
          $valoresMensualAS = json_decode($valoresMensualAS, JSON_UNESCAPED_UNICODE);//conviertiendo a arreglos
          $idsPlanMesual = json_decode($idsPlanMesual, JSON_UNESCAPED_UNICODE);//conviertiendo a arreglos
+         $impacto_ambiental = json_decode($impacto_ambiental, JSON_UNESCAPED_UNICODE);//conviertiendo a arreglos
 
          $estado = true;
+         $impacto_ambiental_existentes= [];
+         $diferentes = [];
+        $consulta = "SELECT * FROM impacto_ambiental_proyecto WHERE id_proyecto = $id";
+        $query = $conexion->query($consulta);
+        if ($query->num_rows > 0) {
+            //Recuperado el responsable inserto
+            
+            //$fila = $query->query_result();
+            while ($datos = mysqli_fetch_array($query)) {
+                    $impacto_ambiental_existentes[] = $datos['impacto_ambiental'];
+                }
+            $diferentes = array_diff($impacto_ambiental, $impacto_ambiental_existentes);
+            //diferentes    impacto_ambiental_existentes impacto_ambiental
+        }
+        $taminio = count($diferentes);
+        if($taminio>0){//Si hay diferentes insertarlo en la tabla de lo contrario no hacer nada
+            foreach ($diferentes as $impacto) {
+                $consulta = "INSERT INTO impacto_ambiental_proyecto (id_proyecto,impacto_ambiental) VALUES ('$id','$impacto')";
+                if ($conexion->query($consulta) !== TRUE) {
+                    $insercion_impacto = "Incorrecto";
+                    break;
+                }
+            } 
+        }
+       
+
+
          //con filter elimino todos los "" y si todos estan vacios no se actualizara, de lo contrario actualizara.
          $cantidad_meses=count($mesXAnio);
          $cantidad_ids=count($idsPlanMesual);
@@ -571,7 +599,8 @@ function actualizarProyecto($id,$fecha_alta_invertida, $nombre_proyecto, $select
         return  "ME RETORNO".$stmt->error;
     }
     $stmt->close();
-   return $estado;
+   //return array($estado,print_r($impacto_ambiental_existentes),print_r($diferentes));
+    return $estado;
 }
 
 

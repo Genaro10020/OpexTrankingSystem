@@ -1442,7 +1442,7 @@ if (isset($_SESSION['nombre'])) {
                             <div class="col-12 col-lg-6">
                                 <div class="input-group mt-3 mx-2 mb-2 ">
                                     <span class="input-group-text w-5">Seleccione Proyecto</span>
-                                    <select class="w-50" @keydown.up="cancelarEvento" @keydown.down="cancelarEvento" @keydown.left="cancelarEvento" @keydown.right="cancelarEvento" @change="consultarImpactoAmbieltalXProyectoID()" v-model="id_proyecto">
+                                    <select class="w-50" @keydown.up="cancelarEvento" @keydown.down="cancelarEvento" @keydown.left="cancelarEvento" @keydown.right="cancelarEvento" @change="consultarImpactoAmbieltalXProyectoID(); verProyecto() " v-model="id_proyecto">
                                         <option value="" disabled>Seleccione...</option>
                                         <option v-for="proyecto in proyectos.sort((a, b) => a.nombre_proyecto.localeCompare(b.nombre_proyecto))" :value="proyecto.id" style="font-size:15px;">{{proyecto.nombre_proyecto}}</option>
                                     </select>
@@ -1476,7 +1476,6 @@ if (isset($_SESSION['nombre'])) {
                             </thead>
                             <tbody>
                                 <!-----------------------------------------------------------------------------CUANDO YA EXISTE MINIMO UN SEGUIMIENTO -->
-
                                 <tr v-if="seguimientos>0" style="vertical-align: middle; font-size: 1.1em;" v-for="(proyecto,posicion) in arregloID" :key="posicion">
                                     <?php if ($_SESSION['acceso'] != "Financiero") { ?>
                                         <td v-if="seguimiento_status">
@@ -1489,17 +1488,17 @@ if (isset($_SESSION['nombre'])) {
                                     <td style="min-width: 351px;">
                                         <div v-if="actualizar==(posicion+1)">
                                             <label class="ms-1"> Mes: </label>
-                                            <select v-model=" mes_select" class="me-3">
-                                                <option v-for="(month,index) in months" :value="(index+1)">{{month}}</option>
+                                            <select v-model=" mes_select" class="me-3" ><!--  @change="verMes" -->
+                                               <option v-for="(month,index) in months" :value="(index+1)" :disabled="anio_select <= anioProyecto  && (index + 1) < mesProyecto">{{month}}</option><!-- AQUI (mesProyecto>(index+1))-->
                                             </select>
                                             <label class="ms-1 "> Año: </label>
-                                            <select v-model="anio_select">
-                                                <option v-for="(year,index) in years" :value="year">{{year}}</option>
+                                            <select v-model="anio_select"><!-- @change="verAnio" -->
+                                                <option v-for="(year,index) in years" :value="year" :disabled="(anioProyecto>year)">{{year}}</option>
                                             </select>
                                         </div>
                                         <div v-else>
                                             <label> {{mostrandoMes(proyecto.mes)}} <label>
-                                                    <label> {{proyecto.anio}} <label>
+                                            <label> {{proyecto.anio}} <label>
                                         </div>
                                     </td>
 
@@ -1567,11 +1566,11 @@ if (isset($_SESSION['nombre'])) {
                                     <td style="min-width: 351px;">
                                         <label v-if="actualizatabla==true" class="ms-3"> Mes: </label>
                                         <select v-if="actualizatabla==true" v-model="mes_select">
-                                            <option v-for="(month,index) in months" :value="(index+1)">{{month}}</option>
+                                            <option v-for="(month,index) in months" :value="(index+1)" :disabled="anio_select <= anioProyecto  && (index + 1) < mesProyecto">{{month}}</option>
                                         </select>
                                         <label v-if="actualizatabla==true" class="ms-3"> Año: </label>
                                         <select v-if="actualizatabla==true" v-model="anio_select">
-                                            <option v-for="(year,index) in years" :value="year">{{year}}</option>
+                                            <option v-for="(year,index) in years" :value="year" :disabled="(anioProyecto>year)">{{year}}</option>
                                         </select>
                                         <!--<input class="mx-1" v-if="actualizatabla==true" type="date" v-model="fecha_desde"></input>--><!--:value="proyecto.fecha_inicial"-->
                                     </td>
