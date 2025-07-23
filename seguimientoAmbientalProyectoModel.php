@@ -195,20 +195,22 @@ function guardarSeguimietoInicial($id_proyecto, $mes, $anio, $toneladas, $inputI
                 } else {
                     for ($i = 0; $i < $largo; $i++) {
                         $id_impacto = $ids_impactos[$i]['id'];
-                        $datos = $inputImpactoAmbiental[$i];
-                        $query_insert = "INSERT INTO registros_impacto_ambiental (id_impacto_ambiental_proyecto,mes,anio,tons_co2,mes_anio,dato,ahorro_suave,ahorro_duro) VALUES (?,?,?,?,?,?,?,?)";
-                        $stmt_insert = $conexion->prepare($query_insert);
-                        if ($stmt_insert) {
-                            $stmt_insert->bind_param("iiisssss", $id_impacto, $mes, $anio, $toneladas, $mes_anio, $datos, $suave, $duro);
-                            if ($stmt_insert->execute()) {
-                                $estado3 = true;
+
+                        if (isset($inputImpactoAmbiental[$i]) && $inputImpactoAmbiental[$i]){
+                            $datos = $inputImpactoAmbiental[$i];
+                            $query_insert = "INSERT INTO registros_impacto_ambiental (id_impacto_ambiental_proyecto,mes,anio,tons_co2,mes_anio,dato,ahorro_suave,ahorro_duro) VALUES (?,?,?,?,?,?,?,?)";
+                            $stmt_insert = $conexion->prepare($query_insert);
+                            if ($stmt_insert) {
+                                $stmt_insert->bind_param("iiisssss", $id_impacto, $mes, $anio, $toneladas, $mes_anio, $datos, $suave, $duro);
+                                if ($stmt_insert->execute()) {
+                                    $estado3 = true;
+                                } else {
+                                    $estado3 = false;
+                                }
+                                $stmt_insert->close();
                             } else {
-                                $estado3 = false;
-                                break;
+                                return $estado3 = "Error en la preparación de la consulta de inserción: " . $conexion->error;
                             }
-                            $stmt_insert->close();
-                        } else {
-                            return $estado3 = "Error en la preparación de la consulta de inserción: " . $conexion->error;
                         }
                     }
                 }
@@ -242,21 +244,22 @@ function actualizarRegistroImpactoAmbiental($id_proyecto, $mes, $anio, $tonelada
     $cantidad_registro = count($idsInputImpactoAmbiental);
     $vueltas = 0;
     $existe = false;
-    $query = "SELECT registros_impacto_ambiental.id AS id_registros, registros_impacto_ambiental.mes_anio FROM  registros_impacto_ambiental JOIN impacto_ambiental_proyecto ON impacto_ambiental_proyecto.id = registros_impacto_ambiental.id_impacto_ambiental_proyecto WHERE impacto_ambiental_proyecto.id_proyecto = ?";
+    $query = "SELECT registros_impacto_ambiental.id AS id_registros, registros_impacto_ambiental.mes_anio, impacto_ambiental_proyecto.id AS idImpactoAmbiental FROM  registros_impacto_ambiental JOIN impacto_ambiental_proyecto ON impacto_ambiental_proyecto.id = registros_impacto_ambiental.id_impacto_ambiental_proyecto WHERE impacto_ambiental_proyecto.id_proyecto = ?";
     $stmt = $conexion->prepare($query);
     if ($stmt) {
         $stmt->bind_param("i", $id_proyecto);
         $stmt->execute();
         $resultados = $stmt->get_result();
-        $ids_que_coinciden = [];
+        $idsRegistrosBD = [];
+        $idsImpactosConRegistro = [];
         while ($row = $resultados->fetch_assoc()) { //recupero columnas id impacto y mes_anio de tabla registros, con anio y  id en consulta
             if ($mes_anio == $row['mes_anio']) {
-                $ids_que_coinciden[] = $row['id_registros']; // tomo los ids que contiene mismo mes y anio
+                $idsRegistrosBD[] = $row['id_registros']; // tomo los ids que contiene mismo mes y anio
+                $idsImpactosConRegistro[] = $row['idImpactoAmbiental'];
             }
         }
-        $diferencias = array_diff($idsInputImpactoAmbiental, $ids_que_coinciden);
-        if (empty($diferencias) || empty($ids_que_coinciden)) {
-            $existe = false;
+        
+        if (!empty($idsRegistrosBD)) {
             for ($i = 0; $i < $cantidad_registro; $i++) {
                 $id = $idsInputImpactoAmbiental[$i]; //continen los id de la tabla registros_impacto_ambiental
                 $dato = $inputImpactoAmbiental[$i];
@@ -271,13 +274,75 @@ function actualizarRegistroImpactoAmbiental($id_proyecto, $mes, $anio, $tonelada
                 }
             }
         } else {
-            $existe = true;
+
         }
+        $diferenciaTamanio = "No";
+        $diferencias = [];
+        $cantidad_diferentes  = 0;
+         $cantidad_existentes = 0;
+        $datonuevo = "";  
+        $impactoBDTablaImpactoAmbiental = [];
+        if(count($idsRegistrosBD)!=count($inputImpactoAmbiental)){
+            $consulta = "SELECT * FROM impacto_ambiental_proyecto WHERE id_proyecto = ?";//recupero los ids de impacto ambietal del proyecto
+            $stmt = $conexion->prepare($consulta);
+            if($stmt){
+                $stmt->bind_param('i',$id_proyecto);
+                $stmt->execute();
+                $resultado = $stmt->get_result();
+                while($datos = $resultado->fetch_assoc()){
+                        $impactoBDTablaImpactoAmbiental[]=  $datos['id'];
+                }
+            }else{
+                $estado = false;
+            }
+             $diferenciaTamanio = "Si";
+             $diferencias = array_diff($impactoBDTablaImpactoAmbiental, $idsImpactosConRegistro);
+             $diferencias = array_values($diferencias);// Resetear los índices para tener un arreglo limpio
+            
+             $cantidad_existentes=count($idsImpactosConRegistro);   
+             $cantidad_diferentes = count($diferencias);
+             
+             if($inputImpactoAmbiental[$cantidad_diferentes-1]){
+                        for ($i=0; $i < $cantidad_diferentes; $i++) { 
+                                $id_impacto =  $diferencias[$i];
+                                if(isset($inputImpactoAmbiental[$cantidad_existentes+$i]) && $inputImpactoAmbiental[$cantidad_existentes+$i]){
+                                    $datonuevo = $inputImpactoAmbiental[$cantidad_existentes+$i];//Evito los que ya existen para insertar los que no BUSCAR EL CORRECTO PARA INSRETAR
+                                    $query_insert = "INSERT INTO registros_impacto_ambiental (id_impacto_ambiental_proyecto,mes,anio,tons_co2,mes_anio,dato,ahorro_suave,ahorro_duro) VALUES (?,?,?,?,?,?,?,?)";
+                                    $stmt_insert = $conexion->prepare($query_insert);
+                                    if ($stmt_insert) {
+                                        $stmt_insert->bind_param("iiisssss", $id_impacto, $mes, $anio, $toneladas, $mes_anio, $datonuevo, $suave, $duro);
+                                        if ($stmt_insert->execute()) {
+                                        $estado = true;
+                                        } else {
+                                            $estado = false;
+                                        }
+                                        $stmt_insert->close();
+                                    } else {
+                                        return $estado = "Error en la preparación de la consulta de inserción: " . $conexion->error;
+                                    }
+                                }
+                                
+                    }
+             }else{
+                $diferenciaTamanio .= ", pero no existe la posicion";
+             }
+            
+        }
+    
+
+        //consultar los ids impacto existentes, verificar elque no exista para insertar
+        /*
+        if(!empty($diferencias)){
+            $existe = false;
+
+        }else{
+            $existe = true;
+        }*/
     } else {
         $estado = "Error en la preparación de la consulta: " . $conexion->error;
     }
     $stmt->close();
-    return array($estado, $existe, $idsInputImpactoAmbiental, $ids_que_coinciden, $diferencias);
+    return array($estado, $existe, $idsInputImpactoAmbiental, $idsRegistrosBD,$inputImpactoAmbiental,$diferenciaTamanio,$idsImpactosConRegistro,$impactoBDTablaImpactoAmbiental,$diferencias,$cantidad_diferentes,$datonuevo);
 }
 
 function eliminarArea()

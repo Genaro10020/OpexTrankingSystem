@@ -548,7 +548,7 @@ const AltaProyectos = {
       axios.post('proyectosController.php', {
         id_proyecto: this.id_proyecto //ID PROYECTO
       }).then(response => {
-        console.log(response.data)
+        console.log("proyectoXID",response.data)
         if (response.data[0][1] == true) {
           if (response.data[0][0].length > 0) {
             this.arregloID = response.data[0][0];
@@ -581,7 +581,7 @@ const AltaProyectos = {
       axios.post('impactoAmbientalProyectoController.php', {
         id_proyecto: this.id_proyecto //ID PROYECTO
       }).then(response => {
-        console.log(response.data)
+        console.log("Consultado Registro Impactos",response.data)
         if (response.data[0][1] == true) {
           if (response.data[0][0].length > 0) {
             this.arregloID = response.data[0][0];
@@ -590,24 +590,32 @@ const AltaProyectos = {
             this.seguimientos = response.data[0][0].length;
             var impactoAmbiental = [];
             var datos = [];
-            for (let j = 0; j < response.data[0][2][0].length; j++) {
+
+            impactoAmbiental = JSON.parse(response.data[0][0][0].impacto_ambiental)
+            console.log(impactoAmbiental)
+
+            /*for (let j = 0; j < response.data[0][2][0].length; j++) {
               impactoAmbiental.push(response.data[0][2][0][j].impacto_ambiental)
-            }
+            }*/
             if (response.data[0][0][0].status_seguimiento === 'Cerrado') {
               this.seguimiento_status = false
             } else {
               this.seguimiento_status = true
             }
 
-            var no_repetidos = new Set(impactoAmbiental);
-            this.columnaImpactoAmbiental = Array.from(no_repetidos);;//tiene los nombres de impacto ambiental
-            this.inputImpactoAmbientalInicial = Array(this.columnaImpactoAmbiental.length);
+            //var no_repetidos = new Set(impactoAmbiental);
+            //this.columnaImpactoAmbiental = Array.from(no_repetidos);;//tiene los nombres de impacto ambiental
+            this.columnaImpactoAmbiental = impactoAmbiental;
+            this.inputImpactoAmbientalInicial = impactoAmbiental
+            
+            //this.inputImpactoAmbientalInicial = Array(this.columnaImpactoAmbiental.length);
 
 
             if (this.columnaImpactoAmbiental[0] == 'Sin Impacto') {
               this.inputImpactoAmbientalInicial = Array(1);
               this.inputImpactoAmbientalInicial[0] = '0.00';
               this.sinImpacto = 'Sin Impacto'
+              console.log("NO HAY IMPACTO")
             } else {
               this.inputImpactoAmbientalInicial = Array(this.columnaImpactoAmbiental.length);
               this.sinImpacto = ''
@@ -1036,9 +1044,9 @@ const AltaProyectos = {
       } else {
         //Si no existe en idsCheckImpacto pero si el selectEmision limpiala
         const index = this.selectEmisiones.findIndex(elemento => elemento.startsWith(`${id_impacto}<->`));
-        console.log("index" + index);
+
         if (index !== -1) {
-          console.log("Se vacio la poscion " + index + "Se encontraba el id_impacto: " + id_impacto);
+          console.log("Se vacio la poscion " + index );
           this.selectEmisiones[index] = "";
         }
       }
@@ -2531,6 +2539,7 @@ const AltaProyectos = {
     },
     verificarImpacto(impacto) {
       let impactosConDatos = this.impactosConDatos;
+      console.log("Contiene Datos",this.impactosConDatos, this.impactosConDatos.includes(impacto))
       return impactosConDatos.includes(impacto)
     },
     //this.impactosConDatos
@@ -2544,7 +2553,9 @@ const AltaProyectos = {
       this.titulo_modal = ''
       this.nueva = ''
       this.respondio = true;
+      
       if (modal == "Alta") {
+        this.impactosConDatos = []; //al ser nuevo proyecto limpiamos si existe registros de ese impacto
         this.actualizar_proyecto = false
         this.titulo_modal = "Alta Proyecto"
         this.myModal = new bootstrap.Modal(document.getElementById("modal-alta-proyecto"))
@@ -3231,17 +3242,24 @@ const AltaProyectos = {
       console.log("Ids", idsImpacto)
 
       var impacto_ambiental_emisiones = this.selectEmisiones
+      let idsImpactosSinEnlace = []; 
       //ordeno las emisiones como el arreglo de impacto ambieltal
-      let emisiones_ordenadas = idsImpacto.flatMap(element =>
-        impacto_ambiental_emisiones.filter(ids => element == ids.split('<->')[0]).map(elementos => elementos.split('<->')[1])//primero reviso que sea igual al id y des tomo el restp
-      )
+      let emisiones_ordenadas = idsImpacto.flatMap(element =>{
+      let coincidencias = impacto_ambiental_emisiones.filter(ids => element == ids.split('<->')[0]).map(elementos => elementos.split('<->')[1])//primero reviso que sea igual al id y des tomo el restp
+       if (coincidencias.length === 0) {
+          idsImpactosSinEnlace.push(element); // Guardamos los que no se encontraron
+        }
+        return coincidencias;
+      });
 
       if (emisiones_ordenadas.length <= 0) {//Si no hay impactos tambien colocarlo sin impacto
         emisiones_ordenadas.push('Sin Impacto')
       }
+      console.log("idsImpactosSinEnlace")
+      if(idsImpactosSinEnlace.length>0){return alert("Seleccione un Enlace para el impacto");}
+
 
       console.log("Ya acomodados", emisiones_ordenadas)
-
       var valores = [];
       for (let index = 0; index < this.valoresCheck.length; index++) {
         if (this.valoresCheck[index] != "") {
@@ -3724,7 +3742,7 @@ const AltaProyectos = {
     guardarSeguimiento() {
       console.log()
       console.log(this.input_tons_co2)
-      console.log("esto trae: ",this.inputImpactoAmbientalInicial)
+      console.log(this.inputImpactoAmbientalInicial)
       console.log(this.input_ahorro_suave)
       console.log(this.input_ahorro_duro)
       if (this.input_tons_co2 !== '') {
@@ -3769,7 +3787,7 @@ const AltaProyectos = {
                       alert("No se realizo correctamente la consulta Relacionada")
                     }
                   } else {
-                    alert("No se econtro el ID del Proyecto")
+                    alert("No se encontró el ID del Proyecto, recargue el sistema, si el problema persiste ponerse en contacto con Excelencia Operativa")
                   }
                 }
               }).catch(error => {
@@ -3796,7 +3814,19 @@ const AltaProyectos = {
     actualizarSeguimiento(posicion) {
 
       //console.log("id Proyecto" + this.id_proyecto + "Desde: " + this.fecha_desde + " Hasta: " + this.fecha_hasta + " Toneladas:" + this.input_tons_co2 + "Impacto Ambielta: " + this.inputImpactoAmbiental[(posicion)] + " Ahorro Duro: " + this.input_ahorro_suave + " Ahorra: " + this.input_ahorro_duro);
-
+        console.log("inputs con datos: ",this.inputImpactoAmbiental[posicion])//cantidad input con datos. 
+        console.log("cantidad de inputs con resgistros: ",this.inputImpactoAmbiental[posicion].length)//cantidad input con datos.
+        console.log("columnas existentes: ",this.columnaImpactoAmbiental)//CantidadColumnas   
+        console.log("cantidad de columnas: ",this.columnaImpactoAmbiental.length)//CantidadColumnas    
+      if(this.inputImpactoAmbiental[posicion].length!=this.columnaImpactoAmbiental.length){
+        return Swal.fire({
+                title: "Un campo esta vacío!",
+                icon: "info",
+                html:"Si no es así, póngase en contacto con excelencia operativa, Enerya",
+                draggable: true
+              });
+      }
+                   
       axios.put('seguimientoAmbientalProyectoController.php', {
         id_proyecto: this.id_proyecto,
         mes: this.mes_select,
@@ -3807,7 +3837,7 @@ const AltaProyectos = {
         input_ahorro_suave: this.input_ahorro_suave,
         input_ahorro_duro: this.input_ahorro_duro,
       }).then(response => {
-        console.log(response.data)
+        console.log("Respuesta actualizacion",response.data)
         if (response.data[0][1] == true) {
           alert("Ese mes ya existe.")
         } else {

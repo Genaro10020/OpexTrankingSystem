@@ -285,10 +285,13 @@ if (isset($_SESSION['nombre'])) {
                                             </div>
                                             <!--Impacto Ambiental-->
                                             <div class="input-group mb-3">
+                                                {{idsCheckImpacto}}<br>
+                                                {{checkImpactoAmbiental}}<br>
+                                                {{selectEmisiones}}<br>
                                                 <span class="input-group-text w-25 text-start">Impacto <br>Ambiental<br><label class=""><i class="bi bi-question-circle"></label></i></span>
                                                 <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkImpactoAmbiental.length<=0 || respondio === false && checkImpactoAmbiental.length>0 && checkImpactoAmbiental.filter(elemento => elemento !='').length != selectEmisiones.filter(elemento => elemento !='').length, '': checkImpactoAmbiental.length>0}">
                                                     <div v-for="(impacto,index) in impactoAmbiental" class="form-check border border-1  mt-1">
-                                                        <input class="form-check-input" type="checkbox" id="checkbox1" v-model="checkImpactoAmbiental" :value="impacto.id+'<->'+impacto.nombre" @change="checkeandoImpactoAmbiental(impacto.id)" :disabled="verificarImpacto(impacto.id+'<->'+impacto.nombre)" />
+                                                        <input class="form-check-input" type="checkbox" id="checkbox1" v-model="checkImpactoAmbiental" :value="impacto.id+'<->'+impacto.nombre" @change="checkeandoImpactoAmbiental(impacto.id,impacto.nombre)" :disabled="verificarImpacto(impacto.id+'<->'+impacto.nombre)" />
                                                         <label class="form-check-label w-75" for="checkbox1">
                                                             {{impacto.nombre}}
                                                         </label>

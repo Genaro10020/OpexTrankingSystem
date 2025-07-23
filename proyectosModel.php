@@ -539,6 +539,7 @@ function actualizarProyecto($id,$fecha_alta_invertida, $nombre_proyecto, $select
          $estado = true;
          $impacto_ambiental_existentes= [];
          $diferentes = [];
+         $diferentesEliminar=[];
         $consulta = "SELECT * FROM impacto_ambiental_proyecto WHERE id_proyecto = $id";
         $query = $conexion->query($consulta);
         if ($query->num_rows > 0) {
@@ -548,18 +549,36 @@ function actualizarProyecto($id,$fecha_alta_invertida, $nombre_proyecto, $select
             while ($datos = mysqli_fetch_array($query)) {
                     $impacto_ambiental_existentes[] = $datos['impacto_ambiental'];
                 }
-            $diferentes = array_diff($impacto_ambiental, $impacto_ambiental_existentes);
+            $diferentes = array_diff($impacto_ambiental, $impacto_ambiental_existentes);//si no exite en BD insertarlo
+            $diferentesEliminar = array_diff($impacto_ambiental_existentes,$impacto_ambiental);//si no existe en la seleccion de impacto eliminarlo de la BD
             //diferentes    impacto_ambiental_existentes impacto_ambiental
         }
+        
         $taminio = count($diferentes);
         if($taminio>0){//Si hay diferentes insertarlo en la tabla de lo contrario no hacer nada
             foreach ($diferentes as $impacto) {
                 $consulta = "INSERT INTO impacto_ambiental_proyecto (id_proyecto,impacto_ambiental) VALUES ('$id','$impacto')";
                 if ($conexion->query($consulta) !== TRUE) {
-                    $insercion_impacto = "Incorrecto";
+                   return $estado = "Nuevo impacto ambiental no se inserto";
                     break;
                 }
             } 
+        }
+
+        if (count($diferentesEliminar) > 0) {
+            $consultaDelete = "DELETE FROM impacto_ambiental_proyecto WHERE impacto_ambiental = ? AND id_proyecto = ?";
+            $stmtDelete = $conexion->prepare($consultaDelete);
+            if ($stmtDelete) {
+                foreach ($diferentesEliminar as $impacto) {
+                    $stmtDelete->bind_param("si", $impacto, $id); // 's' para string, 'i' para entero
+                    if (!$stmtDelete->execute()) {
+                        return $estado = "No se puede eliminar el impacto deseleccionando: " . $stmtDelete->error;
+                    }
+                }
+                $stmtDelete->close(); // Cerrar la declaración
+            } else {
+                return $estado = "Error en la preparación de la consulta de eliminación: " . $conexion->error;
+            }
         }
        
 
@@ -599,7 +618,7 @@ function actualizarProyecto($id,$fecha_alta_invertida, $nombre_proyecto, $select
         return  "ME RETORNO".$stmt->error;
     }
     $stmt->close();
-   //return array($estado,print_r($impacto_ambiental_existentes),print_r($diferentes));
+   //return array($estado,print_r($impacto_ambiental_existentes),print_r($impacto_ambiental),print_r($diferentes),print_r($diferentesEliminar));
     return $estado;
 }
 
