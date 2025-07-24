@@ -3256,7 +3256,7 @@ const AltaProyectos = {
         emisiones_ordenadas.push('Sin Impacto')
       }
       console.log("idsImpactosSinEnlace")
-      if(idsImpactosSinEnlace.length>0){return alert("Seleccione un Enlace para el impacto");}
+      if(idsImpactosSinEnlace.length>0){return alert("Seleccione el Alcance del impacto");}
 
 
       console.log("Ya acomodados", emisiones_ordenadas)
