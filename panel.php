@@ -405,6 +405,16 @@ if (isset($_SESSION['nombre'])) {
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-25 me-2">Objetivo Estrategico</span>
                                                 <input type="checkbox" v-model="objetivo_estrategico" :disabled="actualizar_proyecto">
+
+                                                <div class="d-flex align-items-center ps-5">
+                                                    <div class="form-check form-switch">
+                                                       <!--  <label class="form-check-label" for="switchCheckDefault">Presupuestado</label> -->
+                                                        <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault" v-model="presupuestado" @change="proyectoSIoNOpresupuestado()" style="background-color: #B3F09B; border-color: #58794aff;">
+                                                        <label class="fw-light text-sm">
+                                                            <strong>{{ presupuestado ? 'Presupuestado' : 'No presupuestado' }}</strong>
+                                                        </label>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-3 my-auto mx-auto "><!--bloque imagen Alta Proyecto-->
@@ -431,6 +441,15 @@ if (isset($_SESSION['nombre'])) {
                                     <div class="col-12 pb-2">
                                         <table class="table table-striped table-bordered">
                                             <thead class="text-center">
+                                                <!-- <tr class="sin-fondo">
+                                                    <th>Ahorro</th>  encabezado
+                                                    <th scope="col" v-for="(numero, index) in 12">  
+                                                        <select  style="width:70px" >
+                                                            <option value="AhorroDuro">Duro</option>
+                                                            <option value="AhorroSuave">Suave</option>
+                                                        </select>
+                                                    </th>
+                                                </tr>ya esta la estructura, define datos y logica-->
                                                 <tr>
                                                     <th>Año</th>
                                                     <th scope="col" v-for="(numero,index) in 12">
@@ -726,6 +745,7 @@ if (isset($_SESSION['nombre'])) {
                                 <th style="min-width:230px;">Objetivo(s) Estratégico(s)</th>
                                 <th style="min-width:230px;">Impacto Ambiental</th>
                                 <th style="min-width:230px;">Valores</th>
+                                <th>Presupuestado</th>
                                 <th>Tons CO2 por Evitar <br>(Proyectado)</th>
                                 <th>Ahorro Duro $MXN/Año <br>(Proyectado )</th>
                                 <th>Ahorro Suave $MXN/Año <br>(Proyectado)</th>
@@ -776,6 +796,9 @@ if (isset($_SESSION['nombre'])) {
                                                         <label>
                                                 </li>
                                             </ul>
+                                        </td>
+                                        <td class="border border-secondary text-center">
+                                            {{proyecto.presupuestado}}
                                         </td>
                                         <td class="border border-secondary">{{proyecto.tons_co2}}<br> <label class="text-success" v-if="proyectoSumas[proyecto.id]"><b>{{proyectoSumas[proyecto.id].sumaTons}}<b><label></td>
                                         <td class="border border-secondary">{{proyecto.ahorro_duro}}<br> <label class="text-primary" v-if="proyectoSumas[proyecto.id]"><b>{{proyectoSumas[proyecto.id].sumaDuro}}<b><label></td>

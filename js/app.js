@@ -71,6 +71,7 @@ const AltaProyectos = {
       numero_index: 0,
       respondio: true,//utilizo para cambiar el css si no repondio en altas
       objetivo_estrategico: false,
+      presupuestado: false,
       existeImagenSeleccionada: false,
       existeImagenSeleccionadaSeguimiento: false,
       existeImagenSeleccionadaCO2: false,
@@ -2530,6 +2531,8 @@ const AltaProyectos = {
                 this.calculandoMesesDesdeFechaCredaEnProyecto()
           }
           
+          this.presupuestado = (proyecto.presupuestado === 'Presupuestado')//si proyecto.presupuestado es diferente a 'Presupuestodo', this.presupuetsado sera false y se desactivará switch
+
         } else {
           alert("La consulta de proyectos no se realizo correctamente.")
         }
@@ -2557,6 +2560,7 @@ const AltaProyectos = {
       if (modal == "Alta") {
         this.impactosConDatos = []; //al ser nuevo proyecto limpiamos si existe registros de ese impacto
         this.actualizar_proyecto = false
+        this.presupuestado = false
         this.titulo_modal = "Alta Proyecto"
         this.myModal = new bootstrap.Modal(document.getElementById("modal-alta-proyecto"))
         this.myModal.show()
@@ -3269,8 +3273,12 @@ const AltaProyectos = {
       }
       //Folio proyecto
       var folio = siglasPlanta + "-" + siglasArea + '-' + siglasDepartamento + '-P' + siglasPilaresConcatenado + '-O' + siglasObjetivosConcatenado;
-
-      
+      let presupuestado = ''
+      if (this.presupuestado) {
+        // lógica si está activado
+        console.log("PRESUPUESTADO")
+        presupuestado = 'Presupuestado'
+      }
 
       axios.post("proyectosController.php", {
         id_actualizar: this.id_actualizar,
@@ -3299,7 +3307,8 @@ const AltaProyectos = {
         valoresMensualCO: this.inputValorMensualCO,
         valoresMensualAD: this.inputValorMensualAD,
         valoresMensualAS: this.inputValorMensualAS,
-        idsPlanMesual: this.idsPlanMesual
+        idsPlanMesual: this.idsPlanMesual,
+        presupuestado: presupuestado,
       }).then(response => {
         console.log("Alta resultado", response.data)
         if (insertar_o_actualizar == "Alta Proyecto") {
@@ -3358,6 +3367,20 @@ const AltaProyectos = {
       }).catch(error => {
         console.log("Error :-( ", error)
       })
+    },
+
+    //////////////////////////////////////////////
+    proyectoSIoNOpresupuestado(){
+      console.log("Hola, ", this.presupuestado)
+      if (this.presupuestado) {
+        // lógica si está activado
+        console.log("PRESUPUESTADO")
+        
+      } else {
+        // lógica si está desactivado
+        console.log("NO PRESUPUESTADO")
+
+      }
     },
     editarCOMes(numero) {
       this.flagEditCOMes = numero

@@ -369,7 +369,9 @@ button {
 
     font-size: 0.9em;
 }
-
+.sin-fondo th {
+  background-color: #08568a
+}
 .letraTablas {
     font-size: 30px;
 }

@@ -412,7 +412,7 @@ function consultarProyectosID($id_proyecto)
      $observadorBuscar, $observador, $arregloObservador, $cantidad, $responsablesArreglo);
 }
 
-function insertarProyecto($folio, $fecha_alta_invertida, $nombre_proyecto, $fuente, $planta, $area, $departamento, $metodologia, $responsable_id, $observador, $misiones, $pilares, $objetivos, $impacto_ambiental,$impacto_ambiental_emisiones, $valores, $tons_co2, $ahorro_duro, $ahorro_suave,$anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS)
+function insertarProyecto($folio, $fecha_alta_invertida, $nombre_proyecto, $fuente, $planta, $area, $departamento, $metodologia, $responsable_id, $observador, $misiones, $pilares, $objetivos, $impacto_ambiental,$impacto_ambiental_emisiones, $valores, $tons_co2, $ahorro_duro, $ahorro_suave,$anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS, $presupuestado)
 {
     global $conexion;
     $folio_sin_numero = "";
@@ -459,9 +459,9 @@ function insertarProyecto($folio, $fecha_alta_invertida, $nombre_proyecto, $fuen
 
         $estado  = true;
         //Inserto el proyecto
-        $query = "INSERT INTO proyectos_creados (folio,fecha, fuente, nombre_proyecto, planta, area, departamento, metodologia,nomina, responsable,correo,telefono, misiones,pilares,objetivos,impacto_ambiental,valores, tons_co2, ahorro_duro, ahorro_suave,observador) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $query = "INSERT INTO proyectos_creados (folio,fecha, fuente, nombre_proyecto, planta, area, departamento, metodologia,nomina, responsable,correo,telefono, misiones,pilares,objetivos,impacto_ambiental,valores, tons_co2, ahorro_duro, ahorro_suave,observador, presupuestado) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $stmt = $conexion->prepare($query);
-        $stmt->bind_param("sssssssssssssssssssss", $nuevo_folio, $fecha_alta_invertida, $fuente, $nombre_proyecto, $planta, $area, $departamento, $metodologia, $nomina, $nombre_responsable, $correo_responsable, $telefono_responsable, $misiones, $pilares, $objetivos, $impacto_ambiental_emisiones,$valores, $tons_co2, $ahorro_duro, $ahorro_suave,$observador);
+        $stmt->bind_param("ssssssssssssssssssssss", $nuevo_folio, $fecha_alta_invertida, $fuente, $nombre_proyecto, $planta, $area, $departamento, $metodologia, $nomina, $nombre_responsable, $correo_responsable, $telefono_responsable, $misiones, $pilares, $objetivos, $impacto_ambiental_emisiones,$valores, $tons_co2, $ahorro_duro, $ahorro_suave,$observador, $presupuestado);
         if ($stmt->execute()) {
             $estado = true;
             //insertado el proyecto, ahora inserto los impactos ambientales en otra tabla
@@ -501,7 +501,7 @@ function insertarProyecto($folio, $fecha_alta_invertida, $nombre_proyecto, $fuen
     return array($estado, $estado_folios, $folio_recuperado, $folio_sin_numero, $igual, $insercion_impacto, $impacto_ambiental_array,$impacto_mensual);
 }
 
-function actualizarProyecto($id,$fecha_alta_invertida, $nombre_proyecto, $selectFuente, $planta, $area, $departamento, $metodologia, $responsable_id, $observador,$impacto_ambiental, $impacto_ambiental_emisiones,$valores,$anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS,$idsPlanMesual){
+function actualizarProyecto($id,$fecha_alta_invertida, $nombre_proyecto, $selectFuente, $planta, $area, $departamento, $metodologia, $responsable_id, $observador,$impacto_ambiental, $impacto_ambiental_emisiones,$valores,$anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS,$idsPlanMesual, $presupuestado){
     global $conexion;
     $estado = false;
 
@@ -522,10 +522,10 @@ function actualizarProyecto($id,$fecha_alta_invertida, $nombre_proyecto, $select
         }else {
         $estado  = false;
     }
-///////////////////////////
-    $update = "UPDATE proyectos_creados SET fecha=?, nombre_proyecto=?, fuente=?, planta=?, area=?, departamento=?, metodologia=?, responsable=?, nomina=?, correo=?, telefono=?, observador =?, impacto_ambiental=?, valores=? WHERE  id=?";
+    ///////////////////////////
+    $update = "UPDATE proyectos_creados SET fecha=?, nombre_proyecto=?, fuente=?, planta=?, area=?, departamento=?, metodologia=?, responsable=?, nomina=?, correo=?, telefono=?, observador =?, impacto_ambiental=?, valores=?, presupuestado=? WHERE  id=?";
     $stmt = $conexion->prepare($update);
-    $stmt->bind_param("ssssssssssssssi",$fecha_alta_invertida, $nombre_proyecto, $selectFuente, $planta, $area, $departamento, $metodologia, $nombre_responsable, $nomina, $correo_responsable, $telefono_responsable, $observador, $impacto_ambiental_emisiones, $valores, $id);
+    $stmt->bind_param("sssssssssssssssi",$fecha_alta_invertida, $nombre_proyecto, $selectFuente, $planta, $area, $departamento, $metodologia, $nombre_responsable, $nomina, $correo_responsable, $telefono_responsable, $observador, $impacto_ambiental_emisiones, $valores, $presupuestado, $id);
     if ($stmt->execute()) {
          //insertando impactos mensuales
          $anioXmes = json_decode($anioXmes, JSON_UNESCAPED_UNICODE); //conviertiendo arreglos en cadena
