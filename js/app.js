@@ -72,6 +72,7 @@ const AltaProyectos = {
       respondio: true,//utilizo para cambiar el css si no repondio en altas
       objetivo_estrategico: false,
       presupuestado: false,
+      colorPresupuestado: false,
       existeImagenSeleccionada: false,
       existeImagenSeleccionadaSeguimiento: false,
       existeImagenSeleccionadaCO2: false,
@@ -3375,11 +3376,11 @@ const AltaProyectos = {
       if (this.presupuestado) {
         // lógica si está activado
         console.log("PRESUPUESTADO")
-        
+        this.colorPresupuestado = true
       } else {
         // lógica si está desactivado
         console.log("NO PRESUPUESTADO")
-
+        this.colorPresupuestado = false
       }
     },
     editarCOMes(numero) {

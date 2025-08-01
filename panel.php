@@ -409,7 +409,7 @@ if (isset($_SESSION['nombre'])) {
                                                 <div class="d-flex align-items-center ps-5">
                                                     <div class="form-check form-switch">
                                                        <!--  <label class="form-check-label" for="switchCheckDefault">Presupuestado</label> -->
-                                                        <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault" v-model="presupuestado" @change="proyectoSIoNOpresupuestado()" style="background-color: #B3F09B; border-color: #58794aff;">
+                                                        <input :style="{ backgroundColor: colorPresupuestado ? '#f4ca31ff' : '#B3F09B'}" class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault" v-model="presupuestado" @change="proyectoSIoNOpresupuestado()" >
                                                         <label class="fw-light text-sm">
                                                             <strong>{{ presupuestado ? 'Presupuestado' : 'No presupuestado' }}</strong>
                                                         </label>
