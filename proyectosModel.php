@@ -412,7 +412,7 @@ function consultarProyectosID($id_proyecto)
      $observadorBuscar, $observador, $arregloObservador, $cantidad, $responsablesArreglo);
 }
 
-function insertarProyecto($folio, $fecha_alta_invertida, $nombre_proyecto, $fuente, $planta, $area, $departamento, $metodologia, $responsable_id, $observador, $misiones, $pilares, $objetivos, $impacto_ambiental,$impacto_ambiental_emisiones, $valores, $tons_co2, $ahorro_duro, $ahorro_suave,$anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS, $presupuestado)
+function insertarProyecto($folio, $fecha_alta_invertida, $nombre_proyecto, $fuente, $planta, $area, $departamento, $metodologia, $responsable_id, $observador, $misiones, $pilares, $objetivos, $impacto_ambiental,$impacto_ambiental_emisiones, $valores, $tons_co2, $ahorro_duro, $ahorro_suave,$anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS, $presupuestado, $mesesPresupuestados)
 {
     global $conexion;
     $folio_sin_numero = "";
@@ -481,10 +481,11 @@ function insertarProyecto($folio, $fecha_alta_invertida, $nombre_proyecto, $fuen
                 $valoresMensualCO = json_decode($valoresMensualCO, JSON_UNESCAPED_UNICODE);//conviertiendo a arreglos
                 $valoresMensualAD = json_decode($valoresMensualAD, JSON_UNESCAPED_UNICODE);//conviertiendo a arreglos
                 $valoresMensualAS = json_decode($valoresMensualAS, JSON_UNESCAPED_UNICODE);//conviertiendo a arreglos
+                $mesesPresupuestados = json_decode($mesesPresupuestados, JSON_UNESCAPED_UNICODE);//conviertiendo a arreglos
 
             $cantidad_meses=count($mesXAnio);
-            for ($i=0; $i < $cantidad_meses; $i++) { 
-                $insertar = "INSERT INTO plan_mensual_por_proyecto (id_proyecto, 	mes, 	anio, 	ahorro_co, 	ahorro_d, 	ahorro_s) VALUES ('$ultimo_id','$mesXAnio[$i]','$anioXmes[$i]','$valoresMensualCO[$i]','$valoresMensualAD[$i]','$valoresMensualAS[$i]')";
+            for ($i=0; $i < $cantidad_meses; $i++) {
+                $insertar = "INSERT INTO plan_mensual_por_proyecto (id_proyecto, 	mes, 	anio, 	ahorro_co, 	ahorro_d, 	ahorro_s, mes_presupuestado) VALUES ('$ultimo_id','$mesXAnio[$i]','$anioXmes[$i]','$valoresMensualCO[$i]','$valoresMensualAD[$i]','$valoresMensualAS[$i]','$mesesPresupuestados[$i]')";
                 if ($conexion->query($insertar) !== TRUE) {
                     $impacto_mensual = $conexion->error." Incorreco";
                     break;
@@ -501,7 +502,7 @@ function insertarProyecto($folio, $fecha_alta_invertida, $nombre_proyecto, $fuen
     return array($estado, $estado_folios, $folio_recuperado, $folio_sin_numero, $igual, $insercion_impacto, $impacto_ambiental_array,$impacto_mensual);
 }
 
-function actualizarProyecto($id,$fecha_alta_invertida, $nombre_proyecto, $selectFuente, $planta, $area, $departamento, $metodologia, $responsable_id, $observador,$impacto_ambiental, $impacto_ambiental_emisiones,$valores,$anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS,$idsPlanMesual, $presupuestado){
+function actualizarProyecto($id,$fecha_alta_invertida, $nombre_proyecto, $selectFuente, $planta, $area, $departamento, $metodologia, $responsable_id, $observador,$impacto_ambiental, $impacto_ambiental_emisiones,$valores,$anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS,$idsPlanMesual, $presupuestado, $mesesPresupuestados){
     global $conexion;
     $estado = false;
 
@@ -535,6 +536,7 @@ function actualizarProyecto($id,$fecha_alta_invertida, $nombre_proyecto, $select
          $valoresMensualAS = json_decode($valoresMensualAS, JSON_UNESCAPED_UNICODE);//conviertiendo a arreglos
          $idsPlanMesual = json_decode($idsPlanMesual, JSON_UNESCAPED_UNICODE);//conviertiendo a arreglos
          $impacto_ambiental = json_decode($impacto_ambiental, JSON_UNESCAPED_UNICODE);//conviertiendo a arreglos
+         $mesesPresupuestados = json_decode($mesesPresupuestados, JSON_UNESCAPED_UNICODE);//conviertiendo a arreglos
 
          $estado = true;
          $impacto_ambiental_existentes= [];
@@ -565,15 +567,17 @@ function actualizarProyecto($id,$fecha_alta_invertida, $nombre_proyecto, $select
             } 
         }
 
+        //return $diferentesEliminar;
+
         if (count($diferentesEliminar) > 0) {
             $consultaDelete = "DELETE FROM impacto_ambiental_proyecto WHERE impacto_ambiental = ? AND id_proyecto = ?";
             $stmtDelete = $conexion->prepare($consultaDelete);
             if ($stmtDelete) {
                 foreach ($diferentesEliminar as $impacto) {
                     $stmtDelete->bind_param("si", $impacto, $id); // 's' para string, 'i' para entero
-                    if (!$stmtDelete->execute()) {
-                        return $estado = "No se puede eliminar el impacto deseleccionando: " . $stmtDelete->error;
-                    }
+                        if (!$stmtDelete->execute()) {
+                            //return $estado = "No se puede eliminar el impacto deseleccionando: " .$impacto. $id. $stmtDelete->error;
+                        }
                 }
                 $stmtDelete->close(); // Cerrar la declaración
             } else {
@@ -589,36 +593,36 @@ function actualizarProyecto($id,$fecha_alta_invertida, $nombre_proyecto, $select
         
             
             if($cantidad_ids>0){//Existe y actualiza
-                        $cantidad_meses=count($mesXAnio);
-                        for ($i=0; $i < $cantidad_meses; $i++) { 
-                            $insertar = "UPDATE plan_mensual_por_proyecto SET mes='$mesXAnio[$i]',anio ='$anioXmes[$i]',ahorro_co = '$valoresMensualCO[$i]',ahorro_d = '$valoresMensualAD[$i]',ahorro_s = '$valoresMensualAS[$i]' WHERE id='$idsPlanMesual[$i]' AND id_proyecto='$id'";
+                $cantidad_meses=count($mesXAnio);
+                for ($i=0; $i < $cantidad_meses; $i++) {
+                    $insertar = "UPDATE plan_mensual_por_proyecto SET mes='$mesXAnio[$i]',anio ='$anioXmes[$i]',ahorro_co = '$valoresMensualCO[$i]',ahorro_d = '$valoresMensualAD[$i]',ahorro_s = '$valoresMensualAS[$i]', mes_presupuestado = '$mesesPresupuestados[$i]' WHERE id='$idsPlanMesual[$i]' AND id_proyecto='$id'";
+                    if ($conexion->query($insertar) !== TRUE) {
+                        $estado = $conexion->error." Incorreco";
+                            break;
+                    }else{
+                        $estado = true;
+                    }   
+                }  
+            }else{//No existe y si no son vacias inserta
+                if (!empty(array_filter($valoresMensualCO)) && !empty(array_filter($valoresMensualAD)) && !empty(array_filter($valoresMensualAS)) || !empty(array_filter($mesesPresupuestados))){
+                    for ($i=0; $i < $cantidad_meses; $i++) {
+                        $insertar = "INSERT INTO plan_mensual_por_proyecto (id_proyecto, mes, anio,	ahorro_co, ahorro_d, ahorro_s, mes_presupuestado) VALUES ('$id','$mesXAnio[$i]','$anioXmes[$i]','$valoresMensualCO[$i]','$valoresMensualAD[$i]','$valoresMensualAS[$i]','$mesesPresupuestados[$i]')";
                         if ($conexion->query($insertar) !== TRUE) {
                             $estado = $conexion->error." Incorreco";
                                 break;
                         }else{
-                            $estado = true;
-                        }   
-                    }  
-                }else{//No existe y si no son vacias inserta
-                    if (!empty(array_filter($valoresMensualCO)) && !empty(array_filter($valoresMensualAD)) && !empty(array_filter($valoresMensualAS))){
-                            for ($i=0; $i < $cantidad_meses; $i++) { 
-                                $insertar = "INSERT INTO plan_mensual_por_proyecto (id_proyecto, mes, anio,	ahorro_co, ahorro_d, ahorro_s) VALUES ('$id','$mesXAnio[$i]','$anioXmes[$i]','$valoresMensualCO[$i]','$valoresMensualAD[$i]','$valoresMensualAS[$i]')";
-                                    if ($conexion->query($insertar) !== TRUE) {
-                                        $estado = $conexion->error." Incorreco";
-                                            break;
-                                    }else{
-                                        $estado = true;
-                                    }
-                            }
+                           $estado = true;
+                        }
                     }
                 }
+            }
 
 
     }else{
         return  "ME RETORNO".$stmt->error;
     }
     $stmt->close();
-   //return array($estado,print_r($impacto_ambiental_existentes),print_r($impacto_ambiental),print_r($diferentes),print_r($diferentesEliminar));
+   //return array($estado,print_r($mesesPresupuestados));
     return $estado;
 }
 

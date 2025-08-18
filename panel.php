@@ -401,7 +401,6 @@ if (isset($_SESSION['nombre'])) {
                                                     </div>
                                                 </div>-->
                                             <!--Finbloque-->
-
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-25 me-2">Objetivo Estrategico</span>
                                                 <input type="checkbox" v-model="objetivo_estrategico" :disabled="actualizar_proyecto">
@@ -441,15 +440,16 @@ if (isset($_SESSION['nombre'])) {
                                     <div class="col-12 pb-2">
                                         <table class="table table-striped table-bordered">
                                             <thead class="text-center">
-                                                <!-- <tr class="sin-fondo">
-                                                    <th>Ahorro</th>  encabezado
-                                                    <th scope="col" v-for="(numero, index) in 12">  
-                                                        <select  style="width:70px" >
-                                                            <option value="AhorroDuro">Duro</option>
-                                                            <option value="AhorroSuave">Suave</option>
-                                                        </select>
+                                                <tr class="sin-fondo">
+                                                    <th>Ahorro</th> 
+                                                    <th scope="col" v-for="(numero, index) in 12"> 
+                                                        <div style="display: flex; justify-content: center; align-items: center">
+                                                            <div class="form-check form-switch"> 
+                                                                <input :style="{ backgroundColor: mesesPresupuestados[index] ? '#f4ca31ff' : '#B3F09B'}" v-model="mesesPresupuestados[index]" class="form-check-input" type="checkbox" role="switch" :id="'switch' + index">
+                                                            </div>
+                                                        </div>
                                                     </th>
-                                                </tr>ya esta la estructura, define datos y logica-->
+                                                </tr>
                                                 <tr>
                                                     <th>Año</th>
                                                     <th scope="col" v-for="(numero,index) in 12">

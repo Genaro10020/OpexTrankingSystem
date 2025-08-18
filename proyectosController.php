@@ -30,11 +30,24 @@ if (isset($_SESSION['nombre'])) {
             break;
         case 'POST':
             // Manejar solicitud POST (creación)
+           /*  if (isset($arreglo['mesesPresupuestados'])){
+                if (isset($arreglo['mesesPresupuestados'])) {
+                    echo json_encode([
+                        'recibido' => true,
+                        'meses' => $arreglo['mesesPresupuestados']
+                    ]);
+                } else {
+                    echo json_encode([
+                        'recibido' => false,
+                        'mensaje' => 'No llegaron los mesesPresupuestados'
+                    ]);
+                }
+            } */
             if (isset($arreglo['folio']) && isset($arreglo['fecha_alta']) && isset($arreglo['nombre_proyecto']) && isset($arreglo['fuente']) && isset($arreglo['select_planta']) && isset($arreglo['select_area'])
                 && isset($arreglo['select_departamento']) && isset($arreglo['select_metodologia']) && isset($arreglo['responsable_id']) && isset($arreglo['observador']) && isset($arreglo['misiones'])
                 && isset($arreglo['pilares']) && isset($arreglo['objetivos']) && isset($arreglo['impacto_ambiental']) && isset($arreglo['impacto_ambiental_emisiones']) && isset($arreglo['valores']) && isset($arreglo['tons_co2'])
                 && isset($arreglo['ahorro_duro']) && isset($arreglo['ahorro_suave']) && isset($arreglo['anioXmes']) && isset($arreglo['mesXAnio']) && isset($arreglo['valoresMensualCO']) && isset($arreglo['valoresMensualAD']) && isset($arreglo['valoresMensualAS'])
-                && isset($arreglo['idsPlanMesual']) && isset($arreglo['presupuestado'])|| isset($arreglo['accion'])) {
+                && isset($arreglo['idsPlanMesual']) && isset($arreglo['presupuestado']) && isset($arreglo['mesesPresupuestados']) || isset($arreglo['accion'])) {
                 $folio = $arreglo['folio'];
 
                 $fecha_alta = $arreglo['fecha_alta'];
@@ -65,12 +78,13 @@ if (isset($_SESSION['nombre'])) {
                 $valoresMensualCO = $arreglo['valoresMensualCO'];
                 $valoresMensualAD = $arreglo['valoresMensualAD'];
                 $valoresMensualAS = $arreglo['valoresMensualAS'];
+                
+                $presupuestado = $arreglo['presupuestado'];
+                $mesesPresupuestados = $arreglo['mesesPresupuestados'];
 
                 $ahorro_duro = $arreglo['ahorro_duro'];
                 $ahorro_suave = $arreglo['ahorro_suave'];
-
-                $presupuestado = $arreglo['presupuestado'];
-
+            
                 $misiones = json_encode($misiones, JSON_UNESCAPED_UNICODE); //conviertiendo arreglos en cadena
                 $observador = json_encode($observador, JSON_UNESCAPED_UNICODE); //conviert
                 $pilares = json_encode($pilares, JSON_UNESCAPED_UNICODE); //conviertiendo arreglos en cadena
@@ -85,16 +99,16 @@ if (isset($_SESSION['nombre'])) {
                 $valoresMensualCO = json_encode($valoresMensualCO, JSON_UNESCAPED_UNICODE);//conviertiendo arreglos en cadena
                 $valoresMensualAD = json_encode($valoresMensualAD, JSON_UNESCAPED_UNICODE);//conviertiendo arreglos en cadena
                 $valoresMensualAS = json_encode($valoresMensualAS, JSON_UNESCAPED_UNICODE);//conviertiendo arreglos en cadena
-
+                $mesesPresupuestados = json_encode($mesesPresupuestados, JSON_UNESCAPED_UNICODE);//conviertiendo arreglos en cadena
 
                     if($arreglo['accion']=="Alta Proyecto"){
                         $val[] = insertarProyecto($folio, $fecha_alta_invertida, $nombre_proyecto, $fuente, $planta, $area, $departamento, $metodologia, $responsable_id, $observador, $misiones, $pilares, $objetivos, $impacto_ambiental, $impacto_ambiental_emisiones, $valores, $tons_co2, $ahorro_duro, $ahorro_suave, 
-                        $anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS, $presupuestado);
+                        $anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS, $presupuestado, $mesesPresupuestados);
                     }
                     else if($arreglo['accion']=="Actualizar Proyecto"){//ACTUALIZAR PROYECTO
                         if(isset($arreglo['id_actualizar'])){
                         $id=$arreglo['id_actualizar'];
-                        $val[] = actualizarProyecto($id,$fecha_alta_invertida, $nombre_proyecto, $fuente, $planta, $area, $departamento, $metodologia, $responsable_id, $observador,$impacto_ambiental, $impacto_ambiental_emisiones,$valores,$anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS,$idsPlanMesual, $presupuestado);
+                        $val[] = actualizarProyecto($id,$fecha_alta_invertida, $nombre_proyecto, $fuente, $planta, $area, $departamento, $metodologia, $responsable_id, $observador,$impacto_ambiental, $impacto_ambiental_emisiones,$valores,$anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS,$idsPlanMesual, $presupuestado, $mesesPresupuestados);
                         }else{
                         $val[] = "No llego el ID proyecto actualizar";
                         }
@@ -106,7 +120,7 @@ if (isset($_SESSION['nombre'])) {
                 $val[] = consultarProyectosID($id_proyecto);
             } else {
                 $val[] = "No llegaron tadas la variables";
-            }
+            } 
             // ...
             break;
         case 'PUT':

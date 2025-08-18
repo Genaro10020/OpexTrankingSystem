@@ -73,6 +73,7 @@ const AltaProyectos = {
       objetivo_estrategico: false,
       presupuestado: false,
       colorPresupuestado: false,
+      mesesPresupuestados: [false,false,false,false,false,false,false,false,false,false,false,false],
       existeImagenSeleccionada: false,
       existeImagenSeleccionadaSeguimiento: false,
       existeImagenSeleccionadaCO2: false,
@@ -2352,6 +2353,7 @@ const AltaProyectos = {
       this.telefono = ''
     },
     consultaImpactosAmbientalesConDatos(id) {
+      console.log("Proyecto ID: ",id)
       axios.get("impactoAmbientalController.php", {
         params: {
           accion: 'impactos con datos',
@@ -2360,7 +2362,8 @@ const AltaProyectos = {
       }).then(response => {
         if (response.data[0] === true) {
           this.impactosConDatos = response.data[1].map(elementos => elementos.id + '<->' + elementos.nombre)
-          //console.log(this.impactosConDatos)
+          console.log("Response impacto", response.data)
+          console.log("Proyecto ID: ",id)
         } else {
           console.log("No se realizo la consulta Impactos Ambientales con datos", response.data)
         }
@@ -2533,7 +2536,7 @@ const AltaProyectos = {
           }
           
           this.presupuestado = (proyecto.presupuestado === 'Presupuestado')//si proyecto.presupuestado es diferente a 'Presupuestodo', this.presupuetsado sera false y se desactivará switch
-
+          this.colorPresupuestado = this.presupuestado
         } else {
           alert("La consulta de proyectos no se realizo correctamente.")
         }
@@ -2543,7 +2546,7 @@ const AltaProyectos = {
     },
     verificarImpacto(impacto) {
       let impactosConDatos = this.impactosConDatos;
-      console.log("Contiene Datos",this.impactosConDatos, this.impactosConDatos.includes(impacto))
+      //console.log("Contiene Datos",this.impactosConDatos, this.impactosConDatos.includes(impacto))
       return impactosConDatos.includes(impacto)
     },
     //this.impactosConDatos
@@ -2557,11 +2560,14 @@ const AltaProyectos = {
       this.titulo_modal = ''
       this.nueva = ''
       this.respondio = true;
-      
+      this.presupuestado = false
+      this.mesesPresupuestados = new Array(12).fill(false);
+      this.colorPresupuestado = false
+      this.idsPlanMesual = []
+
       if (modal == "Alta") {
         this.impactosConDatos = []; //al ser nuevo proyecto limpiamos si existe registros de ese impacto
         this.actualizar_proyecto = false
-        this.presupuestado = false
         this.titulo_modal = "Alta Proyecto"
         this.myModal = new bootstrap.Modal(document.getElementById("modal-alta-proyecto"))
         this.myModal.show()
@@ -2686,30 +2692,34 @@ const AltaProyectos = {
           id: id
         }
       }).then(response => {
+        console.log("Esta es la respuesta del controlador",response.data)
         if (response.data[1] === true) {
-          if (response.data[0].length > 0) {
+          console.log()
+         if (response.data[0].length > 0) {
             console.log("Response", response.data[0].length)
-            console.log("Response", response.data[0])
+            console.log("Response jajaj", response.data[0])
             this.idsPlanMesual = response.data[0].map(items => items.id)
             this.AnioXMes = response.data[0].map(items => items.anio)
             this.MesXAnio = response.data[0].map(items => items.mes)
             this.inputValorMensualCO = response.data[0].map(items => items.ahorro_co)
             this.inputValorMensualAD = response.data[0].map(items => items.ahorro_d)
             this.inputValorMensualAS = response.data[0].map(items => items.ahorro_s)
-
-            /*let todosVaciosCO = response.data[0].map(items => items.ahorro_co=='')
+            //this.mesesPresupuestados = response.data.map(item => item.mes_presupuestado == 1);
+            //this.mesesPresupuestados = JSON.parse(response.data[0].map(items => items.mes_presupuestado))
+            this.mesesPresupuestados = response.data[0].map(item => item.mes_presupuestado == 1);
+            console.log("HOLAAAA", this.mesesPresupuestados)
+            let todosVaciosCO = response.data[0].map(items => items.ahorro_co=='')
             let todosVaciosHD= response.data[0].map(items => items.ahorro_d=='')
             let todosVaciosHS= response.data[0].map(items => items.ahorro_s=='')
             console.log(todosVaciosCO,todosVaciosHD,todosVaciosHS)
             console.log(todosVaciosCO==true && todosVaciosHD==true && todosVaciosHS==true)
-            this.hayDatos = (todosVaciosCO==true && todosVaciosHD==true && todosVaciosHS==true)*/
+            this.hayDatos = (todosVaciosCO==true && todosVaciosHD==true && todosVaciosHS==true)
 
-            let todosVaciosCO = response.data[0].every(item => item.ahorro_co === '')
+           /*  let todosVaciosCO = response.data[0].every(item => item.ahorro_co === '')
             let todosVaciosHD = response.data[0].every(item => item.ahorro_d === '')
             let todosVaciosHS = response.data[0].every(item => item.ahorro_s === '')
-
+ */
             console.log(todosVaciosCO, todosVaciosHD, todosVaciosHS)
-
             this.hayDatos = !(todosVaciosCO && todosVaciosHD && todosVaciosHS)
             console.log(this.hayDatos)
           }else{
@@ -3308,10 +3318,12 @@ const AltaProyectos = {
         valoresMensualCO: this.inputValorMensualCO,
         valoresMensualAD: this.inputValorMensualAD,
         valoresMensualAS: this.inputValorMensualAS,
+        //AQUI ENVIA THIS.MESESPRESUPUESTADOS
+        mesesPresupuestados: this.mesesPresupuestados,
         idsPlanMesual: this.idsPlanMesual,
         presupuestado: presupuestado,
       }).then(response => {
-        console.log("Alta resultado", response.data)
+        console.log("Resultado "+insertar_o_actualizar+":", response.data)
         if (insertar_o_actualizar == "Alta Proyecto") {
           if (response.data[0][0] == true) {
             if (response.data[0][1] == true) {
