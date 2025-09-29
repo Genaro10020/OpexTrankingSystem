@@ -2547,10 +2547,13 @@ const AltaProyectos = {
     verificarImpacto(impacto) {
       let impactosConDatos = this.impactosConDatos;
       //console.log("Contiene Datos",this.impactosConDatos, this.impactosConDatos.includes(impacto))
+      //console.log("Impacto",impactosConDatos.includes(impacto))
       return impactosConDatos.includes(impacto)
     },
     //this.impactosConDatos
     abrirModal(modal, tipo, accion, id, nombre_proyecto) {
+      
+        this.impactosConDatos = []; //al ser nuevo proyecto limpiamos si existe registros de ese impacto
       //this.nombre_proyecto = ''
       this.tipo = tipo
       this.accion = accion
@@ -2566,7 +2569,6 @@ const AltaProyectos = {
       this.idsPlanMesual = []
 
       if (modal == "Alta") {
-        this.impactosConDatos = []; //al ser nuevo proyecto limpiamos si existe registros de ese impacto
         this.actualizar_proyecto = false
         this.titulo_modal = "Alta Proyecto"
         this.myModal = new bootstrap.Modal(document.getElementById("modal-alta-proyecto"))
