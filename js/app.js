@@ -55,6 +55,7 @@ const AltaProyectos = {
       idsPilares: [],
       idsObjetivos: [],
       proyectos: [],
+      proyectoSelect: [],
       indexs_pilares: [],
       selectPilar: [],
       selectObjetivo: [],
@@ -192,6 +193,7 @@ const AltaProyectos = {
       ahorroMesFinanzas:[],
       editarMesFinanzas:'',
       idsProyectosXAnioSelect:[],
+      ultimoColor:'Amarillo',
       /*GENERANDO VALOR*/
       select_anio_generando_valor: '',
       sumaClienteValor: '',
@@ -243,6 +245,18 @@ const AltaProyectos = {
       this.showDiv = !this.showDiv;
       console.log(this.showDiv);
     },
+
+    proyectoSeleccionado(){
+      /* return this.proyectos.find(p => p.id === this.id_proyecto);  asignar proyectos a proyectoselect*/
+      if(this.id_proyecto === ""){
+        this.consultarProyectos();
+      }else{
+        let ObjetoNuevo = []
+        ObjetoNuevo.push(this.proyectoSelect.find(p => p.id === this.id_proyecto));
+        this.proyectos = ObjetoNuevo;
+        console.log(" this.proyectos ",ObjetoNuevo)
+      }
+    },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PROYECTOS*/
     consultarProyectos() {
       plan_actualizar = ''; //solo la reseteo
@@ -252,8 +266,10 @@ const AltaProyectos = {
         if (response.data[0][1] == true) {
           if (response.data[0][0].length > 0) {
             this.proyectos = response.data[0][0];
+            this.proyectoSelect = response.data[0][0];
           } else {
             this.proyectos = []
+            this.proyectoSelect = []
           }
         } else {
           alert("La consulta de proyectos no se realizo correctamente.")
@@ -3540,6 +3556,32 @@ const AltaProyectos = {
       })
 
     },
+    /*
+   comparandoFolio(index){
+      if (index > 0 && this.obtenerPrefijo(nombre) !== this.obtenerPrefijo(this.proyectos[index - 1].folio)) {
+        return this.obtenerPrefijo(nombre) != this.obtenerPrefijo(this.proyectos[index - 1].folio);// Cambia el color según tus preferencias
+      } 
+      /*  
+      if(index == 0){
+        this.ultimoColor = "Amarillo"
+        return  this.ultimoColor;
+      }else{
+        let folioSinNumeralActual = this.obtenerPrefijo(this.proyectos[index].folio);
+        let folioSinNumeralAnterior = this.obtenerPrefijo(this.proyectos[index-1].folio);
+        if(folioSinNumeralActual===folioSinNumeralAnterior){
+            return this.ultimoColor;
+        }else{
+          if(this.ultimoColor === "Rojo"){
+            this.ultimoColor = "Amarillo"
+            return this.ultimoColor;
+          }else if(this.ultimoColor == "Amarillo"){
+            this.ultimoColor = "Rojo"
+            return this.ultimoColor;
+          }
+        }
+       
+        
+    },}*/
     folioAnteriorSinNumeral(nombre, index) {
       // Compara el nombre actual con el anterior y asigna un color diferente si es diferente
       if (index > 0 && this.obtenerPrefijo(nombre) !== this.obtenerPrefijo(this.proyectos[index - 1].folio)) {

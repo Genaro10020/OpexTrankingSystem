@@ -349,6 +349,15 @@ thead {
 }
 
 
+.azul1 {
+    background-color: #93c0ee;
+
+}
+
+.azul2 {
+    background-color: #dca910;
+}
+
 .table thead th,
 button {
     font-weight: normal;

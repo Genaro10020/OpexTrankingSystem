@@ -722,12 +722,29 @@ if (isset($_SESSION['nombre'])) {
             <div :class="{ 'cuerpoNormal': mostrarHeader, 'cuerpoAlto': !mostrarHeader }">
                 <!--AQUI TRABAJA //ALTA DE PROYECTOS-->
                 <div class="text-center mt-2" v-if="ventana=='Altas'">
-                    <?php if ($_SESSION['acceso'] == 'Admin') { ?>
-                        <button class="btn btn-menu bg-primary align-items-center mb-2" style=" background:#519f3c; " @click="abrirModal('Alta')">
-                            <i class="bi bi-plus-circle"></i> Alta Proyecto
-                        </button>
+                    <div class="col-12" >
+                        <div class= "row">
+                            <!-- Select de los nombre de los proyectos -->
+                            <div class="col-4">
+                                <div class="input-group mt-3 mx-2 mb-2 ">
+                                    <span class="input-group-text w-5">Seleccione Proyecto</span>
+                                    <select class="w-50"  @keydown.up="cancelarEvento" @keydown.down="cancelarEvento" @keydown.left="cancelarEvento" @keydown.right="cancelarEvento" @change= "proyectoSeleccionado()" v-model="id_proyecto">
+                                        <option value="" default>Todos...</option>
+                                        <option  style="font-size:15px;" v-for="proyecto in proyectoSelect" :key="proyecto.id" :value="proyecto.id">{{ proyecto.nombre_proyecto }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- BOTÓN ALTA PROYECTOS -->
+                            <div class="col-4">
+                                <?php if ($_SESSION['acceso'] == 'Admin') { ?>
+                                <button class="btn btn-menu bg-primary align-items-center mb-2" style=" background:#519f3c; " @click="abrirModal('Alta')">
+                                    <i class="bi bi-plus-circle"></i> Alta Proyecto
+                                </button>
+                            <?php } ?></div>
+                        </div>
+                    </div>
                     
-                    <?php } ?>
+
                     <div class="scroll-dos px-2">
                         <table class="mx-auto  mb-5 tabla-proyectos">
                             <thead class="sticky-top">
@@ -759,10 +776,10 @@ if (isset($_SESSION['nombre'])) {
                             <tbody class=" border:1px solid black" style="text-align: center">
                                
                                 <template v-for="(proyecto,index) in proyectos">
-                                    <tr v-if="folioAnteriorSinNumeral(proyecto.folio, index)" :class="{ 'divisor-tr-creados': folioAnteriorSinNumeral(proyecto.folio, index)==true}"><!--ES DIFERENTE--->
+                                    <tr v-if="folioAnteriorSinNumeral(proyecto.folio, index)" :class="{ 'divisor-tr-creados': folioAnteriorSinNumeral(proyecto.folio, index)==true}">
                                         <td colspan="21" v-if="index>0"></td>
-                                    </tr>
-                                    <tr class="cuerpo-tabla-creados border border-secondary" style="vertical-align: middle;" :class="{ 'fila-ultimo-proyecto': buscandoUltimoProyectoCreado(proyecto.nombre_proyecto)}">
+                                    </tr><!-- Pero como como puedo hacer que se pinte el index actual u el siguiente que ees con el que se esta comparando??? -->
+                                    <tr class="cuerpo-tabla-creados border border-secondary" style="vertical-align: middle;" :class="{'fila-ultimo-proyecto': buscandoUltimoProyectoCreado(proyecto.nombre_proyecto)}"><!--:class="{'azul1': index % 2 === 0,'azul2': index % 2 !== 0, 'fila-ultimo-proyecto': buscandoUltimoProyectoCreado(proyecto.nombre_proyecto)}"-->
                                         <td class="border border-secondary">{{proyecto.fecha}}</td>
                                         <td class="border border-secondary" style="min-width:150px;">{{proyecto.folio}}</td>
                                         <td class="border border-secondary">{{proyecto.fuente}}</td>
