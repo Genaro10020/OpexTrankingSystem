@@ -897,6 +897,12 @@ button {
     height: 20px;
 }
 
+.Amarillo {
+    background-color: #f5f85f;
+}
+.Roja {
+    background-color: #d1544d;
+}
 .fila-ultimo-proyecto {
     animation: colores 5s;
     background: #0a720f;

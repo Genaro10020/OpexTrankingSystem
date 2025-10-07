@@ -774,12 +774,11 @@ if (isset($_SESSION['nombre'])) {
                                 <?php } ?>
                             </thead>
                             <tbody class=" border:1px solid black" style="text-align: center">
-                               
                                 <template v-for="(proyecto,index) in proyectos">
                                     <tr v-if="folioAnteriorSinNumeral(proyecto.folio, index)" :class="{ 'divisor-tr-creados': folioAnteriorSinNumeral(proyecto.folio, index)==true}">
                                         <td colspan="21" v-if="index>0"></td>
                                     </tr><!-- Pero como como puedo hacer que se pinte el index actual u el siguiente que ees con el que se esta comparando??? -->
-                                    <tr class="cuerpo-tabla-creados border border-secondary" style="vertical-align: middle;" :class="{'fila-ultimo-proyecto': buscandoUltimoProyectoCreado(proyecto.nombre_proyecto)}"><!--:class="{'azul1': index % 2 === 0,'azul2': index % 2 !== 0, 'fila-ultimo-proyecto': buscandoUltimoProyectoCreado(proyecto.nombre_proyecto)}"-->
+                                    <tr class="cuerpo-tabla-creados border border-secondary" style="vertical-align: middle;" :class="{ 'Amarillo': proyecto.colorcito=='Amarillo'  ,'Roja': proyecto.colorcito=='Roja'}"><!--:class="{'azul1': index % 2 === 0,'azul2': index % 2 !== 0, 'fila-ultimo-proyecto': buscandoUltimoProyectoCreado(proyecto.nombre_proyecto)}"-->
                                         <td class="border border-secondary">{{proyecto.fecha}}</td>
                                         <td class="border border-secondary" style="min-width:150px;">{{proyecto.folio}}</td>
                                         <td class="border border-secondary">{{proyecto.fuente}}</td>
