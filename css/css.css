@@ -897,11 +897,11 @@ button {
     height: 20px;
 }
 
-.Amarillo {
-    background-color: #f5f85f;
+.AzulFuerte {
+    background-color:#D4E3F6;
 }
-.Roja {
-    background-color: #d1544d;
+.AzulClaro {
+    background-color: #E9F2FB;
 }
 .fila-ultimo-proyecto {
     animation: colores 5s;
