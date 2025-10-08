@@ -21,9 +21,11 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
     case 'POST':
         // Manejar solicitud POST (creación)
-        if(isset($arreglo['nueva'])){
+        if(isset($arreglo['nueva']) && isset($arreglo['cantidad']) && isset($arreglo['unidadMedida'])){
             $nueva = $arreglo['nueva'];
-           $val [] = insertarImpactoAmbiental($nueva);     
+            $cantidad = $arreglo['cantidad'];
+            $unidadMedida = $arreglo['unidadMedida'];
+            $val [] = insertarImpactoAmbiental($nueva,$cantidad,$unidadMedida);     
         }else if(isset($arreglo['suma'])){
             $val[] = sumaImpactoAmbiental();
         }else{
@@ -34,10 +36,12 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
     case 'PUT':
         // Manejar solicitud PUT (actualización)
-            if(isset($arreglo['id']) && isset($arreglo['nuevo'])){
+            if(isset($arreglo['id']) && isset($arreglo['nuevoNombre']) && isset($arreglo['cantidad']) && isset($arreglo['unidadMedida'])){
                 $id=$arreglo['id'];
-                $nuevo=$arreglo['nuevo'];
-                $val[]=actualizarImpactoAmbiental($id,$nuevo);
+                $nuevoNombre = $arreglo['nuevoNombre'];
+                $cantidad = $arreglo['cantidad'];
+                $unidadMedida = $arreglo['unidadMedida'];
+                $val[]=actualizarImpactoAmbiental($id,$nuevoNombre,$cantidad,$unidadMedida);
             }else{
                 $val[] = "No existe variable ID o Nuevo";
             }

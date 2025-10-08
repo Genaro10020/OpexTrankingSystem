@@ -1060,8 +1060,15 @@ if (isset($_SESSION['nombre'])) {
                                                 Nombre
                                             </th>
                                             <th class="sticky-top thmodal">
+                                                Cántidad
+                                            </th>
+                                            <th class="sticky-top thmodal">
                                                 Suma
                                             </th>
+                                            <th class="sticky-top thmodal">
+                                                Unidad Medida
+                                            </th>
+                                          
                                             <th class="sticky-top thmodal">
                                                 Eliminar
                                             </th>
@@ -1075,16 +1082,23 @@ if (isset($_SESSION['nombre'])) {
                                             <td class="text-start">
                                                 {{impacto.nombre}}
                                             </td>
-                                            <td>
+                                            <td class="text-start">
+                                                {{impacto.cantidad}}
+                                            </td>
+                                            <td lass="text-start">
                                                 <template v-for="(suma,indexImpacto ) in sumasImpactoAmbiental">
-                                                    <label v-if="indexImpacto==impacto.nombre" class="bg-success rounded-pill w-75 text-white ms-2 px-2 text-start">{{suma}}</label>
+                                                    <label v-if="indexImpacto==impacto.nombre" class="bg-success rounded-pill w-100 text-white ps-2  text-start">{{suma}}</label>
                                                 </template>
                                             </td>
+                                             <td class="text-start">
+                                                {{impacto.unidad_medida}}
+                                            </td>
+                                            
                                             <td>
                                                 <button type="button" class="myButton" @click="eliminarImpactoAmbiental(impacto.id)"><i class="bi bi-trash3-fill"></i></button>
                                             </td>
                                             <td>
-                                                <button type="button" class="myButton2" @Click="modalCatalogos('Actualizar','Impacto Ambiental',impacto.id,impacto.nombre)"><i class="bi bi-pencil"></i></button>
+                                                <button type="button" class="myButton2" @Click="modalCatalogos('Actualizar','Impacto Ambiental',impacto.id,impacto.nombre,impacto.cantidad,'',impacto.unidad_medida)"><i class="bi bi-pencil"></i></button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -1256,6 +1270,10 @@ if (isset($_SESSION['nombre'])) {
                                             <div class="modal-body input-group mb-3">
                                                 <span class="input-group-text w-25 mt-3">Nombre:</span>
                                                 <input v-model="nueva" type="text" class="w-75 mt-3">
+                                                <span class="input-group-text w-25 mt-3">Cántidad:</span>
+                                                <input type="text" v-model="cantidad" class="w-75 mt-3">
+                                                <span class="input-group-text w-25 mt-3">Unidad Medida:</span>
+                                                <input type="text" v-model="unidadMedida" class="w-75 mt-3">
                                             </div>
                                         </div>
                                     </div>
@@ -1298,6 +1316,10 @@ if (isset($_SESSION['nombre'])) {
                                             <div class="modal-body input-group mb-3">
                                                 <span class="input-group-text w-25 mt-3">Nombre:</span>
                                                 <input v-model="nuevoNombre" type="text" class="w-75 mt-3">
+                                                <span class="input-group-text w-25 mt-3">Cántidad:</span>
+                                                <input type="text" v-model="cantidad" class="w-75 mt-3">
+                                                <span class="input-group-text w-25 mt-3">Unidad Medida:</span>
+                                                <input type="text" v-model="unidadMedida" class="w-75 mt-3">
                                             </div>
                                         </div>
                                     </div>

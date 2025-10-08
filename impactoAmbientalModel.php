@@ -91,7 +91,6 @@ include("conexionGhoner.php");
                     }else{
                         $status = "Consulta tabla impacto ambiental: ".$conexion->error;
                     }
-                    
                 }
             }else{
                 $status = $stmt->error;
@@ -103,11 +102,11 @@ include("conexionGhoner.php");
         return array($status, $respuesta);
     }
 
-    function insertarImpactoAmbiental($nueva){
+    function insertarImpactoAmbiental($nueva,$cantidad,$unidadMedida){
         global $conexion;
-        $query = "INSERT INTO impacto_ambiental (nombre) VALUES (?)";
+        $query = "INSERT INTO impacto_ambiental (nombre,cantidad,unidad_medida) VALUES (?,?,?)";
         $stmt = $conexion->prepare($query);
-        $stmt->bind_param("s", $nueva);
+        $stmt->bind_param("sss", $nueva,$cantidad,$unidadMedida);
         if($stmt->execute()){
             $estado = true;
         }else{
@@ -118,12 +117,12 @@ include("conexionGhoner.php");
         return $estado;
     }
 
-    function actualizarImpactoAmbiental($id,$nuevo){
+    function actualizarImpactoAmbiental($id,$nuevoNombre,$cantidad,$unidadMedida){
         global $conexion;
         $estado = false;
-        $update = "UPDATE impacto_ambiental SET nombre=? WHERE  id=?";
+        $update = "UPDATE impacto_ambiental SET nombre=?, cantidad=?, unidad_medida=? WHERE  id=?";
         $stmt = $conexion->prepare($update);
-        $stmt->bind_param("si", $nuevo, $id);
+        $stmt->bind_param("sssi", $nuevoNombre,$cantidad,$unidadMedida,$id);
         if($stmt->execute()){
             $estado = true;
         }

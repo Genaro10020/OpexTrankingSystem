@@ -1404,7 +1404,9 @@ const AltaProyectos = {
     insertarImpactoAmbiental() {
       if (this.nueva != '') {
         axios.post('impactoAmbientalController.php', {
-          nueva: this.nueva
+          nueva: this.nueva,
+          cantidad: this.cantidad,
+          unidadMedida: this.unidadMedida
         }).then(response => {
           this.nueva = ''
           console.log(response.data)
@@ -1819,7 +1821,9 @@ const AltaProyectos = {
       if (this.nuevoNombre != '') {
         axios.put('impactoAmbientalController.php', {
           id: this.id,
-          nuevo: this.nuevoNombre
+          nuevoNombre: this.nuevoNombre,
+          cantidad: this.cantidad,
+          unidadMedida: this.unidadMedida
         }).then(response => {
           console.log(response.data)
           if (response.data[0] == true) {
@@ -3776,8 +3780,10 @@ const AltaProyectos = {
 
       if (accion == 'Actualizar') {
         if (tipo == 'Impacto Ambiental') {
-          this.nuevoNombre = nombre;
           this.id = id;
+          this.nuevoNombre = nombre;
+          this.cantidad = cantidad;
+          this.unidadMedida = unidadMedida;
         } else if (tipo == 'Estandares') {
           this.id = id;
           this.nuevoNombre = nombre;
