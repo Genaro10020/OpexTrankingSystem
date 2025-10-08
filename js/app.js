@@ -194,6 +194,7 @@ const AltaProyectos = {
       editarMesFinanzas:'',
       idsProyectosXAnioSelect:[],
       ultimoColor:'Amarillo',
+      /* ultimoGuionFolio:[], */
       /*GENERANDO VALOR*/
       select_anio_generando_valor: '',
       sumaClienteValor: '',
@@ -265,12 +266,29 @@ const AltaProyectos = {
         console.log("consultar proyectos",response.data)
         if (response.data[0][1] == true) {
           if (response.data[0][0].length > 0) {
-            this.proyectos = response.data[0][0];
-            this.proyectoSelect = response.data[0][0];
-          } else {
-            this.proyectos = []
-            this.proyectoSelect = []
-          }
+
+            let ultimoColor = 'Amarillo'
+              response.data[0][0].forEach(x => {
+                let numerito = this.obtenerLastNum(x.folio)
+                if(numerito == '#1'){
+                  if(ultimoColor=="Amarillo"){
+                      ultimoColor = "Roja"
+                      
+                  }else{
+                      ultimoColor = "Amarillo"
+                  }
+                  x.colorcito = ultimoColor
+                 
+                }else{
+                  x.colorcito = ultimoColor
+                }
+              })
+              this.proyectos = response.data[0][0];
+              this.proyectoSelect = response.data[0][0];
+            } else {
+              this.proyectos = []
+              this.proyectoSelect = []
+            }
         } else {
           alert("La consulta de proyectos no se realizo correctamente.")
         }
@@ -3560,12 +3578,39 @@ const AltaProyectos = {
       })
 
     },
-    /*
-   comparandoFolio(index){
-      if (index > 0 && this.obtenerPrefijo(nombre) !== this.obtenerPrefijo(this.proyectos[index - 1].folio)) {
+    obtenerLastNum(folioCompleto) {
+      var posicionUltimoNum = folioCompleto.lastIndexOf("#");
+      return folioCompleto.slice(posicionUltimoNum);
+    },
+   comparandoFolio(folio, index){
+
+      /*if (index == 0) {
+        this.ultimoColor = "Amarillo"
+        return  this.ultimoColor;
+       
+        
+         let previousFolioLastNum = this.getLastFolioNumber(previousFolio); // Último número del folio anterior
+
+        // Comparar el número actual con el anterior
+        if (folioLastNum === previousFolioLastNum) {
+            console.log("El número de folio actual es el mismo que el anterior.");
+        } 
+      }else{
+
+        let ultimoNumFolio = this.obtenerLastNum(this.proyectos[index].folio);
+        let ultimoNumFolioAnterior = this.obtenerLastNum(this.proyectos[index-1].folio);
+
+        console.log(this.proyectos[index].folio);
+        console.log("Actual", ultimoNumFolio);
+
+       console.log("Ansterior", ultimoNumFolioAnterior); 
+      }*/  
+      
+
+       /* if (index > 0 && this.obtenerPrefijo(nombre) !== this.obtenerPrefijo(this.proyectos[index - 1].folio)) {
         return this.obtenerPrefijo(nombre) != this.obtenerPrefijo(this.proyectos[index - 1].folio);// Cambia el color según tus preferencias
-      } 
-      /*  
+      }  
+       
       if(index == 0){
         this.ultimoColor = "Amarillo"
         return  this.ultimoColor;
@@ -3573,7 +3618,7 @@ const AltaProyectos = {
         let folioSinNumeralActual = this.obtenerPrefijo(this.proyectos[index].folio);
         let folioSinNumeralAnterior = this.obtenerPrefijo(this.proyectos[index-1].folio);
         if(folioSinNumeralActual===folioSinNumeralAnterior){
-            return this.ultimoColor;
+          return this.ultimoColor;
         }else{
           if(this.ultimoColor === "Rojo"){
             this.ultimoColor = "Amarillo"
@@ -3583,9 +3628,9 @@ const AltaProyectos = {
             return this.ultimoColor;
           }
         }
-       
-        
-    },}*/
+      }
+      */  
+    }, 
     folioAnteriorSinNumeral(nombre, index) {
       // Compara el nombre actual con el anterior y asigna un color diferente si es diferente
       if (index > 0 && this.obtenerPrefijo(nombre) !== this.obtenerPrefijo(this.proyectos[index - 1].folio)) {

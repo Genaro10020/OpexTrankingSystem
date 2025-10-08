@@ -897,6 +897,12 @@ button {
     height: 20px;
 }
 
+.AzulFuerte {
+    background-color:#D4E3F6;
+}
+.AzulClaro {
+    background-color: #E9F2FB;
+}
 .fila-ultimo-proyecto {
     animation: colores 5s;
     background: #0a720f;
