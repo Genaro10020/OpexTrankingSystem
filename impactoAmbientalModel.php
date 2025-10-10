@@ -102,6 +102,36 @@ include("conexionGhoner.php");
         return array($status, $respuesta);
     }
 
+
+    function buscarCoincidenciadeNombreImpactosAmbientales($impactos){
+        global $conexion; 
+        $respuesta=[];
+        $status = false;
+        // Convertir el arreglo de nombres en una cadena separada por comas para la consulta SQL
+        $placeholders = implode(',', array_fill(0, count($impactos), '?'));
+        $tipos = str_repeat('s', count($impactos)); // Asumiendo que todos los parámetros son cadenas (s)
+        
+        $seleccion = "SELECT * FROM impacto_ambiental WHERE nombre IN ($placeholders)";
+        $stmt = $conexion->prepare($seleccion);
+        if($stmt){
+            // Usar el operador splat para pasar los parámetros como referencias
+            $stmt->bind_param($tipos, ...$impactos);
+            if($stmt->execute()){
+                $status = true;
+                $recuperacion=$stmt->get_result();
+                while($datos = $recuperacion->fetch_array()){
+                    $respuesta[] = $datos;
+                }
+            }else{
+                $status = "Consulta tabla impacto ambiental: ".$stmt->error;
+            }
+        }else{
+            $status = "Consulta tabla impacto ambiental: ".$conexion->error;
+        }
+        $stmt->close();
+        return array($respuesta, $status);
+    }
+
     function insertarImpactoAmbiental($nueva,$cantidad,$unidadMedida){
         global $conexion;
         $query = "INSERT INTO impacto_ambiental (nombre,cantidad,unidad_medida) VALUES (?,?,?)";

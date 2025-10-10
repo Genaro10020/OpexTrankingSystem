@@ -23,6 +23,11 @@ if($documento=="Documento CO2"){
     $ruta = "documentosco2";
 }
 
+if($documento=="Impacto Ambiental"){
+    $id_impactoAmbiental=$variables['ids'];//id del impacto ambiental
+    $ruta = "documentosImpactosAmbientales/".$id_impactoAmbiental;
+}
+
 if (is_dir($ruta)){
     // Abre un gestor de directorios para la ruta indicada
     $gestor = opendir($ruta);

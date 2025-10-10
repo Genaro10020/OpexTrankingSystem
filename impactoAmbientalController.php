@@ -14,6 +14,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
         if(isset($_GET['accion']) && $_GET['accion'] =='impactos con datos'){
             $id_proyecto = $_GET['id_proyecto'];
             $val = consultarImpactosAmbientalesConDatos($id_proyecto);
+        }else if(isset($_GET['accion']) && $_GET['accion'] =='buscar por nombre'){
+            $impactos = $_GET['impactos'];
+            $val = buscarCoincidenciadeNombreImpactosAmbientales($impactos);//buscarImpactoAmbientalPorNombre($nombre);
+
         }else{
             $val[] = consultarImpactoAmbiental();
         }

@@ -21,8 +21,8 @@ if (isset($_SESSION['nombre'])) {
                 <!--Bóton-->
                 <div class="text-center">
                     <?php if ($_SESSION['acceso'] == 'Admin') { ?>
-                        <button class="btn-menu " @click="ventana='Crear',opcion=1,consultarMisionesRelacional(),consultarObjetivosRelacional(),consultarMisiones(),consultarImpactoAmbiental(),consultarEstandaresCO2(),consultarFuentes(),mostrarHeader=true,sumarSoloUnaVez=0,buscarDocumentos('Documento CO2'),sumaImpactoAmbiental()"
-                            :class="{'btn-menu-activo': opcion===1,'btn-menu': opcion !== 1}">
+                        <button class="btn-menu " @click="ventana='Crear',opcion=1,consultarMisionesRelacional(),consultarObjetivosRelacional(),consultarMisiones(),consultarImpactoAmbientalConDocumentos(),consultarEstandaresCO2(),consultarFuentes(),mostrarHeader=true,sumarSoloUnaVez=0,sumaImpactoAmbiental()"
+                            :class="{'btn-menu-activo': opcion===1,'btn-menu': opcion !== 1}"><!--buscarDocumentos('Documento CO2')-->
                             <i class="bi bi-plus-circle"></i> Crear Catálogos
                         </button>
                     <?php } ?>
@@ -31,8 +31,8 @@ if (isset($_SESSION['nombre'])) {
                         <i class="bi bi-plus-circle"></i> Proyectos Creados
                     </button>
 
-                    <button class="btn-menu mb-sm-3 mt-sm-3" @click="ventana='Seguimiento',mostrarHeader=true,opcion=3,sumarSoloUnaVez=0,buscarDocumentos('Documento CO2'),opcion=3"
-                        :class="{'btn-menu-activo': opcion===3,'btn-menu': opcion !== 3}">
+                    <button class="btn-menu mb-sm-3 mt-sm-3" @click="ventana='Seguimiento',mostrarHeader=true,opcion=3,sumarSoloUnaVez=0,opcion=3"
+                        :class="{'btn-menu-activo': opcion===3,'btn-menu': opcion !== 3}"><!--buscarDocumentos('Documento CO2')-->
                         <i class="bi bi-plus-circle"></i> Seguimiento
                     </button>
 
@@ -1039,8 +1039,61 @@ if (isset($_SESSION['nombre'])) {
                             </div>
                         </div>
                     </div>
+
+                      <!--TABLA DE FUENTES-->
+                    <div class="col-12 col-lg-6">
+                        <div class="col-12  text-center align-content">
+                            <div class=" encabezadoTablas">
+                                <div class=" d-flex justify-content-center align-items-center" style="font-size: 0.9em;">
+                                    <div class="d-none d-lg-block col-lg-4"></div>
+                                    <div class="col-6 col-lg-4 mt-2">Fuentes</div>
+                                    <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
+                                        <button type="button" class=" btn btn-menu w-50" @Click="modalCatalogos('Crear','Fuente')">Crear</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="scroll">
+                                <table class=" table table-bordered table-striped border border-3 border-secondary">
+                                    <thead>
+                                        <tr class="border border-3 border-secondary" style="font-size: 0.9em;">
+                                            <th class="sticky-top thmodal">
+                                                Nombre
+                                            </th>
+                                            <th class="sticky-top thmodal">
+                                                Siglas
+                                            </th>
+                                            <th class="sticky-top thmodal">
+                                                Eliminar
+                                            </th>
+                                            <th class="sticky-top thmodal">
+                                                Actualizar
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="fuente in fuentes " style="font-size: 0.7em;">
+                                            <td class="text-start">
+                                                {{fuente.nombre}}
+                                            </td>
+                                            <td>
+                                                {{fuente.siglas}}
+                                            </td>
+                                            <td>
+                                                <button type="button" class="myButton" @click="eliminarFuente(fuente.id)"><i class="bi bi-trash3-fill"></i></button>
+                                            </td>
+                                            <td>
+                                                <button type="button" class="myButton2" @Click="modalCatalogos('Actualizar','Fuente',fuente.id,fuente.nombre,'',fuente.siglas)"><i class="bi bi-pencil"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
                     <!--TABLA DE IMPACTO AMBIENTAL-->
-                    <div class="col-12 col-lg-6 ">
+                    <div class="col-12 col-lg-12">
                         <div class="col-12  text-center ">
                             <div class=" encabezadoTablas">
                                 <div class=" d-flex justify-content-center align-items-baseline " style="font-size: 0.9em;">
@@ -1067,7 +1120,9 @@ if (isset($_SESSION['nombre'])) {
                                             <th class="sticky-top thmodal">
                                                 Unidad Medida
                                             </th>
-                                          
+                                             <th class="sticky-top thmodal">
+                                                Documentos
+                                            </th>
                                             <th class="sticky-top thmodal">
                                                 Eliminar
                                             </th>
@@ -1092,6 +1147,10 @@ if (isset($_SESSION['nombre'])) {
                                              <td class="text-start">
                                                 {{impacto.unidad_medida}}
                                             </td>
+                                            <td>
+                                            <button v-if="impacto.documentos<=0"  type="button" class="btn btn-secondary" title="Subir archivos" @click="modal_impactoAmbiental(impacto.id,impacto.nombre)" style="font-size:10px"><i class="bi bi-paperclip"></i>{{impacto.documentos}} Archivos Encontrados</button>
+                                            <button v-else type="button"  class="btn btn-success " title="Visualizar/Subir Archivos" @click="modal_impactoAmbiental(impacto.id,impacto.nombre)" style="font-size:10px"><i class="bi bi-paperclip"></i>{{impacto.documentos}} Archivos Encontrados</button>
+                                            </td>
                                             
                                             <td>
                                                 <button type="button" class="myButton" @click="eliminarImpactoAmbiental(impacto.id)"><i class="bi bi-trash3-fill"></i></button>
@@ -1106,7 +1165,7 @@ if (isset($_SESSION['nombre'])) {
                         </div>
                     </div>
                     <!-- INICIO TABLA ESTANDARES CO2 -->
-                    <div class="col-12 col-lg-6 ">
+                    <!--<div class="col-12 col-lg-6 ">
                         <div class="col-12 text-center align-content">
                             <div class=" encabezadoTablas">
                                 <div class=" d-flex justify-content-center align-items-center " style="font-size: 0.9em;">
@@ -1169,58 +1228,8 @@ if (isset($_SESSION['nombre'])) {
                                 </table>
                             </div>
                         </div>
-                    </div>
-                    <!--TABLA DE FUENTES-->
-                    <div class="col-12 col-lg-6">
-                        <div class="col-12  text-center align-content">
-                            <div class=" encabezadoTablas">
-                                <div class=" d-flex justify-content-center align-items-center" style="font-size: 0.9em;">
-                                    <div class="d-none d-lg-block col-lg-4"></div>
-                                    <div class="col-6 col-lg-4 mt-2">Fuentes</div>
-                                    <div class="col-6 me-4 me-lg-0 col-lg-4 mt-2">
-                                        <button type="button" class=" btn btn-menu w-50" @Click="modalCatalogos('Crear','Fuente')">Crear</button>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="scroll">
-                                <table class=" table table-bordered table-striped border border-3 border-secondary">
-                                    <thead>
-                                        <tr class="border border-3 border-secondary" style="font-size: 0.9em;">
-                                            <th class="sticky-top thmodal">
-                                                Nombre
-                                            </th>
-                                            <th class="sticky-top thmodal">
-                                                Siglas
-                                            </th>
-                                            <th class="sticky-top thmodal">
-                                                Eliminar
-                                            </th>
-                                            <th class="sticky-top thmodal">
-                                                Actualizar
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="fuente in fuentes " style="font-size: 0.7em;">
-                                            <td class="text-start">
-                                                {{fuente.nombre}}
-                                            </td>
-                                            <td>
-                                                {{fuente.siglas}}
-                                            </td>
-                                            <td>
-                                                <button type="button" class="myButton" @click="eliminarFuente(fuente.id)"><i class="bi bi-trash3-fill"></i></button>
-                                            </td>
-                                            <td>
-                                                <button type="button" class="myButton2" @Click="modalCatalogos('Actualizar','Fuente',fuente.id,fuente.nombre,'',fuente.siglas)"><i class="bi bi-pencil"></i></button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                    </div>-->
+                  
                     <!--MODAL MISION-->
                     <div class="modal fade" id="modalCrearCatalogos" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
@@ -1416,6 +1425,90 @@ if (isset($_SESSION['nombre'])) {
                         </div>
                     </div>
                     <!--Fin Modal-->
+
+                      <!-- Modal Eliminar/Actualizar Documentos CO2-->
+                    <div class="modal fade" id="modalImpactoAmbiental" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h6 class="modal-title" id="exampleModalLabel">Subir documento/s <b>{{cual_impacto_nombre}}</b></h6>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="text-center">
+                                        <form @submit.prevent="uploadFile('Impacto Ambiental')" enctype="multipart/form-data">
+                                            <!--Subir Documento Sugerencia-->
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="custom-file mt-5 mb-3">
+                                                        <input type="file" id="input_file_impactoAmbiental" @change="verificandoSelecionImpactoAmbiental()" ref="ref_impAmb" multiple accept="*.jpg/*.png/*.pdf/*.doc/*.docx/*.ppt/*.pptx/*.xls/*.xlsx" class="btn btn-secondary  ms-2 p-0" required />
+                                                    </div>
+                                                </div>
+                                               
+                                                <div class="col-12" v-if="existeDocumentoSeleccionadoImpacto && login!=true">
+                                                    <button type="submit" name="upload" class="btn btn-primary">Subir Archivos </button>
+                                                </div>
+                                                <div v-if="login==true" class="d-flex justify-content-center">
+                                                    <div>
+                                                        <img class="mx-auto" style="width:50px;" src="img/loading.gif" /><label>Subiendo...</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Mostrando los archivos cargados -->
+                                            <div v-show="documentos_impactoAmbiental.length>0">
+                                                <hr>
+                                                <div class="col-12" v-for="(archivos,index) in documentos_impactoAmbiental">
+                                                    
+                                                    <div class="row">
+                                                        <span class="badge bg-secondary">Documento {{index+1}}</span><br>
+                                                        <div class="mt-1">
+                                                            <button type="button" class="btn btn-danger" @click="eliminarDocumento(archivos)" style="font-size:14px;">Eliminar</button>
+                                                        </div>
+                                                    </div>
+                                                    <!--Mostar los JPG y PNG-->
+                                                    <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='png' || archivos.slice(archivos.lastIndexOf('.') + 1)=='jpg'" class="col-12 text-center">
+                                                       <!--  {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br> -->
+                                                        <img :src="documentos_impactoAmbiental[index]" style="width:50%" class="mb-5"></img>
+                                                    </div>
+                                                    <!--Mostrar PDF-->
+                                                    <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='pdf'" class="col-12 text-center">
+                                                        <!-- {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br> -->
+                                                        <iframe :src="documentos_impactoAmbiental[index]" style="width:100%;height:500px;" class="mb-5"></iframe>
+                                                    </div>
+                                                    <!--Mostrar Word-->
+                                                    <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='doc' || archivos.slice(archivos.lastIndexOf('.') + 1)=='docx'" class="col-12 text-center">
+                                                        {{archivos.slice(archivos.lastIndexOf('/')+1)}}<br><!--obtengo el nombre del documento con extension-->
+                                                        <a :href="archivos" :download="getFileName(archivos)">
+                                                            <img src="img/word.png" style="width:200px" class="mb-5"></img>
+                                                        </a>
+                                                    </div>
+                                                    <!--Mostrar Excel-->
+                                                    <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='xls' || archivos.slice(archivos.lastIndexOf('.') + 1)=='xlsx'" class="col-12 text-center">
+                                                        {{archivos.slice(archivos.lastIndexOf('/')+1)}}<br><!--obtengo el nombre del documento con extension-->
+                                                        <a :href="archivos" :download="getFileName(archivos)">
+                                                            <img src="img/excel.png" style="width:200px" class="mb-5"></img>
+                                                        </a>
+                                                    </div>
+                                                    <!--Mostrar Power Point -->
+                                                    <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='ppt' || archivos.slice(archivos.lastIndexOf('.') + 1)=='pptx'" class="col-12 text-center">
+                                                        {{archivos.slice(archivos.lastIndexOf('/')+1)}}<br> <!--obtengo el nombre del documento con extension-->
+                                                        <a :href="archivos" :download="getFileName(archivos)">
+                                                            <img src="img/powerpoint.png" style="width:200px" class="mb-5"></img>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Fin Modal Documento C02-->
+
                     <!-- Modal Eliminar/Actualizar Documentos CO2-->
                     <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-xl">
@@ -1455,32 +1548,32 @@ if (isset($_SESSION['nombre'])) {
                                                     </div>
                                                     <!--Mostar los JPG y PNG-->
                                                     <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='png' || archivos.slice(archivos.lastIndexOf('.') + 1)=='jpg'" class="col-12 text-center">
-                                                        {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br>
+                                                        {{archivos.slice(archivos.lastIndexOf('/')+1)}}<br>
                                                         <img :src="documentos_co2[index]" style="width:50%" class="mb-5"></img>
                                                     </div>
                                                     <!--Mostrar PDF-->
                                                     <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='pdf'" class="col-12 text-center">
-                                                        {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br>
+                                                        {{archivos.slice(archivos.lastIndexOf('/')+1)}}<br>
                                                         <iframe :src="documentos_co2[index]" style="width:100%;height:500px;" class="mb-5"></iframe>
                                                     </div>
                                                     <!--Mostrar Word-->
                                                     <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='doc' || archivos.slice(archivos.lastIndexOf('.') + 1)=='docx'" class="col-12 text-center">
-                                                        {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br><!--obtengo el nombre del documento con extension-->
-                                                        <a :href="archivos" :download="nombre_de_descarga">
+                                                        {{archivos.slice(archivos.lastIndexOf('/')+1)}}<br><!--obtengo el nombre del documento con extension-->
+                                                        <a :href="archivos" :download="getFileName(archivos)">
                                                             <img src="img/word.png" style="width:200px" class="mb-5"></img>
                                                         </a>
                                                     </div>
                                                     <!--Mostrar Excel-->
                                                     <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='xls' || archivos.slice(archivos.lastIndexOf('.') + 1)=='xlsx'" class="col-12 text-center">
-                                                        {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br><!--obtengo el nombre del documento con extension-->
-                                                        <a :href="archivos" :download="nombre_de_descarga">
+                                                        {{archivos.slice(archivos.lastIndexOf('/')+1)}}<br><!--obtengo el nombre del documento con extension-->
+                                                        <a :href="archivos" :download="getFileName(archivos)">
                                                             <img src="img/excel.png" style="width:200px" class="mb-5"></img>
                                                         </a>
                                                     </div>
                                                     <!--Mostrar Power Point -->
                                                     <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='ppt' || archivos.slice(archivos.lastIndexOf('.') + 1)=='pptx'" class="col-12 text-center">
-                                                        {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br> <!--obtengo el nombre del documento con extension-->
-                                                        <a :href="archivos" :download="nombre_de_descarga">
+                                                        {{archivos.slice(archivos.lastIndexOf('/')+1)}}<br> <!--obtengo el nombre del documento con extension-->
+                                                        <a :href="archivos" :download="getFileName(archivos)">
                                                             <img src="img/powerpoint.png" style="width:200px" class="mb-5"></img>
                                                         </a>
                                                     </div>
@@ -1508,15 +1601,17 @@ if (isset($_SESSION['nombre'])) {
                                         <option value="" disabled>Seleccione...</option>
                                         <option v-for="proyecto in proyectos.sort((a, b) => a.nombre_proyecto.localeCompare(b.nombre_proyecto))" :value="proyecto.id" style="font-size:15px;">{{proyecto.nombre_proyecto}}</option>
                                     </select>
-                                    <button v-show="id_proyecto!=''" v-if="documentos_seguimiento.length>0" type="button" class="btn btn-success" title="Visualizar/Subir Archivos" @click="modal_seguimiento()" style="font-size:10px"><i class="bi bi-paperclip"></i>{{documentos_seguimiento.length}} Archivos Encontrados</button>
-                                    <button v-show="id_proyecto!=''" v-else type="button" class="btn btn-secondary" title="Visualizar/Subir Archivos" @click="modal_seguimiento()" style="font-size:10px"><i class="bi bi-paperclip"></i>{{documentos_seguimiento.length}} Archivos Encontrados</button>
+                                    <button v-show="id_proyecto!=''" v-if="documentos_seguimiento.length>0" type="button" class="btn btn-success" title="Visualizar/Subir Archivos" @click="modal_seguimiento()" style="font-size:12px"><i class="bi bi-paperclip">{{documentos_seguimiento.length}} Evidencias Encontrados</i></button>
+                                    <button v-show="id_proyecto!=''" v-else type="button" class="btn btn-secondary" title="Visualizar/Subir Archivos" @click="modal_seguimiento()" style="font-size:12px"><i class="bi bi-paperclip">{{documentos_seguimiento.length}} Evidencias Encontrados</i></button>
                                 </div>
                             </div>
                             <div class="col-12 col-lg-6">
-                                <div class="input-group mt-3 mx-2 mb-2 d-flex justify-content-start justify-content-lg-center">
-                                    <span class="input-group-text w-5">Documentos estandares CO<label style="font-size:8px" class="mt-1">2</label></span>
-                                    <button v-if="documentos_co2.length>0" type="button" class="btn btn-success" title="Visualizar" @click="modal_co2()" style="font-size:10px"><i class="bi bi-file-earmark me-1"></i>{{documentos_co2.length}} Archivos Encontrados</button>
-                                    <button v-else type="button" class="btn btn-secondary" title="Visualizar/Subir Archivos" @click="modal_co2()" style="font-size:10px"><i class="bi bi-file-earmark  me-1"></i>{{documentos_co2.length}} Archivos Encontrados</button>
+                                <div v-for="impacto in impactoAmbientalConID" class="input-group mt-3 mx-2 mb-2 d-flex justify-content-start justify-content-lg-center">
+                                    <span class="input-group-text w-5">Documentos estandares CO
+                                        <label style="font-size:8px" class="mt-1">2</label><br>
+                                    </span> 
+                                    <button v-if="impacto.documentos>0" type="button" class="btn btn-success text-start" title="Visualizar" @click="modal_impactoAmbiental(impacto.id,impacto.nombre)" style="font-size:12px; width: 300px"><i class="bi bi-file-earmark me-1">({{impacto.documentos}})</i>{{impacto.nombre}}</button>
+                                    <button v-else type="button" class="btn btn-secondary text-start" title="Sin archivos de apoyo" style="font-size:12px; width: 300px"><i class="bi bi-file-earmark  me-1">({{impacto.documentos}})</i>{{impacto.nombre}}</button>
                                 </div>
                             </div>
                         </div>
@@ -1549,9 +1644,10 @@ if (isset($_SESSION['nombre'])) {
                                     <?php } ?>
                                     <td style="min-width: 351px;">
                                         <div v-if="actualizar==(posicion+1)">
+                                           
                                             <label class="ms-1"> Mes: </label>
                                             <select v-model="mes_select" class="me-3" ><!--  @change="verMes" -->
-                                               <option v-for="(month,index) in months" :value="(index+1)" :disabled="anio_select <= anioProyecto  && (index + 1) < mesProyecto">{{month}}</option><!-- AQUI (mesProyecto>(index+1))-->
+                                               <option v-for="(month,index) in months" :value="(index+1)" >{{month}}</option><!-- :disabled="anio_select <= anioProyecto  && (index + 1) < mesProyecto"-->
                                             </select>
                                             <label class="ms-1 "> Año: </label>
                                             <select v-model="anio_select"><!-- @change="verAnio" -->
@@ -1628,7 +1724,7 @@ if (isset($_SESSION['nombre'])) {
                                     <td style="min-width: 351px;">
                                         <label v-if="actualizatabla==true" class="ms-3"> Mes: </label>
                                         <select v-if="actualizatabla==true" v-model="mes_select">
-                                            <option v-for="(month,index) in months" :value="(index+1)" :disabled="anio_select <= anioProyecto  && (index + 1) < mesProyecto">{{month}}</option>
+                                            <option v-for="(month,index) in months" :value="(index+1)" >{{month}}</option><!-- :disabled=":disabled="anio_select <= anioProyecto  && (index + 1) < mesProyecto"-->
                                         </select>
                                         <label v-if="actualizatabla==true" class="ms-3"> Año: </label>
                                         <select v-if="actualizatabla==true" v-model="anio_select">
@@ -1706,46 +1802,46 @@ if (isset($_SESSION['nombre'])) {
 
                                                     <!--Mostar los JPG y PNG-->
                                                     <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='png' || archivos.slice(archivos.lastIndexOf('.') + 1)=='jpg'" class="col-12 text-center">
-                                                        {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br>
+                                                        {{archivos.slice(archivos.lastIndexOf('/')+1)}}<br>
                                                         <img :src="documentos_seguimiento[index]" style="width:50%" class="mb-5"></img>
                                                     </div>
                                                     <!--Mostrar PDF-->
                                                     <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='pdf'" class="col-12 text-center">
-                                                        {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br>
+                                                        {{archivos.slice(archivos.lastIndexOf('/')+1)}}<br>
                                                         <iframe :src="documentos_seguimiento[index]" style="width:100%;height:500px;" class="mb-5"></iframe>
                                                     </div>
                                                     <!--Mostrar Word-->
                                                     <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='doc' || archivos.slice(archivos.lastIndexOf('.') + 1)=='docx'" class="col-12 text-center">
-                                                        {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br><!--obtengo el nombre del documento con extension-->
-                                                        <a :href="archivos" :download="nombre_de_descarga">
+                                                        {{archivos.slice(archivos.lastIndexOf('/')+1)}}<br><!--obtengo el nombre del documento con extension-->
+                                                        <a :href="archivos" :download="getFileName(archivos)">
                                                             <img src="img/word.png" style="width:200px" class="mb-5"></img>
                                                         </a>
                                                     </div>
                                                     <!--Mostrar Excel-->
                                                     <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='xls' || archivos.slice(archivos.lastIndexOf('.') + 1)=='xlsx'" class="col-12 text-center">
-                                                        {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br><!--obtengo el nombre del documento con extension-->
-                                                        <a :href="archivos" :download="nombre_de_descarga">
+                                                        {{archivos.slice(archivos.lastIndexOf('/')+1)}}<br><!--obtengo el nombre del documento con extension-->
+                                                        <a :href="archivos" :download="getFileName(archivos)">
                                                             <img src="img/excel.png" style="width:200px" class="mb-5"></img>
                                                         </a>
                                                     </div>
                                                     <!--Mostrar Power Point -->
                                                     <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='ppt' || archivos.slice(archivos.lastIndexOf('.') + 1)=='pptx'" class="col-12 text-center">
-                                                        {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br> <!--obtengo el nombre del documento con extension-->
-                                                        <a :href="archivos" :download="nombre_de_descarga">
+                                                        {{archivos.slice(archivos.lastIndexOf('/')+1)}}<br> <!--obtengo el nombre del documento con extension-->
+                                                        <a :href="archivos" :download="getFileName(archivos)">
                                                             <img src="img/powerpoint.png" style="width:200px" class="mb-5"></img>
                                                         </a>
                                                     </div>
                                                     <!--Mostrar .RAR-->
                                                     <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='rar'" class="col-12 text-center">
-                                                        {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br> <!--obtengo el nombre del documento con extension-->
-                                                        <a :href="archivos" :download="nombre_de_descarga">
+                                                        {{archivos.slice(archivos.lastIndexOf('/')+1)}}<br> <!--obtengo el nombre del documento con extension-->
+                                                        <a :href="archivos" :download="getFileName(archivos)">
                                                             <img src="img/rar.png" style="width:200px" class="mb-5"></img>
                                                         </a>
                                                     </div>
                                                     <!--Mostrar .RAR-->
                                                     <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='zip'" class="col-12 text-center">
-                                                        {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br> <!--obtengo el nombre del documento con extension-->
-                                                        <a :href="archivos" :download="nombre_de_descarga">
+                                                        {{archivos.slice(archivos.lastIndexOf('/')+1)}}<br> <!--obtengo el nombre del documento con extension-->
+                                                        <a :href="archivos" :download="getFileName(archivos)">
                                                             <img src="img/zip.png" style="width:200px" class="mb-5"></img>
                                                         </a>
                                                     </div>
@@ -1804,6 +1900,92 @@ if (isset($_SESSION['nombre'])) {
                         </div>
                     </div>
                     <!--Fin Modal subir seguimiento-->
+                    
+                    <!--MODAL IMPACTO AMBIENTAL-->
+                    <!-- Modal Eliminar/Actualizar Documentos CO2-->
+                    <div class="modal fade" id="modalImpactoAmbiental" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-fullscreen p-5">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h6 class="modal-title" id="exampleModalLabel">Documento/s <b>{{cual_impacto_nombre}}</b></h6>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="text-center">
+                                        <form @submit.prevent="uploadFile('Impacto Ambiental')" enctype="multipart/form-data">
+                                            <!--Subir Documento Sugerencia-->
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="custom-file mt-5 mb-3">
+                                                       <!--  <input type="file" id="input_file_impactoAmbiental" @change="verificandoSelecionImpactoAmbiental()" ref="ref_impAmb" multiple accept="*.jpg/*.png/*.pdf/*.doc/*.docx/*.ppt/*.pptx/*.xls/*.xlsx" class="btn btn-secondary  ms-2 p-0" required /> -->
+                                                    </div>
+                                                </div>
+                                               
+                                                <div class="col-12" v-if="existeDocumentoSeleccionadoImpacto && login!=true">
+                                                    <button type="submit" name="upload" class="btn btn-primary">Subir Archivos </button>
+                                                </div>
+                                                <div v-if="login==true" class="d-flex justify-content-center">
+                                                    <div>
+                                                        <img class="mx-auto" style="width:50px;" src="img/loading.gif" /><label>Subiendo...</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Mostrando los archivos cargados -->
+                                            <div v-show="documentos_impactoAmbiental.length>0">
+                                                <hr>
+                                                <div class="col-12" v-for="(archivos,index) in documentos_impactoAmbiental">
+                                                    
+                                                    <div class="row">
+                                                        <span class="badge bg-secondary">Documento {{index+1}}</span><br>
+                                                        <!-- <div class="mt-1">
+                                                            <button type="button" class="btn btn-danger" @click="eliminarDocumento(archivos)" style="font-size:14px;">Eliminar</button>
+                                                        </div> -->
+                                                    </div>
+                                                    <!--Mostar los JPG y PNG-->
+                                                    <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='png' || archivos.slice(archivos.lastIndexOf('.') + 1)=='jpg'" class="col-12 text-center">
+                                                       <!--  {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br> -->
+                                                        <img :src="documentos_impactoAmbiental[index]" style="width:50%" class="mb-5"></img>
+                                                    </div>
+                                                    <!--Mostrar PDF-->
+                                                    <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='pdf'" class="col-12 text-center">
+                                                        <!-- {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br> -->
+                                                        <iframe :src="documentos_impactoAmbiental[index]" style="width:100%;height:800px;" class="mb-5"></iframe>
+                                                    </div>
+                                                    <!--Mostrar Word-->
+                                                    <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='doc' || archivos.slice(archivos.lastIndexOf('.') + 1)=='docx'" class="col-12 text-center">
+                                                        {{archivos.slice(archivos.lastIndexOf('/')+1)}}<br><!--obtengo el nombre del documento con extension-->
+                                                        <a :href="archivos" :download="getFileName(archivos)">
+                                                            <img src="img/word.png" style="width:200px" class="mb-5"></img>
+                                                        </a>
+                                                    </div>
+                                                    <!--Mostrar Excel-->
+                                                    <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='xls' || archivos.slice(archivos.lastIndexOf('.') + 1)=='xlsx'" class="col-12 text-center">
+                                                        {{archivos.slice(archivos.lastIndexOf('/')+1)}}<br><!--obtengo el nombre del documento con extension-->
+                                                        <a :href="archivos" :download="getFileName(archivos)">
+                                                            <img src="img/excel.png" style="width:200px" class="mb-5"></img>
+                                                        </a>
+                                                    </div>
+                                                    <!--Mostrar Power Point -->
+                                                    <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='ppt' || archivos.slice(archivos.lastIndexOf('.') + 1)=='pptx'" class="col-12 text-center">
+                                                        {{archivos.slice(archivos.lastIndexOf('/')+1)}}<br> <!--obtengo el nombre del documento con extension-->
+                                                        <a :href="archivos" :download="getFileName(archivos)">
+                                                            <img src="img/powerpoint.png" style="width:200px" class="mb-5"></img>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Fin Modal Documento C02-->
+
+                    <!--FIN MODAL IMPACTO AMBIENTAL-->
                 </div>
 
 
@@ -2280,7 +2462,7 @@ if (isset($_SESSION['nombre'])) {
                                                 <!--¡¡¡¡¡¡¡¡¡¡¡SERENA TE QUEDASTE AQUÍ,!!!!!!!!!!!-->
                                                 <?php if ($_SESSION['acceso'] == "Financiero") { ?>
                                                 <div v-if= "select_anio_calendario >= 2025" class = "input-group input-group-sm">
-                                                    <input :id="proyectosXanio.id+'-'+x" :value="buscarValor(proyectosXanio.id, x)" :key="indexa" type= "text" class ="form-control" style="height:20px; font-size: 8px;" placeholder="Ahorro por financiero" :disabled="editarMesFinanzas!=proyectosXanio.id+'_'+x"/>
+                                                    <!--<input :id="proyectosXanio.id+'-'+x" :value="buscarValor(proyectosXanio.id, x)" :key="indexa" type= "text" class ="form-control" style="height:20px; font-size: 8px;" placeholder="Ahorro por financiero" :disabled="editarMesFinanzas!=proyectosXanio.id+'_'+x"/>-->
                                                     <!--<button class ="btn btn-outline-secondary d-flex align-items-center justify-content-center p-1" type="button" style="height:20px; width: 25px">
                                                         <i class="bi bi-floppy" style="font-size: 0.9em;"></i>
                                                     </button>-->
@@ -2293,7 +2475,7 @@ if (isset($_SESSION['nombre'])) {
                                                 </div>
                                                 <?php }else{
                                                     ?>
-                                                    <input :id="proyectosXanio.id+'-'+x" :value="buscarValor(proyectosXanio.id, x)" :key="indexa" type= "text" class ="form-control" style="height:20px; font-size: 8px;" placeholder="Ahorro por financiero" @blur="guardarAhorro(proyectosXanio.id, x)" disabled="true"/>
+                                                    <!--<input :id="proyectosXanio.id+'-'+x" :value="buscarValor(proyectosXanio.id, x)" :key="indexa" type= "text" class ="form-control" style="height:20px; font-size: 8px;" placeholder="Ahorro por financiero" @blur="guardarAhorro(proyectosXanio.id, x)" disabled="true"/>-->
                                                     <?php } ?>
 
                                                 <div class="text-center">
@@ -2482,46 +2664,46 @@ if (isset($_SESSION['nombre'])) {
                                                     </div>
                                                     <!--Mostar los JPG y PNG-->
                                                     <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='png' || archivos.slice(archivos.lastIndexOf('.') + 1)=='jpg'" class="col-12 text-center">
-                                                        {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br>
+                                                        {{archivos.slice(archivos.lastIndexOf('/')+1)}}<br>
                                                         <img :src="documentos_seguimiento_financiero[index]" style="width:50%" class="mb-5"></img>
                                                     </div>
                                                     <!--Mostrar PDF-->
                                                     <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='pdf'" class="col-12 text-center">
-                                                        {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br>
+                                                        {{archivos.slice(archivos.lastIndexOf('/')+1)}}<br>
                                                         <iframe :src="documentos_seguimiento_financiero[index]" style="width:100%;height:500px;" class="mb-5"></iframe>
                                                     </div>
                                                     <!--Mostrar Word-->
                                                     <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='doc' || archivos.slice(archivos.lastIndexOf('.') + 1)=='docx'" class="col-12 text-center">
-                                                        {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br><!--obtengo el nombre del documento con extension-->
-                                                        <a :href="archivos" :download="nombre_de_descarga">
+                                                        {{archivos.slice(archivos.lastIndexOf('/')+1)}}<br><!--obtengo el nombre del documento con extension-->
+                                                        <a :href="archivos" :download="getFileName(archivos)">
                                                             <img src="img/word.png" style="width:200px" class="mb-5"></img>
                                                         </a>
                                                     </div>
                                                     <!--Mostrar Excel-->
                                                     <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='xls' || archivos.slice(archivos.lastIndexOf('.') + 1)=='xlsx'" class="col-12 text-center">
-                                                        {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br><!--obtengo el nombre del documento con extension-->
-                                                        <a :href="archivos" :download="nombre_de_descarga">
+                                                        {{archivos.slice(archivos.lastIndexOf('/')+1)}}<br><!--obtengo el nombre del documento con extension-->
+                                                        <a :href="archivos" :download="getFileName(archivos)">
                                                             <img src="img/excel.png" style="width:200px" class="mb-5"></img>
                                                         </a>
                                                     </div>
                                                     <!--Mostrar Power Point -->
                                                     <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='ppt' || archivos.slice(archivos.lastIndexOf('.') + 1)=='pptx'" class="col-12 text-center">
-                                                        {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br> <!--obtengo el nombre del documento con extension-->
-                                                        <a :href="archivos" :download="nombre_de_descarga">
+                                                        {{archivos.slice(archivos.lastIndexOf('/')+1)}}<br> <!--obtengo el nombre del documento con extension-->
+                                                        <a :href="archivos" :download="getFileName(archivos)">
                                                             <img src="img/powerpoint.png" style="width:200px" class="mb-5"></img>
                                                         </a>
                                                     </div>
                                                     <!--Mostrar .RAR-->
                                                     <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='rar'" class="col-12 text-center">
-                                                        {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br> <!--obtengo el nombre del documento con extension-->
-                                                        <a :href="archivos" :download="nombre_de_descarga">
+                                                        {{archivos.slice(archivos.lastIndexOf('/')+1)}}<br> <!--obtengo el nombre del documento con extension-->
+                                                        <a :href="archivos" :download="getFileName(archivos)">
                                                             <img src="img/rar.png" style="width:200px" class="mb-5"></img>
                                                         </a>
                                                     </div>
                                                     <!--Mostrar .RAR-->
                                                     <div v-if="archivos.slice(archivos.lastIndexOf('.') + 1)=='zip'" class="col-12 text-center">
-                                                        {{nombre_de_descarga=archivos.slice(archivos.lastIndexOf('/')+1)}}<br> <!--obtengo el nombre del documento con extension-->
-                                                        <a :href="archivos" :download="nombre_de_descarga">
+                                                        {{archivos.slice(archivos.lastIndexOf('/')+1)}}<br> <!--obtengo el nombre del documento con extension-->
+                                                        <a :href="archivos" :download="getFileName(archivos)">
                                                             <img src="img/zip.png" style="width:200px" class="mb-5"></img>
                                                         </a>
                                                     </div>

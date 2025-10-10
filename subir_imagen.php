@@ -17,6 +17,8 @@ if($_POST['cual_documento']=="Seguimiento"){
     $path = "seguimiento/".$_POST['id']."/";
 }else if($_POST['cual_documento']=="Documento CO2"){
     $path = "documentosco2/";
+}else if($_POST['cual_documento']=="Impacto Ambiental"){
+    $path = "documentosImpactosAmbientales/".$_POST['id_impactoAmbiental']."/";
 }else{
     $path = "imagenes/";
 }
@@ -43,7 +45,7 @@ if (!file_exists($path)) {
                             $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
                             // Validar extensiones permitidas
-                            if($_POST['cual_documento']=="Seguimiento" || $_POST['cual_documento']=="Documento CO2"){
+                            if($_POST['cual_documento']=="Seguimiento" || $_POST['cual_documento']=="Documento CO2" || $_POST['cual_documento']=="Impacto Ambiental"){
                                 $valid_ext = array("png","jpeg","jpg","pdf","doc","docx","ppt","pptx","xls","xlsx","rar","zip");
                             }else{
                                 $valid_ext = array("jpeg","jpg","png");//entension valida para 
@@ -52,7 +54,7 @@ if (!file_exists($path)) {
                             // Revisar extension
                             if(in_array($ext, $valid_ext)){
 
-                                if($_POST['cual_documento']=="Seguimiento" || $_POST['cual_documento']=="Documento CO2"){
+                                if($_POST['cual_documento']=="Seguimiento" || $_POST['cual_documento']=="Documento CO2" || $_POST['cual_documento']=="Impacto Ambiental"){
                                     $filename = str_replace(" ","_", $filename);
                                     $newfilename = $filename;
                                     $ruta_y_doc= $path.$newfilename;

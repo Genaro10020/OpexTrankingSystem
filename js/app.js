@@ -23,8 +23,11 @@ const AltaProyectos = {
       plantas: [],
       areas: [],
       cual_documento: '',
+      id_impactoAmbiental: '',
+      cual_impacto_nombre: '',
       proyectoSumas: [],
       documentos_co2: [],
+      documentos_impactoAmbiental: [],
       /*Alta Proyectos */
       id_actualizar: '',
       titulo_nombre_proyecto: '',
@@ -46,6 +49,7 @@ const AltaProyectos = {
       checkObjetivos: [],
       checkImpactoAmbiental: [],
       impactoAmbiental: [],
+      impactoAmbientalConID: [],
       valores: [],
       valoresCheck: [],
       sumasImpactoAmbiental: [],
@@ -78,6 +82,7 @@ const AltaProyectos = {
       existeImagenSeleccionada: false,
       existeImagenSeleccionadaSeguimiento: false,
       existeImagenSeleccionadaCO2: false,
+      existeDocumentoSeleccionadoImpacto: false,
       actualizar_proyecto: false,
       ultimo_proyecto_actualizado_o_creado: '',
       idsCheckImpacto: [],
@@ -174,6 +179,7 @@ const AltaProyectos = {
       SumaSustentableEx: 0,
       myModalSeguimiento: '',
       myModalCO2: '',
+      myModalImpacto: '',
       myModalStatus: '',
       nombre_de_descarga: '',
       plan_actualizar: '',
@@ -629,7 +635,7 @@ const AltaProyectos = {
             var datos = [];
 
             impactoAmbiental = JSON.parse(response.data[0][0][0].impacto_ambiental)
-            console.log(impactoAmbiental)
+            console.log("IMPACTO AMBIENTAL",impactoAmbiental)
 
             /*for (let j = 0; j < response.data[0][2][0].length; j++) {
               impactoAmbiental.push(response.data[0][2][0][j].impacto_ambiental)
@@ -718,6 +724,7 @@ const AltaProyectos = {
 
 
             this.buscarDocumentos('Seguimiento')
+            this.consultarImpactoAmbientalPorNombre(impactoAmbiental)
           } else {
             this.consultarProyectoID() // si no existe seguimientos consultara proyectos para insetarlos primeros registros
           }
@@ -1249,27 +1256,94 @@ const AltaProyectos = {
 
       })
     },
-    /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL*/
-    consultarImpactoAmbiental() {
-      axios.get('impactoAmbientalController.php', {
-      }).then(response => {
-        console.log(response.data[0])
-        if (response.data[0][1] == true) {
-          if (response.data[0][0].length > 0) {
-            this.impactoAmbiental = response.data[0][0]
-            this.impactoAmbiental.forEach((elemento, index) => { this.selectEmisiones[index] = '' })
-          } else {
-            this.impactoAmbiental = []
+     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL*/
+      consultarImpactoAmbiental() {
+        axios.get('impactoAmbientalController.php')
+          .then(response => {
+            console.log(response.data[0]);
+            if (response.data[0][1] == true) {
+              if (response.data[0][0].length > 0) {
+                const items = response.data[0][0];
+                for (let [index, elemento] of items.entries()) {
+                  this.selectEmisiones[index] = '';
+                }
+                this.impactoAmbiental = items;
+              } else {
+                this.impactoAmbiental = [];
+              }
+            } else {
+              alert("La consulta impacto ambiental no se realizó correctamente.");
+            }
+          })
+          .catch(error => {
+            console.log('Error:', error);
+          });
+    },
+     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL X NOMBRE PARA OBTENER ID's*/
+      consultarImpactoAmbientalPorNombre(nombresImpactos) {
+
+        let arregloNombresImpactos = [];
+        arregloNombresImpactos = nombresImpactos.map(nombre =>{
+          return nombre.split('->')[0].trim();
+        });
+    
+        axios.get('impactoAmbientalController.php',{
+          params: {
+            accion: 'buscar por nombre',
+            impactos:arregloNombresImpactos, //envio el arreglo de nombres para obtener los ids
           }
-        } else {
-          alert("La consulta impacto ambieltal, no se realizo correctamente.")
-        }
+        }).then(async response => {
+            console.log("Consulta Impactos Ambientales x proyecto con ID",response.data);
+           if (response.data[1] == true) {
+              if (response.data[0].length > 0) {
+                 let items = response.data[0];
+                for (let index = 0; index < items.length; index++) {
+                  let id_impacto = items[index].id;
+                   items[index].documentos = await this.buscarDocumentosXImpactoAmbiental('Impacto Ambiental', id_impacto);
+                }
+                this.impactoAmbientalConID = items;
+              } else {
+                this.impactoAmbientalConID = [{'id':0,'nombre':'Sin Impacto','documentos':0}];//Si no hay impacto ambiental
+              }
+            } else {
+              alert("La consulta impacto ambiental con nombres no se realizó.");
+            } 
+          })
+          .catch(error => {
+            console.log('Error:', error);
+          });
+    },
+    /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL CON DOCUMENTOS*/
+      consultarImpactoAmbientalConDocumentos() {
+        axios.get('impactoAmbientalController.php')
+          .then(async response => {
+            console.log(response.data[0]);
+            if (response.data[0][1] == true) {
+              if (response.data[0][0].length > 0) {
+                const items = response.data[0][0];
+                for (let [index, elemento] of items.entries()) {
+                  this.selectEmisiones[index] = '';
+                  elemento.id = Number(elemento.id);
 
-      }).catch(error => {
-        console.log('Erro :-(' + error)
-      }).finally(() => {
+                  // Espera correctamente el resultado de `buscarDocumentos`
+                  // Usamos `await` para esperar a que `buscarDocumentos` termine antes de asignar el valor
+                  elemento.documentos = await this.buscarDocumentosXImpactoAmbiental('Impacto Ambiental', elemento.id);
 
-      })
+                  // Mostrar el número de documentos encontrados para cada elemento
+                  console.log("Documentos por Impacto Ambiental", elemento.documentos, elemento.id);
+                }
+                this.impactoAmbiental = items;
+                console.log("Resultado final:", this.impactoAmbiental);
+              } else {
+                this.impactoAmbiental = [];
+              }
+            } else {
+              alert("La consulta impacto ambiental no se realizó correctamente.");
+            }
+          })
+          .catch(error => {
+            console.log('Error:', error);
+          });
     },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR VALORES*/
     consultarValores() {
@@ -2747,7 +2821,7 @@ const AltaProyectos = {
             //this.mesesPresupuestados = response.data.map(item => item.mes_presupuestado == 1);
             //this.mesesPresupuestados = JSON.parse(response.data[0].map(items => items.mes_presupuestado))
             this.mesesPresupuestados = response.data[0].map(item => item.mes_presupuestado == 1);
-            console.log("HOLAAAA", this.mesesPresupuestados)
+            //console.log("HOLAAAA", this.mesesPresupuestados)
             let todosVaciosCO = response.data[0].map(items => items.ahorro_co=='')
             let todosVaciosHD= response.data[0].map(items => items.ahorro_d=='')
             let todosVaciosHS= response.data[0].map(items => items.ahorro_s=='')
@@ -2795,7 +2869,12 @@ const AltaProyectos = {
       var imagen_seleccion = document.getElementById('input_file_co2').value;
       if (imagen_seleccion != null) {
         this.existeImagenSeleccionadaCO2 = true;
-
+      }
+    },
+     verificandoSelecionImpactoAmbiental() {
+      var imagen_seleccion = document.getElementById('input_file_impactoAmbiental').value;
+      if (imagen_seleccion != null) {
+        this.existeDocumentoSeleccionadoImpacto = true;
       }
     },
     buscarDocumentos(cual_documento, ids) {
@@ -2807,6 +2886,7 @@ const AltaProyectos = {
       })
         .then(response => {
           if (cual_documento == "Alta Proyecto") {
+              console.log("Alta Proyecto")
             this.imagenes = response.data
             if (this.imagenes.length > 0) {
               console.log(this.imagenes + "Archivos encontrados.")
@@ -2816,6 +2896,7 @@ const AltaProyectos = {
             }
           }
           if (cual_documento == "Seguimiento") {
+            console.log("Seguimiento")
             this.documentos_seguimiento = response.data
             if (this.documentos_seguimiento.length > 0) {
               console.log(this.documentos_seguimiento + "Archivos encontrados.")
@@ -2825,12 +2906,26 @@ const AltaProyectos = {
             }
           }
           if (cual_documento == "Documento CO2") {
+            console.log("Documento CO2")
             this.documentos_co2 = response.data
             if (this.documentos_co2.length > 0) {
               console.log(this.documentos_co2 + "Archivos encontrados.")
               this.random = Math.random()
             } else {
               console.log(this.documentos_co2 + "Sin imagen encontrada.")
+            }
+          }
+            if (cual_documento === "Impacto Ambiental") {
+              if (ids) {
+                let documentos = {}
+                 documentos= response.data;
+                this.documentos_impactoAmbiental = documentos;
+                if (this.documentos_impactoAmbiental.length > 0) {
+                  console.log(this.documentos_impactoAmbiental + " Archivos encontrados");
+                  this.random = Math.random();
+                } else {
+                  console.log(this.documentos_impactoAmbiental + "Sin imagen encontrada.")
+                }
             }
           }
           if (cual_documento == "Estatus") {
@@ -2842,6 +2937,34 @@ const AltaProyectos = {
           console.log(error);
         });
     },
+      async buscarDocumentosXImpactoAmbiental(cual_documento, ids) {
+        this.imagenes = [];
+        try {
+          // Realizamos la solicitud con Axios
+          const response = await axios.post("buscar_documentos.php", {
+            documento: cual_documento,
+            id: this.id_proyecto,
+            ids: ids
+          });
+
+          if (cual_documento === "Impacto Ambiental") {
+            if (ids) {
+              let documentos = response.data;
+              if (documentos.length > 0) {
+                console.log("Impacto Ambiental", ids);
+                console.log(documentos + " Archivos encontrados. AMBIENTAL" + documentos.length);
+                this.random = Math.random();
+                return documentos.length; // Retorna el número de documentos
+              } else {
+                console.log(documentos + " Sin imagen encontrada.");
+                return 0;
+              }
+            }
+          }
+        } catch (error) {
+          console.error("Error en la búsqueda de documentos:", error);
+        }
+      },
     buscarDocumentosEnFinancieros(cual_documento, id) {
       this.imagenes = []
       axios.post("buscar_documentos.php", {
@@ -2864,6 +2987,7 @@ const AltaProyectos = {
         });
     },
     uploadFile(cual_documento) {
+      
       this.login = true
       let formData = new FormData();
       if (cual_documento == 'Alta Proyecto') {
@@ -2881,10 +3005,16 @@ const AltaProyectos = {
         var totalfiles = this.$refs.ref_co2.files.length;
       }
 
+       if (cual_documento == 'Impacto Ambiental') {//Todos los impactos ambientales
+        var files = this.$refs.ref_impAmb.files;
+        var totalfiles = this.$refs.ref_impAmb.files.length;
+      }
+
       for (var index = 0; index < totalfiles; index++) {
         formData.append("files[]", files[index]);//arreglo de documentos_seguimiento
       }
       formData.append("id", this.id_proyecto);
+      formData.append("id_impactoAmbiental", this.id_impactoAmbiental);
       formData.append("cual_documento", cual_documento);
       axios.post("subir_imagen.php", formData,
         {
@@ -2919,6 +3049,21 @@ const AltaProyectos = {
                 this.buscarDocumentos('Documento CO2')
               }
             }
+            if(cual_documento == "Impacto Ambiental") {
+              let id_impacto=this.id_impactoAmbiental
+              if (response.data.length > 0) {
+               document.getElementById("input_file_impactoAmbiental").value = ""
+                this.existeDocumentoSeleccionadoImpacto = false;
+                this.random = Math.random()
+                this.buscarDocumentos('Impacto Ambiental', id_impacto)
+                alert("Se agregaron con Éxito")
+                this.impactoAmbiental.map((elemento, index) => {
+                  if (elemento.id == id_impacto) { 
+                    this.impactoAmbiental[index].documentos = this.impactoAmbiental[index].documentos + response.data.length
+                  } 
+                });
+            }
+          }
           } else {
             this.login = false
             alert("Verifique la extension del archivo o Intente nuevamente.")
@@ -2942,12 +3087,21 @@ const AltaProyectos = {
         if (reponse.data == "Archivo Eliminado") {
 
           if (this.cual_documento == "Seguimiento") {
-            console.log("eline a seguimiento")
+            console.log("elimine a seguimiento")
             this.buscarDocumentos('Seguimiento')
           }
           if (this.cual_documento == "Documento CO2") {
             console.log("se elimino DOCUMENTO CO2")
             this.buscarDocumentos('Documento CO2')
+          }
+          if (this.cual_documento == "Impacto Ambiental") {
+            let id_impacto=this.id_impactoAmbiental
+            this.buscarDocumentos('Impacto Ambiental',id_impacto)
+            this.impactoAmbiental.map((elemento, index) => {
+                if (elemento.id == id_impacto) { 
+                  this.impactoAmbiental[index].documentos = this.impactoAmbiental[index].documentos - 1
+                } 
+              });
           }
           alert("Archivo/Documento Eliminado con Éxito")
 
@@ -2981,6 +3135,14 @@ const AltaProyectos = {
       this.myModalEstatus.show()
       this.buscarDocumentosEnFinancieros('Seguimiento', id)//Financieros
     },
+    modal_impactoAmbiental(id,nombre) {
+      this.myModalImpacto = new bootstrap.Modal(document.getElementById('modalImpactoAmbiental'))
+      this.myModalImpacto.show()
+      this.cual_documento = "Impacto Ambiental"
+      this.id_impactoAmbiental = id
+      this.cual_impacto_nombre = nombre
+      this.buscarDocumentos('Impacto Ambiental',id)
+    },
     incrementarMeses() {
       this.cantidadMeses += 1
     },
@@ -3004,8 +3166,6 @@ const AltaProyectos = {
       
     },
     verificarAltaProyecto() {
-
-
       //Comprobando fecha
       if (this.fecha_alta == '') {
         this.respondio = false;
@@ -3155,8 +3315,10 @@ const AltaProyectos = {
       }
 
     },
+    getFileName(filePath) {
+      return filePath.slice(filePath.lastIndexOf('/') + 1);
+    },
     guardarAltaProyecto(insertar_o_actualizar) {
-
       var fuente = ''
       var siglasFuente = ''
       var fuenteConSiglas = ''
