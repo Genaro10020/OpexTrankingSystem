@@ -3744,55 +3744,7 @@ const AltaProyectos = {
       var posicionUltimoNum = folioCompleto.lastIndexOf("#");
       return folioCompleto.slice(posicionUltimoNum);
     },
-   comparandoFolio(folio, index){
-
-      /*if (index == 0) {
-        this.ultimoColor = "Amarillo"
-        return  this.ultimoColor;
-       
-        
-         let previousFolioLastNum = this.getLastFolioNumber(previousFolio); // Último número del folio anterior
-
-        // Comparar el número actual con el anterior
-        if (folioLastNum === previousFolioLastNum) {
-            console.log("El número de folio actual es el mismo que el anterior.");
-        } 
-      }else{
-
-        let ultimoNumFolio = this.obtenerLastNum(this.proyectos[index].folio);
-        let ultimoNumFolioAnterior = this.obtenerLastNum(this.proyectos[index-1].folio);
-
-        console.log(this.proyectos[index].folio);
-        console.log("Actual", ultimoNumFolio);
-
-       console.log("Ansterior", ultimoNumFolioAnterior); 
-      }*/  
-      
-
-       /* if (index > 0 && this.obtenerPrefijo(nombre) !== this.obtenerPrefijo(this.proyectos[index - 1].folio)) {
-        return this.obtenerPrefijo(nombre) != this.obtenerPrefijo(this.proyectos[index - 1].folio);// Cambia el color según tus preferencias
-      }  
-       
-      if(index == 0){
-        this.ultimoColor = "Amarillo"
-        return  this.ultimoColor;
-      }else{
-        let folioSinNumeralActual = this.obtenerPrefijo(this.proyectos[index].folio);
-        let folioSinNumeralAnterior = this.obtenerPrefijo(this.proyectos[index-1].folio);
-        if(folioSinNumeralActual===folioSinNumeralAnterior){
-          return this.ultimoColor;
-        }else{
-          if(this.ultimoColor === "Rojo"){
-            this.ultimoColor = "Amarillo"
-            return this.ultimoColor;
-          }else if(this.ultimoColor == "Amarillo"){
-            this.ultimoColor = "Rojo"
-            return this.ultimoColor;
-          }
-        }
-      }
-      */  
-    }, 
+    
     folioAnteriorSinNumeral(nombre, index) {
       // Compara el nombre actual con el anterior y asigna un color diferente si es diferente
       if (index > 0 && this.obtenerPrefijo(nombre) !== this.obtenerPrefijo(this.proyectos[index - 1].folio)) {
