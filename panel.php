@@ -725,15 +725,18 @@ if (isset($_SESSION['nombre'])) {
                     <div class="col-12" >
                         <div class= "row">
                             <!-- Select de los nombre de los proyectos -->
-                            <div class="col-4">
-                                <div class="input-group mt-3 mx-2 mb-2 ">
-                                    <span class="input-group-text w-5">Seleccione Proyecto</span>
-                                    <select class="w-50"  @keydown.up="cancelarEvento" @keydown.down="cancelarEvento" @keydown.left="cancelarEvento" @keydown.right="cancelarEvento" @change= "proyectoSeleccionado()" v-model="id_proyecto">
-                                        <option value="" default>Todos...</option>
-                                        <option  style="font-size:15px;" v-for="proyecto in proyectoSelect" :key="proyecto.id" :value="proyecto.id">{{ proyecto.nombre_proyecto }}</option>
-                                    </select>
+                            <?php if ($_SESSION['acceso'] == 'Admin') { ?>
+                                <div class="col-4">
+                                    <div class="input-group mt-3 mx-2 mb-2 ">
+                                        <span class="input-group-text w-5">Seleccione Proyecto</span>
+                                        <select class="w-50"  @keydown.up="cancelarEvento" @keydown.down="cancelarEvento" @keydown.left="cancelarEvento" @keydown.right="cancelarEvento" @change= "proyectoSeleccionado()" v-model="id_proyecto">
+                                            <option value="" default>Todos...</option>
+                                            <option  style="font-size:15px;" v-for="proyecto in proyectoSelect" :key="proyecto.id" :value="proyecto.id">{{ proyecto.nombre_proyecto }}</option>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
+                            <?php } ?>
+
                             <!-- BOTÓN ALTA PROYECTOS -->
                             <div class="col-4">
                                 <?php if ($_SESSION['acceso'] == 'Admin') { ?>
