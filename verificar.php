@@ -10,7 +10,7 @@ $contrasena = $arreglo['contrasena'];
   
     //Verificar SI existe usuario
    
-        $consulta = "SELECT * FROM usuarios WHERE nomina = '$usuario' AND contrasena = '$contrasena' AND (tipo_acceso = 'Admin' OR tipo_acceso='Financiero')";
+        $consulta = "SELECT * FROM usuarios WHERE nomina = '$usuario' AND contrasena = '$contrasena' AND (tipo_acceso = 'Admin' OR tipo_acceso='Financiero' OR tipo_acceso='SymaUser')";
         $query=$conexion->query($consulta);
                 if(mysqli_num_rows($query)>0){
                         while ($dato=mysqli_fetch_array($query)) {

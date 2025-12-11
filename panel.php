@@ -21,21 +21,26 @@ if (isset($_SESSION['nombre'])) {
                 <!--Bóton-->
                 <div class="text-center">
                     <?php if ($_SESSION['acceso'] == 'Admin') { ?>
-                        <button class="btn-menu " @click="ventana='Crear',opcion=1,consultarMisionesRelacional(),consultarObjetivosRelacional(),consultarMisiones(),consultarImpactoAmbientalConDocumentos(),consultarEstandaresCO2(),consultarFuentes(),mostrarHeader=true,sumarSoloUnaVez=0,sumaImpactoAmbiental()"
-                            :class="{'btn-menu-activo': opcion===1,'btn-menu': opcion !== 1}"><!--buscarDocumentos('Documento CO2')-->
+                        <button class="btn-menu " @click="ventana='Crear',opcion=1,consultarMisionesRelacional(),consultarObjetivosRelacional(),consultarMisiones(),consultarImpactoAmbientalConDocumentos(),consultarEstandaresCO2(),consultarFuentes(),mostrarHeader=true,sumarSoloUnaVez=0"
+                            :class="{'btn-menu-activo': opcion===1,'btn-menu': opcion !== 1}"><!--buscarDocumentos('Documento CO2')--> <!-- sumaImpactoAmbiental() -->
                             <i class="bi bi-plus-circle"></i> Crear Catálogos
                         </button>
                     <?php } ?>
-                    <button class="btn-menu me-0  mx-sm-3 mt-sm-3" @click="ventana='Altas',opcion=2,mostrarHeader=true,sumarSoloUnaVez=0"
-                        :class="{'btn-menu-activo': opcion===2,'btn-menu': opcion !== 2}">
-                        <i class="bi bi-plus-circle"></i> Proyectos Creados
-                    </button>
 
-                    <button class="btn-menu mb-sm-3 mt-sm-3" @click="ventana='Seguimiento',mostrarHeader=true,opcion=3,sumarSoloUnaVez=0,opcion=3"
-                        :class="{'btn-menu-activo': opcion===3,'btn-menu': opcion !== 3}"><!--buscarDocumentos('Documento CO2')-->
-                        <i class="bi bi-plus-circle"></i> Seguimiento
-                    </button>
+                    <?php if ($_SESSION['acceso'] != 'SymaUser') { ?>
+                        <button class="btn-menu me-0  mx-sm-3 mt-sm-3" @click="ventana='Altas',opcion=2,mostrarHeader=true,sumarSoloUnaVez=0"
+                            :class="{'btn-menu-activo': opcion===2,'btn-menu': opcion !== 2}">
+                            <i class="bi bi-plus-circle"></i> Proyectos Creados
+                        </button>
+                    <?php } ?>
 
+                    <?php if ($_SESSION['acceso'] != 'SymaUser') { ?>
+                        <button class="btn-menu mb-sm-3 mt-sm-3" @click="ventana='Seguimiento',mostrarHeader=true,opcion=3,sumarSoloUnaVez=0,opcion=3"
+                            :class="{'btn-menu-activo': opcion===3,'btn-menu': opcion !== 3}"><!--buscarDocumentos('Documento CO2')-->
+                            <i class="bi bi-plus-circle"></i> Seguimiento
+                        </button>
+                    <?php } ?>
+                    
                     <?php if ($_SESSION['acceso'] == 'Admin' || $_SESSION['acceso'] == 'Financiero') { ?>
                         <button class="btn-menu ms-sm-3 mb-sm-3" @click="ventana='Calendario',opcion=5,mostrarHeader=true,consultarPlantas(),  consultarCalendarioProyectos()"
                             :class="{'btn-menu-activo': opcion===5,'btn-menu': opcion !== 5}">
@@ -43,15 +48,26 @@ if (isset($_SESSION['nombre'])) {
                         </button>
                     <?php } ?>
 
-                    <button class="btn-menu mb-sm-3 ms-sm-3  " @click="ventana='Generar Valor',opcion=4,consultarObjetivosRelacional(),mostrarHeader=false,consultarSeguimientos(),valoresProyectos('')"
-                        :class="{'btn-menu-activo': opcion===4,'btn-menu': opcion !== 4}">
-                        <i class="bi bi-plus-circle"></i> Generando Valor Sustentable
-                    </button>
+                    <?php if ($_SESSION['acceso'] != 'SymaUser') { ?>   
+                        <button class="btn-menu mb-sm-3 ms-sm-3  " @click="ventana='Generar Valor',opcion=4,consultarObjetivosRelacional(),mostrarHeader=false,consultarSeguimientos(),valoresProyectos('')"
+                            :class="{'btn-menu-activo': opcion===4,'btn-menu': opcion !== 4}">
+                            <i class="bi bi-plus-circle"></i> Generando Valor Sustentable
+                        </button>
+                    <?php } ?>
 
-                    <button class="btn-menu mb-sm-3 ms-sm-3  " @click="ventana='Valores Gonher',opcion=6,valoresProyectos('grafica')"
-                        :class="{'btn-menu-activo': opcion===6,'btn-menu': opcion !== 6}">
-                        <i class="bi bi-plus-circle"></i> Valores Gonher
-                    </button>
+                    <?php if ($_SESSION['acceso'] != 'SymaUser') { ?>
+                        <button class="btn-menu mb-sm-3 ms-sm-3  " @click="ventana='Valores Gonher',opcion=6,valoresProyectos('grafica')"
+                            :class="{'btn-menu-activo': opcion===6,'btn-menu': opcion !== 6}">
+                            <i class="bi bi-plus-circle"></i> Valores Gonher
+                        </button>
+                    <?php } ?>
+
+                    <?php if ($_SESSION['acceso'] == 'SymaUser') { ?>
+                        <button class="btn-menu  mb-sm-3" @click="ventana='Impactos Ambientales',opcion=7,mostrarHeader=true"
+                            :class="{'btn-menu-activo': opcion===7,'btn-menu': opcion !== 7}">
+                            <i class="bi bi-plus-circle"></i> Impactos Ambientales
+                        </button>
+                    <?php } ?>
                     <!--<button class="btn-menu" @click="ventana='Reportes'">
                         <i class="bi bi-plus-circle"></i> Reportes
                     </button>-->
@@ -718,13 +734,130 @@ if (isset($_SESSION['nombre'])) {
                 </div>
                 <!--Fin Bóton Alta Proyectoss-->
             </div>
+
+                <!-- MODAL IMPACTOS AMBIENTALES -->
+                 <div class="modal fade" id="modalAspectosSyma" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered modal-xl">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h6 class="modal-title fw-bold" id="exampleModalLabel"><h3>{{ isEditMode ? 'Editar' : 'Crear' }} Aspecto Ambiental</h3> <b>  </b></h6>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form @submit.prevent="isEditMode ? actualizarImpactoAmbiental() : insertarImpactoAmbiental()" id="modal-form"><!-- Modifica el submit, ahora llamaras al metodo instertarImpactoAmbiental --> 
+                                        <div class= "row">
+                                            <div class="col-md-6">
+                                                <!-- Fila de Aspecto Ambiental -->
+                                                <div class="form-group">
+                                                    <label for="aspecto">Aspecto Ambiental</label>
+                                                    <input v-model="aspecto" class="form-control form-control-sm" type="text" id="aspecto" name="aspecto" placeholder="" required>
+                                                </div>
+
+                                                <!-- Fila de Unidad de Medida -->
+                                                <div class="form-group">
+                                                    <label for="unidad">Unidad de Medida</label>
+                                                    <input v-model="unidad" class="form-control form-control-sm" type="text" id="unidad" name="unidad" placeholder="" required>
+                                                </div>
+
+                                                <!-- Fila de Clasificación -->
+                                                <div class="form-group">
+                                                    <label for="clasificacion">Clasificación</label>
+                                                    <input v-model="clasificacion" class="form-control form-control-sm" type="text" id="clasificacion" name="clasificacion" placeholder="" required>
+                                                </div>
+
+                                                <!-- Fila de Ciclo de Vida -->
+                                                <div class="form-group">
+                                                    <label for="ciclo-vida">Ciclo de Vida</label>
+                                                    <input v-model="ciclo" class="form-control form-control-sm"  type="text" id="ciclo-vida" name="ciclo-vida" placeholder="" required>
+                                                </div>
+                                                
+                                                <!-- Fila de I/O -->
+                                                <div class="form-group">
+                                                    <label for="i/o">I/O</label>
+                                                    <input v-model="io" class="form-control form-control-sm" type="text" id="i/o" name="i/o" placeholder="" required>
+                                                </div>
+
+                                                <!-- Fila de Impacto Ambiental -->
+                                                <div class="form-group">
+                                                    <label for="impacto">Impacto Ambiental</label>
+                                                    <input v-model="impacto" class="form-control form-control-sm" type="text" id="impacto" name="impacto" placeholder="" required>
+                                                </div>
+
+                                                <!-- Fila de Requisito legal -->
+                                                <div class="form-group">
+                                                    <label for="requisito">Requisito Legal Asociado</label>
+                                                    <input v-model="requisito" class="form-control form-control-sm" type="text" id="requisito" name="requisito" placeholder="" required>
+                                                </div>
+
+                                                <!-- Fila de Alcance -->
+                                                <div class="form-group">
+                                                    <label for="alcance">Alcance</label>
+                                                    <input v-model="alcance" class="form-control form-control-sm" type="number" max = "3" min="1" id="alcance" name="alcance" placeholder="" required>
+                                                </div>
+                                            </div>
+                                                
+                                            <div class= "col-md-6">
+                                                <!-- Fila de CO2 (toneladas) -->
+                                                <div class="form-group">
+                                                    <label for="co2">CO2 (t)</label>
+                                                    <input v-model="CO2" class="form-control form-control-sm" type="number" id="co2" name="co2" step="0.01" placeholder="Ej: 1.33">
+                                                </div>
+                                                <!-- Fila de CH4 (toneladas) -->
+                                                <div class="form-group">
+                                                    <label for="ch4">CH4 (t)</label>
+                                                    <input v-model="CH4" class="form-control form-control-sm" type="number" id="ch4" name="ch4" step="0.01" placeholder="Ej: 2.52">
+                                                </div>
+
+                                                <!-- Fila de NO2 (toneladas) -->
+                                                <div class="form-group">
+                                                    <label for="NO2">NO2 (t)</label>
+                                                    <input v-model="NO2" class="form-control form-control-sm" type="number" id="NO2" name="NO2" step="0.01" placeholder="Ej: 2.57">
+                                                </div>
+
+                                                <!-- Fila de CO2→CO2e (toneladas) -->
+                                                <div class="form-group">
+                                                    <label for="CO2→CO2e">CO2→CO2e (t)</label>
+                                                    <input v-model="CO2CO2e" class="form-control form-control-sm" type="number" id="CO2→CO2e" name="CO2→CO2e" step="0.01" placeholder="Ej: 2.57">
+                                                </div>
+
+                                                <!-- Fila de CH4→CO2e (toneladas) -->
+                                                <div class="form-group">
+                                                    <label for="CH4→CO2e">CH4→CO2e (t)</label>
+                                                    <input v-model="CH4CO2e" class="form-control form-control-sm" type="number" id="CH4→CO2e" name="CH4→CO2e" step="0.01" placeholder="Ej: 2.56">
+                                                </div>
+
+                                                <!-- Fila de N2O→CO2e (toneladas) -->
+                                                <div class="form-group">
+                                                    <label for="N2O→CO2e">N2O→CO2e (t)</label>
+                                                    <input v-model="N2OCO2e" class="form-control form-control-sm" type="number" id="N2O→CO2e" name="N2O→CO2e" step="0.01" placeholder="Ej: 2.55">
+                                                </div>
+                                            </div>
+                                                        
+                                            <!-- Botones de Acción -->
+                                            <div class="form-group text-center">
+                                                
+                                                <button type="submit" class="submit-button btn btn-sm me-1 mt-4" :class= "{'bg-warning': isEditMode == true, 'bg-success': isEditMode != true}">{{ isEditMode ? 'Guardar Cambios' : 'Crear' }}</button>
+                                                <button type="button" class="cancel-button btn btn-secondary btn-sm ms-1 mt-4 " id="cancel-modal">Cancelar</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- MODIFICA EL FORM CONFORME A TUS NECESIDADES, NO OLVIDES AGREGAR ESTILOS!!!!!!!!! AQUI -->
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <!-- FIN MODAL IMPACTOS AMBIENTALES -->
+
             <!--Cuerpo-->
             <div :class="{ 'cuerpoNormal': mostrarHeader, 'cuerpoAlto': !mostrarHeader }">
                 <!--AQUI TRABAJA //ALTA DE PROYECTOS-->
                 <div class="text-center mt-2" v-if="ventana=='Altas'">
                     <div class="col-12" >
                         <div class= "row">
-                            <!-- Select de los nombre de los proyectos -->
+                            <!-- Select de los nombres de los proyectos -->
                             <?php if ($_SESSION['acceso'] == 'Admin') { ?>
                                 <div class="col-4">
                                     <div class="input-group mt-3 mx-2 mb-2 ">
@@ -1096,7 +1229,7 @@ if (isset($_SESSION['nombre'])) {
                     </div>
 
                     <!--TABLA DE IMPACTO AMBIENTAL-->
-                    <div class="col-12 col-lg-12">
+                    <!--<div class="col-12 col-lg-12">
                         <div class="col-12  text-center ">
                             <div class=" encabezadoTablas">
                                 <div class=" d-flex justify-content-center align-items-baseline " style="font-size: 0.9em;">
@@ -1166,7 +1299,8 @@ if (isset($_SESSION['nombre'])) {
                                 </table>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
+
                     <!-- INICIO TABLA ESTANDARES CO2 -->
                     <!--<div class="col-12 col-lg-6 ">
                         <div class="col-12 text-center align-content">
@@ -1276,7 +1410,7 @@ if (isset($_SESSION['nombre'])) {
                                         </div>
                                     </div>
                                     <!--Cuerpo de MODAL IMPACTO AMBIENTAL-->
-                                    <div v-if="tipo=='Impacto Ambiental'">
+                                   <!--  <div v-if="tipo=='Impacto Ambiental'">
                                         <div>
                                             <div class="modal-body input-group mb-3">
                                                 <span class="input-group-text w-25 mt-3">Nombre:</span>
@@ -1287,7 +1421,7 @@ if (isset($_SESSION['nombre'])) {
                                                 <input type="text" v-model="unidadMedida" class="w-75 mt-3">
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
 
                                     <!--Cuerpo de MODAL ESTANDARES CO2 -->
                                     <div v-if="tipo=='Estandar'">
@@ -1322,7 +1456,7 @@ if (isset($_SESSION['nombre'])) {
                                 <!-- MODAL ACTUALIZAR -->
                                 <div v-if="accion=='Actualizar'">
                                     <!--Cuerpo de MODAL IMPACTO AMBIENTAL-->
-                                    <div v-if="tipo=='Impacto Ambiental'">
+                                    <!-- <div v-if="tipo=='Impacto Ambiental'">
                                         <div>
                                             <div class="modal-body input-group mb-3">
                                                 <span class="input-group-text w-25 mt-3">Nombre:</span>
@@ -1333,7 +1467,7 @@ if (isset($_SESSION['nombre'])) {
                                                 <input type="text" v-model="unidadMedida" class="w-75 mt-3">
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <!--cuerpo MODAL ACTUALIZAR Misiones-->
                                     <div v-if="tipo=='Mision'">
                                         <div>
@@ -1413,11 +1547,10 @@ if (isset($_SESSION['nombre'])) {
                                     <button type="button" class="boton-aceptar" v-if="tipo=='Mision' && accion=='Crear'" @click="insertarMision()">Crear</button>
                                     <button type="button" class="boton-aceptar" v-if="tipo=='Pilar'  && accion=='Crear'" @click="insertarPilar()">Crear</button>
                                     <button type="button" class="boton-aceptar" v-if="tipo=='Objetivo'  && accion=='Crear'" @click="insertarObjetivo()">Crear</button>
-                                    <button type="button" class="boton-aceptar" v-if="tipo=='Impacto Ambiental'  && accion=='Crear'" @click="insertarImpactoAmbiental()">Crear</button>
-                                    <button type="button" class="boton-aceptar" v-if="tipo=='Estandar'  && accion=='Crear'" @click="insertarEstandaresCO2()">Crear</button>
+                                    <!-- <button type="button" class="boton-aceptar" v-if="tipo=='Impacto Ambiental'  && accion=='Crear'" @click="insertarImpactoAmbiental()">Crear</button> -->                                    <button type="button" class="boton-aceptar" v-if="tipo=='Estandar'  && accion=='Crear'" @click="insertarEstandaresCO2()">Crear</button>
                                     <button type="button" class="boton-aceptar" v-if="tipo=='Fuente'  && accion=='Crear'" @click="insertarFuente()">Crear</button>
                                     <!-- BOTON PARA ACTUALIZAR INFORMACION  -->
-                                    <button type="button" class="boton-actualizar" v-if="tipo=='Impacto Ambiental' && accion=='Actualizar'" @click="actualizarImpactoAmbiental()">Actualizar</button>
+                                    <!-- <button type="button" class="boton-actualizar" v-if="tipo=='Impacto Ambiental' && accion=='Actualizar'" @click="actualizarImpactoAmbiental()">Actualizar</button> -->
                                     <button type="button" class="boton-actualizar" v-if="tipo=='Estandares' && accion=='Actualizar'" @click="actualizarEstandaresCO2()">Actualizar</button>
                                     <button type="button" class="boton-actualizar" v-if="tipo=='Pilar' && accion=='Actualizar'" @click="actualizarPilares()">Actualizar</button>
                                     <button type="button" class="boton-actualizar" v-if="tipo=='Objetivo' && accion=='Actualizar'" @click="actualizarObjetivos()">Actualizar</button>
@@ -2758,6 +2891,64 @@ if (isset($_SESSION['nombre'])) {
                         </div>
                     </div>
                 </div><!--Fin Valores Gonher-->
+
+                <!-- VENTANA Impactos Ambientales syma-->
+                <div v-if="ventana=='Impactos Ambientales'" v-cloak>
+                    <div class= "text-center mt-3 ">
+                        <button class="btn btn-menu bg-primary align-items-center mb-2 btn-sm" style=" background:#519f3c; " @click = "abrirModalSyma('Crear', index)">
+                            <i class="bi bi-plus-circle"></i> Nuevo
+                        </button>     
+                    </div>  
+                    <div class= "scroll-dos">            
+                        <table class="table table-bordered table-striped table-hover  tabla-ambiental text-center mt-3">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th scope="col">Aspecto Ambiental</th>
+                                    <th scope="col">U.M.</th>
+                                    <th scope="col">Clasificación</th>
+                                    <th scope="col">Ciclo de Vida</th>
+                                    <th scope="col">I/O</th>
+                                    <th scope="col">Impacto Ambiental</th>
+                                    <th scope="col">Requisito Legal Asociado</th>
+                                    <th scope="col">Alcance</th>
+                                    <th scope="col">CO2 (t)</th>
+                                    <th scope="col">CH4 (t)</th>
+                                    <th scope="col">NO2 (t)</th>
+                                    <th scope="col">CO2→CO2e (t)</th>
+                                    <th scope="col">CH4→CO2e (t)</th>
+                                    <th scope="col">N2O→CO2e (t)</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(item, index) in impactoAmbiental" :key="index">
+                                    <td>
+                                        <button class="btn btn-warning btn-sm" title="Editar" @click="abrirModalSyma('Editar', index)"><i class="bi bi-pen"></i></button>
+                                    </td><!-- AGREGA MODAL PARA ACTUALIZAR, INTENTA REUTILIZAR LA DE INSERCIÓN (SE AGREGA EN EL @CLICK) -->
+                                    <td class = "text-start">{{ item.nombre }}</td>
+                                    <td>{{ item.unidad }}</td>
+                                    <td>{{ item.clasificacion }}</td>
+                                    <td>{{ item.ciclo }}</td>
+                                    <td>{{ item.io }}</td>
+                                    <td>{{ item.impacto }}</td>
+                                    <td>{{ item.requisito }}</td>
+                                    <td>{{ item.alcance }}</td>
+                                    <td>{{ item.CO2 }}</td>
+                                    <td>{{ item.CH4 }}</td>
+                                    <td>{{ item.NO2 }}</td>
+                                    <td>{{ item.CO2CO2e }}</td>
+                                    <td>{{ item.CH4CO2e }}</td>
+                                    <td>{{ item.N2OCO2e }}</td>
+                                    <td>
+                                        <button class="btn btn-danger btn-sm" title="Eliminar" @click = "eliminarImpactoAmbiental(index)"><i class="bi bi-trash3"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div> 
+                </div>
+                <!-- FIN VENTANA Impactos Ambientales syma-->
             </div><!--cuerpo-->
 
             <div class="footer row" style="min-height:10vh;"> <!--pie-->

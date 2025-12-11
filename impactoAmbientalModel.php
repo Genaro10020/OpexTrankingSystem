@@ -125,18 +125,22 @@ include("conexionGhoner.php");
             }else{
                 $status = "Consulta tabla impacto ambiental: ".$stmt->error;
             }
+            
+            $stmt->close();
         }else{
             $status = "Consulta tabla impacto ambiental: ".$conexion->error;
         }
-        $stmt->close();
         return array($respuesta, $status);
     }
 
-    function insertarImpactoAmbiental($nueva,$cantidad,$unidadMedida){
+    function insertarImpactoAmbiental($aspecto,$unidad,$clasificacion,$ciclo,$io,$impacto,$requisito,
+        $alcance,$CO2,$CH4,$NO2,$CO2CO2e,$CH4CO2e,$N2OCO2e){
         global $conexion;
-        $query = "INSERT INTO impacto_ambiental (nombre,cantidad,unidad_medida) VALUES (?,?,?)";
+        $query = "INSERT INTO impacto_ambiental (nombre,unidad,clasificacion, ciclo, io,  impacto, requisito,
+        alcance, CO2, CH4, NO2, CO2CO2e, CH4CO2e, N2OCO2e) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $stmt = $conexion->prepare($query);
-        $stmt->bind_param("sss", $nueva,$cantidad,$unidadMedida);
+        $stmt->bind_param("sssssssidddddd", $aspecto,$unidad,$clasificacion,$ciclo,$io,$impacto,$requisito,
+        $alcance,$CO2,$CH4,$NO2,$CO2CO2e,$CH4CO2e,$N2OCO2e);
         if($stmt->execute()){
             $estado = true;
         }else{
@@ -147,12 +151,15 @@ include("conexionGhoner.php");
         return $estado;
     }
 
-    function actualizarImpactoAmbiental($id,$nuevoNombre,$cantidad,$unidadMedida){
+    function actualizarImpactoAmbiental($id,$aspecto,$unidad,$clasificacion,$ciclo,$io,$impacto,$requisito,
+        $alcance,$CO2,$CH4,$NO2,$CO2CO2e,$CH4CO2e,$N2OCO2e){
         global $conexion;
         $estado = false;
-        $update = "UPDATE impacto_ambiental SET nombre=?, cantidad=?, unidad_medida=? WHERE  id=?";
+        $update = "UPDATE impacto_ambiental SET nombre=?, unidad=?, clasificacion=?, ciclo=?, io=?,
+        impacto=?, requisito=?, alcance=?, CO2=?, CH4=?, NO2=?, CO2CO2e=?, CH4CO2e=?, N2OCO2e=?  WHERE  id=?";
         $stmt = $conexion->prepare($update);
-        $stmt->bind_param("sssi", $nuevoNombre,$cantidad,$unidadMedida,$id);
+        $stmt->bind_param("sssssssiddddddi",$aspecto,$unidad,$clasificacion,$ciclo,$io,$impacto,$requisito,
+        $alcance,$CO2,$CH4,$NO2,$CO2CO2e,$CH4CO2e,$N2OCO2e,$id);
         if($stmt->execute()){
             $estado = true;
         }

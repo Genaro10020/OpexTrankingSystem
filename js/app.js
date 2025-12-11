@@ -7,8 +7,8 @@ const AltaProyectos = {
   data() {
     return {
       /*/////////////////////////////////////////////////////////////////////////////////VARIBLES USUARIOS Y DEPARTAMENTOS INICIO*/
-      opcion: 2,
-      ventana: 'Altas',
+      opcion: 0,
+      ventana: '',
       myModal: '',
       myModalCRUD: '',
       tipo: '',
@@ -142,6 +142,7 @@ const AltaProyectos = {
       id_mision_ligada: '',
       pilar: '',
       objetivos_ligados: '',
+      //whoPerson: '<?php echo $_SESSION["acceso"]; ?>',
       /*SEGUIMIENTO DE PROYECTO*/
       mesProyecto: 0,
       anioProyecto: 0,
@@ -238,21 +239,194 @@ const AltaProyectos = {
       ahorro_co2_mes_mes: [],
       fechaAltaProyecto:'',
       hayDatos:false,
-      mesesCapturadoYSumaXProyecto:[]
+      mesesCapturadoYSumaXProyecto:[],
+
+      //////////////////////SYMA ASPECTOS AMBINETALES
+      isEditMode: false,
+      tablaAspectos: [],
+      aspecto: '',
+      unidad: '',
+      alcance: '',
+      requisito: '',
+      impacto:'',
+      ciclo: '',
+      io:'',
+      clasificacion:'',
+      CO2: '',
+      CH4: '',
+      NO2: '',
+      CO2CO2e:'', 
+      CH4CO2e:'', 
+      N2OCO2e: '',
+
     }
   },
   mounted() {
     //  this.consultarUsuarios()
-    this.consultarProyectos()
-    this.consultarSumaProyectos()
-    this.tomarAnioActual()
+    this.whoWindows()
+   /* this.consultarProyectos()
+        this.consultarSumaProyectos()
+        this.tomarAnioActual() */
+  
   },
   methods: {
+    
+    whoWindows(){
+      
+        
+      
+      axios.get('access.php', {
+      }).then(response => {
+        // Código a ejecutar cuando la solicitud sea exitosa
+        if (response.data.success) {
+          this.whoPerson = response.data.acceso;
+          console.log('Tipo de acceso:', this.whoPerson);
+          
+          if(this.whoPerson == 'SymaUser'){
+            this.opcion=7;
+            this.ventana='Impactos Ambientales';
+            this.consultarImpactoAmbiental();
+          }else{
+            this.opcion=2;
+            this.ventana='Altas';
+            this.consultarProyectos()
+            this.consultarSumaProyectos()
+          }
+          this.tomarAnioActual()
+        } else {
+          console.warn(response.data.mensaje);
+          // Opcional: redirigir al login
+          // window.location.href = 'login.php';
+        }
+      }).catch(error => {
+        console.log('Error :-(' + error)
+      })
+
+
+    },
     toggleDiv() {
       this.showDiv = !this.showDiv;
       console.log(this.showDiv);
     },
 
+    abrirModalSyma(queHace, index){
+      console.log("Que hace:", queHace, "Quien: ", index)
+
+      
+      ////Reseteo variables
+      this.aspecto = '';
+      this.unidad = '';
+      this.clasificacion = '';
+      this.ciclo = '';
+      this.io = '';
+      this.impacto = '';
+      this.requisito = '';
+      this.alcance = '';
+      this.CO2 = '';
+      this.CH4 = '';
+      this.NO2 = '';
+      this.CO2CO2e = '';
+      this.CH4CO2e = '';
+      this.N2OCO2e = '';
+      if(queHace == 'Crear'){
+        this.isEditMode = false
+
+        this.myModal = new bootstrap.Modal(document.getElementById("modalAspectosSyma"))
+        this.myModal.show()
+      }else if(queHace == 'Editar'){
+        var miImpacto = this.impactoAmbiental[index]
+        console.log("miImpacto", miImpacto)
+        this.id = miImpacto.id
+        this.isEditMode = true
+
+        this.aspecto = miImpacto.nombre
+        this.unidad = miImpacto.unidad
+        this.alcance = miImpacto.alcance
+        this.requisito = miImpacto.requisito
+        this.impacto = miImpacto.impacto
+        this.ciclo = miImpacto.ciclo
+        this.io = miImpacto.io
+        this.clasificacion = miImpacto.clasificacion
+        this.CO2 = miImpacto.CO2
+        this.CH4 = miImpacto.CH4
+        this.NO2 = miImpacto.NO2
+        this.CO2CO2e = miImpacto.CO2CO2e
+        this.CH4CO2e = miImpacto.CH4CO2e
+        this.N2OCO2e = miImpacto.N2OCO2e
+        
+        this.myModal = new bootstrap.Modal(document.getElementById("modalAspectosSyma"))
+        this.myModal.show()
+      }/* else if(queHace == 'Eliminar'){
+        console.log(queHace)
+        var miImpacto = this.impactoAmbiental[index]
+        this.id = miImpacto.id
+        console.log("id", this.id)
+
+        this.eliminarImpactoAmbiental()
+      } */
+
+    },
+    /* agregarAspecto(){
+      console.log("HOLAAAAAAAAAAAA")
+      this.tablaAspectos.push({
+        aspecto: this.aspecto,
+        unidad: this.unidad,
+        clasificacion: this.clasificacion,
+        ciclo: this.ciclo,
+        io: this.io,
+        impacto: this.impacto,
+        requisito: this.requisito,
+        alcance: this.alcance,
+        CO2: this.CO2,
+        CH4: this.CH4,
+        NO2: this.NO2,
+        CO2CO2e: this.CO2CO2e,
+        CH4CO2e: this.CH4CO2e,
+        N2OCO2e: this.N2OCO2e,
+      });//////////^^^<<<TEMPORAL  Este solo lo asigna al arreglo para poder mostrarlo en la tabla, luego lo harás por medio de consulta 
+
+      /////ENVIAR POR AXIOS V V V
+      axios.post('impactoAmbientalController.php', {
+        aspecto: this.aspecto,
+        unidad: this.unidad,
+        clasificacion: this.clasificacion,
+        ciclo: this.ciclo,
+        io: this.io,
+        impacto: this.impacto,
+        requisito: this.requisito,
+        alcance: this.alcance,
+        CO2: this.CO2,
+        CH4: this.CH4,
+        NO2: this.NO2,
+        CO2CO2e: this.CO2CO2e,
+        CH4CO2e: this.CH4CO2e,
+        N2OCO2e: this.N2OCO2e,
+      })
+      .then(res => {
+        console.log("Guardado correctamente");
+      })
+      .catch(err => {
+        console.log(err);
+      });//////////// ^ ^ ^ TE FALTA CREAR ARCHIVO PHP PARA GUARDAR ESTO EN LA BD, AGREGA VALIDACIONES EN THEN
+
+
+
+      // LIMPIAR VARIABLES
+      this.aspecto = "";
+      this.unidad = "";
+      this.clasificacion = "";
+      this.ciclo = "";
+      this.io = "";
+      this.impacto = "";
+      this.requisito = "";
+      this.alcance = "";
+      this.CO2 = "";
+      this.CH4 = "";
+      this.NO2 = "";
+      this.CO2CO2e = "";
+      this.CH4CO2e = "";
+      this.N2OCO2e = "";
+    }, */
     proyectoSeleccionado(){
       /* return this.proyectos.find(p => p.id === this.id_proyecto);  asignar proyectos a proyectoselect*/
       if(this.id_proyecto === ""){
@@ -1257,35 +1431,40 @@ const AltaProyectos = {
       })
     },
      /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL*/
-      consultarImpactoAmbiental() {
-        axios.get('impactoAmbientalController.php')
-          .then(response => {
-            console.log(response.data[0]);
-            if (response.data[0][1] == true) {
-              if (response.data[0][0].length > 0) {
-                const items = response.data[0][0];
-                for (let [index, elemento] of items.entries()) {
-                  this.selectEmisiones[index] = '';
-                }
-                this.impactoAmbiental = items;
-              } else {
-                this.impactoAmbiental = [];
-              }
-            } else {
-              alert("La consulta impacto ambiental no se realizó correctamente.");
+    consultarImpactoAmbiental() {
+      axios.get('impactoAmbientalController.php')
+      .then(response => {
+        console.log("holichi",response.data[0]);
+        if (response.data[0][1] == true) {
+          if (response.data[0][0].length > 0) {
+            const items = response.data[0][0];
+            for (let [index, elemento] of items.entries()) {
+              this.selectEmisiones[index] = '';
             }
-          })
-          .catch(error => {
-            console.log('Error:', error);
-          });
+            this.impactoAmbiental = items;
+            console.log("response??",this.impactoAmbiental)
+            console.log("kkkk", this.selectEmisiones)
+          } else {
+            this.impactoAmbiental = [];
+          }
+        } else {
+          alert("La consulta impacto ambiental no se realizó correctamente.");
+        }
+      })
+      .catch(error => {
+        console.log('Error:', error);
+      });
     },
      /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL X NOMBRE PARA OBTENER ID's*/
       consultarImpactoAmbientalPorNombre(nombresImpactos) {
+        console.log("nombre????????", nombresImpactos)
 
         let arregloNombresImpactos = [];
         arregloNombresImpactos = nombresImpactos.map(nombre =>{
           return nombre.split('->')[0].trim();
         });
+
+        console.log("ARREGLOOO", arregloNombresImpactos)
     
         axios.get('impactoAmbientalController.php',{
           params: {
@@ -1394,7 +1573,7 @@ const AltaProyectos = {
 
     },
     /*/////////////////////////////////////////////////////////////////////////////////SUMA IMPACTO AMBIENTAL*/
-    sumaImpactoAmbiental() {
+    /* sumaImpactoAmbiental() {
       axios.post('impactoAmbientalController.php', {
         suma: 'suma'
       }).then(response => {
@@ -1410,7 +1589,7 @@ const AltaProyectos = {
       }).finally(() => {
 
       })
-    },
+    }, */
     /*/////////////////////////////////////////////////////////////////////////////////INSERTAR PLANTA*/
     insertarPlanta() {
       if (this.nueva != "" && this.siglas != "") {
@@ -1494,19 +1673,55 @@ const AltaProyectos = {
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR AREAS*/
     /*/////////////////////////////////////////////////////////////////////////////////INSERTAR PLANTA*/
     insertarImpactoAmbiental() {
-      if (this.nueva != '') {
+      /* if (this.nueva != '') { */
         axios.post('impactoAmbientalController.php', {
-          nueva: this.nueva,
-          cantidad: this.cantidad,
-          unidadMedida: this.unidadMedida
+          /* cantidad: this.cantidad,
+          unidadMedida: this.unidadMedida */
+          aspecto: this.aspecto,
+          unidad: this.unidad,
+          clasificacion: this.clasificacion,
+          ciclo: this.ciclo,
+          io: this.io,
+          impacto: this.impacto,
+          requisito: this.requisito,
+          alcance: this.alcance,
+          CO2: this.CO2,
+          CH4: this.CH4,
+          NO2: this.NO2,
+          CO2CO2e: this.CO2CO2e,
+          CH4CO2e: this.CH4CO2e,
+          N2OCO2e: this.N2OCO2e,
         }).then(response => {
-          this.nueva = ''
+          //this.nueva = ''
           console.log(response.data)
           if (!response.data[0] == false) {
             // this.myModalCRUD.hide()
             this.consultarImpactoAmbiental()
             this.myModal.hide();
-            alert('Alta exitosa..');
+            //alert('Alta exitosa..');
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "¡Guardado!",
+              text: "El Aspecto Ambiental se guardó correctamente",
+              showConfirmButton: false,
+              timer: 1500
+            });/* 
+            ////Reseteo las variables despues de insertar
+            this.aspecto = '';
+            this.unidad = '';
+            this.clasificacion = '';
+            this.ciclo = '';
+            this.io = '';
+            this.impacto = '';
+            this.requisito = '';
+            this.alcance = '';
+            this.CO2 = '';
+            this.CH4 = '';
+            this.NO2 = '';
+            this.CO2CO2e = '';
+            this.CH4CO2e = '';
+            this.N2OCO2e = ''; */
           } else {
             alert("La inserción de Planta, no se realizo correctamente.")
           }
@@ -1516,9 +1731,9 @@ const AltaProyectos = {
         }).finally(() => {
 
         })
-      } else {
+      /* } else {
         alert('Todos los campos son obligatorios')
-      }
+      } */
     },
 
     /*/////////////////////////////////////////////////////////////////////////////////INSERTAR FUENTE*/
@@ -1910,31 +2125,64 @@ const AltaProyectos = {
     },
     /*/////////////////////////////////////////////////////////////////////////////////ACTUALIZAR IMPACTO AMBIENTAL*/
     actualizarImpactoAmbiental() {
-      if (this.nuevoNombre != '') {
-        axios.put('impactoAmbientalController.php', {
-          id: this.id,
-          nuevoNombre: this.nuevoNombre,
-          cantidad: this.cantidad,
-          unidadMedida: this.unidadMedida
-        }).then(response => {
-          console.log(response.data)
-          if (response.data[0] == true) {
-            this.myModal.hide();
-            this.consultarImpactoAmbiental()
-            this.id = ''
-            this.nuevoNombre = ''
-            alert("Se actualizo correctamente.")
-          } else {
-            alert("No se actualizo el Objetivo.")
-          }
-        }).catch(error => {
-          //console.log('Erro :-('+error)
-        }).finally(() => {
+    /*if (this.nuevoNombre != '') {*/
 
-        })
-      } else {
+      console.log("this.id",this.id)
+      axios.put('impactoAmbientalController.php', {
+        /*  nuevoNombre: this.nuevoNombre,
+        cantidad: this.cantidad,
+        unidadMedida: this.unidadMedida */
+        id: this.id,
+        aspecto: this.aspecto,
+        unidad: this.unidad,
+        clasificacion: this.clasificacion,
+        ciclo: this.ciclo,
+        io: this.io,
+        impacto: this.impacto,
+        requisito: this.requisito,
+        alcance: this.alcance,
+        CO2: this.CO2,
+        CH4: this.CH4,
+        NO2: this.NO2,
+        CO2CO2e: this.CO2CO2e,
+        CH4CO2e: this.CH4CO2e,
+        N2OCO2e: this.N2OCO2e,
+      }).then(response => {
+        console.log(response.data)
+        if (response.data[0] == true) {
+          this.myModal.hide();
+          this.consultarImpactoAmbiental()
+          console.log("respuestaactializa",response.data)
+          /* 
+          this.id = ''
+          this.nuevoNombre = '' */
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "¡Actualizado!",
+            text: "El aspecto se actualizó correctamente",
+            showConfirmButton: false,
+            timer: 1500
+          });
+        } else {
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "Error",
+            text: "No se actualizó el aspecto.",
+            showConfirmButton: false,
+            timer: 1500
+          });
+          alert("")
+        }
+      }).catch(error => {
+        //console.log('Erro :-('+error)
+      }).finally(() => {
+
+      })
+      /*} else {
         alert("Todos los campos son requeridos para poder actualizar.")
-      }
+      } */
     },
     /*/////////////////////////////////////////////////////////////////////////////////ACTUALIZAR IMPACTO AMBIENTAL*/
     actualizarFuente() {
@@ -2357,27 +2605,50 @@ const AltaProyectos = {
       }
     },
     /*/////////////////////////////////////////////////////////////////////////////////ELIMINAR RESPONSABLE*/
-    eliminarImpactoAmbiental(id) {
-      if (confirm("¿Desea eliminar el Impacto Ambiental?")) {
-        axios.delete('impactoAmbientalController.php', {
+    eliminarImpactoAmbiental(index) {
+      var impacto = this.impactoAmbiental[index]
+      console.log("impacto", impacto)
+      this.id = impacto.id
+      id = this.id
+      console.log("ELIMINAR ", id)
+      
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: "No podrás revertir esta acción",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true,
+        confirmButtonColor:'#f24f4fff',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Aquí va el código para eliminar el Impacto Ambiental
+          axios.delete('impactoAmbientalController.php', {
           data: {
             id: id
           }
-        }).then(response => {
-          console.log(response.data)
-          if (response.data[0] == true) {
-            this.consultarImpactoAmbiental()
-            this.id = ''
-            this.nuevoNombre = ''
-          } else {
-            alert("No se elimino al Responsable.")
-          }
-        }).catch(error => {
-          //console.log('Erro :-('+error)
-        }).finally(() => {
-
-        })
-      }
+          }).then(response => {
+            console.log(response.data)
+            if (response.data[0] == true) {
+              this.consultarImpactoAmbiental()
+              /* this.id = ''
+              this.nuevoNombre = '' */
+            } else {
+              alert("No se elimino al Responsable.")
+            }
+          }).catch(error => {
+            console.log('Erro :-('+error)
+          })
+          Swal.fire({
+            title: 'Eliminado!',
+            text: 'El Aspecto Ambiental ha sido eliminado.',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1500
+          })
+        }
+      })
     },
     /*/////////////////////////////////////////////////////////////////////////////////ELIMINAR RESPONSABLE*/
     eliminarEstandares(id) {
