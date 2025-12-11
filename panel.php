@@ -836,7 +836,7 @@ if (isset($_SESSION['nombre'])) {
                                             <!-- Botones de Acción -->
                                             <div class="form-group text-center">
                                                 
-                                                <button type="submit" class="submit-button btn btn-sm me-1 mt-4" :class= "{'bg-warning': isEditMode == true, 'bg-success': isEditMode != true}">{{ isEditMode ? 'Guardar Cambios' : 'Crear' }}</button>
+                                                <button type="submit" class="submit-button btn btn-sm me-1 mt-4" :class= "{'bg-warning': isEditMode == true, 'bg-success text-white': isEditMode != true}">{{ isEditMode ? 'Guardar Cambios' : 'Crear' }}</button>
                                                 <button type="button" class="cancel-button btn btn-secondary btn-sm ms-1 mt-4 " id="cancel-modal">Cancelar</button>
                                             </div>
                                         </div>
