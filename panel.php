@@ -800,36 +800,36 @@ if (isset($_SESSION['nombre'])) {
                                                 <!-- Fila de CO2 (toneladas) -->
                                                 <div class="form-group">
                                                     <label for="co2">CO2 (t)</label>
-                                                    <input v-model="CO2" class="form-control form-control-sm" type="number" id="co2" name="co2" step="0.01" placeholder="Ej: 1.33">
+                                                    <input v-model="CO2" class="form-control form-control-sm" type="number" id="co2" name="co2" step="0.0001" placeholder="Ej: 1.33">
                                                 </div>
                                                 <!-- Fila de CH4 (toneladas) -->
                                                 <div class="form-group">
                                                     <label for="ch4">CH4 (t)</label>
-                                                    <input v-model="CH4" class="form-control form-control-sm" type="number" id="ch4" name="ch4" step="0.01" placeholder="Ej: 2.52">
+                                                    <input v-model="CH4" class="form-control form-control-sm" type="number" id="ch4" name="ch4" step="0.0001" placeholder="Ej: 2.52">
                                                 </div>
 
                                                 <!-- Fila de NO2 (toneladas) -->
                                                 <div class="form-group">
                                                     <label for="NO2">NO2 (t)</label>
-                                                    <input v-model="NO2" class="form-control form-control-sm" type="number" id="NO2" name="NO2" step="0.01" placeholder="Ej: 2.57">
+                                                    <input v-model="NO2" class="form-control form-control-sm" type="number" id="NO2" name="NO2" step="0.0001" placeholder="Ej: 2.57">
                                                 </div>
 
                                                 <!-- Fila de CO2→CO2e (toneladas) -->
                                                 <div class="form-group">
                                                     <label for="CO2→CO2e">CO2→CO2e (t)</label>
-                                                    <input v-model="CO2CO2e" class="form-control form-control-sm" type="number" id="CO2→CO2e" name="CO2→CO2e" step="0.01" placeholder="Ej: 2.57">
+                                                    <input v-model="CO2CO2e" class="form-control form-control-sm" type="number" id="CO2→CO2e" name="CO2→CO2e" step="0.0001" placeholder="Ej: 2.57">
                                                 </div>
 
                                                 <!-- Fila de CH4→CO2e (toneladas) -->
                                                 <div class="form-group">
                                                     <label for="CH4→CO2e">CH4→CO2e (t)</label>
-                                                    <input v-model="CH4CO2e" class="form-control form-control-sm" type="number" id="CH4→CO2e" name="CH4→CO2e" step="0.01" placeholder="Ej: 2.56">
+                                                    <input v-model="CH4CO2e" class="form-control form-control-sm" type="number" id="CH4→CO2e" name="CH4→CO2e" step="0.0001" placeholder="Ej: 2.56">
                                                 </div>
 
                                                 <!-- Fila de N2O→CO2e (toneladas) -->
                                                 <div class="form-group">
                                                     <label for="N2O→CO2e">N2O→CO2e (t)</label>
-                                                    <input v-model="N2OCO2e" class="form-control form-control-sm" type="number" id="N2O→CO2e" name="N2O→CO2e" step="0.01" placeholder="Ej: 2.55">
+                                                    <input v-model="N2OCO2e" class="form-control form-control-sm" type="number" id="N2O→CO2e" name="N2O→CO2e" step="0.0001" placeholder="Ej: 2.55">
                                                 </div>
                                             </div>
                                                         
