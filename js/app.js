@@ -440,6 +440,7 @@ const AltaProyectos = {
     },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PROYECTOS*/
     consultarProyectos() {
+      this.id_proyecto = ''
       plan_actualizar = ''; //solo la reseteo
       axios.get('proyectosController.php', {
       }).then(response => {
@@ -793,123 +794,130 @@ const AltaProyectos = {
       })
     },
     consultarImpactoAmbieltalXProyectoID() {
+      if(this.id_proyecto != ''){
 
-      this.actualizar = 0
-      axios.post('impactoAmbientalProyectoController.php', {
-        id_proyecto: this.id_proyecto //ID PROYECTO
-      }).then(response => {
-        console.log("Consultado Registro Impactos",response.data)
-        if (response.data[0][1] == true) {
-          if (response.data[0][0].length > 0) {
-            this.arregloID = response.data[0][0];
-            var comparandoImpactoInicial = "";
-            var comparandoImpactoDos = "";
-            this.seguimientos = response.data[0][0].length;
-            var impactoAmbiental = [];
-            var datos = [];
+        console.log("ENTRE A CONSULTAR",);
+        this.actualizar = 0
+        axios.post('impactoAmbientalProyectoController.php', {
+          id_proyecto: this.id_proyecto //ID PROYECTO
+        }).then(response => {
+          console.log("Consultado Registro Impactos",response.data)
+          if (response.data[0][1] == true) {
+            if (response.data[0][0].length > 0) {
+              this.arregloID = response.data[0][0];
+              var comparandoImpactoInicial = "";
+              var comparandoImpactoDos = "";
+              this.seguimientos = response.data[0][0].length;
+              var impactoAmbiental = [];
+              var datos = [];
 
-            impactoAmbiental = JSON.parse(response.data[0][0][0].impacto_ambiental)
-            console.log("IMPACTO AMBIENTAL",impactoAmbiental)
+              impactoAmbiental = JSON.parse(response.data[0][0][0].impacto_ambiental)
+              console.log("IMPACTO AMBIENTAL",impactoAmbiental)
 
-            /*for (let j = 0; j < response.data[0][2][0].length; j++) {
-              impactoAmbiental.push(response.data[0][2][0][j].impacto_ambiental)
-            }*/
-            if (response.data[0][0][0].status_seguimiento === 'Cerrado') {
-              this.seguimiento_status = false
-            } else {
-              this.seguimiento_status = true
-            }
-
-            //var no_repetidos = new Set(impactoAmbiental);
-            //this.columnaImpactoAmbiental = Array.from(no_repetidos);;//tiene los nombres de impacto ambiental
-            this.columnaImpactoAmbiental = impactoAmbiental;
-            this.inputImpactoAmbientalInicial = impactoAmbiental
-            
-            //this.inputImpactoAmbientalInicial = Array(this.columnaImpactoAmbiental.length);
-
-
-            if (this.columnaImpactoAmbiental[0] == 'Sin Impacto') {
-              this.inputImpactoAmbientalInicial = Array(1);
-              this.inputImpactoAmbientalInicial[0] = '0.00';
-              this.sinImpacto = 'Sin Impacto'
-              console.log("NO HAY IMPACTO")
-            } else {
-              this.inputImpactoAmbientalInicial = Array(this.columnaImpactoAmbiental.length);
-              this.sinImpacto = ''
-            }
-
-            this.inputImpactoAmbiental = response.data[0][2].map(subArray => subArray.map(objeto => objeto.dato));
-            this.idsInputImpactoAmbiental = response.data[0][2].map(subArray => subArray.map(objeto => objeto.id_registro));//los utilizare para actualizar
-
-            //Sumando Columnas
-            var sumaC02 = 0
-            var sumaAhorroDuro = 0
-            var sumaAhorroSuave = 0
-            //suma CO2
-            for (let i = 0; i < response.data[0][0].length; i++) {
-              var valorC02 = response.data[0][0][i].tons_co2  //tomando los valores de C02
-              var valorAhorroDuro = response.data[0][0][i].ahorro_duro  //tomando los valores de Ahorro Duro
-              var valorAhorroSuave = response.data[0][0][i].ahorro_suave  //tomando los valores de Ahorro Duro
-              valorAhorroDuro = this.formatoSoloNumeros(valorAhorroDuro); //Eliminando pesos 
-              valorAhorroSuave = this.formatoSoloNumeros(valorAhorroSuave); //Eliminando pesos 
-              sumaC02 = parseFloat(sumaC02) + parseFloat(valorC02)
-              sumaAhorroDuro = parseFloat(sumaAhorroDuro) + parseFloat(valorAhorroDuro) // sumando Ahorro duro
-              sumaAhorroSuave = parseFloat(sumaAhorroSuave) + parseFloat(valorAhorroSuave) // sumando Ahorro duro
-            }
-            this.sumaCO2 = sumaC02.toFixed(2);
-            this.sumaAhorroDuro = this.formatoNumeroApesos(sumaAhorroDuro); //convietiendo a pesos
-            this.sumaAhorroSuave = this.formatoNumeroApesos(sumaAhorroSuave); //convietiendo a pesos
-
-            //Sumando Valores de Columna Impacto Ambiental
-            var sumas = [];
-            for (let i = 0; i < this.inputImpactoAmbiental.length; i++) {
-              for (let j = 0; j < this.inputImpactoAmbiental[i].length; j++) {
-                valor = this.inputImpactoAmbiental[i][j]
-                valor = valor.replaceAll(',', '');//elimino la "," par que la suma sea correcta y dejo el "."
-                if (i === 0) {
-                  // Inicializar la suma en la primera iteración
-                  sumas['suma' + j] = parseFloat(valor);
-                  console.log(parseFloat(valor))
-                } else {
-                  // Sumar en las iteraciones siguientes
-                  sumas['suma' + j] += parseFloat(valor);
-                  console.log(parseFloat(valor))
-                }
+              /*for (let j = 0; j < response.data[0][2][0].length; j++) {
+                impactoAmbiental.push(response.data[0][2][0][j].impacto_ambiental)
+              }*/
+              if (response.data[0][0][0].status_seguimiento === 'Cerrado') {
+                this.seguimiento_status = false
+              } else {
+                this.seguimiento_status = true
               }
 
-            }
+              //var no_repetidos = new Set(impactoAmbiental);
+              //this.columnaImpactoAmbiental = Array.from(no_repetidos);;//tiene los nombres de impacto ambiental
+              this.columnaImpactoAmbiental = impactoAmbiental;
+              this.inputImpactoAmbientalInicial = impactoAmbiental
+              
+              //this.inputImpactoAmbientalInicial = Array(this.columnaImpactoAmbiental.length);
 
-            // Redondear al mostrar o almacenar para que no aparecans numero con msa de dos decimas .00
-            for (let i in sumas) {
-              sumas[i] = parseFloat(sumas[i]).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });  // Convertir a número antes de usar toFixed
-            }
-            this.sumaColumnasImpacto = sumas;
 
-            /*for (let i = 0; i <this.seguimientos[0][2].length; i++) {
-                for (let j = 0; j < this.seguimientos[0][2][i].length; j++) {
-                  var valor = this.seguimientos[0][2][i][j].dato;
-                  // Utilizar una clave dinámica (suma1, suma2, etc.)
-                  sumas['suma' + j] = (sumas['suma' + j]) + parseFloat(valor);
-                  console.log(sumas['suma' + j] )
-                     //sumando = parseFloat(sumando) + parseFloat(suma);
-                      //this.seguimientos[0][2][i][j].push({['Sumado' + j]: sumando.toFixed(2) });
+              if (this.columnaImpactoAmbiental[0] == 'Sin Impacto') {
+                this.inputImpactoAmbientalInicial = Array(1);
+                this.inputImpactoAmbientalInicial[0] = '0.00';
+                this.sinImpacto = 'Sin Impacto'
+                console.log("NO HAY IMPACTO")
+              } else {
+                this.inputImpactoAmbientalInicial = Array(this.columnaImpactoAmbiental.length);
+                this.sinImpacto = ''
+              }
+
+              this.inputImpactoAmbiental = response.data[0][2].map(subArray => subArray.map(objeto => objeto.dato));
+              this.idsInputImpactoAmbiental = response.data[0][2].map(subArray => subArray.map(objeto => objeto.id_registro));//los utilizare para actualizar
+
+              //Sumando Columnas
+              var sumaC02 = 0
+              var sumaAhorroDuro = 0
+              var sumaAhorroSuave = 0
+              //suma CO2
+              for (let i = 0; i < response.data[0][0].length; i++) {
+                var valorC02 = response.data[0][0][i].tons_co2  //tomando los valores de C02
+                var valorAhorroDuro = response.data[0][0][i].ahorro_duro  //tomando los valores de Ahorro Duro
+                var valorAhorroSuave = response.data[0][0][i].ahorro_suave  //tomando los valores de Ahorro Duro
+                valorAhorroDuro = this.formatoSoloNumeros(valorAhorroDuro); //Eliminando pesos 
+                valorAhorroSuave = this.formatoSoloNumeros(valorAhorroSuave); //Eliminando pesos 
+                sumaC02 = parseFloat(sumaC02) + parseFloat(valorC02)
+                sumaAhorroDuro = parseFloat(sumaAhorroDuro) + parseFloat(valorAhorroDuro) // sumando Ahorro duro
+                sumaAhorroSuave = parseFloat(sumaAhorroSuave) + parseFloat(valorAhorroSuave) // sumando Ahorro duro
+              }
+              this.sumaCO2 = sumaC02.toFixed(2);
+              this.sumaAhorroDuro = this.formatoNumeroApesos(sumaAhorroDuro); //convietiendo a pesos
+              this.sumaAhorroSuave = this.formatoNumeroApesos(sumaAhorroSuave); //convietiendo a pesos
+
+              //Sumando Valores de Columna Impacto Ambiental
+              var sumas = [];
+              for (let i = 0; i < this.inputImpactoAmbiental.length; i++) {
+                for (let j = 0; j < this.inputImpactoAmbiental[i].length; j++) {
+                  valor = this.inputImpactoAmbiental[i][j]
+                  valor = valor.replaceAll(',', '');//elimino la "," par que la suma sea correcta y dejo el "."
+                  if (i === 0) {
+                    // Inicializar la suma en la primera iteración
+                    sumas['suma' + j] = parseFloat(valor);
+                    console.log(parseFloat(valor))
+                  } else {
+                    // Sumar en las iteraciones siguientes
+                    sumas['suma' + j] += parseFloat(valor);
+                    console.log(parseFloat(valor))
+                  }
                 }
-            }*/
 
+              }
 
-            this.buscarDocumentos('Seguimiento')
-            this.consultarImpactoAmbientalPorNombre(impactoAmbiental)
+              // Redondear al mostrar o almacenar para que no aparecans numero con msa de dos decimas .00
+              for (let i in sumas) {
+                sumas[i] = parseFloat(sumas[i]).toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2, });  // Convertir a número antes de usar toFixed
+              }
+              this.sumaColumnasImpacto = sumas;
+
+              /*for (let i = 0; i <this.seguimientos[0][2].length; i++) {
+                  for (let j = 0; j < this.seguimientos[0][2][i].length; j++) {
+                    var valor = this.seguimientos[0][2][i][j].dato;
+                    // Utilizar una clave dinámica (suma1, suma2, etc.)
+                    sumas['suma' + j] = (sumas['suma' + j]) + parseFloat(valor);
+                    console.log(sumas['suma' + j] )
+                      //sumando = parseFloat(sumando) + parseFloat(suma);
+                        //this.seguimientos[0][2][i][j].push({['Sumado' + j]: sumando.toFixed(2) });
+                  }
+              }*/
+
+              this.verProyecto()
+              this.buscarDocumentos('Seguimiento')
+              this.consultarImpactoAmbientalPorNombre(impactoAmbiental)
+            } else {
+              this.consultarProyectoID() // si no existe seguimientos consultara proyectos para insetarlos primeros registros
+            }
           } else {
-            this.consultarProyectoID() // si no existe seguimientos consultara proyectos para insetarlos primeros registros
+            alert("La consulta de proyectos no se realizo correctamente.")
           }
-        } else {
-          alert("La consulta de proyectos no se realizo correctamente.")
-        }
-      }).catch(error => {
-        console.log('Erro :-(' + error)
-      }).finally(() => {
+        }).catch(error => {
+          console.log('Erro :-(' + error)
+        }).finally(() => {
 
-      })
+        })
+      }else{
+        this.arregloID = [];
+        this.seguimientos = 0;
+        this.columnaImpactoAmbiental = [];
+      }
     },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PROYECTOS POR NOMBRE*/
     consultarProyectosPorNombre() {
@@ -3916,27 +3924,29 @@ const AltaProyectos = {
       console.log("Año: ", this.AnioXMes)
     },
     verProyecto() {
-      this.proyecto = this.proyectos.find(p => p.id === this.id_proyecto);
-      var fechaDeProyecto=this.proyecto.fecha
-      console.log("fecha", fechaDeProyecto);
-      const [dia, mes, anio] = fechaDeProyecto.split("-");
-      console.log("Mes:", mes); 
-      console.log("Año:", anio);
-      /* let mes = 0;
-      switch (mes) {
-        case 1:
+      if(this.id_proyecto != ''){
+        this.proyecto = this.proyectos.find(p => p.id === this.id_proyecto);
+        var fechaDeProyecto=this.proyecto.fecha
+        console.log("fecha", fechaDeProyecto);
+        const [dia, mes, anio] = fechaDeProyecto.split("-");
+        console.log("Mes:", mes); 
+        console.log("Año:", anio);
+        /* let mes = 0;
+        switch (mes) {
+          case 1:
 
-          break;
-        default:
-          break;
-      } */
-     
-      this.mesProyecto = parseInt(mes)
-      this.anioProyecto= parseInt(anio)
+            break;
+          default:
+            break;
+        } */
+      
+        this.mesProyecto = parseInt(mes)
+        this.anioProyecto= parseInt(anio)
 
 
-      this.mes_select = this.mesProyecto
-      console.log("mesProyecto:",this.mesProyecto)
+        this.mes_select = this.mesProyecto
+        console.log("mesProyecto:",this.mesProyecto)
+      }
     },
     /* verMes(){
       console.log("Mes:", this.mes_select)

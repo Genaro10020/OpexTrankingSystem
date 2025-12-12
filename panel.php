@@ -28,17 +28,17 @@ if (isset($_SESSION['nombre'])) {
                     <?php } ?>
 
                     <?php if ($_SESSION['acceso'] != 'SymaUser') { ?>
-                        <button class="btn-menu me-0  mx-sm-3 mt-sm-3" @click="ventana='Altas',opcion=2,mostrarHeader=true,sumarSoloUnaVez=0"
+                        <button class="btn-menu me-0  mx-sm-3 mt-sm-3" @click="ventana='Altas',opcion=2,mostrarHeader=true,sumarSoloUnaVez=0, consultarProyectos();"
                             :class="{'btn-menu-activo': opcion===2,'btn-menu': opcion !== 2}">
                             <i class="bi bi-plus-circle"></i> Proyectos Creados
                         </button>
                     <?php } ?>
 
                     <?php if ($_SESSION['acceso'] != 'SymaUser') { ?>
-                        <button class="btn-menu mb-sm-3 mt-sm-3" @click="ventana='Seguimiento',mostrarHeader=true,opcion=3,sumarSoloUnaVez=0,opcion=3"
+                        <button class="btn-menu mb-sm-3 mt-sm-3" @click="ventana='Seguimiento',mostrarHeader=true,opcion=3,sumarSoloUnaVez=0,opcion=3, consultarImpactoAmbieltalXProyectoID()" 
                             :class="{'btn-menu-activo': opcion===3,'btn-menu': opcion !== 3}"><!--buscarDocumentos('Documento CO2')-->
                             <i class="bi bi-plus-circle"></i> Seguimiento
-                        </button>
+                        </button><!--consultarImpactoAmbieltalXProyectoID(); verProyecto() " -->
                     <?php } ?>
                     
                     <?php if ($_SESSION['acceso'] == 'Admin' || $_SESSION['acceso'] == 'Financiero') { ?>
@@ -1733,7 +1733,7 @@ if (isset($_SESSION['nombre'])) {
                             <div class="col-12 col-lg-6">
                                 <div class="input-group mt-3 mx-2 mb-2 ">
                                     <span class="input-group-text w-5">Seleccione Proyecto</span>
-                                    <select class="w-50" @keydown.up="cancelarEvento" @keydown.down="cancelarEvento" @keydown.left="cancelarEvento" @keydown.right="cancelarEvento" @change="consultarImpactoAmbieltalXProyectoID(); verProyecto() " v-model="id_proyecto">
+                                    <select class="w-50" @keydown.up="cancelarEvento" @keydown.down="cancelarEvento" @keydown.left="cancelarEvento" @keydown.right="cancelarEvento" @change="consultarImpactoAmbieltalXProyectoID() " v-model="id_proyecto">
                                         <option value="" disabled>Seleccione...</option>
                                         <option v-for="proyecto in proyectoSelect.sort((a, b) => a.nombre_proyecto.localeCompare(b.nombre_proyecto))" :value="proyecto.id" style="font-size:15px;">{{proyecto.nombre_proyecto}}</option>
                                     </select>
