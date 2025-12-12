@@ -28,7 +28,7 @@ if (isset($_SESSION['nombre'])) {
                     <?php } ?>
 
                     <?php if ($_SESSION['acceso'] != 'SymaUser') { ?>
-                        <button class="btn-menu me-0  mx-sm-3 mt-sm-3" @click="ventana='Altas',opcion=2,mostrarHeader=true,sumarSoloUnaVez=0, consultarProyectos();"
+                        <button class="btn-menu me-0  mx-sm-3 mt-sm-3" @click="ventana='Altas',opcion=2,mostrarHeader=true,sumarSoloUnaVez=0, proyectoSeleccionado();"
                             :class="{'btn-menu-activo': opcion===2,'btn-menu': opcion !== 2}">
                             <i class="bi bi-plus-circle"></i> Proyectos Creados
                         </button>
@@ -862,9 +862,9 @@ if (isset($_SESSION['nombre'])) {
                                 <div class="col-4">
                                     <div class="input-group mt-3 mx-2 mb-2 ">
                                         <span class="input-group-text w-5">Seleccione Proyecto</span>
-                                        <select class="w-50"  @keydown.up="cancelarEvento" @keydown.down="cancelarEvento" @keydown.left="cancelarEvento" @keydown.right="cancelarEvento" @change= "proyectoSeleccionado()" v-model="id_proyecto">
-                                            <option value="" default>Todos...</option>
-                                            <option  style="font-size:15px;" v-for="proyecto in proyectoSelect" :key="proyecto.id" :value="proyecto.id">{{ proyecto.nombre_proyecto }}</option>
+                                        <select class="w-50"  @keydown.up="cancelarEvento" @keydown.down="cancelarEvento" @keydown.left="cancelarEvento" @keydown.right="cancelarEvento"  v-model="id_proyecto">
+                                            <option @click= "proyectoSeleccionado()" value="" default>Todos...</option>
+                                            <option  @click= "proyectoSeleccionado()" style="font-size:15px;" v-for="proyecto in proyectoSelect" :key="proyecto.id" :value="proyecto.id">{{ proyecto.nombre_proyecto }}</option>
                                         </select>
                                     </div>
                                 </div>

@@ -432,15 +432,20 @@ const AltaProyectos = {
       if(this.id_proyecto === ""){
         this.consultarProyectos();
       }else{
-        let ObjetoNuevo = []
-        ObjetoNuevo.push(this.proyectoSelect.find(p => p.id === this.id_proyecto));
-        this.proyectos = ObjetoNuevo;
-        console.log(" this.proyectos ",ObjetoNuevo)
+        if(this.whoPerson != 'Admin'){
+          this.id_proyecto = '';///Resetea solo si es dif a admin
+          this.consultarProyectos();
+        }else{
+          let ObjetoNuevo = []
+          ObjetoNuevo.push(this.proyectoSelect.find(p => p.id === this.id_proyecto));
+          this.proyectos = ObjetoNuevo;
+          console.log(" this.proyectos ",ObjetoNuevo)
+        }
+        
       }
     },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PROYECTOS*/
     consultarProyectos() {
-      this.id_proyecto = ''
       plan_actualizar = ''; //solo la reseteo
       axios.get('proyectosController.php', {
       }).then(response => {
