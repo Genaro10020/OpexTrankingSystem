@@ -862,9 +862,9 @@ if (isset($_SESSION['nombre'])) {
                                 <div class="col-4">
                                     <div class="input-group mt-3 mx-2 mb-2 ">
                                         <span class="input-group-text w-5">Seleccione Proyecto</span>
-                                        <select class="w-50"  @keydown.up="cancelarEvento" @keydown.down="cancelarEvento" @keydown.left="cancelarEvento" @keydown.right="cancelarEvento"  v-model="id_proyecto">
-                                            <option @click= "proyectoSeleccionado()" value="" default>Todos...</option>
-                                            <option  @click= "proyectoSeleccionado()" style="font-size:15px;" v-for="proyecto in proyectoSelect" :key="proyecto.id" :value="proyecto.id">{{ proyecto.nombre_proyecto }}</option>
+                                        <select class="w-50"  @keydown.up="cancelarEvento" @keydown.down="cancelarEvento" @keydown.left="cancelarEvento" @keydown.right="cancelarEvento"  v-model="id_proyecto" @click= "proyectoSeleccionado()">
+                                            <option value="" default>Todos...</option>
+                                            <option style="font-size:15px;" v-for="proyecto in proyectoSelect" :key="proyecto.id" :value="proyecto.id">{{ proyecto.nombre_proyecto }}</option>
                                         </select>
                                     </div>
                                 </div>
