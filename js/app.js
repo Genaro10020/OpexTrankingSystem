@@ -258,7 +258,7 @@ const AltaProyectos = {
       CO2CO2e:'', 
       CH4CO2e:'', 
       N2OCO2e: '',
-
+      material: '',
     }
   },
   mounted() {
@@ -328,6 +328,7 @@ const AltaProyectos = {
       this.CO2CO2e = '';
       this.CH4CO2e = '';
       this.N2OCO2e = '';
+      this.material = '';
       if(queHace == 'Crear'){
         this.isEditMode = false
 
@@ -353,6 +354,7 @@ const AltaProyectos = {
         this.CO2CO2e = miImpacto.CO2CO2e
         this.CH4CO2e = miImpacto.CH4CO2e
         this.N2OCO2e = miImpacto.N2OCO2e
+        this.material = miImpacto.material
         
         this.myModal = new bootstrap.Modal(document.getElementById("modalAspectosSyma"))
         this.myModal.show()
@@ -1704,6 +1706,7 @@ const AltaProyectos = {
           CO2CO2e: this.CO2CO2e,
           CH4CO2e: this.CH4CO2e,
           N2OCO2e: this.N2OCO2e,
+          material: this.material,
         }).then(response => {
           //this.nueva = ''
           console.log(response.data)
@@ -2160,6 +2163,7 @@ const AltaProyectos = {
         CO2CO2e: this.CO2CO2e,
         CH4CO2e: this.CH4CO2e,
         N2OCO2e: this.N2OCO2e,
+        material: this.material,
       }).then(response => {
         console.log(response.data)
         if (response.data[0] == true) {

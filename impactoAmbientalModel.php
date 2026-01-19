@@ -134,13 +134,13 @@ include("conexionGhoner.php");
     }
 
     function insertarImpactoAmbiental($aspecto,$unidad,$clasificacion,$ciclo,$io,$impacto,$requisito,
-        $alcance,$CO2,$CH4,$NO2,$CO2CO2e,$CH4CO2e,$N2OCO2e){
+        $alcance,$CO2,$CH4,$NO2,$CO2CO2e,$CH4CO2e,$N2OCO2e, $material){
         global $conexion;
         $query = "INSERT INTO impacto_ambiental (nombre,unidad,clasificacion, ciclo, io,  impacto, requisito,
-        alcance, CO2, CH4, NO2, CO2CO2e, CH4CO2e, N2OCO2e) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        alcance, CO2, CH4, NO2, CO2CO2e, CH4CO2e, N2OCO2e, material) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $stmt = $conexion->prepare($query);
-        $stmt->bind_param("sssssssidddddd", $aspecto,$unidad,$clasificacion,$ciclo,$io,$impacto,$requisito,
-        $alcance,$CO2,$CH4,$NO2,$CO2CO2e,$CH4CO2e,$N2OCO2e);
+        $stmt->bind_param("sssssssidddddds", $aspecto,$unidad,$clasificacion,$ciclo,$io,$impacto,$requisito,
+        $alcance,$CO2,$CH4,$NO2,$CO2CO2e,$CH4CO2e,$N2OCO2e,$material);
         if($stmt->execute()){
             $estado = true;
         }else{
@@ -152,14 +152,14 @@ include("conexionGhoner.php");
     }
 
     function actualizarImpactoAmbiental($id,$aspecto,$unidad,$clasificacion,$ciclo,$io,$impacto,$requisito,
-        $alcance,$CO2,$CH4,$NO2,$CO2CO2e,$CH4CO2e,$N2OCO2e){
+        $alcance,$CO2,$CH4,$NO2,$CO2CO2e,$CH4CO2e,$N2OCO2e, $material){
         global $conexion;
         $estado = false;
         $update = "UPDATE impacto_ambiental SET nombre=?, unidad=?, clasificacion=?, ciclo=?, io=?,
-        impacto=?, requisito=?, alcance=?, CO2=?, CH4=?, NO2=?, CO2CO2e=?, CH4CO2e=?, N2OCO2e=?  WHERE  id=?";
+        impacto=?, requisito=?, alcance=?, CO2=?, CH4=?, NO2=?, CO2CO2e=?, CH4CO2e=?, N2OCO2e=?, material=?  WHERE  id=?";
         $stmt = $conexion->prepare($update);
-        $stmt->bind_param("sssssssiddddddi",$aspecto,$unidad,$clasificacion,$ciclo,$io,$impacto,$requisito,
-        $alcance,$CO2,$CH4,$NO2,$CO2CO2e,$CH4CO2e,$N2OCO2e,$id);
+        $stmt->bind_param("sssssssiddddddsi",$aspecto,$unidad,$clasificacion,$ciclo,$io,$impacto,$requisito,
+        $alcance,$CO2,$CH4,$NO2,$CO2CO2e,$CH4CO2e,$N2OCO2e,$material,$id);
         if($stmt->execute()){
             $estado = true;
         }

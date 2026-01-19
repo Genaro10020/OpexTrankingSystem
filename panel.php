@@ -747,12 +747,24 @@ if (isset($_SESSION['nombre'])) {
                                     <form @submit.prevent="isEditMode ? actualizarImpactoAmbiental() : insertarImpactoAmbiental()" id="modal-form"><!-- Modifica el submit, ahora llamaras al metodo instertarImpactoAmbiental --> 
                                         <div class= "row">
                                             <div class="col-md-6">
-                                                <!-- Fila de Aspecto Ambiental -->
+                                                <!-- Fila de Ciclo de Vida -->
                                                 <div class="form-group">
-                                                    <label for="aspecto">Aspecto Ambiental</label>
-                                                    <input v-model="aspecto" class="form-control form-control-sm" type="text" id="aspecto" name="aspecto" placeholder="" required>
+                                                    <label for="ciclo-vida">Ciclo de Vida</label>
+                                                    <input v-model="ciclo" class="form-control form-control-sm"  type="text" id="ciclo-vida" name="ciclo-vida" placeholder="" required>
                                                 </div>
 
+                                                <!-- Fila de Material -->
+                                                <div class="form-group">
+                                                    <label for="ciclo-vida">Materiales de Entradas / Salidas</label>
+                                                    <input v-model="material" class="form-control form-control-sm"  type="text" id="material" name="material" placeholder="" required>
+                                                </div>
+
+                                                <!-- Fila de I/O -->
+                                                <div class="form-group">
+                                                    <label for="i/o">I/O</label>
+                                                    <input v-model="io" class="form-control form-control-sm" type="text" id="i/o" name="i/o" placeholder="" required>
+                                                </div>
+                                                
                                                 <!-- Fila de Unidad de Medida -->
                                                 <div class="form-group">
                                                     <label for="unidad">Unidad de Medida</label>
@@ -765,16 +777,10 @@ if (isset($_SESSION['nombre'])) {
                                                     <input v-model="clasificacion" class="form-control form-control-sm" type="text" id="clasificacion" name="clasificacion" placeholder="" required>
                                                 </div>
 
-                                                <!-- Fila de Ciclo de Vida -->
+                                                <!-- Fila de Aspecto Ambiental -->
                                                 <div class="form-group">
-                                                    <label for="ciclo-vida">Ciclo de Vida</label>
-                                                    <input v-model="ciclo" class="form-control form-control-sm"  type="text" id="ciclo-vida" name="ciclo-vida" placeholder="" required>
-                                                </div>
-                                                
-                                                <!-- Fila de I/O -->
-                                                <div class="form-group">
-                                                    <label for="i/o">I/O</label>
-                                                    <input v-model="io" class="form-control form-control-sm" type="text" id="i/o" name="i/o" placeholder="" required>
+                                                    <label for="aspecto">Aspecto Ambiental</label>
+                                                    <input v-model="aspecto" class="form-control form-control-sm" type="text" id="aspecto" name="aspecto" placeholder="" required>
                                                 </div>
 
                                                 <!-- Fila de Impacto Ambiental -->
@@ -2904,11 +2910,12 @@ if (isset($_SESSION['nombre'])) {
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th scope="col">Aspecto Ambiental</th>
+                                    <th scope="col">Ciclo de Vida</th>
+                                    <th scope="col">Materiales de Entradas / Salidas</th>
+                                    <th scope="col">I/O</th>
                                     <th scope="col">U.M.</th>
                                     <th scope="col">Clasificación</th>
-                                    <th scope="col">Ciclo de Vida</th>
-                                    <th scope="col">I/O</th>
+                                    <th scope="col">Aspecto Ambiental</th>
                                     <th scope="col">Impacto Ambiental</th>
                                     <th scope="col">Requisito Legal Asociado</th>
                                     <th scope="col">Alcance</th>
@@ -2926,11 +2933,12 @@ if (isset($_SESSION['nombre'])) {
                                     <td>
                                         <button class="btn btn-warning btn-sm" title="Editar" @click="abrirModalSyma('Editar', index)"><i class="bi bi-pen"></i></button>
                                     </td><!-- AGREGA MODAL PARA ACTUALIZAR, INTENTA REUTILIZAR LA DE INSERCIÓN (SE AGREGA EN EL @CLICK) -->
-                                    <td class = "text-start">{{ item.nombre }}</td>
+                                    <td>{{ item.ciclo }}</td>
+                                    <td>{{ item.material }}</td>
+                                    <td>{{ item.io }}</td>
                                     <td>{{ item.unidad }}</td>
                                     <td>{{ item.clasificacion }}</td>
-                                    <td>{{ item.ciclo }}</td>
-                                    <td>{{ item.io }}</td>
+                                    <td class = "text-start">{{ item.nombre }}</td>
                                     <td>{{ item.impacto }}</td>
                                     <td>{{ item.requisito }}</td>
                                     <td>{{ item.alcance }}</td>
