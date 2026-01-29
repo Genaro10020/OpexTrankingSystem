@@ -21,49 +21,49 @@ if (isset($_SESSION['nombre'])) {
                 <!--Bóton-->
                 <div class="text-center">
                     <?php if ($_SESSION['acceso'] == 'Admin') { ?>
-                        <button class="btn-menu " @click="ventana='Crear',opcion=1,consultarMisionesRelacional(),consultarObjetivosRelacional(),consultarMisiones(),consultarImpactoAmbientalConDocumentos(),consultarEstandaresCO2(),consultarFuentes(),mostrarHeader=true,sumarSoloUnaVez=0"
+                        <button class="btn-menu " @click="verificarSesion(), ventana='Crear',opcion=1,consultarMisionesRelacional(),consultarObjetivosRelacional(),consultarMisiones(),consultarImpactoAmbientalConDocumentos(),consultarEstandaresCO2(),consultarFuentes(),mostrarHeader=true,sumarSoloUnaVez=0"
                             :class="{'btn-menu-activo': opcion===1,'btn-menu': opcion !== 1}"><!--buscarDocumentos('Documento CO2')--> <!-- sumaImpactoAmbiental() -->
                             <i class="bi bi-plus-circle"></i> Crear Catálogos
                         </button>
                     <?php } ?>
 
                     <?php if ($_SESSION['acceso'] != 'SymaUser') { ?>
-                        <button class="btn-menu me-0  mx-sm-3 mt-sm-3" @click="ventana='Altas',opcion=2,mostrarHeader=true,sumarSoloUnaVez=0, proyectoSeleccionado();"
+                        <button class="btn-menu me-0  mx-sm-3 mt-sm-3" @click="verificarSesion(), ventana='Altas',opcion=2,mostrarHeader=true,sumarSoloUnaVez=0, proyectoSeleccionado();"
                             :class="{'btn-menu-activo': opcion===2,'btn-menu': opcion !== 2}">
                             <i class="bi bi-plus-circle"></i> Proyectos Creados
                         </button>
                     <?php } ?>
 
                     <?php if ($_SESSION['acceso'] != 'SymaUser') { ?>
-                        <button class="btn-menu mb-sm-3 mt-sm-3" @click="ventana='Seguimiento',mostrarHeader=true,opcion=3,sumarSoloUnaVez=0,opcion=3, consultarImpactoAmbieltalXProyectoID()" 
+                        <button class="btn-menu mb-sm-3 mt-sm-3" @click="verificarSesion(), ventana='Seguimiento',mostrarHeader=true,opcion=3,sumarSoloUnaVez=0,opcion=3, consultarImpactoAmbieltalXProyectoID()" 
                             :class="{'btn-menu-activo': opcion===3,'btn-menu': opcion !== 3}"><!--buscarDocumentos('Documento CO2')-->
                             <i class="bi bi-plus-circle"></i> Seguimiento
                         </button><!--consultarImpactoAmbieltalXProyectoID(); verProyecto() " -->
                     <?php } ?>
                     
                     <?php if ($_SESSION['acceso'] == 'Admin' || $_SESSION['acceso'] == 'Financiero') { ?>
-                        <button class="btn-menu ms-sm-3 mb-sm-3" @click="ventana='Calendario',opcion=5,mostrarHeader=true,consultarPlantas(),  consultarCalendarioProyectos()"
+                        <button class="btn-menu ms-sm-3 mb-sm-3" @click="verificarSesion(), ventana='Calendario',opcion=5,mostrarHeader=true,consultarPlantas(),  consultarCalendarioProyectos()"
                             :class="{'btn-menu-activo': opcion===5,'btn-menu': opcion !== 5}">
                             <i class="bi bi-plus-circle"></i> Estatus Captura
                         </button>
                     <?php } ?>
 
                     <?php if ($_SESSION['acceso'] != 'SymaUser') { ?>   
-                        <button class="btn-menu mb-sm-3 ms-sm-3  " @click="ventana='Generar Valor',opcion=4,consultarObjetivosRelacional(),mostrarHeader=false,consultarSeguimientos(),valoresProyectos('')"
+                        <button class="btn-menu mb-sm-3 ms-sm-3  " @click="verificarSesion(), ventana='Generar Valor',opcion=4,consultarObjetivosRelacional(),mostrarHeader=false,consultarSeguimientos(),valoresProyectos('')"
                             :class="{'btn-menu-activo': opcion===4,'btn-menu': opcion !== 4}">
                             <i class="bi bi-plus-circle"></i> Generando Valor Sustentable
                         </button>
                     <?php } ?>
 
                     <?php if ($_SESSION['acceso'] != 'SymaUser') { ?>
-                        <button class="btn-menu mb-sm-3 ms-sm-3  " @click="ventana='Valores Gonher',opcion=6,valoresProyectos('grafica')"
+                        <button class="btn-menu mb-sm-3 ms-sm-3  " @click="verificarSesion(), ventana='Valores Gonher',opcion=6,valoresProyectos('grafica')"
                             :class="{'btn-menu-activo': opcion===6,'btn-menu': opcion !== 6}">
                             <i class="bi bi-plus-circle"></i> Valores Gonher
                         </button>
                     <?php } ?>
 
                     <?php if ($_SESSION['acceso'] == 'SymaUser') { ?>
-                        <button class="btn-menu  mb-sm-3" @click="ventana='Impactos Ambientales',opcion=7,mostrarHeader=true"
+                        <button class="btn-menu  mb-sm-3" @click="verificarSesion(), ventana='Impactos Ambientales',opcion=7,mostrarHeader=true"
                             :class="{'btn-menu-activo': opcion===7,'btn-menu': opcion !== 7}">
                             <i class="bi bi-plus-circle"></i> Impactos Ambientales
                         </button>
@@ -868,7 +868,7 @@ if (isset($_SESSION['nombre'])) {
                                 <div class="col-4">
                                     <div class="input-group mt-3 mx-2 mb-2 ">
                                         <span class="input-group-text w-5">Seleccione Proyecto</span>
-                                        <select class="w-50"  @keydown.up="cancelarEvento" @keydown.down="cancelarEvento" @keydown.left="cancelarEvento" @keydown.right="cancelarEvento"  v-model="id_proyecto" @click= "proyectoSeleccionado()">
+                                        <select class="w-50"  @keydown.up="cancelarEvento" @keydown.down="cancelarEvento" @keydown.left="cancelarEvento" @keydown.right="cancelarEvento"  v-model="id_proyecto" @click= "verificarSesion(), proyectoSeleccionado()">
                                             <option value="" default>Todos...</option>
                                             <option style="font-size:15px;" v-for="proyecto in proyectoSelect" :key="proyecto.id" :value="proyecto.id">{{ proyecto.nombre_proyecto }}</option>
                                         </select>
@@ -879,7 +879,7 @@ if (isset($_SESSION['nombre'])) {
                             <!-- BOTÓN ALTA PROYECTOS -->
                             <div class="col-4">
                                 <?php if ($_SESSION['acceso'] == 'Admin') { ?>
-                                <button class="btn btn-menu bg-primary align-items-center mb-2" style=" background:#519f3c; " @click="abrirModal('Alta')">
+                                <button class="btn btn-menu bg-primary align-items-center mb-2" style=" background:#519f3c; " @click="verificarSesion(), abrirModal('Alta')">
                                     <i class="bi bi-plus-circle"></i> Alta Proyecto
                                 </button>
                             <?php } ?></div>
@@ -965,7 +965,7 @@ if (isset($_SESSION['nombre'])) {
                                         <td class="border border-secondary"><b><label v-if="proyecto.status_seguimiento!='Cerrado'" class="text-success">Siguiendo</label><label v-else="proyecto.status_seguimiento!='Cerrado'" class="text-danger">{{proyecto.status_seguimiento}}<label></b></td>
                                         <?php if ($_SESSION['acceso'] == 'Admin') { ?>
                                             <td class="border border-secondary"> <button class="rounded-circle bg-danger border border-secondary btn shadow-sm" @click="eliminarProyecto(proyecto.id,proyecto.nombre_proyecto)"><i class="bi bi-trash3-fill text-white"></i></button></td>
-                                            <td><button type="button" class=" btn boton_actualizar mx-2" @Click="abrirModal('Actualizar Proyecto','','',proyecto.id,proyecto.nombre_proyecto)">Actualizar</button></td>
+                                            <td><button type="button" class=" btn boton_actualizar mx-2" @Click="verificarSesion(), abrirModal('Actualizar Proyecto','','',proyecto.id,proyecto.nombre_proyecto)">Actualizar</button></td>
                                         <?php } ?>
                                     </tr>
                                 </template>
@@ -1739,7 +1739,7 @@ if (isset($_SESSION['nombre'])) {
                             <div class="col-12 col-lg-6">
                                 <div class="input-group mt-3 mx-2 mb-2 ">
                                     <span class="input-group-text w-5">Seleccione Proyecto</span>
-                                    <select class="w-50" @keydown.up="cancelarEvento" @keydown.down="cancelarEvento" @keydown.left="cancelarEvento" @keydown.right="cancelarEvento" @change="consultarImpactoAmbieltalXProyectoID() " v-model="id_proyecto">
+                                    <select class="w-50" @keydown.up="cancelarEvento" @keydown.down="cancelarEvento" @keydown.left="cancelarEvento" @keydown.right="cancelarEvento" @change="verificarSesion(), consultarImpactoAmbieltalXProyectoID() " v-model="id_proyecto">
                                         <option value="" disabled>Seleccione...</option>
                                         <option v-for="proyecto in proyectoSelect.sort((a, b) => a.nombre_proyecto.localeCompare(b.nombre_proyecto))" :value="proyecto.id" style="font-size:15px;">{{proyecto.nombre_proyecto}}</option>
                                     </select>
@@ -2466,13 +2466,13 @@ if (isset($_SESSION['nombre'])) {
                             <div class="col-3" style="min-width:250px">
                                 <div class="input-group mt-3 mb-2">
                                     <span class="input-group-text" style="width: 150px;">Seleccione año</span>
-                                    <select style="width: 100px;" v-model="select_anio_calendario" @change="consultarCalendarioProyectos()">
+                                    <select style="width: 100px;" v-model="select_anio_calendario" @change="verificarSesion(), consultarCalendarioProyectos()">
                                         <option v-for="(year,index) in years" :value="year">{{year}}</option>
                                     </select>
                                 </div>
                                 <div class="input-group mt-3 mb-2">
                                     <span class="input-group-text" style="width: 150px; font-size:0.8em;">Seleccione Planta</span>
-                                    <select style="width: 100px;" v-model="select_planta_calendario" @change=consultarCalendarioProyectos()>
+                                    <select style="width: 100px;" v-model="select_planta_calendario" @change="verificarSesion(), consultarCalendarioProyectos()">
                                         <option value="">Ver todos..</option>
                                         <option v-for="planta in plantas" :value="planta.nombre">{{planta.nombre.toUpperCase()}}</option>
                                     </select>

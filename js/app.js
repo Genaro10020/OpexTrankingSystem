@@ -270,6 +270,17 @@ const AltaProyectos = {
   
   },
   methods: {
+    verificarSesion(){
+      axios.get('verificarSesion.php', {
+      }).then(response => {
+       if(response.data.success === true){
+         console.log("Sesión activa");
+       }
+      }).catch(error => {
+        console.log('Error :-(' + error)
+        window.location.href = 'index.php?cerrar=1';
+      })
+    },
     
     whoWindows(){
       
@@ -311,8 +322,8 @@ const AltaProyectos = {
 
     abrirModalSyma(queHace, index){
       console.log("Que hace:", queHace, "Quien: ", index)
-
       
+      this.verificarSesion()
       ////Reseteo variables
       this.aspecto = '';
       this.unidad = '';
@@ -478,7 +489,7 @@ const AltaProyectos = {
               this.proyectoSelect = []
             }
         } else {
-          alert("La consulta de proyectos no se realizo correctamente.")
+          console.log("La consulta de proyectos no se realizo correctamente.")
         }
       }).catch(error => {
         console.log('Error :-(' + error)
@@ -573,7 +584,7 @@ const AltaProyectos = {
           this.consultarAhorro()
           this.consultarMesesCapturadosYsumaXProyecto()
         } else {
-          alert("En la consulta calendario total por proyecto, no se logro")
+          console.log("En la consulta calendario total por proyecto, no se logro")
         }
       }).catch(error => {
         console.log('Erro :-(' + error)
@@ -913,7 +924,7 @@ const AltaProyectos = {
               this.consultarProyectoID() // si no existe seguimientos consultara proyectos para insetarlos primeros registros
             }
           } else {
-            alert("La consulta de proyectos no se realizo correctamente.")
+            console.log("La consulta de proyectos no se realizo correctamente.")
           }
         }).catch(error => {
           console.log('Erro :-(' + error)
@@ -955,7 +966,7 @@ const AltaProyectos = {
             this.fuentes = []
           }
         } else {
-          alert("La consulta de fuentes no se realizo correctamente.")
+          console.log("La consulta de fuentes no se realizo correctamente.")
         }
       }).catch(error => {
         console.log('Erro :-(' + error)
@@ -973,7 +984,7 @@ const AltaProyectos = {
             this.plantas = response.data[0][0]
           }
         } else {
-          alert("La consulta  plantas no se realizo correctamente.")
+          console.log("La consulta  plantas no se realizo correctamente.")
         }
 
       }).catch(error => {
@@ -1320,7 +1331,7 @@ const AltaProyectos = {
             this.checkPilares = []  //reseteando
           }
         } else {
-          alert("La consulta Pilares, no se realizo correctamente.")
+          console.log("La consulta Pilares, no se realizo correctamente.")
         }
 
       }).catch(error => {
@@ -1386,7 +1397,7 @@ const AltaProyectos = {
             this.misiones = []
           }
         } else {
-          alert("La consulta Misiones, no se realizo correctamente.")
+          console.log("La consulta Misiones, no se realizo correctamente.")
         }
 
       }).catch(error => {
@@ -1411,7 +1422,7 @@ const AltaProyectos = {
             this.pilaresRelacion = [];
           }
         } else {
-          alert("La consulta Misiones, no se realizo correctamente.")
+          console.log("La consulta Misiones, no se realizo correctamente.")
         }
 
       }).catch(error => {
@@ -1436,7 +1447,7 @@ const AltaProyectos = {
             this.objetivos_ligados = [];
           }
         } else {
-          alert("La consulta de Objetivos relacionados, no se realizo correctamente.")
+          console.log("La consulta de Objetivos relacionados, no se realizo correctamente.")
         }
 
       }).catch(error => {
@@ -1463,7 +1474,7 @@ const AltaProyectos = {
             this.impactoAmbiental = [];
           }
         } else {
-          alert("La consulta impacto ambiental no se realizó correctamente.");
+          console.log("La consulta impacto ambiental no se realizó correctamente.");
         }
       })
       .catch(error => {
@@ -1532,7 +1543,7 @@ const AltaProyectos = {
                 this.impactoAmbiental = [];
               }
             } else {
-              alert("La consulta impacto ambiental no se realizó correctamente.");
+              console.log("La consulta impacto ambiental no se realizó correctamente.");
             }
           })
           .catch(error => {
@@ -1676,7 +1687,7 @@ const AltaProyectos = {
             this.estandares = []
           }
         } else {
-          alert("La consulta  plantas no se realizo correctamente.")
+          console.log("La consulta  plantas no se realizo correctamente.")
         }
 
       }).catch(error => {
@@ -2142,7 +2153,6 @@ const AltaProyectos = {
     /*/////////////////////////////////////////////////////////////////////////////////ACTUALIZAR IMPACTO AMBIENTAL*/
     actualizarImpactoAmbiental() {
     /*if (this.nuevoNombre != '') {*/
-
       console.log("this.id",this.id)
       axios.put('impactoAmbientalController.php', {
         /*  nuevoNombre: this.nuevoNombre,
@@ -2190,7 +2200,7 @@ const AltaProyectos = {
             showConfirmButton: false,
             timer: 1500
           });
-          alert("")
+          console.log("")
         }
       }).catch(error => {
         //console.log('Erro :-('+error)
@@ -4658,8 +4668,8 @@ const AltaProyectos = {
             } else {
               this.todosSeguimientos = []
             }
-          } else { alert("consulta proyectos en consultarSeguimiento, no se realizo correctamente") }
-        } else { alert("La consulta de pilares, no se realizo correctamente.") }
+          } else { console.log("consulta proyectos en consultarSeguimiento, no se realizo correctamente") }
+        } else { console.log("La consulta de pilares, no se realizo correctamente.") }
       }).catch(error => {
         console.log('Erro :-(' + error)
       }).finally(() => {
@@ -4688,7 +4698,7 @@ const AltaProyectos = {
             this.tablaGraficas() //llamo la grafica solo si es la ventana Valores Gonher, esto para llenar primero sumaValoresGonher y despues crear la tabla.
           }
         } else {
-          alert("Existe un problema con la consulta sumaValoresGonher")
+          console.log("Existe un problema con la consulta sumaValoresGonher")
         }
 
       }).catch(error => {
