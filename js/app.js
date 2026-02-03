@@ -240,6 +240,7 @@ const AltaProyectos = {
       fechaAltaProyecto:'',
       hayDatos:false,
       mesesCapturadoYSumaXProyecto:[],
+      proyectosSeleccionados: [],
 
       //////////////////////SYMA ASPECTOS AMBINETALES
       isEditMode: false,
@@ -713,6 +714,43 @@ const AltaProyectos = {
 
       })
     },
+ // Métodos de suma personalizada
+parseMoney(valor) {
+  return Number(
+    valor.replace('$', '').replace(/,/g, '')
+  ) || 0
+},
+
+sumaPersonalizadaPorMes(mes) {
+  let total = 0
+  const anioSeleccionado = Number(this.select_anio_calendario)
+  this.proyectosSeleccionados.forEach(id => {
+    const proyecto = this.mesesCapturadoYSumaXProyecto[id]
+    if (!proyecto) return
+    const registroMes = proyecto.registros.find(r =>r.mes === mes && r.anio === anioSeleccionado)
+    if (registroMes){total += this.parseMoney(registroMes.ahorroDuro)}
+  })
+  return total.toLocaleString('es-MX', {
+    style: 'currency',
+    currency: 'MXN'
+  })
+},
+sumaTotalPersonalizada() {
+  let total = 0
+  const anioSeleccionado = Number(this.select_anio_calendario)
+  this.proyectosSeleccionados.forEach(id => {const proyecto = this.mesesCapturadoYSumaXProyecto[id]
+    if (!proyecto) return
+    proyecto.registros.forEach(r => {
+      if (r.anio === anioSeleccionado) {total += this.parseMoney(r.ahorroDuro)}
+    })
+  })
+  return total.toLocaleString('es-MX', {
+    style: 'currency',
+    currency: 'MXN'
+  })
+},
+// Fin de suma personalizada
+
     ///////////////////////////////////////////////////////////////////////////////////busca el valor para luego mostraarlo, se da formato al num en input se y quita formato al guardar o actualizar
     buscarValor(id, mes){
 

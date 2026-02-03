@@ -2479,7 +2479,7 @@ if (isset($_SESSION['nombre'])) {
                                 </div>
                             </div>
                             <!--ESTE DIV SE USA PARA AÑOS MENORES AL 2025 -->
-                            <div v-if="select_anio_calendario < 2025" class="col-4 my-auto text-center" style="font-size:10px;min-width:350px">
+                            <div v-if="select_anio_calendario < 2025" class="col-3 my-auto text-center" style="font-size:10px;min-width:350px">
                                 <div class="row m-0 col-4 alert alert-primary p-0" style="font-size:10px;min-width:350px">
                                     <label class="text-dark">Teórico Acumulado Anual (Ahorro Duro / Plan)</label>
                                     <div class="col-4  text-start">
@@ -2500,7 +2500,7 @@ if (isset($_SESSION['nombre'])) {
                             </div>
 
                             <!--ESTE DIV SE USA DEL 2025 EN ADELANTE 1904371-->
-                            <div v-if="select_anio_calendario >= 2025" class="col-4 my-auto text-center" style="font-size:10px;min-width:350px">
+                            <div v-if="select_anio_calendario >= 2025" class="col-3 my-auto text-center" style="font-size:10px;min-width:350px">
                                 <div class="row m-0 col-4 alert alert-primary p-0" style="font-size:10px;min-width:350px">
                                     <label class="text-dark">Pres. Acumulado Anual (Pres. / Totales)</label>
                                     <div class="col-4  text-start">
@@ -2520,7 +2520,7 @@ if (isset($_SESSION['nombre'])) {
                                 </div>
                             </div>
 
-                            <div class="col-4 my-auto text-center" style="font-size:10px;min-width:350px">
+                            <div class="col-3 my-auto text-center" style="font-size:10px;min-width:350px">
                                 <div class="row m-0 col-4 alert alert-primary p-0" style="font-size:10px;min-width:350px">
                                     <label class="text-dark">Real Acumulado Anual (Real / Plan)</label>
                                     <div class="col-4  text-start">
@@ -2536,6 +2536,17 @@ if (isset($_SESSION['nombre'])) {
                                             <div v-if="parseInt(calcularPorcentajeRealAnual())>=100" class="progress-bar bg-success" role="progressbar" :style="'width:'+calcularPorcentajeRealAnual()+'%!important;'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentajeRealAnual()}} % </label></div>
                                             <div v-else class="progress-bar bg-primary" role="progressbar" :style="'width:'+calcularPorcentajeRealAnual()+'%!important;'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentajeRealAnual()}} % </label></div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="col-3 my-auto text-center" style="font-size:10px;min-width:350px">
+                                <div class="row m-0 col-4 alert alert-primary p-0" style="font-size:10px;min-width:350px">
+                                    <label class="text-dark">Suma total Personalizada</label>
+                                    <div class="col-6  text-start">
+                                        Suma Personalizada:
+                                    </div>
+                                    <div class="col-4 text-start">
+                                         {{ sumaTotalPersonalizada() }}
                                     </div>
                                 </div>
                             </div>
@@ -2584,7 +2595,7 @@ if (isset($_SESSION['nombre'])) {
                                         <span class="badge" style=" background:#0e989a; font-weight: lighter;">{{proyectosXanio.directo}}</span><br>
                                         <span class="badge text-black" style=" background:#F5C227; font-weight: lighter;">{{proyectosXanio.presupuestado}}</span><br>
                                         <?php if ($_SESSION['acceso'] == "Admin") { ?>
-                                            <input class="form-check-input mt-0 fs-6" type="checkbox" value="" aria-label="Checkbox for following text input">
+                                            <input class="form-check-input mt-0 fs-6" type="checkbox" :value="proyectosXanio.id"  v-model="proyectosSeleccionados" aria-label="Checkbox for following text input">
                                         <?php } ?><!-- CAMBIO AQUIIIIIIIIIIIIIIIÍ -->
                                     </td>
                                     <td class="sticky3" style="background:#f4f4f4">
@@ -2663,7 +2674,7 @@ if (isset($_SESSION['nombre'])) {
                                     <td></td>
 
                                     <td style="font-size:10px; min-width:120px">
-                                        <div class="p-2 pt-1 mt-2">Suma : </div>
+                                        <div class="p-2 pt-1 mt-2">Suma Pers.: </div>
                                         <div class="p-2 pt-1">tCO2 Evitado:</div> <!--desaparecer si es menor a 2025 -->
                                         <div v-if="select_anio_calendario >= 2025" class="p-2 pt-1">Pres:</div> <!--desaparecer si es menor a 2025 -->
                                         <div class="p-2 pt-1">Plan:</div>
@@ -2671,7 +2682,9 @@ if (isset($_SESSION['nombre'])) {
                                         <div v-if="select_anio_calendario >= 2025" class="p-2 mt-1">Cumplimiento Plan:</div>
                                     </td>
                                     <td class="align-middle" v-for="(x,index) in 12" style="font-size:12px"><!--Columna de Sumas X Anio-->
-                                        <div class="badge alert-secondary w-100">123456789</div>
+                                        <div class="badge alert-secondary w-100">
+                                           {{sumaPersonalizadaPorMes(index + 1)}}
+                                        </div><!--AQUI-->
                                         <div>
                                             <span class="badge alert-success w-100" v-if="ahorro_co2_mes_mes[x-1]">{{ahorro_co2_mes_mes[x-1].suma}}</span>
                                             <label style="min-height:18px;"></label>
