@@ -2582,7 +2582,10 @@ if (isset($_SESSION['nombre'])) {
                                         <i class="bi bi-info-circle-fill me-2 text-primary" style="font-size: 1.3em" :title="' Responsable: '+proyectosXanio.responsable+'\n Correo: '+proyectosXanio.correo+'\n Teléfono: '+proyectosXanio.telefono"></i>
                                         {{proyectosXanio.nombre_proyecto}}<br>
                                         <span class="badge" style=" background:#0e989a; font-weight: lighter;">{{proyectosXanio.directo}}</span><br>
-                                        <span class="badge text-black" style=" background:#F5C227; font-weight: lighter;">{{proyectosXanio.presupuestado}}</span>
+                                        <span class="badge text-black" style=" background:#F5C227; font-weight: lighter;">{{proyectosXanio.presupuestado}}</span><br>
+                                        <?php if ($_SESSION['acceso'] == "Admin") { ?>
+                                            <input class="form-check-input mt-0 fs-6" type="checkbox" value="" aria-label="Checkbox for following text input">
+                                        <?php } ?><!-- CAMBIO AQUIIIIIIIIIIIIIIIÍ -->
                                     </td>
                                     <td class="sticky3" style="background:#f4f4f4">
                                         <!--<span class="badge bg-dark" style=" font-size: 8px" v-if="cantidadMesesRegistrados[proyectosXanio.id]>11">Finalizado</span><br>-->
@@ -2660,14 +2663,15 @@ if (isset($_SESSION['nombre'])) {
                                     <td></td>
 
                                     <td style="font-size:10px; min-width:120px">
-                                        <div class="p-2 pt-1 mt-2">tCO2 Evitado:</div> <!--desaparecer si es menor a 2025 -->
+                                        <div class="p-2 pt-1 mt-2">Suma : </div>
+                                        <div class="p-2 pt-1">tCO2 Evitado:</div> <!--desaparecer si es menor a 2025 -->
                                         <div v-if="select_anio_calendario >= 2025" class="p-2 pt-1">Pres:</div> <!--desaparecer si es menor a 2025 -->
                                         <div class="p-2 pt-1">Plan:</div>
                                         <div class="p-2 mt-1">Total:</div>
                                         <div v-if="select_anio_calendario >= 2025" class="p-2 mt-1">Cumplimiento Plan:</div>
                                     </td>
                                     <td class="align-middle" v-for="(x,index) in 12" style="font-size:12px"><!--Columna de Sumas X Anio-->
-
+                                        <div class="badge alert-secondary w-100">123456789</div>
                                         <div>
                                             <span class="badge alert-success w-100" v-if="ahorro_co2_mes_mes[x-1]">{{ahorro_co2_mes_mes[x-1].suma}}</span>
                                             <label style="min-height:18px;"></label>
