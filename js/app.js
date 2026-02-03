@@ -2963,6 +2963,8 @@ const AltaProyectos = {
     //this.impactosConDatos
     abrirModal(modal, tipo, accion, id, nombre_proyecto) {
       
+
+       console.log("jooooo",this.mesesPresupuestados)
         this.impactosConDatos = []; //al ser nuevo proyecto limpiamos si existe registros de ese impacto
       //this.nombre_proyecto = ''
       this.tipo = tipo
@@ -3889,10 +3891,17 @@ const AltaProyectos = {
         // lógica si está activado
         console.log("PRESUPUESTADO")
         this.colorPresupuestado = true
+        /* this.mesesPresupuestados = this.mesesPresupuestados.map(() => true)
+
+        console.log("presupuestado",this.colorPresupuestado)
+        console.log("mesesP",this.mesesPresupuestados) */
       } else {
         // lógica si está desactivado
         console.log("NO PRESUPUESTADO")
         this.colorPresupuestado = false
+        /* this.mesesPresupuestados = this.mesesPresupuestados.map(() => false)
+        console.log("presupuestado",this.colorPresupuestado)
+        console.log("mesesP", this.mesesPresupuestados) */
       }
     },
     editarCOMes(numero) {
