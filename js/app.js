@@ -3217,6 +3217,7 @@ sumaTotalPersonalizada() {
     },
     buscarDocumentos(cual_documento, ids) {
       this.imagenes = []
+      this.documentos_seguimiento = []
       axios.post("buscar_documentos.php", {
         documento: cual_documento,
         id: this.id_proyecto,
