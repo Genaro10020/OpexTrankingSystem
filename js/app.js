@@ -500,6 +500,7 @@ const AltaProyectos = {
     },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR PROYECTOS*/
     consultarCalendarioProyectos() {
+      this.proyectosSeleccionados = []
       this.ahorro_co2_mes_mes = []
       this.plan_actualizar = ''
       this.documentos_seguimiento_financiero = []
@@ -680,6 +681,53 @@ const AltaProyectos = {
       })
       
     },
+    consultarDatoSumaPersonalizada() {
+        this.cargando = true; 
+        axios.get('sumaPersonalizadaController.php', {
+          params: {
+            anio: this.select_anio_calendario,
+            planta: this.select_planta_calendario
+          }
+        })
+        .then(response => {
+            console.log(
+              "Respuesta del controlador de suma personalizada:",
+              response
+            );
+
+            if (response.data.success) {
+              const proyectosJsonSelected = response.data.datos?.[0]?.selected_projects;
+              this.proyectosSeleccionados = proyectosJsonSelected ? JSON.parse(proyectosJsonSelected): [];
+            } else {
+              console.warn(
+                "La consulta no se realizó correctamente.",
+                response.data
+              );
+              this.proyectosSeleccionados = [];
+            }
+          })
+        .catch(error => {
+          console.error("Error al consultar suma personalizada:", error);
+          this.$toast?.error?.("No se pudo consultar la suma personalizada"); // si usas toasts
+        })
+        .finally(() => {
+          this.cargando = false;
+        });
+    },
+
+    guardarDatoSumaPersonalizada() {
+      axios.post('sumaPersonalizadaController.php', {
+        proyectos: this.proyectosSeleccionados,
+        anio: this.select_anio_calendario,
+        planta: this.select_planta_calendario
+      }).then(response => {
+        console.log("Respuesta del controlador de suma personalizada:", response.data);
+      }).catch(error => {
+        console.log("Error al guardar datos de suma personalizada:", error);
+      });
+    },
+    
+ 
 
     //////////////////////////////////////////////Consulta Ahorro
     consultarAhorro() {
@@ -851,7 +899,7 @@ sumaTotalPersonalizada() {
     },
     consultarImpactoAmbieltalXProyectoID() {
       if(this.id_proyecto != ''){
-
+        this.documentos_seguimiento = []
         console.log("ENTRE A CONSULTAR",);
         this.actualizar = 0
         axios.post('impactoAmbientalProyectoController.php', {
@@ -3217,7 +3265,7 @@ sumaTotalPersonalizada() {
     },
     buscarDocumentos(cual_documento, ids) {
       this.imagenes = []
-      this.documentos_seguimiento = []
+      
       axios.post("buscar_documentos.php", {
         documento: cual_documento,
         id: this.id_proyecto,

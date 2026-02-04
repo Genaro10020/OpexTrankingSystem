@@ -17,7 +17,61 @@
 .cinta {
     background-color: rgb(184, 14, 14);
 }
+/*css check personalizado*/
 
+.checkbox-custom {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 8px;
+  user-select: none;
+}
+
+/* ocultamos el checkbox real */
+.checkbox-custom input {
+  display: none;
+}
+
+/* caja */
+.checkmark {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #72903b; /* gris */
+  border-radius: 4px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+/* cuando está checked */
+.checkbox-custom input:checked + .checkmark {
+  background-color: #48c821; /* amarillo */
+  border-color: #328918;
+  color: rgb(76, 36, 197);
+  font-weight: bold;
+}
+
+/* el check */
+.checkmark::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  opacity: 0;
+}
+
+/* mostrar el check */
+.checkbox-custom input:checked + .checkmark::after {
+  opacity: 1;
+}
+
+
+
+/*fin css check personalizda*/
 
 .form-login {
     font-family: 'Almarai', sans-serif;

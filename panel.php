@@ -42,7 +42,7 @@ if (isset($_SESSION['nombre'])) {
                     <?php } ?>
                     
                     <?php if ($_SESSION['acceso'] == 'Admin' || $_SESSION['acceso'] == 'Financiero') { ?>
-                        <button class="btn-menu ms-sm-3 mb-sm-3" @click="verificarSesion(), ventana='Calendario',opcion=5,mostrarHeader=true,consultarPlantas(),  consultarCalendarioProyectos()"
+                        <button class="btn-menu ms-sm-3 mb-sm-3" @click="verificarSesion(), ventana='Calendario',opcion=5,mostrarHeader=true,consultarPlantas(),  consultarCalendarioProyectos(),consultarDatoSumaPersonalizada()"
                             :class="{'btn-menu-activo': opcion===5,'btn-menu': opcion !== 5}">
                             <i class="bi bi-plus-circle"></i> Estatus Captura
                         </button>
@@ -2466,13 +2466,13 @@ if (isset($_SESSION['nombre'])) {
                             <div class="col-3" style="min-width:250px">
                                 <div class="input-group mt-3 mb-2">
                                     <span class="input-group-text" style="width: 150px;">Seleccione año</span>
-                                    <select style="width: 100px;" v-model="select_anio_calendario" @change="verificarSesion(), consultarCalendarioProyectos()">
+                                    <select style="width: 100px;" v-model="select_anio_calendario" @change="verificarSesion(), consultarCalendarioProyectos(),consultarDatoSumaPersonalizada()">
                                         <option v-for="(year,index) in years" :value="year">{{year}}</option>
                                     </select>
                                 </div>
                                 <div class="input-group mt-3 mb-2">
                                     <span class="input-group-text" style="width: 150px; font-size:0.8em;">Seleccione Planta</span>
-                                    <select style="width: 100px;" v-model="select_planta_calendario" @change="verificarSesion(), consultarCalendarioProyectos()">
+                                    <select style="width: 100px;" v-model="select_planta_calendario" @change="verificarSesion(), consultarCalendarioProyectos(),consultarDatoSumaPersonalizada()">
                                         <option value="">Ver todos..</option>
                                         <option v-for="planta in plantas" :value="planta.nombre">{{planta.nombre.toUpperCase()}}</option>
                                     </select>
@@ -2595,7 +2595,12 @@ if (isset($_SESSION['nombre'])) {
                                         <span class="badge" style=" background:#0e989a; font-weight: lighter;">{{proyectosXanio.directo}}</span><br>
                                         <span class="badge text-black" style=" background:#F5C227; font-weight: lighter;">{{proyectosXanio.presupuestado}}</span><br>
                                         <?php if ($_SESSION['acceso'] == "Admin") { ?>
-                                            <input class="form-check-input mt-0 fs-6" type="checkbox" :value="proyectosXanio.id"  v-model="proyectosSeleccionados" aria-label="Checkbox for following text input">
+
+                                            <label class="checkbox-custom">
+                                                <input type="checkbox" @change="guardarDatoSumaPersonalizada()" :value="proyectosXanio.id"  v-model="proyectosSeleccionados" class="w-4 h-4 text-yellow-400 bg-neutral-secondary-medium border-default-medium rounded-xs focus:ring-yellow-500 dark:focus:ring-yellow-600 ring-offset-neutral-primary focus:ring-2"  >
+                                                <span class="checkmark"></span>
+                                            </label>
+                                            
                                         <?php } ?><!-- CAMBIO AQUIIIIIIIIIIIIIIIÍ -->
                                     </td>
                                     <td class="sticky3" style="background:#f4f4f4">
