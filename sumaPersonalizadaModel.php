@@ -12,19 +12,17 @@ function consultarSumaPersonalizada($anio, $planta){
     $types  = "i";
     $params = [$anio];
 
-    // Planta SOLO si viene con valor
     if ($planta !== '') {
+        // Cuando planta tiene valor
         $where   .= " AND `plant` = ?";
         $types   .= "s";
         $params[] = $planta;
+    } else {
+        // Cuando planta viene vacía
+        $where .= " AND (`plant` = '' OR `plant` IS NULL)";
     }
 
-    $sql = "
-        SELECT *
-        FROM sumas_personalizadas
-        $where
-        ORDER BY id DESC
-    ";
+    $sql = "SELECT * FROM sumas_personalizadas $where ORDER BY id DESC";
 
     $stmt = $conexion->prepare($sql);
     if (!$stmt) {
