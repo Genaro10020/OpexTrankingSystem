@@ -13,11 +13,19 @@
     font-size: 1em;
 }
 
+
 .footer,
 .cinta {
     background-color: rgb(184, 14, 14);
 }
 /*css check personalizado*/
+
+.sin-outline:focus,
+.sin-outline:active,
+.sin-outline:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
 
 .checkbox-custom {
   display: flex;
@@ -36,10 +44,20 @@
 .checkmark {
   width: 16px;
   height: 16px;
-  border: 2px solid #72903b; /* gris */
+  border: 2px solid #393939; /* gris */
+   background-color: #fefefe;
   border-radius: 4px;
   position: relative;
   transition: all 0.2s ease;
+}
+.checkmark-desactivada {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #8c8c8c; /* gris */
+  border-radius: 4px;
+  position: relative;
+  transition: all 0.2s ease;
+  background-color: #c4c4c4;
 }
 
 /* cuando está checked */
@@ -48,6 +66,15 @@
   border-color: #328918;
   color: rgb(76, 36, 197);
   font-weight: bold;
+  
+}
+
+.checkbox-asigned{
+  background-color: #e6cce3; /* amarillo */
+  border-color: #a3cc96;
+  color: rgb(76, 36, 197);
+  font-weight: bold;
+  
 }
 
 /* el check */

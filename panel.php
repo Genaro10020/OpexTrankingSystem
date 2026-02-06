@@ -2541,14 +2541,31 @@ if (isset($_SESSION['nombre'])) {
                             </div>
                              <div class="col-3 my-auto text-center" style="font-size:10px;min-width:350px">
                                 <div class="row m-0 col-4 alert alert-primary p-0" style="font-size:10px;min-width:350px">
-                                    <label class="text-dark">Suma total Personalizada</label>
-                                    <div class="col-6  text-start">
-                                        Suma Personalizada:
+                                    <label class="text-dark">Suma total Personalizada/Presupuestado</label>
+                                    <div class="col-4  text-start">
+                                        Personalizada:<br>
+                                        Suma Pres:
                                     </div>
                                     <div class="col-4 text-start">
-                                         {{ sumaTotalPersonalizada() }}
+                                         {{ sumaTotalPersonalizada() }}<br>
+                                         {{sumaPres}}
                                     </div>
+                                      <div class="col-4 text-center my-auto">
+                                       <div class="progress" style="height: 20px;">
+                                            <div v-if="parseInt(calcularPorcentajeSumaPersonalizada())>=100" class="progress-bar bg-success" role="progressbar" :style="'width:'+calcularPorcentajeSumaPersonalizada()+'%!important;'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentaje()}} % </label></div>
+                                            <div v-else class="progress-bar bg-primary" role="progressbar" :style="'width:'+calcularPorcentajeSumaPersonalizada()+'%!important;'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentaje()}} % </label></div>
+                                        </div>
+                                    </div>
+                                     <div class="col-12 d-flex justify-content-center">
+                                        <div class="form-check form-switch d-flex my-auto gap-2 mt-1">
+                                            <input class="form-check-input " type="checkbox"role="switch" id="switchBloqueo" v-model="bloqueado" style="transform: scale(1.6);">
+                                            <label class="form-check-label mb-0" for="switchBloqueo">
+                                            {{ bloqueado ? 'Desbloqueado' : 'Bloqueado' }}
+                                            </label>
+                                        </div>
+                                     </div>
                                 </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -2596,12 +2613,23 @@ if (isset($_SESSION['nombre'])) {
                                         <span class="badge text-black" style=" background:#F5C227; font-weight: lighter;">{{proyectosXanio.presupuestado}}</span><br>
                                         <?php if ($_SESSION['acceso'] == "Admin") { ?>
 
-                                            <label class="checkbox-custom">
-                                                <input type="checkbox" @change="guardarDatoSumaPersonalizada()" :value="proyectosXanio.id"  v-model="proyectosSeleccionados" class="w-4 h-4 text-yellow-400 bg-neutral-secondary-medium border-default-medium rounded-xs focus:ring-yellow-500 dark:focus:ring-yellow-600 ring-offset-neutral-primary focus:ring-2"  >
-                                                <span class="checkmark"></span>
-                                            </label>
-                                            
-                                        <?php } ?><!-- CAMBIO AQUIIIIIIIIIIIIIIIÍ -->
+                                           <label class="checkbox-custom" >
+                                                <input
+                                                    type="checkbox"
+                                                    :class="bloqueado ? 'bg-primary' : ''"
+                                                    :value="proyectosXanio.id"
+                                                    v-model="proyectosSeleccionados"
+                                                    :disabled="!bloqueado"
+                                                >   
+                                                <span class="checkmark" :class="bloqueado ? 'checkmark' : 'checkmark-desactivada'"></span>
+                                                <span v-show="proyectosSeleccionados.includes(proyectosXanio.id)"  class="checkbox-asigned">
+                                                   Sumado {{ bloqueado ? '' : '🔒' }}
+                                                </span>
+                                                  <span v-show="!proyectosSeleccionados.includes(proyectosXanio.id)"  class="checkbox-custom">
+                                                     {{ bloqueado ? '' : '🔒' }}
+                                                </span>
+                                                </label>
+                                        <?php } ?>
                                     </td>
                                     <td class="sticky3" style="background:#f4f4f4">
                                         <!--<span class="badge bg-dark" style=" font-size: 8px" v-if="cantidadMesesRegistrados[proyectosXanio.id]>11">Finalizado</span><br>-->
@@ -2620,7 +2648,7 @@ if (isset($_SESSION['nombre'])) {
                                                 <span class=" badge rounded-pill alert-dark" style=" font-size: 8px">Ahorro Duro:<br><label class="text-dark">{{proyectosDatosCalendario.ahorro_duro}}<label></span>
                                                 <span class="badge rounded-pill alert-warning" style=" font-size: 8px">Ahorro Suave:<br>{{proyectosDatosCalendario.ahorro_suave}}</span>
 
-                                                <!--¡¡¡¡¡¡¡¡¡¡¡SERENA TE QUEDASTE AQUÍ,!!!!!!!!!!!-->
+                                               
                                                 <?php if ($_SESSION['acceso'] == "Financiero") { ?>
                                                 <div v-if= "select_anio_calendario >= 2025" class = "input-group input-group-sm">
                                                     <!--<input :id="proyectosXanio.id+'-'+x" :value="buscarValor(proyectosXanio.id, x)" :key="indexa" type= "text" class ="form-control" style="height:20px; font-size: 8px;" placeholder="Ahorro por financiero" :disabled="editarMesFinanzas!=proyectosXanio.id+'_'+x"/>-->

@@ -201,6 +201,8 @@ const AltaProyectos = {
       editarMesFinanzas:'',
       idsProyectosXAnioSelect:[],
       ultimoColor:'Amarillo',
+      totalSumaPersonalizada: 0,
+
       /* ultimoGuionFolio:[], */
       /*GENERANDO VALOR*/
       select_anio_generando_valor: '',
@@ -260,6 +262,7 @@ const AltaProyectos = {
       CH4CO2e:'', 
       N2OCO2e: '',
       material: '',
+      bloqueado: false,
     }
   },
   mounted() {
@@ -271,6 +274,9 @@ const AltaProyectos = {
   
   },
   methods: {
+     bloquerDesbloquear() {
+      this.bloqueado = !this.bloqueado
+    },
     verificarSesion(){
       axios.get('verificarSesion.php', {
       }).then(response => {
@@ -792,6 +798,7 @@ sumaTotalPersonalizada() {
       if (r.anio === anioSeleccionado) {total += this.parseMoney(r.ahorroDuro)}
     })
   })
+  this.totalSumaPersonalizada = total
   return total.toLocaleString('es-MX', {
     style: 'currency',
     currency: 'MXN'
@@ -5136,8 +5143,21 @@ sumaTotalPersonalizada() {
         return this.meta === 0 || this.selleva === 0 ? 0 : parseFloat((this.selleva / this.meta) * 100).toFixed(2)
       }
     },
+    calcularPorcentajeSumaPersonalizada() {
+      if (this.select_anio_calendario >= 2025) {
+        // console.log('meta:',this.metaPres,'se lleva:',this.selleva)
+        //  console.log('pres:',parseFloat((this.selleva/this.metaPres)*100).toFixed(2))
+        return this.metaPres === 0 || this.totalSumaPersonalizada === 0 ? 0 : parseFloat((this.totalSumaPersonalizada / this.metaPres) * 100).toFixed(2)
+
+      } else {
+        return this.meta === 0 || this.totalSumaPersonalizada === 0 ? 0 : parseFloat((this.totalSumaPersonalizada / this.meta) * 100).toFixed(2)
+      }
+    },
 
     calcularPorcentajeRealAnual() {
+      return this.meta === 0 || this.SumNumReales === 0 ? 0 : parseFloat((this.SumNumReales / this.meta) * 100).toFixed(2)
+    },
+     calcularPorcentajePersonalizadaPresupuestada() {
       return this.meta === 0 || this.SumNumReales === 0 ? 0 : parseFloat((this.SumNumReales / this.meta) * 100).toFixed(2)
     },
     calcularPorcentajeMensualTeorico(mes) {
