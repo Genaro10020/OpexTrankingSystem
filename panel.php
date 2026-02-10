@@ -422,15 +422,16 @@ if (isset($_SESSION['nombre'])) {
                                                 <span class="input-group-text w-25 me-2">Objetivo Estrategico</span>
                                                 <input type="checkbox" v-model="objetivo_estrategico" :disabled="actualizar_proyecto">
 
-                                                <div class="d-flex align-items-center ps-5">
+                                                <!--<div class="d-flex align-items-center ps-5">
+                                                    ESTE ERA BOTON PARA PRESUPUESTAR EL PROYECTO, Y NO SE USA
                                                     <div class="form-check form-switch">
-                                                       <!--  <label class="form-check-label" for="switchCheckDefault">Presupuestado</label> -->
+                                                       ///<label class="form-check-label" for="switchCheckDefault">Presupuestado</label>/// >
                                                         <input :style="{ backgroundColor: colorPresupuestado ? '#f4ca31ff' : '#B3F09B'}" class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault" v-model="presupuestado" @change="proyectoSIoNOpresupuestado()" >
                                                         <label class="fw-light text-sm">
                                                             <strong>{{ presupuestado ? 'Presupuestado' : 'No presupuestado' }}</strong>
                                                         </label>
                                                     </div>
-                                                </div>
+                                                </div>-->
                                             </div>
                                         </div>
                                         <div class="col-3 my-auto mx-auto "><!--bloque imagen Alta Proyecto-->
@@ -457,7 +458,8 @@ if (isset($_SESSION['nombre'])) {
                                     <div class="col-12 pb-2">
                                         <table class="table table-striped table-bordered">
                                             <thead class="text-center">
-                                                <tr class="sin-fondo">
+                                                <!-- esta era fila par Activar o desactivar Presupuestados NO SE USA -->
+                                                <!-- <tr class="sin-fondo">
                                                     <th>Ahorro</th> 
                                                     <th scope="col" v-for="(numero, index) in 12"> 
                                                         <div style="display: flex; justify-content: center; align-items: center">
@@ -466,7 +468,7 @@ if (isset($_SESSION['nombre'])) {
                                                             </div>
                                                         </div>
                                                     </th>
-                                                </tr>
+                                                </tr> -->
                                                 <tr>
                                                     <th>Año</th>
                                                     <th scope="col" v-for="(numero,index) in 12">
@@ -905,7 +907,7 @@ if (isset($_SESSION['nombre'])) {
                                 <th style="min-width:230px;">Objetivo(s) Estratégico(s)</th>
                                 <th style="min-width:230px;">Impacto Ambiental</th>
                                 <th style="min-width:230px;">Valores</th>
-                                <th>Presupuestado</th>
+                                <!-- <th>Presupuestado</th> -->
                                 <th>Tons CO2 por Evitar <br>(Proyectado)</th>
                                 <th>Ahorro Duro $MXN/Año <br>(Proyectado )</th>
                                 <th>Ahorro Suave $MXN/Año <br>(Proyectado)</th>
@@ -956,9 +958,9 @@ if (isset($_SESSION['nombre'])) {
                                                 </li>
                                             </ul>
                                         </td>
-                                        <td class="border border-secondary text-center">
+                                       <!--  <td class="border border-secondary text-center">
                                             {{proyecto.presupuestado}}
-                                        </td>
+                                        </td> -->
                                         <td class="border border-secondary">{{proyecto.tons_co2}}<br> <label class="text-success" v-if="proyectoSumas[proyecto.id]"><b>{{proyectoSumas[proyecto.id].sumaTons}}<b><label></td>
                                         <td class="border border-secondary">{{proyecto.ahorro_duro}}<br> <label class="text-primary" v-if="proyectoSumas[proyecto.id]"><b>{{proyectoSumas[proyecto.id].sumaDuro}}<b><label></td>
                                         <td class="border border-secondary">{{proyecto.ahorro_suave}}<br> <label class="text-primary" v-if="proyectoSumas[proyecto.id]"><b>{{proyectoSumas[proyecto.id].sumaSuave}}<b><label></td>
@@ -2539,7 +2541,7 @@ if (isset($_SESSION['nombre'])) {
                                     </div>
                                 </div>
                             </div>
-                             <div class="col-3 my-auto text-center" style="font-size:10px;min-width:350px">
+                            <div class="col-3 my-auto text-center" style="font-size:10px;min-width:350px">
                                 <div class="row m-0 col-4 alert alert-primary p-0" style="font-size:10px;min-width:350px">
                                     <label class="text-dark">Suma total Personalizada/Presupuestado</label>
                                     <div class="col-4  text-start">
@@ -2610,7 +2612,7 @@ if (isset($_SESSION['nombre'])) {
                                         <i class="bi bi-info-circle-fill me-2 text-primary" style="font-size: 1.3em" :title="' Responsable: '+proyectosXanio.responsable+'\n Correo: '+proyectosXanio.correo+'\n Teléfono: '+proyectosXanio.telefono"></i>
                                         {{proyectosXanio.nombre_proyecto}}<br>
                                         <span class="badge" style=" background:#0e989a; font-weight: lighter;">{{proyectosXanio.directo}}</span><br>
-                                        <span class="badge text-black" style=" background:#F5C227; font-weight: lighter;">{{proyectosXanio.presupuestado}}</span><br>
+                                        <!-- <span class="badge text-black" style=" background:#F5C227; font-weight: lighter;">{{proyectosXanio.presupuestado}}</span><br> -->
                                         <?php if ($_SESSION['acceso'] == "Admin") { ?>
 
                                            <label class="checkbox-custom" >
