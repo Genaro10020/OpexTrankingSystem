@@ -721,11 +721,19 @@ const AltaProyectos = {
         });
     },
 
-    guardarDatoSumaPersonalizada() {
+    guardarDatoSumaPersonalizada(planta) {
+      let tomaPlanta = '';
+      if(this.select_planta_calendario == ''){
+        tomaPlanta = planta
+        console.log("planta metodo")
+      }else if(this.select_planta_calendario != ''){
+        tomaPlanta = this.select_planta_calendario
+        console.log("planta thiss")
+      }
       axios.post('sumaPersonalizadaController.php', {
         proyectos: this.proyectosSeleccionados,
         anio: this.select_anio_calendario,
-        planta: this.select_planta_calendario
+        planta: tomaPlanta,
       }).then(response => {
         console.log("Respuesta del controlador de suma personalizada:", response.data);
       }).catch(error => {

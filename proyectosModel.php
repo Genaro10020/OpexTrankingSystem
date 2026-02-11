@@ -189,7 +189,7 @@ function consultarCalendarioProyecto($anio,$planta)
     $estado2 = false;
     $anioActual=intval($anio);
     $anioAnterior = $anioActual-1;
-    $consulta="SELECT proyectos_creados.responsable,proyectos_creados.correo,proyectos_creados.telefono,proyectos_creados.nombre_proyecto,proyectos_creados.id,proyectos_creados.fecha, proyectos_creados.objetivos, proyectos_creados.presupuestado, registros_impacto_ambiental.mes,proyectos_creados.status_seguimiento /*Proyectos por año Unicos listado de proyectos a mostrar*/
+    $consulta="SELECT proyectos_creados.responsable,proyectos_creados.planta,proyectos_creados.correo,proyectos_creados.telefono,proyectos_creados.nombre_proyecto,proyectos_creados.id,proyectos_creados.fecha, proyectos_creados.objetivos, proyectos_creados.presupuestado, registros_impacto_ambiental.mes,proyectos_creados.status_seguimiento /*Proyectos por año Unicos listado de proyectos a mostrar*/
     FROM impacto_ambiental_proyecto LEFT JOIN proyectos_creados 
     ON proyectos_creados.id = impacto_ambiental_proyecto.id_proyecto 
     LEFT JOIN registros_impacto_ambiental 
