@@ -2621,7 +2621,7 @@ if (isset($_SESSION['nombre'])) {
                                                     :class="bloqueado ? 'bg-primary' : ''"
                                                     :value="proyectosXanio.id"
                                                     v-model="proyectosSeleccionados"
-                                                    @change="guardarDatoSumaPersonalizada(proyectosXanio.planta)"
+                                                    @change="guardarDatoSumaPersonalizada(proyectosXanio.planta,proyectosXanio.id)"
                                                     :disabled="!bloqueado"
                                                 >   
                                                 <span class="checkmark" :class="bloqueado ? 'checkmark' : 'checkmark-desactivada'"></span>

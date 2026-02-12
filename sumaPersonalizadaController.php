@@ -48,17 +48,16 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
     case 'POST':
         if (
-            isset($arreglo['proyectos']) &&
+            isset($arreglo['idProyecto']) &&
             isset($arreglo['anio']) &&
             isset($arreglo['planta'])
         ) {
-            $proyectos     = $arreglo['proyectos'];
+            $idProyecto     = $arreglo['idProyecto'];
             $anio          = $arreglo['anio'];
             $planta        = $arreglo['planta'];
-            $proyectosJson = json_encode($proyectos);
 
             $resultado = insertarOActualizarSumaPersonalizada(
-                $proyectosJson,
+                $idProyecto,
                 $anio,
                 $planta
             );

@@ -696,14 +696,24 @@ const AltaProyectos = {
           }
         })
         .then(response => {
-            console.log(
-              "Respuesta del controlador de suma personalizada:",
-              response
-            );
+            console.log("Respuesta del controlador de suma personalizada:",response);
 
             if (response.data.success) {
-              const proyectosJsonSelected = response.data.datos?.[0]?.selected_projects;
-              this.proyectosSeleccionados = proyectosJsonSelected ? JSON.parse(proyectosJsonSelected): [];
+                const datos = response.data.datos || [];
+                let proyectos = [];
+
+                datos.forEach(item => {
+                  if (item.selected_projects) {
+                    const parsed = JSON.parse(item.selected_projects);
+                    if (Array.isArray(parsed)) {
+                      proyectos = proyectos.concat(parsed);
+                    } else {
+                      proyectos.push(parsed);
+                    }
+                  }
+                });
+
+                this.proyectosSeleccionados = proyectos;
             } else {
               console.warn(
                 "La consulta no se realizó correctamente.",
@@ -721,19 +731,17 @@ const AltaProyectos = {
         });
     },
 
-    guardarDatoSumaPersonalizada(planta) {
+    guardarDatoSumaPersonalizada(planta,idProyecto) {
       let tomaPlanta = '';
       if(this.select_planta_calendario == ''){
         tomaPlanta = planta
-        console.log("planta metodo")
       }else if(this.select_planta_calendario != ''){
         tomaPlanta = this.select_planta_calendario
-        console.log("planta thiss")
       }
       axios.post('sumaPersonalizadaController.php', {
-        proyectos: this.proyectosSeleccionados,
         anio: this.select_anio_calendario,
         planta: tomaPlanta,
+        idProyecto: idProyecto
       }).then(response => {
         console.log("Respuesta del controlador de suma personalizada:", response.data);
       }).catch(error => {

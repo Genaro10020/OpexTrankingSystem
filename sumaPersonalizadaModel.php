@@ -7,29 +7,14 @@ function consultarSumaPersonalizada($anio, $planta){
     $resultado = [];
     $anio = (int)$anio;
 
-    // Base del WHERE (anio siempre aplica)
-    $where  = "WHERE `year` = ?";
-    $types  = "i";
-    $params = [$anio];
-
-    if ($planta !== '') {
-        // Cuando planta tiene valor
-        $where   .= " AND `plant` = ?";
-        $types   .= "s";
-        $params[] = $planta;
-    } else {
-        // Cuando planta viene vacía
-        $where .= " AND (`plant` = '' OR `plant` IS NULL)";
-    }
-
-    $sql = "SELECT * FROM sumas_personalizadas $where ORDER BY id DESC";
+    $sql = "SELECT * FROM sumas_personalizadas WHERE `year` = ? AND ( ? = '' OR `plant` = ? ) ORDER BY id DESC";
 
     $stmt = $conexion->prepare($sql);
     if (!$stmt) {
         return [[], false];
     }
 
-    $stmt->bind_param($types, ...$params);
+    $stmt->bind_param("iss", $anio, $planta, $planta);
     $stmt->execute();
 
     $res = $stmt->get_result();
@@ -41,35 +26,69 @@ function consultarSumaPersonalizada($anio, $planta){
 }
 
 
-    function insertarOActualizarSumaPersonalizada($proyectos, $anio, $planta) {
-        global $conexion;
+    function insertarOActualizarSumaPersonalizada($proyectoId, $anio, $planta) {
+    global $conexion;
 
-        // 1. Verificar si ya existe el registro
-        $queryCheck = "SELECT id FROM sumas_personalizadas WHERE `year` = ? AND `plant` = ?";
-        $stmtCheck = $conexion->prepare($queryCheck);
-        $stmtCheck->bind_param("is", $anio, $planta);
-        $stmtCheck->execute();
-        $result = $stmtCheck->get_result();
+    // 1 Buscar registro existente
+    $queryCheck = "SELECT id, selected_projects 
+                   FROM sumas_personalizadas 
+                   WHERE `year` = ? AND `plant` = ?";
 
-        if ($result->num_rows > 0) {
-            // 2. Existe -> UPDATE
-            $queryUpdate = " UPDATE sumas_personalizadas SET selected_projects = ? WHERE `year` = ? AND `plant` = ?";
-            $stmt = $conexion->prepare($queryUpdate);
-            $stmt->bind_param("sis", $proyectos, $anio, $planta);
-        } else {
-            // 3. No existe -> INSERT
-            $queryInsert = "INSERT INTO sumas_personalizadas (selected_projects, year, plant) VALUES (?, ?, ?)";
-            $stmt = $conexion->prepare($queryInsert);
-            $stmt->bind_param("sis", $proyectos, $anio, $planta);
+    $stmtCheck = $conexion->prepare($queryCheck);
+    $stmtCheck->bind_param("is", $anio, $planta);
+    $stmtCheck->execute();
+    $result = $stmtCheck->get_result();
+
+    if ($result->num_rows > 0) {
+
+        // 2 Ya existe
+        $row = $result->fetch_assoc();
+        $idRegistro = $row['id'];
+
+        // Decodificar JSON actual
+        $proyectosActuales = json_decode($row['selected_projects'], true);
+
+        if (!is_array($proyectosActuales)) {
+            $proyectosActuales = [];
         }
 
-        $estado = $stmt->execute();
+        // 3 Agregar nuevo ID si no existe
+        if (!in_array($proyectoId, $proyectosActuales)) {
+            $proyectosActuales[] = $proyectoId;
+        }
 
-        $stmtCheck->close();
-        $stmt->close();
+        $nuevoJson = json_encode($proyectosActuales);
 
-        return $estado;
+        // 4 Actualizar
+        $queryUpdate = "UPDATE sumas_personalizadas 
+                        SET selected_projects = ? 
+                        WHERE id = ?";
+
+        $stmt = $conexion->prepare($queryUpdate);
+        $stmt->bind_param("si", $nuevoJson, $idRegistro);
+
+    } else {
+
+        // 5 No existe → crear nuevo registro
+        $nuevoArray = [$proyectoId];
+        $nuevoJson = json_encode($nuevoArray);
+
+        $queryInsert = "INSERT INTO sumas_personalizadas 
+                        (selected_projects, year, plant) 
+                        VALUES (?, ?, ?)";
+
+        $stmt = $conexion->prepare($queryInsert);
+        $stmt->bind_param("sis", $nuevoJson, $anio, $planta);
     }
+
+    $estado = $stmt->execute();
+
+    $stmtCheck->close();
+    $stmt->close();
+
+    return $estado;
+}
+
 /* 
     function actualizarMetodologia($id,$nuevoNombre){
         global $conexion;
