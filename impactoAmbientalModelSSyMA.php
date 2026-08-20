@@ -150,12 +150,14 @@ function consultarImpactoAmbiental(){
         return array($respuesta, $status);
     }
 
-    function insertarImpactoAmbiental($nueva,$siglas){
+    function insertarImpactoAmbientalSSyMA($aspecto,$unidad,$clasificacion,$ciclo,$entradas_salidas,$impacto,$requisito,
+        $alcance,$CO2,$CH4,$NO2,$CO2CO2e,$CH4CO2e,$N2OCO2e, $e_s){
         global $conexion;
-        $nueva = trim($nueva).' ('.trim($siglas).')';
-        $query = "INSERT INTO impacto_ambiental (nombre,unidad) VALUES (?,?)";
+        $query = "INSERT INTO catalogo_impactos_y_aspectos_ambientales (nombre,unidad,clasificacion, ciclo, entradas_salidas,  impacto, requisito,
+        alcance, CO2, CH4, NO2, CO2CO2e, CH4CO2e, N2OCO2e, e_s) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $stmt = $conexion->prepare($query);
-        $stmt->bind_param("ss", $nueva,$siglas);
+        $stmt->bind_param("sssssssidddddds", $aspecto,$unidad,$clasificacion,$ciclo,$entradas_salidas,$impacto,$requisito,
+        $alcance,$CO2,$CH4,$NO2,$CO2CO2e,$CH4CO2e,$N2OCO2e,$e_s);
         if($stmt->execute()){
             $estado = true;
         }else{
@@ -166,13 +168,15 @@ function consultarImpactoAmbiental(){
         return $estado;
     }
 
-    function actualizarImpactoAmbiental($id,$nueva,$siglas){
+    function actualizarImpactoAmbientalSSyMA($id,$aspecto,$unidad,$clasificacion,$ciclo,$entradas_salidas,$impacto,$requisito,
+        $alcance,$CO2,$CH4,$NO2,$CO2CO2e,$CH4CO2e,$N2OCO2e, $e_s){
         global $conexion;
-        $nombre = trim($nueva).' ('.trim($siglas).')';
         $estado = false;
-        $update = "UPDATE impacto_ambiental SET nombre=?, unidad=? WHERE  id=?";
+        $update = "UPDATE catalogo_impactos_y_aspectos_ambientales SET nombre=?, unidad=?, clasificacion=?, ciclo=?, entradas_salidas=?,
+        impacto=?, requisito=?, alcance=?, CO2=?, CH4=?, NO2=?, CO2CO2e=?, CH4CO2e=?, N2OCO2e=?, e_s=?  WHERE  id=?";
         $stmt = $conexion->prepare($update);
-        $stmt->bind_param("ssi",$nombre,$siglas,$id);
+        $stmt->bind_param("sssssssiddddddsi",$aspecto,$unidad,$clasificacion,$ciclo,$entradas_salidas,$impacto,$requisito,
+        $alcance,$CO2,$CH4,$NO2,$CO2CO2e,$CH4CO2e,$N2OCO2e,$e_s,$id);
         if($stmt->execute()){
             $estado = true;
         }
@@ -180,10 +184,10 @@ function consultarImpactoAmbiental(){
         return $estado;
     }
 
-    function eliminarImpactoAmbiental($id){
+    function eliminarImpactoAmbientalSSyMA($id){
         global $conexion;
         $estado = false;
-        $delete = "DELETE FROM impacto_ambiental WHERE id=?";
+        $delete = "DELETE FROM catalogo_impactos_y_aspectos_ambientales WHERE id=?";
         $stmt = $conexion->prepare($delete);
         $stmt->bind_param("i", $id);
         if($stmt->execute()){
