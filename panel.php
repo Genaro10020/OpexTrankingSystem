@@ -2361,15 +2361,15 @@ if (isset($_SESSION['nombre'])) {
                                     <button v-show="id_proyecto!=''" v-else type="button" class="btn btn-secondary" title="Visualizar/Subir Archivos" @click="modal_seguimiento()" style="font-size:12px"><i class="bi bi-paperclip">{{documentos_seguimiento.length}} Evidencias Encontrados</i></button>
                                 </div>
                             </div>
-                            <div class="col-12 col-lg-6">
-                                <div v-for="impacto in impactoAmbientalConID" class="input-group mt-3 mx-2 mb-2 d-flex justify-content-start justify-content-lg-center">
+                           <!--  <div class="col-12 col-lg-12">
+                                 <div v-for="impacto in impactoAmbientalConID" class="input-group mt-3 mx-2 mb-2 d-flex justify-content-start justify-content-lg-center">
                                     <span class="input-group-text w-5">Documentos estandares CO
                                         <label style="font-size:8px" class="mt-1">2</label><br>
                                     </span> 
                                     <button v-if="impacto.documentos>0" type="button" class="btn btn-success text-start" title="Visualizar" @click="modal_impactoAmbiental(impacto.id,impacto.nombre)" style="font-size:12px; width: 300px"><i class="bi bi-file-earmark me-1">({{impacto.documentos}})</i>{{impacto.nombre}}</button>
                                     <button v-else type="button" class="btn btn-secondary text-start" title="Sin archivos de apoyo" style="font-size:12px; width: 300px"><i class="bi bi-file-earmark  me-1">({{impacto.documentos}})</i>{{impacto.nombre}}</button>
-                                </div>
-                            </div>
+                                </div> 
+                            </div> -->
                         </div>
                     </div>
                     <div class="scroll-dos">
