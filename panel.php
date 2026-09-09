@@ -1258,7 +1258,7 @@ if (isset($_SESSION['nombre'])) {
                                             </div>
                                                 
                                             <!-- Emisiones de gases -->
-                                         <div class="col-md-4">
+                                         <div class="col-md-4" v-if="['Electricidad', 'Gasolina', 'Gas natural', 'Diésel'].includes(entradas_salidas)">
                                                     <div class="alert alert-light border-secondary py-2 mb-3">
                                                     🌱 <strong>Emisiones atmosféricas</strong>
                                                         <small class="d-block text-muted">
