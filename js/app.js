@@ -2890,178 +2890,194 @@ sumaTotalPersonalizada() {
         console.log("Error en consultaImpactosAmbientalesConDatos: " + error)
       })
     },
-    consultaProyectoIDActualizar(id) {
-      axios.post('proyectosController.php', {
-        id_proyecto: id //ID PROYECTO
-      }).then(response => {
+    async consultaProyectoIDActualizar(id) {
+      try {
+        const response = await axios.post('proyectosController.php', {
+          id_proyecto: id 
+        });
 
-        console.log("RESPUESTA CONSULTA PROYECTO",response.data[0])
-        //
+        console.log("RESPUESTA CONSULTA PROYECTO", response.data[0]);
+
         if (typeof response.data[0][4] === 'object' && !Array.isArray(response.data[0][4]) && response.data[0][4] !== null) {
-         this.selectFuente = response.data[0][4].id +'<->'+ response.data[0][4].nombre+'<->'+response.data[0][4].siglas
-        } else {
-          console.log("No es un objeto fuente");
+          this.selectFuente = response.data[0][4].id + '<->' + response.data[0][4].nombre + '<->' + response.data[0][4].siglas;
         }
         if (typeof response.data[0][6] === 'object' && !Array.isArray(response.data[0][6]) && response.data[0][6] !== null) {
-          this.selectPlanta = response.data[0][6].id +'<->'+ response.data[0][6].nombre+'<->'+response.data[0][6].siglas
-         } else {
-           console.log("No es un objeto planta");
-         }
-         if (typeof response.data[0][8] === 'object' && !Array.isArray(response.data[0][8]) && response.data[0][8] !== null) {
-          this.selectArea = response.data[0][8].id +'<->'+ response.data[0][8].nombre+'<->'+response.data[0][8].siglas
-         } else {
-           console.log("No es un objeto area");
-         }
-         if (typeof response.data[0][10] === 'object' && !Array.isArray(response.data[0][10]) && response.data[0][10] !== null) {
-          this.selectDepartamento = response.data[0][10].id +'<->'+ response.data[0][10].nombre+'<->'+response.data[0][10].siglas
-         } else {
-           console.log("No es un objeto departamento");
-         }
-         if (typeof response.data[0][12] === 'object' && !Array.isArray(response.data[0][12]) && response.data[0][12] !== null) {
-          this.selectMetodologia = response.data[0][12].id +'<->'+ response.data[0][12].nombre
-         } else {
-           console.log("No es un objeto metodologia");
-         }
-         if (typeof response.data[0][14] === 'object' && !Array.isArray(response.data[0][14]) && response.data[0][14] !== null) {
-          this.selectResponsable = response.data[0][14].id +'<->'+ response.data[0][14].nombre
-         } else {
-           console.log("No es un objeto responsable");
-         }
+          this.selectPlanta = response.data[0][6].id + '<->' + response.data[0][6].nombre + '<->' + response.data[0][6].siglas;
+        }
+        if (typeof response.data[0][8] === 'object' && !Array.isArray(response.data[0][8]) && response.data[0][8] !== null) {
+          this.selectArea = response.data[0][8].id + '<->' + response.data[0][8].nombre + '<->' + response.data[0][8].siglas;
+        }
+        if (typeof response.data[0][10] === 'object' && !Array.isArray(response.data[0][10]) && response.data[0][10] !== null) {
+          this.selectDepartamento = response.data[0][10].id + '<->' + response.data[0][10].nombre + '<->' + response.data[0][10].siglas;
+        }
+        if (typeof response.data[0][12] === 'object' && !Array.isArray(response.data[0][12]) && response.data[0][12] !== null) {
+          this.selectMetodologia = response.data[0][12].id + '<->' + response.data[0][12].nombre;
+        }
+        if (typeof response.data[0][14] === 'object' && !Array.isArray(response.data[0][14]) && response.data[0][14] !== null) {
+          this.selectResponsable = response.data[0][14].id + '<->' + response.data[0][14].nombre;
+        }
 
-         if (Array.isArray(response.data[0][19]) && response.data[0][19] !== null) {
+        if (Array.isArray(response.data[0][19]) && response.data[0][19] !== null) {
+          this.checkObservadores = [];
           for (let index = 0; index < response.data[0][19].length; index++) {
-            if(response.data[0][19][index].nombre !=='Pte'){
-              this.checkObservadores.push(response.data[0][19][index].nombre +'<->'+ response.data[0][19][index].numero_nomina)
+            if (response.data[0][19][index].nombre !== 'Pte') {
+              this.checkObservadores.push(response.data[0][19][index].nombre + '<->' + response.data[0][19][index].numero_nomina);
             }
           }
-          
-         } else {
-           console.log("No es un objeto observador");
-         }
-
-        
-
-         /*if (
-          Array.isArray(response.data[0][19]) &&
-          response.data[0][19].length > 0
-        ) {
-          this.checkObservadores = response.data[0][19]
-            .filter(obs => typeof obs === 'object' && obs !== null)
-            .map(obs => {
-              const nombre = obs.nombre || "Sin nombre";
-              const nomina = obs.numero_nomina || "Sin nómina";
-              return `${nombre}<->${nomina}`;
-            })
-            .join(', ');
-        } else {
-          console.warn("No hay observadores válidos en el arreglo");
-        }*/
-        
-         
-         /*if (
-          Array.isArray(response.data[0][19]) &&
-          response.data[0][19] !== null &&
-          typeof response.data[0][19][0] === 'object' &&
-          response.data[0][19][0] !== null
-        ) {
-          const observador = response.data[0][19][0];
-        
-          // Verifica que existan las propiedades antes de usarlas
-          const nombre = observador.nombre || "Sin nombre";
-          const nomina = observador.numero_nomina || "Sin nómina";
-        
-          this.checkObservadores = `${nombre}<->${nomina}`;
-        } else {
-          console.warn("No es un objeto observador válido o está vacío");
-        }*/
-        
-         
-         /*if (Array.isArray(response.data[0][19]) && response.data[0][19] !== null) {
-          this.checkObservadores = response.data[0][19][0].nombre +'<->'+ response.data[0][19][0].numero_nomina
-         } else {
-           console.log("No es un objeto observador");
-         }*/
-
-         //console.log()
-
-         //this.responsablesArreglo=["Hector Lara Ponce+'<->'+66199"]
-
-        /*if(response.data[0][4].length>0){
-          console.log("Si es un arreglo")
-        }else{
-          console.log("No es un arreglo")
-        }*/
+        }
 
         if (response.data[0][1] == true) {
-          this.idsCheckImpacto = []
-          this.checkImpactoAmbiental = []
-          let impactosAmbientaslesBD = this.impactoAmbiental
+          this.idsCheckImpacto = [];
+          this.checkImpactoAmbiental = [];
+          let impactosAmbientaslesBD = this.impactoAmbiental;
 
-          let proyecto = response.data[0][0][0]
-          console.log("pROYECTO: ",proyecto);
+          let proyecto = response.data[0][0][0];
+          console.log("PROYECTO RECUPERADO: ", proyecto);
 
-          //console.log('Proyecto encontradi ID', proyecto.fecha, 'Fecha', proyecto.fecha.replace(/-/g, "/"))
-          
-          //this.fecha_alta=proyecto.fecha.replace(/-/g, "/")
-          
-          //console.log("Change", proyecto.fecha.split("-").join("/"))
-          //console.log("hey",proyecto.fecha);
-          
           let separando = proyecto.fecha.split("-");
-          console.log("Separando",separando);
-          ordenado = separando[2]+"-"+separando[1]+"-"+separando[0]
-          console.log("Ordenado",ordenado);
-          this.fecha_alta=ordenado
+          let ordenado = separando[2] + "-" + separando[1] + "-" + separando[0];
+          this.fecha_alta = ordenado;
           this.fechaAltaProyecto = separando;
+          this.nombre_proyecto = proyecto.nombre_proyecto;
+          this.valoresCheck = proyecto.valores ? JSON.parse(proyecto.valores) : [];
 
-          this.nombre_proyecto=proyecto.nombre_proyecto
+          let impacto_ambientales = proyecto.impacto_ambiental ? JSON.parse(proyecto.impacto_ambiental) : [];
+          let impacto_ambiental = impacto_ambientales.map(impactos => impactos.split('->')[0]);
 
+          if (!impacto_ambientales.some(sinImpacto => sinImpacto == "Sin Impacto")) {
+            let impactos_con_id = impacto_ambiental.flatMap(impactos => {
+              return impactosAmbientaslesBD.filter(elementos => elementos.nombre == impactos);
+            });
 
-          let checkImpacto = this.checkImpactoAmbiental
-          let valores = JSON.parse(proyecto.valores)
-          this.valoresCheck = valores //asignando los valores checkeados
+            let checkImpacto = impactos_con_id.map(impacto => impacto.id + '<->' + impacto.nombre);
+            this.idsCheckImpacto = checkImpacto.map(impactoids => impactoids.split('<->')[0]);
+            this.checkImpactoAmbiental = checkImpacto;
 
-          impacto_ambientales = JSON.parse(proyecto.impacto_ambiental)//conviertiendo a arreglo impacto y alcance (si es que tiene)
-          impacto_ambiental = impacto_ambientales.map(impactos => impactos.split('->')[0]) //si existe alcance solo tomar el impacto
-
-
-          if (!impacto_ambientales.some(sinImpacto => sinImpacto == "Sin Impacto")) {// Si no hay impacto no hacer nada
-            console.log("Ejecutando")
-            impactos_con_id = impacto_ambiental.flatMap(impactos => {//busco los impactos para encontrar su id
-              return impactosAmbientaslesBD.find(elementos => elementos.nombre == impactos);
-            })
-
-            checkImpacto = impactos_con_id.map(impacto => impacto.id + '<->' + impacto.nombre)//para que se checkend
-            this.idsCheckImpacto = checkImpacto.map(impactoids => impactoids.split('<->')[0])//asigno los ids
-            this.checkImpactoAmbiental = checkImpacto
-
-            let resultado = []
+            let resultado = [];
             impactosAmbientaslesBD.forEach((elementos, index) => {
-              resultado[index] = ""
-              if (impacto_ambientales.some(impactoProyecto => impactoProyecto.split('->')[1]) && impacto_ambientales.some(impactoProyecto => impactoProyecto.split('->')[0] == elementos.nombre)) {
-                resultado[index] = elementos.id + "<->" + elementos.nombre + "->" + impacto_ambientales.filter(impactoProyecto => impactoProyecto.split('->')[0] == elementos.nombre).map(imp => imp.split('->')[1]);
+              resultado[index] = "";
+              if (impacto_ambientales.some(imp => imp.split('->')[1]) && impacto_ambientales.some(imp => imp.split('->')[0] == elementos.nombre)) {
+                resultado[index] = elementos.id + "<->" + elementos.nombre + "->" + impacto_ambientales.filter(imp => imp.split('->')[0] == elementos.nombre).map(imp => imp.split('->')[1]);
               }
-            })
+            });
 
-            if (impacto_ambientales.some(verificando => verificando.split('->')[1])) {//solo verifico que exista minimo un impacto ambietal con "->"
+            if (impacto_ambientales.some(verificando => verificando.split('->')[1])) {
               this.selectEmisiones = resultado;
             }
           }
-          
-          let mesProyecto = parseInt(this.fechaAltaProyecto[1])
-          let anioProyecto = parseInt(this.fechaAltaProyecto[2])
-          if(mesProyecto >= 7 && anioProyecto >= 2025 && this.hayDatos==false){
-                this.calculandoMesesDesdeFechaCredaEnProyecto()
+
+          let mesProyecto = parseInt(this.fechaAltaProyecto[1]);
+          let anioProyecto = parseInt(this.fechaAltaProyecto[2]);
+          if (mesProyecto >= 7 && anioProyecto >= 2025 && this.hayDatos == false) {
+            this.calculandoMesesDesdeFechaCredaEnProyecto();
           }
-          
-          this.presupuestado = (proyecto.presupuestado === 'Presupuestado')//si proyecto.presupuestado es diferente a 'Presupuestodo', this.presupuetsado sera false y se desactivará switch
-          this.colorPresupuestado = this.presupuestado
+
+          this.presupuestado = (proyecto.presupuestado === 'Presupuestado');
+          this.colorPresupuestado = this.presupuestado;
+
+          const limpiarCadena = (str) => {
+            if (!str) return '';
+            return str.toString().replace(/["'()]/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
+          };
+
+          const parsearSeguro = (campo) => {
+            if (!campo) return [];
+            if (Array.isArray(campo)) return campo;
+            try {
+              let p = JSON.parse(campo);
+              return Array.isArray(p) ? p : [p];
+            } catch (e) {
+              return [campo];
+            }
+          };
+
+          let savedMisiones = parsearSeguro(proyecto.misiones);
+          let savedPilares = parsearSeguro(proyecto.pilares);
+          let savedObjetivos = parsearSeguro(proyecto.objetivos);
+
+          // 1. Garantizar que las misiones existan
+          if (this.misiones.length === 0) {
+            const resMisiones = await axios.get('misionesController.php');
+            if (resMisiones.data && resMisiones.data[0] && resMisiones.data[0][0]) {
+              this.misiones = resMisiones.data[0][0];
+            }
+          }
+
+          this.checkMisiones = [];
+          this.misiones.forEach(m => {
+            let coincide = savedMisiones.some(sm => limpiarCadena(sm) === limpiarCadena(m.nombre) || limpiarCadena(sm).includes(limpiarCadena(m.nombre)));
+            if (!coincide && savedMisiones.length === 0 && this.misiones.length > 0) {
+              coincide = true;
+            }
+            if (coincide) {
+              this.checkMisiones.push(m.id + '<->' + m.nombre);
+            }
+          });
+
+          if (this.checkMisiones.length > 0) {
+            let misiones_ids = this.checkMisiones.map(m => m.split('<->')[0]);
+
+            const resPilares = await axios.post('pilaresController.php', {
+              idsMisiones: misiones_ids
+            });
+
+            if (resPilares.data && resPilares.data[0] && resPilares.data[0][1] == true) {
+              this.pilares = resPilares.data[0][0];
+              this.selectPilar = new Array(this.pilares.length).fill("");
+              this.checkPilares = [];
+              let ids_pilares_detectados = [];
+
+              this.pilares.forEach((pilar, index) => {
+                let coincidePilar = savedPilares.some(sp => {
+                  let sLim = limpiarCadena(sp);
+                  return sLim.includes(limpiarCadena(pilar.nombre)) || (pilar.siglas && sLim.includes(limpiarCadena(pilar.siglas)));
+                });
+
+                if (coincidePilar) {
+                  let valorCheckPilar = pilar.id + '<->' + pilar.nombre + '<->' + pilar.siglas + '<->' + (index + 1);
+                  this.checkPilares.push(valorCheckPilar);
+                  ids_pilares_detectados.push(pilar.id);
+                }
+              });
+
+              this.idsPilares = ids_pilares_detectados;
+
+              if (this.checkPilares.length > 0) {
+                const resObjetivos = await axios.post('objetivosController.php', {
+                  idsPilares: this.idsPilares
+                });
+
+                if (resObjetivos.data && resObjetivos.data[0] && resObjetivos.data[0][1] == true) {
+                  this.objetivos = resObjetivos.data[0][0];
+                  this.selectObjetivo = new Array(this.objetivos.length).fill("");
+                  this.checkObjetivos = [];
+                  this.idsObjetivos = [];
+
+                  this.objetivos.forEach((obj, index) => {
+                    let objGuardado = savedObjetivos.find(so => {
+                      let sLim = limpiarCadena(so);
+                      return sLim.includes(limpiarCadena(obj.nombre));
+                    });
+
+                    if (objGuardado) {
+                      let valorCheckObj = obj.id + '<->' + obj.nombre + '<->' + obj.id_pilares + '<->' + obj.siglas + '<->' + (index + 1);
+                      this.checkObjetivos.push(valorCheckObj);
+                      this.idsObjetivos.push(obj.id);
+
+                      let esDirecto = objGuardado.toLowerCase().includes('directo');
+                      this.selectObjetivo[index] = esDirecto ? 'directo' : 'indirecto';
+                    }
+                  });
+                }
+              }
+            }
+          }
         } else {
-          alert("La consulta de proyectos no se realizo correctamente.")
+          alert("La consulta de proyectos no se realizó correctamente.");
         }
-      }).catch(error => {
-        console.log('Error consultaProyectoIDActualizar :-(' + error)
-      });
+      } catch (error) {
+        console.log('Error consultaProyectoIDActualizar :-(' + error);
+      }
     },
     verificarImpacto(impacto) {
       let impactosConDatos = this.impactosConDatos;
