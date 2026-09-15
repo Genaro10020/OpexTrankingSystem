@@ -18,35 +18,20 @@ switch ($_SERVER['REQUEST_METHOD']) {
             $impactos = $_GET['impactos'];
             $val = buscarCoincidenciadeNombreImpactosAmbientales($impactos);//buscarImpactoAmbientalPorNombre($nombre);
 
-        }else{
+        }else if(isset($_GET['accion']) && $_GET['accion'] =='consultarImpactoAmbiental'){
             $val[] = consultarImpactoAmbiental();
+        }else if(isset($_GET['accion']) && $_GET['accion'] =='consultarImpactoAmbientalSSyMA'){
+            $val[] = consultarImpactoAmbientalSSyMA();
         }
             
         break;
     case 'POST':
         // Manejar solicitud POST (creación)
-        if(isset($arreglo['aspecto']) && isset($arreglo['unidad']) && isset($arreglo['clasificacion']) && isset($arreglo['ciclo']) && isset($arreglo['io'])
-            && isset($arreglo['impacto']) && isset($arreglo['requisito']) && isset($arreglo['alcance']) && isset($arreglo['CO2']) && isset($arreglo['CH4']) 
-            && isset($arreglo['NO2']) && isset($arreglo['CO2CO2e']) && isset($arreglo['CH4CO2e']) && isset($arreglo['N2OCO2e']) && isset($arreglo['material'])){
-
-            $aspecto = $arreglo['aspecto'];
-            $unidad = $arreglo['unidad'];
-            $clasificacion = $arreglo['clasificacion'];
-            $ciclo = $arreglo['ciclo'];
-            $io = $arreglo['io'];
-            $impacto = $arreglo['impacto']; 
-            $requisito = $arreglo['requisito'];
-            $alcance = $arreglo['alcance'];
-            $CO2 = $arreglo['CO2'];
-            $CH4 = $arreglo['CH4'];
-            $NO2 = $arreglo['NO2'];
-            $CO2CO2e = $arreglo['CO2CO2e'];
-            $CH4CO2e = $arreglo['CH4CO2e'];
-            $N2OCO2e = $arreglo['N2OCO2e'];
-            $material = $arreglo['material'];
-
-            $val [] = insertarImpactoAmbiental($aspecto,$unidad,$clasificacion,$ciclo,$io,$impacto,$requisito,
-            $alcance,$CO2,$CH4,$NO2,$CO2CO2e,$CH4CO2e,$N2OCO2e,$material);     
+        if(isset($arreglo['nueva']) && isset($arreglo['siglas'])){
+            $nueva = $arreglo['nueva'];
+            $siglas = $arreglo['siglas'];
+            $val[] = insertarImpactoAmbiental($nueva, $siglas);
+              
         }else if(isset($arreglo['suma'])){
             $val[] = sumaImpactoAmbiental();
         }else{
@@ -57,29 +42,13 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
     case 'PUT':
         // Manejar solicitud PUT (actualización)
-            if(isset($arreglo['id']) && isset($arreglo['aspecto']) && isset($arreglo['unidad']) && isset($arreglo['clasificacion']) && isset($arreglo['ciclo']) 
-                && isset($arreglo['io']) && isset($arreglo['impacto']) && isset($arreglo['requisito']) && isset($arreglo['alcance']) && isset($arreglo['CO2']) 
-                && isset($arreglo['CH4']) && isset($arreglo['NO2']) && isset($arreglo['CO2CO2e']) && isset($arreglo['CH4CO2e']) && isset($arreglo['N2OCO2e']) && isset($arreglo['material'])){
+            if(isset($arreglo['id']) && isset($arreglo['nueva']) && isset($arreglo['siglas'])){
 
                 $id=$arreglo['id'];
-                $aspecto = $arreglo['aspecto'];
-                $unidad = $arreglo['unidad'];
-                $clasificacion = $arreglo['clasificacion'];
-                $ciclo = $arreglo['ciclo'];
-                $io = $arreglo['io'];
-                $impacto = $arreglo['impacto']; 
-                $requisito = $arreglo['requisito'];
-                $alcance = $arreglo['alcance'];
-                $CO2 = $arreglo['CO2'];
-                $CH4 = $arreglo['CH4'];
-                $NO2 = $arreglo['NO2'];
-                $CO2CO2e = $arreglo['CO2CO2e'];
-                $CH4CO2e = $arreglo['CH4CO2e'];
-                $N2OCO2e = $arreglo['N2OCO2e'];
-                $material = $arreglo['material'];
-
-                $val[]=actualizarImpactoAmbiental($id,$aspecto,$unidad,$clasificacion,$ciclo,$io,$impacto,$requisito,
-                $alcance,$CO2,$CH4,$NO2,$CO2CO2e,$CH4CO2e,$N2OCO2e,$material);
+                $nueva = $arreglo['nueva'];
+                $siglas = $arreglo['siglas'];
+    
+                $val[]=actualizarImpactoAmbiental($id,$nueva,$siglas);
             }else{
                 $val[] = "No existe variable ID o Nuevo";
             }

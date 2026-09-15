@@ -21,7 +21,7 @@ if (isset($_SESSION['nombre'])) {
                 <!--Bóton-->
                 <div class="text-center">
                     <?php if ($_SESSION['acceso'] == 'Admin') { ?>
-                        <button class="btn-menu " @click="verificarSesion(), ventana='Crear',opcion=1,consultarMisionesRelacional(),consultarObjetivosRelacional(),consultarMisiones(),consultarImpactoAmbientalConDocumentos(),consultarEstandaresCO2(),consultarFuentes(),mostrarHeader=true,sumarSoloUnaVez=0"
+                        <button class="btn-menu " @click="verificarSesion(), ventana='Crear',opcion=1,consultarMisionesRelacional(),consultarObjetivosRelacional(),consultarMisiones(),consultarEstandaresCO2(),consultarFuentes(),mostrarHeader=true,sumarSoloUnaVez=0"
                             :class="{'btn-menu-activo': opcion===1,'btn-menu': opcion !== 1}"><!--buscarDocumentos('Documento CO2')--> <!-- sumaImpactoAmbiental() -->
                             <i class="bi bi-plus-circle"></i> Crear Catálogos
                         </button>
@@ -224,8 +224,6 @@ if (isset($_SESSION['nombre'])) {
                                                 </div>
                                             </div>
 
-
-
                                             <!--Misiones-->
 
                                             <div class="input-group mb-3 mt-3 ">
@@ -302,12 +300,12 @@ if (isset($_SESSION['nombre'])) {
                                             <!--Impacto Ambiental-->
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-25 text-start">Impacto <br>Ambiental<br><label class=""><i class="bi bi-question-circle"></label></i></span>
-                                                
-                                                <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkImpactoAmbiental.length<=0 || respondio === false && checkImpactoAmbiental.length>0 && checkImpactoAmbiental.filter(elemento => elemento !='').length != selectEmisiones.filter(elemento => elemento !='').length, '': checkImpactoAmbiental.length>0}">
+                                                <div class="div-mision-pilares-impacto scroll" :class="{'nocontestado': respondio === false && checkImpactoAmbiental.length<=0 || respondio === false && checkImpactoAmbiental.length>0 && checkImpactoAmbiental.filter(elemento => elemento !='').length != selectEmisiones.filter(elemento => elemento !='').length, '': checkImpactoAmbiental.length>0}">
+                                                  
                                                     <div v-for="(impacto,index) in impactoAmbiental" class="form-check border border-1  mt-1">
                                                         <input class="form-check-input" type="checkbox" id="checkbox1" v-model="checkImpactoAmbiental" :value="impacto.id+'<->'+impacto.nombre" @change="checkeandoImpactoAmbiental(impacto.id,impacto.nombre)" :disabled="verificarImpacto(impacto.id+'<->'+impacto.nombre)" />
                                                         <label class="form-check-label w-75" for="checkbox1">
-                                                            {{impacto.nombre}}
+                                                          {{impacto.nombre}}<!--Pendiente definir como mostralo-->
                                                         </label>
                                                         <label class="w-25" v-if="idsCheckImpacto.includes(impacto.id) && checkImpactoAmbiental.length>0">
                                                             <select v-model="selectEmisiones[index]" class="w-100">
@@ -319,7 +317,12 @@ if (isset($_SESSION['nombre'])) {
                                                         </label>
                                                     </div>
                                                 </div>
-                                                <div v-if="checkImpactoAmbiental.length>0" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
+                                                <div v-show="actualizar_proyecto==false" class="my-auto">
+                                                    <div class="col-12"><button class="btn-anadir" title="Crear" @click="abrirModal('CRUD','Impacto Ambiental','Crear')"><i class="bi bi-plus-circle"></i></button></div>
+                                                    <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Impacto Ambiental','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
+                                                    <div class="col-12"><button class="btn-delete" title="Eliminar" @click="eliminarImpactoAmbiental()"><i class="bi bi-x-circle"></i></button></div>
+                                                </div>
+                                                <div v-if="checkImpactoAmbiental.length>0" class="text-center my-auto ms-2"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
 
                                             <!--Valores Gonher-->
@@ -634,7 +637,28 @@ if (isset($_SESSION['nombre'])) {
                                             <input type="text" v-model="nuevoNombre" class="w-50">
                                         </div>
                                     </div>
-                                    <!--OBJETIVOS-->
+                                      <!--CRUD Impacto Ambiental Crear-->
+                                    <div v-if="tipo=='Impacto Ambiental' && accion=='Crear'">
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text w-50">Nombre:</span>
+                                            <input type="text" v-model="nueva" class="w-50">
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text w-50">U.M.:</span>
+                                            <input type="text" v-model="siglas" class="w-50">
+                                        </div>
+                                    </div>
+                                     <!--CRUD Impacto Ambiental Actualizar-->
+                                    <div v-if="tipo=='Impacto Ambiental' && accion=='Actualizar'">
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text w-50">Nombre:</span>
+                                            <input type="text" v-model="nuevoNombre" class="w-50">
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text w-50">U.M.:</span>
+                                            <input type="text" v-model="siglas" class="w-50">
+                                        </div>
+                                    </div>
                                     <!--CRUD Objetivo Crear-->
                                     <div v-if="tipo=='Objetivo' && accion=='Crear'">
                                         <div class="input-group mb-3">
@@ -719,6 +743,7 @@ if (isset($_SESSION['nombre'])) {
                                     <button type="button" class="boton-aceptar" v-if="tipo=='Metodología' && accion=='Crear'" @click="insertarMetodologia()">Crear</button>
                                     <button type="button" class="boton-aceptar" v-if="tipo=='Objetivo' && accion=='Crear'" @click="insertarObjetivo()">Crear</button>
                                     <button type="button" class="boton-aceptar" v-if="tipo=='Pilar' && accion=='Crear'" @click="insertarPilar()">Crear</button>
+                                    <button type="button" class="boton-aceptar" v-if="tipo=='Impacto Ambiental' && accion=='Crear'" @click="insertarImpactoAmbiental()">Crear</button>
                                     <!--botones actualizar-->
                                     <button type="button" class="boton-actualizar" v-if="tipo=='Planta' && accion=='Actualizar'" @click="actualizarPlanta()">Actualizar</button>
                                     <button type="button" class="boton-actualizar" v-if="tipo=='Área' && accion=='Actualizar'" @click="actualizarArea()">Actualizar</button>
@@ -726,6 +751,7 @@ if (isset($_SESSION['nombre'])) {
                                     <button type="button" class="boton-actualizar" v-if="tipo=='Metodología' && accion=='Actualizar'" @click="actualizarMetodologia()">Actualizar</button>
                                     <button type="button" class="boton-actualizar" v-if="tipo=='Objetivo' && accion=='Actualizar'" @click="actualizarObjetivo()">Actualizar</button>
                                     <button type="button" class="boton-actualizar" v-if="tipo=='Pilar' && accion=='Actualizar'" @click="actualizarPilares()">Actualizar</button>
+                                    <button type="button" class="boton-actualizar" v-if="tipo=='Impacto Ambiental' && accion=='Actualizar'" @click="actualizarImpactoAmbiental()">Actualizar</button>
                                 </div>
                             </div>
                         </div>
@@ -738,108 +764,694 @@ if (isset($_SESSION['nombre'])) {
             </div>
 
                 <!-- MODAL IMPACTOS AMBIENTALES -->
-                 <div class="modal fade" id="modalAspectosSyma" tabindex="-1">
+                 <div class="modal fade" id="modalAspectosSyma" tabindex="-1"  data-bs-backdrop="static" data-bs-keyboard="false">
                         <div class="modal-dialog modal-dialog-centered modal-xl">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h6 class="modal-title fw-bold" id="exampleModalLabel"><h3>{{ isEditMode ? 'Editar' : 'Crear' }} Aspecto Ambiental</h3> <b>  </b></h6>
+                                    <h6 class="modal-title fw-bold" id="exampleModalLabel"><h4>{{ isEditMode ? 'Editar' : 'Crear' }} Aspecto e Impacto Ambiental</h4> <b>  </b></h6>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form @submit.prevent="isEditMode ? actualizarImpactoAmbiental() : insertarImpactoAmbiental()" id="modal-form"><!-- Modifica el submit, ahora llamaras al metodo instertarImpactoAmbiental --> 
+                                    <form @submit.prevent="isEditMode ? actualizarImpactoAmbientalSSyMA() : insertarImpactoAmbientalCatalogoSSyMA()" id="modal-form"><!-- Modifica el submit, ahora llamaras al metodo instertarImpactoAmbiental --> 
                                         <div class= "row">
-                                            <div class="col-md-6">
-                                                <!-- Fila de Ciclo de Vida -->
-                                                <div class="form-group">
-                                                    <label for="ciclo-vida">Ciclo de Vida</label>
-                                                    <input v-model="ciclo" class="form-control form-control-sm"  type="text" id="ciclo-vida" name="ciclo-vida" placeholder="" required>
+                                            <div class="col-md-8">
+                                               <!-- Ciclo de Vida -->
+                                                <div class="form-group mb-3">
+                                                   <label for="ciclo-vida" class="form-label fw-bold mb-1">
+                                                        Ciclo de Vida
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <div class="position-relative">
+                                                        <input
+                                                            type="text"
+                                                            id="ciclo-vida"
+                                                            class="form-control form-control-sm pe-4"
+                                                            :style="{
+                                                                borderColor: isEditMode && ciclo ? '#d77914' : (!isEditMode && ciclo ? '#198754' : '')
+                                                            }"
+                                                            list="lista-ciclos"
+                                                            v-model.trim="ciclo"
+                                                            :placeholder="isEditMode
+                                                                ? 'Modifique el ciclo'
+                                                                : ''"
+                                                            autocomplete="off"
+                                                            required>
+                                                        <!-- Indicador -->
+                                                        <span
+                                                            v-if="ciclo"
+                                                            class="position-absolute top-50 end-0 translate-middle-y me-2 fw-bold"
+                                                            :class="isEditMode ? 'text-warning' : 'text-success'">
+                                                            {{ isEditMode ? '🟡' : '🟢' }}
+                                                        </span>
+
+                                                    </div>
+
+                                                    <datalist id="lista-ciclos">
+                                                        <option
+                                                            v-for="item in ciclos"
+                                                            :key="item"
+                                                            :value="item">
+                                                        </option>
+                                                    </datalist>
+
+                                                    <small
+                                                    class="fst-italic"
+                                                       :style="{ color: isEditMode ? '#d77914' : '#198754' }"
+                                                    >
+                                                        {{
+                                                            isEditMode
+                                                                ? 'Está editando un ciclo existente.'
+                                                                : 'Escriba para buscar o crear un nuevo registro.'
+                                                        }}
+                                                    </small>
+
                                                 </div>
 
-                                                <!-- Fila de Material -->
-                                                <div class="form-group">
-                                                    <label for="ciclo-vida">Materiales de Entradas / Salidas</label>
-                                                    <input v-model="material" class="form-control form-control-sm"  type="text" id="material" name="material" placeholder="" required>
+                                               
+                                              <!-- Entrada (E) / Salida (S) -->
+                                            <div class="form-group mb-3">
+                                                <label for="entrada-salida" class="form-label fw-bold mb-1">
+                                                    Entrada (E) / Salida (S) <span class="text-danger">*</span>
+                                                </label>
+                                                <div class="position-relative">
+
+                                                    <input
+                                                        type="text"
+                                                        id="entrada-salida"
+                                                        class="form-control form-control-sm pe-4"
+                                                        :style="{
+                                                                borderColor: isEditMode && ciclo ? '#d77914' : (!isEditMode && ciclo ? '#198754' : '')
+                                                            }"
+                                                        list="lista-es"
+                                                        v-model.trim="e_s"
+                                                        :placeholder="isEditMode
+                                                            ? 'Modifique la entrada o salida'
+                                                            : ''"
+                                                        autocomplete="off">
+                                                    <!-- Indicador -->
+                                                    <span
+                                                        v-if="e_s"
+                                                        class="position-absolute top-50 end-0 translate-middle-y me-2 fw-bold"
+                                                        :class="isEditMode ? 'text-warning' : 'text-success'">
+                                                        {{ isEditMode ? '🟡' : '🟢' }}
+                                                    </span>
                                                 </div>
 
-                                                <!-- Fila de I/O -->
-                                                <div class="form-group">
-                                                    <label for="i/o">I/O</label>
-                                                    <input v-model="io" class="form-control form-control-sm" type="text" id="i/o" name="i/o" placeholder="" required>
+                                                <datalist id="lista-es">
+                                                    <option
+                                                        v-for="item in es"
+                                                        :key="item"
+                                                        :value="item">
+                                                    </option>
+                                                </datalist>
+                                                <small
+                                                    class="fst-italic"
+                                                    :style="{ color: isEditMode ? '#d77914' : '#198754' }">
+                                                    {{
+                                                        isEditMode
+                                                            ? 'Está editando una entrada o salida existente.'
+                                                            : 'Escriba para buscar o crear un nuevo registro.'
+                                                    }}
+                                                </small>
+                                            </div>
+                                                   <!-- U.M. -->
+                                                <div class="form-group mb-3">
+
+                                                <label for="unidad" class="form-label fw-bold mb-1">
+                                                    U.M. <span class="text-danger">*</span>
+                                                </label>
+
+                                                    <div class="position-relative">
+
+                                                        <input
+                                                            type="text"
+                                                            class="form-control form-control-sm pe-4"
+                                                            :style="{
+                                                                'border-color': !isEditMode && unidad ? '#198754' : (isEditMode && unidad ? '#d77914' : '')
+                                                            }"
+                                                            list="lista-unidades"
+                                                            v-model.trim="unidad"
+                                                            :placeholder="isEditMode
+                                                                ? 'Modifique la unidad de medida'
+                                                                : ''"
+                                                            autocomplete="off"
+                                                            required>
+
+                                                        <!-- Indicador -->
+                                                        <span
+                                                            v-if="unidad"
+                                                            class="position-absolute top-50 end-0 translate-middle-y me-2 fw-bold"
+                                                            :class="isEditMode ? 'text-warning' : 'text-success'">
+                                                            {{ isEditMode ? '🟡' : '🟢' }}
+                                                        </span>
+
+                                                    </div>
+
+                                                    <datalist id="lista-unidades">
+                                                        <option
+                                                            v-for="item in unidades"
+                                                            :key="item"
+                                                            :value="item">
+                                                        </option>
+                                                    </datalist>
+
+                                                    <small
+                                                        class="fst-italic"
+                                                        :style="{ color: isEditMode ? '#d77914' : '#198754' }">
+                                                        {{
+                                                            isEditMode
+                                                                ? 'Está editando una unidad de medida existente.'
+                                                                : 'Escriba para buscar o crear un nuevo registro.'
+                                                        }}
+                                                    </small>
+
                                                 </div>
+
+                                               <!-- Clasificación -->
+                                                <div class="form-group mb-3">
+
+                                                    <label
+                                                        for="clasificacion"
+                                                        class="form-label fw-bold mb-1">
+                                                        Clasificación <span class="text-danger">*</span>
+                                                    </label>
+
+                                                    <div class="position-relative">
+                                                        <input
+                                                            type="text"
+                                                            id="clasificacion"
+                                                            class="form-control form-control-sm pe-4"
+                                                            :style="{
+                                                                'border-color': !isEditMode && clasificacion
+                                                                    ? '#198754'
+                                                                    : (isEditMode && clasificacion ? '#d77914' : '')
+                                                            }"
+                                                            list="lista-clasificaciones"
+                                                            v-model.trim="clasificacion"
+                                                            :placeholder="isEditMode
+                                                                ? 'Modifique la clasificación'
+                                                                : ''"
+                                                            autocomplete="off"
+                                                            required>
+
+                                                        <!-- Indicador -->
+                                                        <span
+                                                            v-if="clasificacion"
+                                                            class="position-absolute top-50 end-0 translate-middle-y me-2 fw-bold"
+                                                            :class="isEditMode ? 'text-warning' : 'text-success'">
+                                                            {{ isEditMode ? '🟡' : '🟢' }}
+                                                        </span>
+
+                                                    </div>
+
+                                                    <datalist id="lista-clasificaciones">
+                                                        <option
+                                                            v-for="item in clasificaciones"
+                                                            :key="item"
+                                                            :value="item">
+                                                        </option>
+                                                    </datalist>
+
+                                                    <small
+                                                        class="fst-italic"
+                                                        :style="{ color: isEditMode ? '#d77914' : '#198754' }">
+                                                        {{
+                                                            isEditMode
+                                                                ? 'Está editando una clasificación existente.'
+                                                                : 'Escriba para buscar o crear un nuevo registro.'
+                                                        }}
+                                                    </small>
+                                                </div>    
                                                 
-                                                <!-- Fila de Unidad de Medida -->
-                                                <div class="form-group">
-                                                    <label for="unidad">Unidad de Medida</label>
-                                                    <input v-model="unidad" class="form-control form-control-sm" type="text" id="unidad" name="unidad" placeholder="" required>
+                                                <!-- Entradas / Salidas -->
+                                                    <div class="form-group mb-3">
+                                                        <label for="entradas-salidas" class="form-label fw-bold mb-1">
+                                                            Entradas / Salidas <span class="text-danger">*</span>
+                                                        </label>
+                                                        <div class="position-relative">
+                                                            <input
+                                                                type="text"
+                                                                id="entradas-salidas"
+                                                                class="form-control form-control-sm pe-4"
+                                                                :style="{
+                                                                    'border-color': !isEditMode && entradas_salidas 
+                                                                        ? '#198754' 
+                                                                        : (isEditMode && entradas_salidas ? '#d77914' : '')
+                                                                }"
+                                                                list="lista-entradas"
+                                                                v-model.trim="entradas_salidas"
+                                                                :placeholder="isEditMode
+                                                                    ? 'Modifique la entrada o salida'
+                                                                    : ''"
+                                                                autocomplete="off"
+                                                                required>
+
+                                                            <!-- Indicador -->
+                                                            <span
+                                                                v-if="entradas_salidas"
+                                                                class="position-absolute top-50 end-0 translate-middle-y me-2 fw-bold"
+                                                                :class="isEditMode ? 'text-warning' : 'text-success'">
+                                                                {{ isEditMode ? '🟡' : '🟢' }}
+                                                            </span>
+
+                                                        </div>
+                                                        <datalist id="lista-entradas">
+                                                            <option
+                                                                v-for="item in entradas"
+                                                                :key="item"
+                                                                :value="item">
+                                                            </option>
+                                                        </datalist>
+                                                        <small
+                                                            class="fst-italic"
+                                                            :style="{ color: isEditMode ? '#d77914' : '#198754' }">
+                                                            {{
+                                                                isEditMode
+                                                                    ? 'Está editando una entrada o salida existente.'
+                                                                    : 'Escriba para buscar o crear un nuevo registro.'
+                                                            }}
+                                                        </small>
+                                                    </div>
+
+                                                 <!-- Aspecto Ambiental -->
+                                                <div class="form-group mb-3">
+
+                                                    <label for="aspecto" class="form-label fw-bold mb-1">
+                                                        Aspecto Ambiental <span class="text-danger">*</span>
+                                                    </label>
+
+                                                    <div class="position-relative">
+
+                                                        <input
+                                                            v-model.trim="aspecto"
+                                                            type="text"
+                                                            id="aspecto"
+                                                            class="form-control form-control-sm pe-4"
+                                                            :style="{
+                                                                'border-color': !isEditMode && aspecto
+                                                                    ? '#198754'
+                                                                    : (isEditMode && aspecto ? '#d77914' : '')
+                                                            }"
+                                                            list="lista-aspectos"
+                                                            :placeholder="isEditMode
+                                                                ? 'Modifique el aspecto ambiental'
+                                                                : ''"
+                                                            autocomplete="off"
+                                                            required
+                                                        >
+
+                                                        <!-- Indicador -->
+                                                        <span
+                                                            v-if="aspecto"
+                                                            class="position-absolute top-50 end-0 translate-middle-y me-2 fw-bold"
+                                                            :class="isEditMode ? 'text-warning' : 'text-success'">
+                                                            {{ isEditMode ? '🟡' : '🟢' }}
+                                                        </span>
+
+                                                    </div>
+
+                                                    <datalist id="lista-aspectos">
+                                                        <option
+                                                            v-for="item in nombres"
+                                                            :key="item"
+                                                            :value="item">
+                                                        </option>
+                                                    </datalist>
+
+                                                    <small
+                                                        class="fst-italic"
+                                                        :style="{ color: isEditMode ? '#d77914' : '#198754' }">
+                                                        {{
+                                                            isEditMode
+                                                                ? 'Está editando un aspecto ambiental existente.'
+                                                                : 'Escriba para buscar o crear un nuevo registro.'
+                                                        }}
+                                                    </small>
+
                                                 </div>
 
-                                                <!-- Fila de Clasificación -->
-                                                <div class="form-group">
-                                                    <label for="clasificacion">Clasificación</label>
-                                                    <input v-model="clasificacion" class="form-control form-control-sm" type="text" id="clasificacion" name="clasificacion" placeholder="" required>
+
+                                                <!-- Impacto Ambiental -->
+                                                <div class="form-group mb-3">
+
+                                                    <label for="impacto" class="form-label fw-bold mb-1">
+                                                        Impacto Ambiental <span class="text-danger">*</span>
+                                                    </label>
+
+                                                    <div class="position-relative">
+
+                                                        <input
+                                                            v-model.trim="impacto"
+                                                            type="text"
+                                                            id="impacto"
+                                                            class="form-control form-control-sm pe-4"
+                                                            :style="{
+                                                                'border-color': !isEditMode && impacto
+                                                                    ? '#198754'
+                                                                    : (isEditMode && impacto ? '#d77914' : '')
+                                                            }"
+                                                            list="lista-impactos"
+                                                            :placeholder="isEditMode
+                                                                ? 'Modifique el impacto ambiental'
+                                                                : ''"
+                                                            autocomplete="off"
+                                                            required
+                                                        >
+
+                                                        <!-- Indicador -->
+                                                        <span
+                                                            v-if="impacto"
+                                                            class="position-absolute top-50 end-0 translate-middle-y me-2 fw-bold"
+                                                            :class="isEditMode ? 'text-warning' : 'text-success'">
+                                                            {{ isEditMode ? '🟡' : '🟢' }}
+                                                        </span>
+
+                                                    </div>
+
+                                                    <datalist id="lista-impactos">
+                                                        <option
+                                                            v-for="item in impactos"
+                                                            :key="item"
+                                                            :value="item">
+                                                        </option>
+                                                    </datalist>
+
+                                                    <small
+                                                        class="fst-italic"
+                                                        :style="{ color: isEditMode ? '#d77914' : '#198754' }">
+                                                        {{
+                                                            isEditMode
+                                                                ? 'Está editando un impacto ambiental existente.'
+                                                                : 'Escriba para buscar o crear un nuevo registro.'
+                                                        }}
+                                                    </small>
+
                                                 </div>
 
-                                                <!-- Fila de Aspecto Ambiental -->
-                                                <div class="form-group">
-                                                    <label for="aspecto">Aspecto Ambiental</label>
-                                                    <input v-model="aspecto" class="form-control form-control-sm" type="text" id="aspecto" name="aspecto" placeholder="" required>
-                                                </div>
 
-                                                <!-- Fila de Impacto Ambiental -->
-                                                <div class="form-group">
-                                                    <label for="impacto">Impacto Ambiental</label>
-                                                    <input v-model="impacto" class="form-control form-control-sm" type="text" id="impacto" name="impacto" placeholder="" required>
-                                                </div>
+                                                <!-- Requisito Legal Asociado -->
+                                                    <div class="form-group mb-3 position-relative">
+                                                        <label for="requisito" class="form-label fw-bold mb-1">
+                                                            Requisito Legal Asociado <span class="text-danger">*</span>
+                                                        </label>
+                                                        <div class="position-relative">
+                                                            <textarea
+                                                                v-model="requisito"
+                                                                id="requisito"
+                                                                name="requisito"
+                                                                class="form-control form-control-sm"
+                                                                :style="{
+                                                                    'border-color': !isEditMode && requisito
+                                                                        ? '#198754'
+                                                                        : (isEditMode && requisito ? '#d77914' : '')
+                                                                }"
+                                                                rows="3"
+                                                                required
+                                                                :placeholder="isEditMode
+                                                                    ? 'Modifique el requisito legal asociado'
+                                                                    : ''"
+                                                                autocomplete="off"
+                                                                spellcheck="false"
+                                                                @input="buscarRequisitos"
+                                                                @focus="mostrarListaRequisitos = true"
+                                                                @blur="ocultarLista">
+                                                            </textarea>
+                                                            <!-- Indicador -->
+                                                            <span
+                                                                v-if="requisito"
+                                                                class="position-absolute top-0 end-0 mt-2 me-2 fw-bold"
+                                                                :class="isEditMode ? 'text-warning' : 'text-success'">
+                                                                {{ isEditMode ? '🟡' : '🟢' }}
+                                                            </span>
+                                                        </div>
+                                                        <!-- Lista de sugerencias -->
+                                                        <div
+                                                            v-if="mostrarListaRequisitos && requisitosFiltrados.length"
+                                                            class="list-group position-absolute w-100 shadow"
+                                                            style="z-index: 1000; max-height: 250px; overflow-y: auto;">
+                                                            <button
+                                                                v-for="item in requisitosFiltrados"
+                                                                :key="item"
+                                                                type="button"
+                                                                class="list-group-item list-group-item-action text-start"
+                                                                @click="seleccionarRequisito(item)">
+                                                                {{ item }}
+                                                            </button>
+                                                        </div>
+                                                        <small
+                                                            class="fst-italic"
+                                                            :style="{ color: isEditMode ? '#d77914' : '#198754' }">
+                                                            {{
+                                                                isEditMode
+                                                                    ? 'Está editando un requisito legal existente.'
+                                                                    : 'Escriba para buscar un requisito existente o crear uno nuevo.'
+                                                            }}
+                                                        </small>
+                                                    </div>  
 
-                                                <!-- Fila de Requisito legal -->
-                                                <div class="form-group">
-                                                    <label for="requisito">Requisito Legal Asociado</label>
-                                                    <input v-model="requisito" class="form-control form-control-sm" type="text" id="requisito" name="requisito" placeholder="" required>
-                                                </div>
+                                               <!-- Alcance -->
+                                                <div class="form-group mb-3">
 
-                                                <!-- Fila de Alcance -->
-                                                <div class="form-group">
-                                                    <label for="alcance">Alcance</label>
-                                                    <input v-model="alcance" class="form-control form-control-sm" type="number" max = "3" min="1" id="alcance" name="alcance" placeholder="" required>
+                                                    <label for="alcance" class="form-label fw-bold mb-1">
+                                                        Alcance <span class="text-danger">*</span>
+                                                    </label>
+
+                                                    <div class="position-relative">
+
+                                                        <input
+                                                            v-model="alcance"
+                                                            class="form-control form-control-sm pe-4"
+                                                            :style="{
+                                                                'border-color': !isEditMode && alcance
+                                                                    ? '#198754'
+                                                                    : (isEditMode && alcance ? '#d77914' : '')
+                                                            }"
+                                                            type="number"
+                                                            max="3"
+                                                            min="1"
+                                                            id="alcance"
+                                                            name="alcance"
+                                                            placeholder=""
+                                                            required>
+
+                                                        <!-- Indicador -->
+                                                        <span
+                                                            v-if="alcance"
+                                                            class="position-absolute top-50 end-0 translate-middle-y me-1"
+                                                            :class="isEditMode ? 'text-warning' : 'text-success'">
+                                                            {{ isEditMode ? '🟡' : '🟢' }}
+                                                        </span>
+
+                                                    </div>
+
+                                                    <small
+                                                        class="fst-italic"
+                                                        :style="{ color: isEditMode ? '#d77914' : '#198754' }">
+                                                        {{
+                                                            isEditMode
+                                                                ? 'Está editando el alcance del registro.'
+                                                                : 'Ingrese un alcance válido entre 1 y 3.'
+                                                        }}
+                                                    </small>
+
                                                 </div>
                                             </div>
                                                 
-                                            <div class= "col-md-6">
-                                                <!-- Fila de CO2 (toneladas) -->
-                                                <div class="form-group">
-                                                    <label for="co2">CO2 (t)</label>
-                                                    <input v-model="CO2" class="form-control form-control-sm" type="number" id="co2" name="co2" step="0.0001" placeholder="Ej: 1.33">
-                                                </div>
-                                                <!-- Fila de CH4 (toneladas) -->
-                                                <div class="form-group">
-                                                    <label for="ch4">CH4 (t)</label>
-                                                    <input v-model="CH4" class="form-control form-control-sm" type="number" id="ch4" name="ch4" step="0.0001" placeholder="Ej: 2.52">
-                                                </div>
+                                            <!-- Emisiones de gases -->
+                                         <div class="col-md-4" v-if="['Electricidad', 'Gasolina', 'Gas natural', 'Diésel'].includes(entradas_salidas)">
+                                                    <div class="alert alert-light border-secondary py-2 mb-3">
+                                                    🌱 <strong>Emisiones atmosféricas</strong>
+                                                        <small class="d-block text-muted">
+                                                            Valores expresados en toneladas.
+                                                        </small>
+                                                     </div>
 
-                                                <!-- Fila de NO2 (toneladas) -->
-                                                <div class="form-group">
-                                                    <label for="NO2">NO2 (t)</label>
-                                                    <input v-model="NO2" class="form-control form-control-sm" type="number" id="NO2" name="NO2" step="0.0001" placeholder="Ej: 2.57">
-                                                </div>
+                                                    <!-- CO2 -->
+                                                    <div class="form-group mb-3">
+                                                        <label for="co2" class="form-label fw-bold mb-1">
+                                                            CO<sub>2</sub> (t)
+                                                        </label>
 
-                                                <!-- Fila de CO2→CO2e (toneladas) -->
-                                                <div class="form-group">
-                                                    <label for="CO2→CO2e">CO2→CO2e (t)</label>
-                                                    <input v-model="CO2CO2e" class="form-control form-control-sm" type="number" id="CO2→CO2e" name="CO2→CO2e" step="0.0001" placeholder="Ej: 2.57">
-                                                </div>
+                                                        <div class="position-relative">
+                                                            <input
+                                                                v-model="CO2"
+                                                                class="form-control form-control-sm pe-4"
+                                                                :style="{
+                                                                    'border-color': !isEditMode && CO2 !== ''
+                                                                        ? '#198754'
+                                                                        : (isEditMode && CO2 !== '' ? '#d77914' : '')
+                                                                }"
+                                                                type="number"
+                                                                id="co2"
+                                                                name="co2"
+                                                                step="0.0001"
+                                                                placeholder="Ej: 1.33">
 
-                                                <!-- Fila de CH4→CO2e (toneladas) -->
-                                                <div class="form-group">
-                                                    <label for="CH4→CO2e">CH4→CO2e (t)</label>
-                                                    <input v-model="CH4CO2e" class="form-control form-control-sm" type="number" id="CH4→CO2e" name="CH4→CO2e" step="0.0001" placeholder="Ej: 2.56">
-                                                </div>
+                                                            <span
+                                                                v-if="CO2 !== '' && CO2 !== null"
+                                                                class="position-absolute top-50 end-0 translate-middle-y me-1"
+                                                                :class="isEditMode ? 'text-warning' : 'text-success'">
+                                                                {{ isEditMode ? '🟡' : '🟢' }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
 
-                                                <!-- Fila de N2O→CO2e (toneladas) -->
-                                                <div class="form-group">
-                                                    <label for="N2O→CO2e">N2O→CO2e (t)</label>
-                                                    <input v-model="N2OCO2e" class="form-control form-control-sm" type="number" id="N2O→CO2e" name="N2O→CO2e" step="0.0001" placeholder="Ej: 2.55">
+
+                                                    <!-- CH4 -->
+                                                    <div class="form-group mb-3">
+                                                        <label for="ch4" class="form-label fw-bold mb-1">
+                                                            CH<sub>4</sub> (t)
+                                                        </label>
+
+                                                        <div class="position-relative">
+                                                            <input
+                                                                v-model="CH4"
+                                                                class="form-control form-control-sm pe-4"
+                                                                :style="{
+                                                                    'border-color': !isEditMode && CH4 !== ''
+                                                                        ? '#198754'
+                                                                        : (isEditMode && CH4 !== '' ? '#d77914' : '')
+                                                                }"
+                                                                type="number"
+                                                                id="ch4"
+                                                                name="ch4"
+                                                                step="0.0001"
+                                                                placeholder="Ej: 2.52">
+
+                                                            <span
+                                                                v-if="CH4 !== '' && CH4 !== null"
+                                                                class="position-absolute top-50 end-0 translate-middle-y me-1"
+                                                                :class="isEditMode ? 'text-warning' : 'text-success'">
+                                                                {{ isEditMode ? '🟡' : '🟢' }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <!-- NO2 -->
+                                                    <div class="form-group mb-3">
+                                                        <label for="NO2" class="form-label fw-bold mb-1">
+                                                            NO<sub>2</sub> (t)
+                                                        </label>
+
+                                                        <div class="position-relative">
+                                                            <input
+                                                                v-model="NO2"
+                                                                class="form-control form-control-sm pe-4"
+                                                                :style="{
+                                                                    'border-color': !isEditMode && NO2 !== ''
+                                                                        ? '#198754'
+                                                                        : (isEditMode && NO2 !== '' ? '#d77914' : '')
+                                                                }"
+                                                                type="number"
+                                                                id="NO2"
+                                                                name="NO2"
+                                                                step="0.0001"
+                                                                placeholder="Ej: 2.57">
+
+                                                            <span
+                                                                v-if="NO2 !== '' && NO2 !== null"
+                                                                class="position-absolute top-50 end-0 translate-middle-y me-1"
+                                                                :class="isEditMode ? 'text-warning' : 'text-success'">
+                                                                {{ isEditMode ? '🟡' : '🟢' }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <!-- CO2 → CO2e -->
+                                                    <div class="form-group mb-3">
+                                                        <label for="CO2CO2e" class="form-label fw-bold mb-1">
+                                                            CO<sub>2</sub> → CO<sub>2</sub>e (t)
+                                                        </label>
+
+                                                        <div class="position-relative">
+                                                            <input
+                                                                v-model="CO2CO2e"
+                                                                class="form-control form-control-sm pe-4"
+                                                                :style="{
+                                                                    'border-color': !isEditMode && CO2CO2e !== ''
+                                                                        ? '#198754'
+                                                                        : (isEditMode && CO2CO2e !== '' ? '#d77914' : '')
+                                                                }"
+                                                                type="number"
+                                                                id="CO2CO2e"
+                                                                name="CO2CO2e"
+                                                                step="0.0001"
+                                                                placeholder="Ej: 2.57">
+
+                                                            <span
+                                                                v-if="CO2CO2e !== '' && CO2CO2e !== null"
+                                                                class="position-absolute top-50 end-0 translate-middle-y me-1"
+                                                                :class="isEditMode ? 'text-warning' : 'text-success'">
+                                                                {{ isEditMode ? '🟡' : '🟢' }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <!-- CH4 → CO2e -->
+                                                    <div class="form-group mb-3">
+                                                        <label for="CH4CO2e" class="form-label fw-bold mb-1">
+                                                            CH<sub>4</sub> → CO<sub>2</sub>e (t)
+                                                        </label>
+
+                                                        <div class="position-relative">
+                                                            <input
+                                                                v-model="CH4CO2e"
+                                                                class="form-control form-control-sm pe-4"
+                                                                :style="{
+                                                                    'border-color': !isEditMode && CH4CO2e !== ''
+                                                                        ? '#198754'
+                                                                        : (isEditMode && CH4CO2e !== '' ? '#d77914' : '')
+                                                                }"
+                                                                type="number"
+                                                                id="CH4CO2e"
+                                                                name="CH4CO2e"
+                                                                step="0.0001"
+                                                                placeholder="Ej: 2.56">
+
+                                                            <span
+                                                                v-if="CH4CO2e !== '' && CH4CO2e !== null"
+                                                                class="position-absolute top-50 end-0 translate-middle-y me-1"
+                                                                :class="isEditMode ? 'text-warning' : 'text-success'">
+                                                                {{ isEditMode ? '🟡' : '🟢' }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <!-- N2O → CO2e -->
+                                                    <div class="form-group mb-3">
+                                                        <label for="N2OCO2e" class="form-label fw-bold mb-1">
+                                                            N<sub>2</sub>O → CO<sub>2</sub>e (t)
+                                                        </label>
+
+                                                        <div class="position-relative">
+                                                            <input
+                                                                v-model="N2OCO2e"
+                                                                class="form-control form-control-sm pe-4"
+                                                                :style="{
+                                                                    'border-color': !isEditMode && N2OCO2e !== ''
+                                                                        ? '#198754'
+                                                                        : (isEditMode && N2OCO2e !== '' ? '#d77914' : '')
+                                                                }"
+                                                                type="number"
+                                                                id="N2OCO2e"
+                                                                name="N2OCO2e"
+                                                                step="0.0001"
+                                                                placeholder="Ej: 2.55">
+
+                                                            <span
+                                                                v-if="N2OCO2e !== '' && N2OCO2e !== null"
+                                                                class="position-absolute top-50 end-0 translate-middle-y me-1"
+                                                                :class="isEditMode ? 'text-warning' : 'text-success'">
+                                                                {{ isEditMode ? '🟡' : '🟢' }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
                                                 </div>
-                                            </div>
                                                         
                                             <!-- Botones de Acción -->
                                             <div class="form-group text-center">
@@ -1237,7 +1849,7 @@ if (isset($_SESSION['nombre'])) {
                     </div>
 
                     <!--TABLA DE IMPACTO AMBIENTAL-->
-                    <!--<div class="col-12 col-lg-12">
+                    <!-- <div class="col-12 col-lg-12">
                         <div class="col-12  text-center ">
                             <div class=" encabezadoTablas">
                                 <div class=" d-flex justify-content-center align-items-baseline " style="font-size: 0.9em;">
@@ -1307,7 +1919,7 @@ if (isset($_SESSION['nombre'])) {
                                 </table>
                             </div>
                         </div>
-                    </div>-->
+                    </div> -->
 
                     <!-- INICIO TABLA ESTANDARES CO2 -->
                     <!--<div class="col-12 col-lg-6 ">
@@ -1418,18 +2030,18 @@ if (isset($_SESSION['nombre'])) {
                                         </div>
                                     </div>
                                     <!--Cuerpo de MODAL IMPACTO AMBIENTAL-->
-                                   <!--  <div v-if="tipo=='Impacto Ambiental'">
+                                   <div v-if="tipo=='Impacto Ambiental'">
                                         <div>
                                             <div class="modal-body input-group mb-3">
                                                 <span class="input-group-text w-25 mt-3">Nombre:</span>
-                                                <input v-model="nueva" type="text" class="w-75 mt-3">
+                                                <input v-model="aspecto" type="text" class="w-75 mt-3">
                                                 <span class="input-group-text w-25 mt-3">Cántidad:</span>
                                                 <input type="text" v-model="cantidad" class="w-75 mt-3">
                                                 <span class="input-group-text w-25 mt-3">Unidad Medida:</span>
                                                 <input type="text" v-model="unidadMedida" class="w-75 mt-3">
                                             </div>
                                         </div>
-                                    </div> -->
+                                    </div> 
 
                                     <!--Cuerpo de MODAL ESTANDARES CO2 -->
                                     <div v-if="tipo=='Estandar'">
@@ -1464,7 +2076,7 @@ if (isset($_SESSION['nombre'])) {
                                 <!-- MODAL ACTUALIZAR -->
                                 <div v-if="accion=='Actualizar'">
                                     <!--Cuerpo de MODAL IMPACTO AMBIENTAL-->
-                                    <!-- <div v-if="tipo=='Impacto Ambiental'">
+                                     <div v-if="tipo=='Impacto Ambiental'">
                                         <div>
                                             <div class="modal-body input-group mb-3">
                                                 <span class="input-group-text w-25 mt-3">Nombre:</span>
@@ -1475,7 +2087,7 @@ if (isset($_SESSION['nombre'])) {
                                                 <input type="text" v-model="unidadMedida" class="w-75 mt-3">
                                             </div>
                                         </div>
-                                    </div> -->
+                                    </div> 
                                     <!--cuerpo MODAL ACTUALIZAR Misiones-->
                                     <div v-if="tipo=='Mision'">
                                         <div>
@@ -1555,10 +2167,10 @@ if (isset($_SESSION['nombre'])) {
                                     <button type="button" class="boton-aceptar" v-if="tipo=='Mision' && accion=='Crear'" @click="insertarMision()">Crear</button>
                                     <button type="button" class="boton-aceptar" v-if="tipo=='Pilar'  && accion=='Crear'" @click="insertarPilar()">Crear</button>
                                     <button type="button" class="boton-aceptar" v-if="tipo=='Objetivo'  && accion=='Crear'" @click="insertarObjetivo()">Crear</button>
-                                    <!-- <button type="button" class="boton-aceptar" v-if="tipo=='Impacto Ambiental'  && accion=='Crear'" @click="insertarImpactoAmbiental()">Crear</button> -->                                    <button type="button" class="boton-aceptar" v-if="tipo=='Estandar'  && accion=='Crear'" @click="insertarEstandaresCO2()">Crear</button>
+                                    <button type="button" class="boton-aceptar" v-if="tipo=='Impacto Ambiental'  && accion=='Crear'" @click="insertarImpactoAmbiental()">Crear</button>                                <button type="button" class="boton-aceptar" v-if="tipo=='Estandar'  && accion=='Crear'" @click="insertarEstandaresCO2()">Crear</button>
                                     <button type="button" class="boton-aceptar" v-if="tipo=='Fuente'  && accion=='Crear'" @click="insertarFuente()">Crear</button>
                                     <!-- BOTON PARA ACTUALIZAR INFORMACION  -->
-                                    <!-- <button type="button" class="boton-actualizar" v-if="tipo=='Impacto Ambiental' && accion=='Actualizar'" @click="actualizarImpactoAmbiental()">Actualizar</button> -->
+                                    <button type="button" class="boton-actualizar" v-if="tipo=='Impacto Ambiental' && accion=='Actualizar'" @click="actualizarImpactoAmbiental()">Actualizar</button>
                                     <button type="button" class="boton-actualizar" v-if="tipo=='Estandares' && accion=='Actualizar'" @click="actualizarEstandaresCO2()">Actualizar</button>
                                     <button type="button" class="boton-actualizar" v-if="tipo=='Pilar' && accion=='Actualizar'" @click="actualizarPilares()">Actualizar</button>
                                     <button type="button" class="boton-actualizar" v-if="tipo=='Objetivo' && accion=='Actualizar'" @click="actualizarObjetivos()">Actualizar</button>
@@ -1749,15 +2361,15 @@ if (isset($_SESSION['nombre'])) {
                                     <button v-show="id_proyecto!=''" v-else type="button" class="btn btn-secondary" title="Visualizar/Subir Archivos" @click="modal_seguimiento()" style="font-size:12px"><i class="bi bi-paperclip">{{documentos_seguimiento.length}} Evidencias Encontrados</i></button>
                                 </div>
                             </div>
-                            <div class="col-12 col-lg-6">
-                                <div v-for="impacto in impactoAmbientalConID" class="input-group mt-3 mx-2 mb-2 d-flex justify-content-start justify-content-lg-center">
+                           <!--  <div class="col-12 col-lg-12">
+                                 <div v-for="impacto in impactoAmbientalConID" class="input-group mt-3 mx-2 mb-2 d-flex justify-content-start justify-content-lg-center">
                                     <span class="input-group-text w-5">Documentos estandares CO
                                         <label style="font-size:8px" class="mt-1">2</label><br>
                                     </span> 
                                     <button v-if="impacto.documentos>0" type="button" class="btn btn-success text-start" title="Visualizar" @click="modal_impactoAmbiental(impacto.id,impacto.nombre)" style="font-size:12px; width: 300px"><i class="bi bi-file-earmark me-1">({{impacto.documentos}})</i>{{impacto.nombre}}</button>
                                     <button v-else type="button" class="btn btn-secondary text-start" title="Sin archivos de apoyo" style="font-size:12px; width: 300px"><i class="bi bi-file-earmark  me-1">({{impacto.documentos}})</i>{{impacto.nombre}}</button>
-                                </div>
-                            </div>
+                                </div> 
+                            </div> -->
                         </div>
                     </div>
                     <div class="scroll-dos">
@@ -2956,44 +3568,48 @@ if (isset($_SESSION['nombre'])) {
                     <div class= "text-center mt-3 ">
                         <button class="btn btn-menu bg-primary align-items-center mb-2 btn-sm" style=" background:#519f3c; " @click = "abrirModalSyma('Crear', index)">
                             <i class="bi bi-plus-circle"></i> Nuevo
-                        </button>     
+                        </button>
                     </div>  
                     <div class= "scroll-dos">            
                         <table class="table table-bordered table-striped table-hover  tabla-ambiental text-center mt-3">
-                            <thead>
+                            <thead class="sticky-top  align-middle">
                                 <tr>
                                     <th></th>
+                                    <th></th>
                                     <th scope="col">Ciclo de Vida</th>
-                                    <th scope="col">Materiales de Entradas / Salidas</th>
-                                    <th scope="col">I/O</th>
+                                    <th scope="col">Entrada (E) / Salida (S)</th>
                                     <th scope="col">U.M.</th>
                                     <th scope="col">Clasificación</th>
+                                    <th scope="col">Entradas / Salidas</th>
                                     <th scope="col">Aspecto Ambiental</th>
                                     <th scope="col">Impacto Ambiental</th>
                                     <th scope="col">Requisito Legal Asociado</th>
                                     <th scope="col">Alcance</th>
-                                    <th scope="col">CO2 (t)</th>
-                                    <th scope="col">CH4 (t)</th>
-                                    <th scope="col">NO2 (t)</th>
-                                    <th scope="col">CO2→CO2e (t)</th>
-                                    <th scope="col">CH4→CO2e (t)</th>
-                                    <th scope="col">N2O→CO2e (t)</th>
+                                    <th scope="col">CO<sub>2</sub> (t)</th>
+                                    <th scope="col">CH<sub>4</sub> (t)</th>
+                                    <th scope="col">NO<sub>2</sub> (t)</th>
+                                    <th scope="col">CO<sub>2</sub>→CO<sub>2</sub>e (t)</th>
+                                    <th scope="col">CH<sub>4</sub>→CO<sub>2</sub>e (t)</th>
+                                    <th scope="col">N<sub>2</sub>O→CO<sub>2</sub>e (t)</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(item, index) in impactoAmbiental" :key="index">
+                                <tr v-for="(item, index) in impactoAmbientalSSyMA" :key="index" class="align-middle">
+                                    <th>
+                                        {{ index + 1 }}
+                                    </th>
                                     <td>
                                         <button class="btn btn-warning btn-sm" title="Editar" @click="abrirModalSyma('Editar', index)"><i class="bi bi-pen"></i></button>
                                     </td><!-- AGREGA MODAL PARA ACTUALIZAR, INTENTA REUTILIZAR LA DE INSERCIÓN (SE AGREGA EN EL @CLICK) -->
                                     <td>{{ item.ciclo }}</td>
-                                    <td>{{ item.material }}</td>
-                                    <td>{{ item.io }}</td>
-                                    <td>{{ item.unidad }}</td>
-                                    <td>{{ item.clasificacion }}</td>
-                                    <td class = "text-start">{{ item.nombre }}</td>
-                                    <td>{{ item.impacto }}</td>
-                                    <td>{{ item.requisito }}</td>
+                                    <td>{{ item.e_s }}</td>
+                                     <td>{{ item.unidad }}</td>
+                                     <td>{{ item.clasificacion }}</td>
+                                    <td>{{ item.entradas_salidas }}</td>
+                                     <td style="min-width: 200px;">{{ item.nombre }}</td>
+                                    <td style="min-width: 200px;">{{ item.impacto }}</td>
+                                    <td style="min-width: 300px;">{{ item.requisito }}</td>
                                     <td>{{ item.alcance }}</td>
                                     <td>{{ item.CO2 }}</td>
                                     <td>{{ item.CH4 }}</td>
@@ -3002,7 +3618,7 @@ if (isset($_SESSION['nombre'])) {
                                     <td>{{ item.CH4CO2e }}</td>
                                     <td>{{ item.N2OCO2e }}</td>
                                     <td>
-                                        <button class="btn btn-danger btn-sm" title="Eliminar" @click = "eliminarImpactoAmbiental(index)"><i class="bi bi-trash3"></i></button>
+                                        <button class="btn btn-danger btn-sm" title="Eliminar" @click = "eliminarImpactoAmbientalSSyMA(index)"><i class="bi bi-trash3"></i></button>
                                     </td>
                                 </tr>
                             </tbody>
