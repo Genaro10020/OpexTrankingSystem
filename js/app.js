@@ -3071,69 +3071,57 @@ sumaTotalPersonalizada() {
     },
     //this.impactosConDatos
     abrirModal(modal, tipo, accion, id, nombre_proyecto) {
-      
-
-       console.log("jooooo",this.mesesPresupuestados)
-        this.impactosConDatos = []; //al ser nuevo proyecto limpiamos si existe registros de ese impacto
-      //this.nombre_proyecto = ''
-      this.tipo = tipo
-      this.accion = accion
-      this.hayDatos = false
-
-      //resetando variables
-      this.titulo_modal = ''
-      this.nueva = ''
-      this.respondio = true;
-      this.presupuestado = false
-      this.mesesPresupuestados = new Array(12).fill(false);
-      this.colorPresupuestado = false
-      this.idsPlanMesual = []
+      this.impactosConDatos = [];
+      this.tipo = tipo;
+      this.accion = accion;
 
       if (modal == "Alta") {
-        this.actualizar_proyecto = false
-        this.titulo_modal = "Alta Proyecto"
-        this.myModal = new bootstrap.Modal(document.getElementById("modal-alta-proyecto"))
-        this.myModal.show()
-        this.consultarPlantas()
-        this.consultarAreas()
-        this.consultarDepartamentos()
-        this.consultarMetodologias()
-        this.consultarResponsables()
-        this.consultarImpactoAmbiental()
-        this.consultarMisiones()
-        this.consultarFuentes()
-        this.consultarValores()
-        this.buscarDocumentos('Alta Proyecto')
+        this.reiniciarVariables();
+
+        this.actualizar_proyecto = false;
+        this.titulo_modal = "Alta Proyecto";
+        
+        this.myModal = new bootstrap.Modal(document.getElementById("modal-alta-proyecto"));
+        this.myModal.show();
+
+        this.consultarPlantas();
+        this.consultarAreas();
+        this.consultarDepartamentos();
+        this.consultarMetodologias();
+        this.consultarResponsables();
+        this.consultarImpactoAmbiental();
+        this.consultarMisiones();
+        this.consultarFuentes();
+        this.consultarValores();
+        this.buscarDocumentos('Alta Proyecto');
         this.incrementarMeses();
         this.inicializarArreglosPlanMensual();
 
-
       } else if (modal == "Actualizar Proyecto") {
-        this.valoresCheck = [] //la limpio
-        this.titulo_nombre_proyecto = nombre_proyecto
-        this.id_actualizar = id
-        this.actualizar_proyecto = true
-        this.titulo_modal = "Actualizar Proyecto"
-        this.myModal = new bootstrap.Modal(document.getElementById("modal-alta-proyecto"))
-        this.myModal.show()
+        this.reiniciarVariables();
 
-        //lo usos para verificar si el impacto ya contiene datos y evitar que puedan manipularlos al actualizar el proyecto
-        this.consultaImpactosAmbientalesConDatos(id)
-        this.consultarPlantas()
-        this.consultarAreas()
-        this.consultarDepartamentos()
-        this.consultarMetodologias()
-        this.consultarResponsables()
-        this.consultarImpactoAmbiental()
-        this.consultarMisiones()
-        this.consultarFuentes()
-        this.consultarValores()
+        this.titulo_nombre_proyecto = nombre_proyecto;
+        this.id_actualizar = id;
+        this.actualizar_proyecto = true;
+        this.titulo_modal = "Actualizar Proyecto";
+
+        this.myModal = new bootstrap.Modal(document.getElementById("modal-alta-proyecto"));
+        this.myModal.show();
+
+        this.consultaImpactosAmbientalesConDatos(id);
+        this.consultarPlantas();
+        this.consultarAreas();
+        this.consultarDepartamentos();
+        this.consultarMetodologias();
+        this.consultarResponsables();
+        this.consultarImpactoAmbiental();
+        this.consultarMisiones();
+        this.consultarFuentes();
+        this.consultarValores();
         this.consultarPlanMensualProyecto(id);
         setTimeout(() => {
-          this.consultaProyectoIDActualizar(id)
-        }, 200)
-
-
+          this.consultaProyectoIDActualizar(id);
+        }, 200);
       } else if (modal == "CRUD") {
         this.myModalCRUD = new bootstrap.Modal(document.getElementById("modal-alta-crud"))
         if (accion == "Crear") {
