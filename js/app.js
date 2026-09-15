@@ -2995,7 +2995,6 @@ sumaTotalPersonalizada() {
           let savedPilares = parsearSeguro(proyecto.pilares);
           let savedObjetivos = parsearSeguro(proyecto.objetivos);
 
-          // 1. Garantizar que las misiones existan
           if (this.misiones.length === 0) {
             const resMisiones = await axios.get('misionesController.php');
             if (resMisiones.data && resMisiones.data[0] && resMisiones.data[0][0]) {
