@@ -232,7 +232,7 @@ if (isset($_SESSION['nombre'])) {
                                                 <span class="input-group-text w-25 text-start">Misión </span>
                                                 <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkMisiones.length<=0, '': checkMisiones.length>0}">
                                                     <div class="form-check border border-1 mt-1" v-for="(mision, index) in misiones" :key="index">
-                                                        <input class="form-check-input" type="checkbox" :value="mision.id+'<->'+mision.nombre" v-model="checkMisiones" @change="consultarPilaresXmisionSeleccionada()" :disabled="actualizar_proyecto">
+                                                        <input class="form-check-input" type="checkbox" :value="mision.id+'<->'+mision.nombre" v-model="checkMisiones" @change="consultarPilaresXmisionSeleccionada()">
                                                         <label class="form-check-label">
                                                             {{ mision.nombre }}
                                                         </label>
@@ -251,7 +251,7 @@ if (isset($_SESSION['nombre'])) {
                                                 <span class="input-group-text w-25 text-start">Pilares <br>Estratégicos </span>
                                                 <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkPilares.length<=0, '': checkPilares.length>0}">
                                                     <div class="form-check border border-1 mt-1" v-for="(pilar, index) in pilares" :key="index">
-                                                        <input class="form-check-input" type="checkbox" :value="pilar.id+'<->'+pilar.nombre+'<->'+pilar.siglas+'<->'+(index+1)" v-model="checkPilares" @change="consultarObjetivosXpilaresSeleccionados()" :disabled="actualizar_proyecto">
+                                                        <input class="form-check-input" type="checkbox" :value="pilar.id+'<->'+pilar.nombre+'<->'+pilar.siglas+'<->'+(index+1)" v-model="checkPilares" @change="consultarObjetivosXpilaresSeleccionados()">
                                                         <label class="form-check-label w-75">
                                                             {{ pilar.nombre }} ({{pilar.siglas}})
                                                         </label>
@@ -279,7 +279,7 @@ if (isset($_SESSION['nombre'])) {
                                                 <span class="input-group-text w-25 text-start">Objetivos <br>Estratégicos</span>
                                                 <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkObjetivos.length<=0 || respondio === false && selectObjetivo.length>0 && !selectObjetivo.includes('directo'), '': checkObjetivos.length>0}">
                                                     <div v-for="(objetivo, index) in objetivos" class="form-check border border-1 mt-1" :key="index">
-                                                        <input class="form-check-input" v-model="checkObjetivos" type="checkbox" id="checkbox1" :value="objetivo.id+'<->'+objetivo.nombre+'<->'+objetivo.id_pilares+'<->'+objetivo.siglas+'<->'+(index+1)" @change="checkeandoObjetivos()" :disabled="actualizar_proyecto">
+                                                        <input class="form-check-input" v-model="checkObjetivos" type="checkbox" id="checkbox1" :value="objetivo.id+'<->'+objetivo.nombre+'<->'+objetivo.id_pilares+'<->'+objetivo.siglas+'<->'+(index+1)" @change="checkeandoObjetivos()">
                                                         <label class="form-check-label w-75" for="checkbox1">
                                                             {{objetivo.nombre}} ({{objetivo.siglas}})
                                                         </label>
@@ -437,7 +437,7 @@ if (isset($_SESSION['nombre'])) {
                                         <div class="col-3 my-auto mx-auto "><!--bloque imagen Alta Proyecto-->
                                             <form @submit.prevent="uploadFile('Alta Proyecto')">
                                                 <div class="row mx-auto">
-                                                    <input type="file" id="input_file_subir" @change="varificandoSelecion()" ref="ref_imagen" accept="*.jpg/*.png" class="btn-success py-1" required :disabled="actualizar_proyecto" />
+                                                    <input type="file" id="input_file_subir" @change="varificandoSelecion()" ref="ref_imagen" accept="*.jpg/*.png" class="btn-success py-1" required />
                                                 </div>
                                                 <div v-if="imagenes.length>0" class="row">
                                                     <div class="col-12 d-flex justify-content-center">
