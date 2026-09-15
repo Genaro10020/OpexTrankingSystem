@@ -4115,19 +4115,64 @@ sumaTotalPersonalizada() {
       this.flagEditAhorroSuaveMes = ''
     },
     reiniciarVariables() {
-      this.fecha_alta = ''
-      this.selectFuente = ''
-      this.selectPlanta = ''
-      this.selectArea = ''
-      this.selectDepartamento = ''
-      this.selectMetodologia = ''
-      this.selectResponsable = ''
-      this.checkObservadores = []
-      this.idsCheckImpacto = []
-      this.checkImpactoAmbiental = []
-      this.impactoAmbiental = []
-      this.selectEmisiones = []
-      this.valoresCheck = []
+      this.id_actualizar = '';
+      this.titulo_nombre_proyecto = '';
+      this.titulo_modal = '';
+      this.actualizar_proyecto = false;
+      this.respondio = true;
+      this.hayDatos = false;
+
+      this.fecha_alta = '';
+      this.nombre_proyecto = '';
+      this.selectFuente = '';
+      this.selectPlanta = '';
+      this.selectArea = '';
+      this.selectDepartamento = '';
+      this.selectMetodologia = '';
+      this.selectResponsable = '';
+      this.checkObservadores = [];
+
+      this.checkMisiones = [];
+      this.checkPilares = [];
+      this.checkObjetivos = [];
+      this.pilares = [];
+      this.objetivos = [];
+      this.selectPilar = [];
+      this.selectObjetivo = [];
+      this.idsPilares = [];
+      this.idsObjetivos = [];
+
+      this.idsCheckImpacto = [];
+      this.checkImpactoAmbiental = [];
+      this.selectEmisiones = [];
+      this.impactosConDatos = [];
+      this.valoresCheck = [];
+
+      this.objetivo_estrategico = false;
+      this.presupuestado = false;
+      this.colorPresupuestado = false;
+
+      this.imagenes = [];
+      this.existeImagenSeleccionada = false;
+      let inputFile = document.getElementById('input_file_subir');
+      if (inputFile) {
+        inputFile.value = '';
+      }
+
+      this.idsPlanMesual = [];
+      this.inputValorMensualCO = [];
+      this.inputValorMensualAD = [];
+      this.inputValorMensualAS = [];
+      this.mesesPresupuestados = new Array(12).fill(false);
+      this.AnioXMes = [];
+      this.MesXAnio = [];
+
+      this.nuevoResponsable = false;
+      this.actualizarResponsable = false;
+      this.nombre = '';
+      this.numero_nomina = '';
+      this.correo = '';
+      this.telefono = '';
     },
     verificarSiEsActualizar() {
       if (this.actualizar_proyecto == true) {
