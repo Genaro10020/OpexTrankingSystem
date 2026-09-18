@@ -523,6 +523,20 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
             $telefono_responsable = $fila['telefono']; 
         }
     }
+
+    $folio_final   = $folio;
+    $consultaFolio = "SELECT folio FROM proyectos_creados WHERE id = '$id'";
+    $queryFolio = $conexion->query($consultaFolio);
+
+    if ($queryFolio && $queryFolio->num_rows > 0) {
+        $filaF = $queryFolio->fetch_assoc();
+        $partesFolio = explode("#", $filaF['folio']);
+
+        if (count($partesFolio) > 1) {
+            $ultimoNum   = end($partesFolio);
+            $folio_final = $folio . "-#" . $ultimoNum;
+        }
+    }
 }
 
 
