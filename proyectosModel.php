@@ -612,7 +612,41 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
                 $stmtDelete->close();
             }
         }
+
+        $cantidad_ids   = is_array($idsPlanMesual) ? count($idsPlanMesual) : 0;
+        $cantidad_meses = is_array($mesXAnio) ? count($mesXAnio) : 0;
+
+        if ($cantidad_ids > 0) {
+            for ($i = 0; $i < $cantidad_meses; $i++) {
+                $updPlan = "UPDATE plan_mensual_por_proyecto SET mes='$mesXAnio[$i]', anio='$anioXmes[$i]', ahorro_co='$valoresMensualCO[$i]', ahorro_d='$valoresMensualAD[$i]', ahorro_s='$valoresMensualAS[$i]', mes_presupuestado='$mesesPresupuestados[$i]' WHERE id='$idsPlanMesual[$i]' AND id_proyecto='$id'";
+
+                if ($conexion->query($updPlan) !== TRUE) {
+                    $estado = $conexion->error . " Incorrecto";
+                    break;
+                } else {
+                    $estado = true;
+                }
+            }
+        } else {
+            if (!empty(array_filter($valoresMensualCO)) && !empty(array_filter($valoresMensualAD)) && !empty(array_filter($valoresMensualAS)) || !empty(array_filter($mesesPresupuestados))) {
+                for ($i = 0; $i < $cantidad_meses; $i++) {
+                    $insPlan = "INSERT INTO plan_mensual_por_proyecto (id_proyecto, mes, anio, ahorro_co, ahorro_d, ahorro_s, mes_presupuestado) VALUES ('$id', '$mesXAnio[$i]', '$anioXmes[$i]', '$valoresMensualCO[$i]', '$valoresMensualAD[$i]', '$valoresMensualAS[$i]', '$mesesPresupuestados[$i]')";
+
+                    if ($conexion->query($insPlan) !== TRUE) {
+                        $estado = $conexion->error . " Incorrecto";
+                        break;
+                    } else {
+                        $estado = true;
+                    }
+                }
+            }
+        }
+    } else {
+        return "ERROR: " . $stmt->error;
     }
+
+    $stmt->close();
+    return $estado;
 }
 
 
