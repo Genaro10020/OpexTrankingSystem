@@ -506,124 +506,23 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
     global $conexion;
     $estado = false;
 
+    $nomina = "";
+    $nombre_responsable = "";
+    $correo_responsable = "";
+    $telefono_responsable = "";
 
-
-
-    ////////////////////////////
-    $consulta = "SELECT * FROM responsables WHERE id = $responsable_id";
-    $query = $conexion->query($consulta);
-    if ($query->num_rows > 0) {
-        //Recuperado el responsable inserto
-        $fila = $query->fetch_assoc();
-        $nomina = $fila['numero_nomina'];
-        $nombre_responsable = $fila['nombre'];
-        $correo_responsable =  $fila['correo'];
-        $telefono_responsable =  $fila['telefono'];
-        $estado  = true;
-        }else {
-        $estado  = false;
-    }
-    ///////////////////////////
-    $update = "UPDATE proyectos_creados SET fecha=?, nombre_proyecto=?, fuente=?, planta=?, area=?, departamento=?, metodologia=?, responsable=?, nomina=?, correo=?, telefono=?, observador =?, impacto_ambiental=?, valores=?, presupuestado=? WHERE  id=?";
-    $stmt = $conexion->prepare($update);
-    $stmt->bind_param("sssssssssssssssi",$fecha_alta_invertida, $nombre_proyecto, $selectFuente, $planta, $area, $departamento, $metodologia, $nombre_responsable, $nomina, $correo_responsable, $telefono_responsable, $observador, $impacto_ambiental_emisiones, $valores, $presupuestado, $id);
-    if ($stmt->execute()) {
-         //insertando impactos mensuales
-         $anioXmes = json_decode($anioXmes, JSON_UNESCAPED_UNICODE); //conviertiendo arreglos en cadena
-         $mesXAnio = json_decode($mesXAnio, JSON_UNESCAPED_UNICODE);//conviertiendo arreglos en cadena
-         $valoresMensualCO = json_decode($valoresMensualCO, JSON_UNESCAPED_UNICODE);//conviertiendo a arreglos
-         $valoresMensualAD = json_decode($valoresMensualAD, JSON_UNESCAPED_UNICODE);//conviertiendo a arreglos
-         $valoresMensualAS = json_decode($valoresMensualAS, JSON_UNESCAPED_UNICODE);//conviertiendo a arreglos
-         $idsPlanMesual = json_decode($idsPlanMesual, JSON_UNESCAPED_UNICODE);//conviertiendo a arreglos
-         $impacto_ambiental = json_decode($impacto_ambiental, JSON_UNESCAPED_UNICODE);//conviertiendo a arreglos
-         $mesesPresupuestados = json_decode($mesesPresupuestados, JSON_UNESCAPED_UNICODE);//conviertiendo a arreglos
-
-         $estado = true;
-         $impacto_ambiental_existentes= [];
-         $diferentes = [];
-         $diferentesEliminar=[];
-        $consulta = "SELECT * FROM impacto_ambiental_proyecto WHERE id_proyecto = $id";
+    if (!empty($responsable_id)) {
+        $consulta = "SELECT * FROM responsables WHERE id = '$responsable_id'";
         $query = $conexion->query($consulta);
-        if ($query->num_rows > 0) {
-            //Recuperado el responsable inserto
-            
-            //$fila = $query->query_result();
-            while ($datos = mysqli_fetch_array($query)) {
-                    $impacto_ambiental_existentes[] = $datos['impacto_ambiental'];
-                }
-            $diferentes = array_diff($impacto_ambiental, $impacto_ambiental_existentes);//si no exite en BD insertarlo
-            $diferentesEliminar = array_diff($impacto_ambiental_existentes,$impacto_ambiental);//si no existe en la seleccion de impacto eliminarlo de la BD
-            //diferentes    impacto_ambiental_existentes impacto_ambiental
+
+        if($query && $query->num_rows > 0) {
+            $fila = $query->fetch_assoc();
+            $nomina = $fila['numero_nomina'];
+            $nombre_responsable   = $fila['nombre'];
+            $correo_responsable   = $fila['correo'];
+            $telefono_responsable = $fila['telefono']; 
         }
-        
-        $taminio = count($diferentes);
-        if($taminio>0){//Si hay diferentes insertarlo en la tabla de lo contrario no hacer nada
-            foreach ($diferentes as $impacto) {
-                $consulta = "INSERT INTO impacto_ambiental_proyecto (id_proyecto,impacto_ambiental) VALUES ('$id','$impacto')";
-                if ($conexion->query($consulta) !== TRUE) {
-                   return $estado = "Nuevo impacto ambiental no se inserto";
-                    break;
-                }
-            } 
-        }
-
-        //return $diferentesEliminar;
-
-        if (count($diferentesEliminar) > 0) {
-            $consultaDelete = "DELETE FROM impacto_ambiental_proyecto WHERE impacto_ambiental = ? AND id_proyecto = ?";
-            $stmtDelete = $conexion->prepare($consultaDelete);
-            if ($stmtDelete) {
-                foreach ($diferentesEliminar as $impacto) {
-                    $stmtDelete->bind_param("si", $impacto, $id); // 's' para string, 'i' para entero
-                        if (!$stmtDelete->execute()) {
-                            //return $estado = "No se puede eliminar el impacto deseleccionando: " .$impacto. $id. $stmtDelete->error;
-                        }
-                }
-                $stmtDelete->close(); // Cerrar la declaración
-            } else {
-                return $estado = "Error en la preparación de la consulta de eliminación: " . $conexion->error;
-            }
-        }
-       
-
-
-         //con filter elimino todos los "" y si todos estan vacios no se actualizara, de lo contrario actualizara.
-         $cantidad_meses=count($mesXAnio);
-         $cantidad_ids=count($idsPlanMesual);
-        
-            
-            if($cantidad_ids>0){//Existe y actualiza
-                $cantidad_meses=count($mesXAnio);
-                for ($i=0; $i < $cantidad_meses; $i++) {
-                    $insertar = "UPDATE plan_mensual_por_proyecto SET mes='$mesXAnio[$i]',anio ='$anioXmes[$i]',ahorro_co = '$valoresMensualCO[$i]',ahorro_d = '$valoresMensualAD[$i]',ahorro_s = '$valoresMensualAS[$i]', mes_presupuestado = '$mesesPresupuestados[$i]' WHERE id='$idsPlanMesual[$i]' AND id_proyecto='$id'";
-                    if ($conexion->query($insertar) !== TRUE) {
-                        $estado = $conexion->error." Incorreco";
-                            break;
-                    }else{
-                        $estado = true;
-                    }   
-                }  
-            }else{//No existe y si no son vacias inserta
-                if (!empty(array_filter($valoresMensualCO)) && !empty(array_filter($valoresMensualAD)) && !empty(array_filter($valoresMensualAS)) || !empty(array_filter($mesesPresupuestados))){
-                    for ($i=0; $i < $cantidad_meses; $i++) {
-                        $insertar = "INSERT INTO plan_mensual_por_proyecto (id_proyecto, mes, anio,	ahorro_co, ahorro_d, ahorro_s, mes_presupuestado) VALUES ('$id','$mesXAnio[$i]','$anioXmes[$i]','$valoresMensualCO[$i]','$valoresMensualAD[$i]','$valoresMensualAS[$i]','$mesesPresupuestados[$i]')";
-                        if ($conexion->query($insertar) !== TRUE) {
-                            $estado = $conexion->error." Incorreco";
-                                break;
-                        }else{
-                           $estado = true;
-                        }
-                    }
-                }
-            }
-
-
-    }else{
-        return  "ME RETORNO".$stmt->error;
     }
-    $stmt->close();
-   //return array($estado,print_r($mesesPresupuestados));
-    return $estado;
 }
 
 
