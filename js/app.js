@@ -3308,29 +3308,9 @@ sumaTotalPersonalizada() {
     },
     //this.impactosConDatos
     abrirModal(modal, tipo, accion, id, nombre_proyecto) {
-<<<<<<< HEAD
       this.impactosConDatos = [];
       this.tipo = tipo;
       this.accion = accion;
-=======
-      
-
-       //console.log("jooooo",this.mesesPresupuestados)
-        this.impactosConDatos = []; //al ser nuevo proyecto limpiamos si existe registros de ese impacto
-      //this.nombre_proyecto = ''
-      this.tipo = tipo
-      this.accion = accion
-      this.hayDatos = false
-
-      //resetando variables
-      this.titulo_modal = ''
-      this.nueva = ''
-      this.respondio = true;
-      this.presupuestado = false
-      this.mesesPresupuestados = new Array(12).fill(false);
-      this.colorPresupuestado = false
-      this.idsPlanMesual = []
->>>>>>> d6b6934a161d4aaf65b66314ff65a02620319016
 
       if (modal == "Alta") {
         this.reiniciarVariables();
