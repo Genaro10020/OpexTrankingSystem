@@ -563,6 +563,56 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
         $id
     );
 
+    if ($stmt->execute()) {
+        $anioXmes = !is_array($anioXmes) ? json_decode($anioXmes, true) : $anioXmes;
+        $mesXAnio = !is_array($mesXAnio) ? json_decode($mesXAnio, true) : $mesXAnio;
+        $valoresMensualCO    = !is_array($valoresMensualCO) ? json_decode($valoresMensualCO, true) : $valoresMensualCO;
+        $valoresMensualAD    = !is_array($valoresMensualAD) ? json_decode($valoresMensualAS, true) : $valoresMensualAD;
+        $valoresMensualAS    = !is_array($valoresMensualAS) ? json_decode($valoresMensualAS, true) : $valoresMensualAS;
+        $idsPlanMesual       = !is_array($idsPlanMesual) ? json_decode($idsPlanMesual, true) : $idsPlanMesual;
+        $impacto_ambiental   = !is_array($impacto_ambiental) ? (json_decode($impacto_ambiental, true) ?? []) : $impacto_ambiental;
+        $mesesPresupuestados = !is_array($mesesPresupuestados) ? json_decode($mesesPresupuestados, true) : $mesesPresupuestados;
+
+        $estado = true;
+        $impacto_ambiental_existentes = [];
+
+        $consultaImp = "SELECT * FROM impacto_ambiental_proyecto WHERE id_proyecto = '$id'";
+        $queryImp = $conexion->query($consultaImp);
+
+        if ($queryImp && $queryImp->num_rows > 0) {
+            while ($datos = mysqli_fetch_array($queryImp)) {
+                $impacto_ambiental_existentes[] = $datos['impacto_ambiental'];
+            }
+
+            $diferentes         = array_diff($impacto_ambiental, $impacto_ambiental_existentes);
+            $diferentesEliminar = array_diff($impacto_ambiental_existentes, $impacto_ambiental);
+        } else {
+            $diferentes         = $impacto_ambiental;
+            $diferentesEliminar = [];
+        }
+
+        if (count($diferentes) > 0) {
+            foreach ($diferentes as $impacto) {
+                $consultaIns = "INSERT INTO impacto_ambiental_proyecto (id_proyecto, impacto_ambiental) VALUES ('$id', '$impacto')";
+                if ($conexion->query($consultaIns) !== TRUE) {
+                    return "El nuevo impacto ambiental no fue agregado"
+                }
+            }
+        }
+
+        if (count($diferentesEliminar) > 0) {
+            $consultaDelete = "DELETE FROM impacto_ambiental_proyecto WHERE impacto_ambiental = ? AND id_proyecto = ?";
+            $stmtDelete = $conexion->prepare($consultaDelete);
+
+            if ($stmtDelete) {
+                foreach ($diferentesEliminar as $impacto) {
+                    $stmtDelete->bind_param("si", $impacto, $id);
+                    $stmtDelete->execute();
+                }
+                $stmtDelete->close();
+            }
+        }
+    }
 }
 
 
