@@ -502,7 +502,7 @@ function insertarProyecto($folio, $fecha_alta_invertida, $nombre_proyecto, $fuen
     return array($estado, $estado_folios, $folio_recuperado, $folio_sin_numero, $igual, $insercion_impacto, $impacto_ambiental_array,$impacto_mensual);
 }
 
-function actualizarProyecto($id,$fecha_alta_invertida, $nombre_proyecto, $selectFuente, $planta, $area, $departamento, $metodologia, $responsable_id, $observador,$impacto_ambiental, $impacto_ambiental_emisiones,$valores,$anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS,$idsPlanMesual, $presupuestado, $mesesPresupuestados){
+function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto, $selectFuente, $planta, $area, $departamento, $metodologia, $responsable_id, $observador, $misiones, $pilares, $objetivos, $impacto_ambiental, $impacto_ambiental_emisiones, $valores, $anioXmes, $mesXAnio, $valoresMensualCO, $valoresMensualAD, $valoresMensualAS, $idsPlanMesual, $presupuestado, $mesesPresupuestados){
     global $conexion;
     $estado = false;
 
