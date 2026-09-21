@@ -4494,6 +4494,17 @@ const AltaProyectos = {
         }
       }
 
+      if (directosSeleccionados === 0) {
+        this.respondio = false;
+        Swal.fire({
+          title: "Objetivo Directo Requerido",
+          text: "Un objetivo debe ser 'Directo'",
+          icon: "warning",
+        });
+
+        return;
+      }
+
       var fuente = "";
       var siglasFuente = "";
       var fuenteConSiglas = "";
