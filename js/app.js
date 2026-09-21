@@ -1434,6 +1434,61 @@ const AltaProyectos = {
             }
           }
         }
+
+        axios
+          .post("objetivosController.php", {
+            idsPilares: ids_pilares,
+          })
+          .then((response) => {
+            if (response.data[0][1] == true) {
+              let listaObjetivos = response.data[0][0] || [];
+              this.objetivos = listaObjetivos;
+
+              let nuevosCheckObjetivos = [];
+              let nuevosIdsObjetivos = [];
+              let nuevoSelectObjetivo = new Array(listaObjetivos.length).fill(
+                "",
+              );
+
+              listaObjetivos.forEach((obj, index) => {
+                let idStr = String(obj.id).trim();
+
+                if (
+                  objetivosPrevios[idStr] &&
+                  ids_pilares.map(String).includes(String(obj.id.pilares))
+                ) {
+                  let valorCheck =
+                    obj.id +
+                    "<->" +
+                    obj.nombre +
+                    "<->" +
+                    obj.id_pilares +
+                    "<->" +
+                    obj.siglas +
+                    "<->" +
+                    (index + 1);
+                  nuevosCheckObjetivos.push(valorCheck);
+                  nuevosIdsObjetivos.push(obj.id);
+                  nuevosIdsObjetivos.push(String(obj.id));
+                  nuevoSelectObjetivo[index] = objetivosPrevios[idStr];
+                }
+              });
+
+              this.checkObjetivos = nuevosCheckObjetivos;
+              this.idsObjetivos = nuevosIdsObjetivos;
+              this.selectObjetivo = nuevoSelectObjetivo;
+            } else {
+              alert(
+                "La consulta Objetivos por Pilares Seleccionados, no se realizo correctamente.",
+              );
+            }
+          });
+      } else {
+        this.checkObjetivos = [];
+        this.selectObjetivo = [];
+        this.objetivos = [];
+        this.idsObjetivos = [];
+        this.idsPilares = [];
       }
     },
     /*VERIFICANDO OBJETIVOS AL CHECKERA */
