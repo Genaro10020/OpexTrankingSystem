@@ -107,10 +107,36 @@ if (isset($_SESSION['nombre'])) {
                     }
                     else if($arreglo['accion']=="Actualizar Proyecto"){//ACTUALIZAR PROYECTO
                         if(isset($arreglo['id_actualizar'])){
-                        $id=$arreglo['id_actualizar'];
-                        $val[] = actualizarProyecto($id,$fecha_alta_invertida, $nombre_proyecto, $fuente, $planta, $area, $departamento, $metodologia, $responsable_id, $observador,$impacto_ambiental, $impacto_ambiental_emisiones,$valores,$anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS,$idsPlanMesual, $presupuestado, $mesesPresupuestados);
+                            $id = $arreglo['id_actualizar'];
+                            $val[] = actualizarProyecto(
+                                $id,
+                                $folio,
+                                $fecha_alta_invertida,
+                                $nombre_proyecto,
+                                $fuente,
+                                $planta,
+                                $area,
+                                $departamento,
+                                $metodologia,
+                                $responsable_id,
+                                $observador,
+                                $misiones,
+                                $pilares,
+                                $objetivos,
+                                $impacto_ambiental,
+                                $impacto_ambiental_emisiones,
+                                $valores,
+                                $anioXmes,
+                                $mesXAnio,
+                                $valoresMensualCO,
+                                $valoresMensualAD,
+                                $valoresMensualAS,
+                                $idsPlanMesual,
+                                $presupuestado,
+                                $mesesPresupuestados
+                            );
                         }else{
-                        $val[] = "No llego el ID proyecto actualizar";
+                            $val[] = "No llego el ID proyecto actualizar";
                         }
                     }else{
                         $val[] = "No exista esa acción en insertar o actualizar proyecto";
@@ -121,7 +147,6 @@ if (isset($_SESSION['nombre'])) {
             } else {
                 $val[] = "No llegaron tadas la variables";
             } 
-            // ...
             break;
         case 'PUT':
             // Manejar solicitud PUT (actualización)
