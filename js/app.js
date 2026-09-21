@@ -4473,6 +4473,16 @@ const AltaProyectos = {
       return filePath.slice(filePath.lastIndexOf("/") + 1);
     },
     guardarAltaProyecto(insertar_o_actualizar) {
+      if (!this.checkObjetivos || this.checkObjetivos.length === 0) {
+        this.respondio = false;
+        Swal.fire({
+          title: "Objetivo Requerido",
+          text: "Debe seleccionar al menos un Objetivo Estratégico",
+          icon: "warning",
+        });
+        return;
+      }
+
       var fuente = "";
       var siglasFuente = "";
       var fuenteConSiglas = "";
