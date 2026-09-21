@@ -1380,96 +1380,19 @@ const AltaProyectos = {
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR OBJETIVOS POR PILARES SELECCIONADA*/
     consultarObjetivosXpilaresSeleccionados() {
       if (this.checkPilares.length > 0) {
-        this.selectObjetivo = [];
-        this.checkObjetivos = [];
-        this.objetivos = [];
-        var ids_pilares = [];
-        var indexs_pilar = [];
-        console.log(this.checkPilares);
-
-        //tomo los ids de los pilarese seleccionados y los inserto en arrelo ids.pilares y me mostrada los select correspondientes
-        for (let i = 0; i < this.checkPilares.length; i++) {
-          var id_pilar = this.checkPilares[i].split("<->")[0];
-          var index = this.checkPilares[i].split("<->")[3];
-          ids_pilares.push(id_pilar);
-          indexs_pilar.push(index);
+        let objetivosPrevios = {};
+        if (this.checkObjetivos && this.checkObjetivos.length > 0) {
+          this.checkObjetivos.forEach((item) => {
+            let partes = item.split("<->");
+            let idObj = String(partes[0]).trim();
+            let idxObj = parseInt(partes[4]) - 1;
+            let tipo =
+              this.selectObjetivo && this.selectObjetivo[idxObj]
+                ? this.selectObjetivo[idxObj]
+                : "indirecto";
+            objetivosPrevios[idObj] = tipo;
+          });
         }
-        this.idsPilares = ids_pilares;
-        console.log(indexs_pilar);
-
-        //creo posiciones
-        cantidad_pilares = [];
-        for (let index = 0; index < this.pilares.length; index++) {
-          cantidad_pilares[index] = index + 1;
-        }
-        console.log(cantidad_pilares);
-
-        //insertando indirecto check seleccionado por primera vez y que sean diferentes a Directo o Indirecto
-        for (let i = 0; i < this.pilares.length; i++) {
-          for (let j = 0; j < this.pilares.length; j++) {
-            if (indexs_pilar[i] == j + 1) {
-              if (this.selectPilar[j] == "") {
-                this.selectPilar[j] = "indirecto";
-              }
-            }
-          }
-        }
-
-        // Buscar los números faltantes
-        let faltantes = cantidad_pilares.filter(
-          (elemento) => !indexs_pilar.includes(String(elemento)),
-        );
-        let separando = faltantes.map(Number);
-
-        for (let i = 0; i < this.pilares.length; i++) {
-          for (let j = 0; j < this.pilares.length; j++) {
-            if (separando[i] == j + 1) {
-              this.selectPilar[j] = "";
-              //console.log("Reseteare"+(j+1)+"La posicion es i:"+i+"y la jota es:"+j)
-            }
-          }
-        }
-
-        if (indexs_pilar.length < this.selectPilar.length) {
-          // Calcula la diferencia de longitud
-          const diferencia = this.selectPilar.length - this.idsPilares.length;
-          // Agrega elementos vacíos ("") al final de idsPilares
-          for (let i = 0; i < diferencia; i++) {
-            this.idsPilares.push("");
-          }
-        }
-
-        axios
-          .post("objetivosController.php", {
-            idsPilares: ids_pilares,
-          })
-          .then((response) => {
-            console.log(response.data[0]);
-            if (response.data[0][1] == true) {
-              if (response.data[0][0].length > 0) {
-                //this.pilares = response.data[0][0]
-                this.objetivos = response.data[0][0];
-
-                for (let i = 0; i < this.objetivos.length; i++) {
-                  this.selectObjetivo.push("");
-                }
-              }
-              this.idsObjetivos = [];
-            } else {
-              alert(
-                "La consulta Objetivos por Pilares Seleccionados, no se realizo correctamente.",
-              );
-            }
-          })
-          .catch((error) => {
-            console.log("Erro :-(" + error);
-          })
-          .finally(() => {});
-      } else {
-        this.checkObjetivos = [];
-        this.selectObjetivo = [];
-        this.objetivos = [];
-        this.idsPilares = [];
       }
     },
     /*VERIFICANDO OBJETIVOS AL CHECKERA */
