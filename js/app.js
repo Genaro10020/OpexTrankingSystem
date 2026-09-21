@@ -4483,6 +4483,17 @@ const AltaProyectos = {
         return;
       }
 
+      let directosSeleccionados = 0;
+
+      for (let i = 0; i < this.checkObjetivos.length; i++) {
+        let partes = this.checkObjetivos[i].split("<->");
+        let indexObj = parseInt(partes[4]) - 1;
+
+        if (this.selectObjetivo[indexObj] === "directo") {
+          directosSeleccionados++;
+        }
+      }
+
       var fuente = "";
       var siglasFuente = "";
       var fuenteConSiglas = "";
