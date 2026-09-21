@@ -1405,6 +1405,35 @@ const AltaProyectos = {
         }
 
         this.idsPilares = ids_pilares;
+
+        let cantidad_pilares = [];
+
+        for (let index = 0; index < this.pilares.length; index++) {
+          cantidad_pilares[index] = index + 1;
+        }
+
+        for (let i = 0; i < this.pilares.length; i++) {
+          for (let j = 0; j < this.pilares.length; j++) {
+            if (indexs_pilar[i] == j + 1) {
+              if (this.selectPilar[j] == "") {
+                this.selectPilar[j] = "indirecto";
+              }
+            }
+          }
+        }
+
+        let faltantes = cantidad_pilares.filter((elemento) =>
+          indexs_pilar.includes(String(elemento)),
+        );
+        let separando = faltantes.map(Number);
+
+        for (let i = 0; i < this.pilares.length; i++) {
+          for (let j = 0; j < this.pilares.length; j++) {
+            if (separando[i] == j + 1) {
+              this.selectPilar[j] = "";
+            }
+          }
+        }
       }
     },
     /*VERIFICANDO OBJETIVOS AL CHECKERA */
