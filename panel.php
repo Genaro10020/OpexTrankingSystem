@@ -1548,22 +1548,22 @@ if (isset($_SESSION['nombre'])) {
                                         <!--<td class="border border-secondary">{{proyecto.telefono}}</td>-->
                                         <td class="border border-secondary text-start">
                                             <ul v-if="proyecto.pilares">
-                                                <li v-for="pilar in JSON.parse(proyecto.pilares)">{{pilar}}</li>
+                                                <li v-for="pilar in parseJSONSeguro(proyecto.pilares)">{{pilar}}</li>
                                             </ul>
                                         </td>
                                         <td class="border border-secondary text-start">
                                             <ul v-if="proyecto.objetivos">
-                                                <li v-for="objetivo in JSON.parse(proyecto.objetivos)">{{objetivo}}</li>
+                                                <li v-for="objetivo in parseJSONSeguro(proyecto.objetivos)">{{objetivo}}</li>
                                             </ul>
                                         </td>
                                         <td class="border border-secondary text-start">
                                             <ul v-if="proyecto.impacto_ambiental">
-                                                <li v-for="impacto in JSON.parse(proyecto.impacto_ambiental)">{{impacto}}</li>
+                                                <li v-for="impacto in parseJSONSeguro(proyecto.impacto_ambiental)">{{impacto}}</li>
                                             </ul>
                                         </td>
                                         <td class="border border-secondary text-start">
                                             <ul v-if="proyecto.valores">
-                                                <li v-for="(valor in JSON.parse(proyecto.valores)">
+                                                <li v-for="valor in parseJSONSeguro(proyecto.valores)">
                                                     <label :class="{'valor-calidad':'Excelencia'===valor,'valor-trabajo':'Colaboración'===valor, 'valor-compromiso':'Compromiso'===valor,'valor-servicio':'Servicio'===valor, 'valor-desarrollo':'Desarollo'===valor,'valor-integridad':'Integridad'===valor,'valor-innovacion':'Innovación'===valor}">
                                                         {{valor}}
                                                         <label>
