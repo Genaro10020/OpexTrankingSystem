@@ -567,7 +567,7 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
         $anioXmes = !is_array($anioXmes) ? json_decode($anioXmes, true) : $anioXmes;
         $mesXAnio = !is_array($mesXAnio) ? json_decode($mesXAnio, true) : $mesXAnio;
         $valoresMensualCO    = !is_array($valoresMensualCO) ? json_decode($valoresMensualCO, true) : $valoresMensualCO;
-        $valoresMensualAD    = !is_array($valoresMensualAD) ? json_decode($valoresMensualAS, true) : $valoresMensualAD;
+        $valoresMensualAD    = !is_array($valoresMensualAD) ? json_decode($valoresMensualAD, true) : $valoresMensualAD;
         $valoresMensualAS    = !is_array($valoresMensualAS) ? json_decode($valoresMensualAS, true) : $valoresMensualAS;
         $idsPlanMesual       = !is_array($idsPlanMesual) ? json_decode($idsPlanMesual, true) : $idsPlanMesual;
         $impacto_ambiental   = !is_array($impacto_ambiental) ? (json_decode($impacto_ambiental, true) ?? []) : $impacto_ambiental;
@@ -595,7 +595,7 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
             foreach ($diferentes as $impacto) {
                 $consultaIns = "INSERT INTO impacto_ambiental_proyecto (id_proyecto, impacto_ambiental) VALUES ('$id', '$impacto')";
                 if ($conexion->query($consultaIns) !== TRUE) {
-                    return "El nuevo impacto ambiental no fue agregado"
+                    return "El nuevo impacto ambiental no fue agregado";
                 }
             }
         }
