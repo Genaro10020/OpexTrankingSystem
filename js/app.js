@@ -313,6 +313,16 @@ const AltaProyectos = {
         this.tomarAnioActual() */
   },
   methods: {
+    parseJSONSeguro(valor) {
+      if (!valor) return [];
+      if (Array.isArray(valor)) return valor;
+      try {
+        let p = JSON.parse(valor);
+        return Array.isArray(p) ? p : [p];
+      } catch (e) {
+        return [valor];
+      }
+    },
     bloquerDesbloquear() {
       this.bloqueado = !this.bloqueado;
     },
