@@ -1393,6 +1393,18 @@ const AltaProyectos = {
             objetivosPrevios[idObj] = tipo;
           });
         }
+
+        var ids_pilares = [];
+        var indexs_pilar = [];
+
+        for (let i = 0; i < this.checkPilares.length; i++) {
+          var id_pilar = this.checkPilares[i].split("<->")[0];
+          var index = this.checkPilares[i].split("<->")[3];
+          ids_pilares.push(id_pilar);
+          indexs_pilar.push(index);
+        }
+
+        this.idsPilares = ids_pilares;
       }
     },
     /*VERIFICANDO OBJETIVOS AL CHECKERA */
