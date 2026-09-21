@@ -1407,7 +1407,6 @@ const AltaProyectos = {
         this.idsPilares = ids_pilares;
 
         let cantidad_pilares = [];
-
         for (let index = 0; index < this.pilares.length; index++) {
           cantidad_pilares[index] = index + 1;
         }
@@ -1422,8 +1421,8 @@ const AltaProyectos = {
           }
         }
 
-        let faltantes = cantidad_pilares.filter((elemento) =>
-          indexs_pilar.includes(String(elemento)),
+        let faltantes = cantidad_pilares.filter(
+          (elemento) => !indexs_pilar.includes(String(elemento)),
         );
         let separando = faltantes.map(Number);
 
@@ -1455,7 +1454,7 @@ const AltaProyectos = {
 
                 if (
                   objetivosPrevios[idStr] &&
-                  ids_pilares.map(String).includes(String(obj.id.pilares))
+                  ids_pilares.map(String).includes(String(obj.id_pilares))
                 ) {
                   let valorCheck =
                     obj.id +
@@ -1467,6 +1466,7 @@ const AltaProyectos = {
                     obj.siglas +
                     "<->" +
                     (index + 1);
+
                   nuevosCheckObjetivos.push(valorCheck);
                   nuevosIdsObjetivos.push(obj.id);
                   nuevosIdsObjetivos.push(String(obj.id));
@@ -1482,6 +1482,9 @@ const AltaProyectos = {
                 "La consulta Objetivos por Pilares Seleccionados, no se realizo correctamente.",
               );
             }
+          })
+          .catch((error) => {
+            console.log("Error al consultar objetivos: ", error);
           });
       } else {
         this.checkObjetivos = [];
