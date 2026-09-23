@@ -63,10 +63,17 @@ if (isset($_SESSION['nombre'])) {
                     <?php } ?>
 
                     <?php if ($_SESSION['acceso'] == 'SymaUser') { ?>
+                       <div class="col-12 d-flex justify-content-center align-items-center gap-2 rounded-3">
                         <button class="btn-menu  mb-sm-3" @click="verificarSesion(), ventana='Impactos Ambientales',opcion=7,mostrarHeader=true"
                             :class="{'btn-menu-activo': opcion===7,'btn-menu': opcion !== 7}">
                             <i class="bi bi-plus-circle"></i> Impactos Ambientales
                         </button>
+
+                        <button class="btn-menu  mb-sm-3" @click="verificarSesion(), ventana='Calculadora FE Combustibles',opcion=8,mostrarHeader=true"
+                            :class="{'btn-menu-activo': opcion===8,'btn-menu': opcion !== 8}">
+                            <i class="bi bi-plus-circle"></i> Calculadora FE Combustibles
+                        </button>
+                        </div>
                     <?php } ?>
                     <!--<button class="btn-menu" @click="ventana='Reportes'">
                         <i class="bi bi-plus-circle"></i> Reportes
@@ -3626,8 +3633,745 @@ if (isset($_SESSION['nombre'])) {
                     </div> 
                 </div>
                 <!-- FIN VENTANA Impactos Ambientales syma-->
-            </div><!--cuerpo-->
+                     <!-- VENTANA Impactos Ambientales syma-->
+                <div v-if="ventana=='Calculadora FE Combustibles'" v-cloak>
+                    <div class="container-fluid py-4">
+                            <!-- ENCABEZADO -->
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <h5 class="fw-bold mb-1" style="color:#3f6b4a;">Factores de Emisión 2026</h5>
+                                    <small class="text-muted">
+                                        Instrucciones: Captura en las celdas color amarillo los consumos de combustible
+                                        o cualquier recurso utilizado.
+                                    </small>
+                                </div>
 
+                                <button type="button" class="btn btn-sm btn-success" @click="mostrarDetalle = !mostrarDetalle">
+                                    <i :class="mostrarDetalle ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                                    {{ mostrarDetalle ? 'Ocultar factores' : 'Mostrar factores' }}
+                                </button>
+                            </div>
+
+                            <!-- ========================================================= -->
+                            <!-- TABLA PRINCIPAL: COMBUSTIBLES -->
+                            <!-- ========================================================= -->
+                            <div class="table-responsive">
+                                        <table class="table table-bordered table-sm align-middle text-center tabla-emisiones">
+
+                                            <thead>
+                                            <!-- =====================================================
+                                                FILA DE PASOS
+                                                ===================================================== -->
+                                            <tr>
+                                            <!-- Datos de entrada: 3 columnas -->
+                                            <th colspan="3"></th>
+
+                                            <!-- PASO 5: 1 columna -->
+                                            <th v-if="mostrarDetalle"
+                                                colspan="2"
+                                                class="paso-morado-1">
+                                                PASO 5
+                                            </th>
+
+                                            <!-- PASO 6: 3 columnas -->
+                                            <th v-if="mostrarDetalle"
+                                                colspan="3"
+                                                class="paso-morado-2">
+                                                PASO 6
+                                            </th>
+
+                                            <!-- PASO 7: 2 columnas -->
+                                            <th v-if="mostrarDetalle"
+                                                colspan="2"
+                                                class="paso-morado-1">
+                                                PASO 7
+                                            </th>
+
+                                            <!-- PASO 8: 4 columnas -->
+                                            <th v-if="mostrarDetalle"
+                                                colspan="4"
+                                                class="paso-morado-2">
+                                                PASO 8
+                                            </th>
+
+                                            <!-- Siempre visibles -->
+                                            <th colspan="3"></th>
+                                            <th colspan="3"></th>
+                                            <th colspan="3"></th>
+
+                                            <!-- Total -->
+                                            <th></th>
+
+                                        </tr>
+
+
+                                        <!-- =====================================================
+                                            FILA DE GRUPOS
+                                            ===================================================== -->
+                                        <tr>
+
+                                            <!-- DATOS DE ENTRADA -->
+                                            <th colspan="3" class="grupo-verde">
+                                                Datos de Entrada
+                                            </th>
+
+
+                                            <!-- PASO 5 -->
+                                            <th v-if="mostrarDetalle"
+                                                colspan="2"
+                                                class="grupo-paso-5">
+                                                Convertir Unidades
+                                            </th>
+
+
+                                            <!-- PASO 6 -->
+                                            <th v-if="mostrarDetalle"
+                                                colspan="3"
+                                                class="grupo-paso-6">
+                                                Buscar Poder Calorífico
+                                            </th>
+
+
+                                            <!-- PASO 7 -->
+                                            <th v-if="mostrarDetalle"
+                                                colspan="2"
+                                                class="grupo-paso-7">
+                                                Convertir el Poder Calorífico a
+                                            </th>
+
+
+                                            <!-- PASO 8 -->
+                                            <th v-if="mostrarDetalle"
+                                                colspan="4"
+                                                class="grupo-paso-8">
+                                                Buscar Factores de emisión
+                                            </th>
+
+
+                                            <!-- SIEMPRE VISIBLES -->
+
+                                            <th colspan="3" class="grupo-verde">
+                                                Convertir Factores de emisión
+                                            </th>
+
+                                            <th colspan="3" class="grupo-verde">
+                                                Potencial de Calentamiento Global
+                                            </th>
+
+                                            <th colspan="3" class="grupo-verde">
+                                                Cantidad de Emisiones por Gases
+                                            </th>
+
+                                            <th class="encabezado-azul">
+                                                Total
+                                            </th>
+
+                                        </tr>
+
+
+                                        <!-- =====================================================
+                                            FILA DE COLUMNAS
+                                            ===================================================== -->
+                                        <tr>
+
+                                            <!-- DATOS DE ENTRADA -->
+
+                                            <th class="encabezado-verde">
+                                                Combustible /<br>
+                                                Energético
+                                            </th>
+
+                                            <th class="encabezado-amarillo">
+                                                Cantidad a<br>
+                                                convertir
+                                            </th>
+
+                                            <th class="encabezado-verde">
+                                                Unidades
+                                            </th>
+
+
+                                            <!-- =================================================
+                                                PASO 5
+                                                CONVERTIR UNIDADES
+                                                1 COLUMNA
+                                                ================================================= -->
+
+                                            <th v-if="mostrarDetalle"
+                                                class="columna-paso-5">
+                                                Convertir el DA a
+                                            </th>
+
+                                             <th v-if="mostrarDetalle"
+                                                class="columna-paso-5">
+                                               ---
+                                            </th>
+
+                                            <!-- =================================================
+                                                PASO 6
+                                                BUSCAR PODER CALORÍFICO
+                                                3 COLUMNAS
+                                                ================================================= -->
+
+                                            <th v-if="mostrarDetalle"
+                                                class="columna-paso-6">
+                                                Poder<br>
+                                                Calorífico
+                                            </th>
+
+                                            <th v-if="mostrarDetalle"
+                                                class="columna-paso-6">
+                                                Unidad
+                                            </th>
+
+                                            <th v-if="mostrarDetalle"
+                                                class="columna-paso-6">
+                                                OTRAS<br>
+                                                CONVERSIONES
+                                            </th>
+
+
+                                            <!-- =================================================
+                                                PASO 7
+                                                CONVERTIR PODER CALORÍFICO
+                                                2 COLUMNAS
+                                                ================================================= -->
+
+                                            <th v-if="mostrarDetalle"
+                                                class="columna-paso-7">
+                                                Convertir el Poder<br>
+                                                Calorífico a
+                                            </th>
+
+                                            <th v-if="mostrarDetalle"
+                                                class="columna-paso-7">
+                                                Unidad
+                                            </th>
+
+
+                                            <!-- =================================================
+                                                PASO 8
+                                                BUSCAR FACTORES DE EMISIÓN
+                                                4 COLUMNAS
+                                                ================================================= -->
+
+                                            <th v-if="mostrarDetalle"
+                                                class="columna-paso-8">
+                                                CO₂ (T/MJ)
+                                            </th>
+
+                                            <th v-if="mostrarDetalle"
+                                                class="columna-paso-8">
+                                                CH₄ (KG/MJ)
+                                            </th>
+
+                                            <th v-if="mostrarDetalle"
+                                                class="columna-paso-8">
+                                                N₂O (KG/MJ)
+                                            </th>
+
+                                            <th v-if="mostrarDetalle"
+                                                class="columna-paso-8">
+                                                otros
+                                            </th>
+
+                                            <!-- =================================================
+                                                CONVERTIR FACTORES DE EMISIÓN
+                                                SIEMPRE VISIBLE
+                                                ================================================= -->
+
+                                            <th class="encabezado-verde">
+                                                CO₂ (T/GJ)
+                                            </th>
+
+                                            <th class="encabezado-verde">
+                                                CH₄ (T/GJ)
+                                            </th>
+
+                                            <th class="encabezado-verde">
+                                                N₂O (T/GJ)
+                                            </th>
+
+
+                                            <!-- =================================================
+                                                POTENCIAL DE CALENTAMIENTO GLOBAL
+                                                SIEMPRE VISIBLE - INPUT
+                                                ================================================= -->
+
+                                            <th class="encabezado-verde">
+                                                CO₂
+                                            </th>
+
+                                            <th class="encabezado-verde">
+                                                CH₄
+                                            </th>
+
+                                            <th class="encabezado-verde">
+                                                N₂O
+                                            </th>
+
+                                            <!-- =================================================
+                                                CANTIDAD DE EMISIONES POR GASES
+                                                SIEMPRE VISIBLE - INPUT
+                                                ================================================= -->
+
+                                            <th class="encabezado-verde">
+                                                CO₂<br>
+                                                <small>(tCO₂e)</small>
+                                            </th>
+
+                                            <th class="encabezado-verde">
+                                                CH₄<br>
+                                                <small>(tCO₂e)</small>
+                                            </th>
+
+                                            <th class="encabezado-verde">
+                                                N₂O<br>
+                                                <small>(tCO₂e)</small>
+                                            </th>
+
+                                            <!-- TOTAL -->
+                                            <th class="encabezado-azul">
+                                                tCO₂e
+                                            </th>
+                                        </tr>
+                                    </thead>
+
+                                            <!-- =========================================================
+                                                CUERPO DE LA TABLA
+                                                ========================================================= -->
+                                            <tbody>
+
+                                        <tr v-for="(item, key) in combustibles" :key="key">
+
+                                            <!-- =================================================
+                                                DATOS DE ENTRADA
+                                                ================================================= -->
+
+                                            <td class="text-start">
+                                                {{ item.nombre }}
+                                            </td>
+
+                                            <td class="celda-input-importante">
+                                                <input
+                                                    type="number"
+                                                    class="form-control form-control-sm"
+                                                    v-model.number="item.cantidad">
+                                            </td>
+
+                                           <td 
+                                                class="celda-input">
+                                                <input
+                                                    type="text"
+                                                    class="form-control form-control-sm"
+                                                    v-model="item.um">
+
+                                            </td>
+
+
+                                            <!-- =================================================
+                                                PASO 5 - 1
+                                                ================================================= -->
+
+                                            <td v-if="mostrarDetalle" class="celda-input columna-paso-5">
+                                                <input
+                                                    type="text"
+                                                    class="form-control form-control-sm"
+                                                    v-model.number="item.cantidad"
+                                                    step="any">
+                                            </td>
+
+                                              <td v-if="mostrarDetalle"
+                                                class="celda-input columna-paso-7">
+
+                                                <input
+                                                    type="text"
+                                                    class="form-control form-control-sm"
+                                                    v-model="item.um">
+
+                                            </td>
+
+
+                                            <!-- =================================================
+                                                PASO 6 - 3
+                                                ================================================= -->
+
+                                            <td v-if="mostrarDetalle"
+                                                class="celda-input columna-paso-6">
+
+                                                <input
+                                                    type="number"
+                                                    class="form-control form-control-sm"
+                                                    v-model.number="item.poderCalorifico">
+
+                                            </td>
+
+                                            <td v-if="mostrarDetalle"
+                                                class="celda-input columna-paso-6">
+
+                                                <input
+                                                    type="text"
+                                                    class="form-control form-control-sm"
+                                                    v-model="item.unidadPC">
+
+                                            </td>
+
+                                            <td v-if="mostrarDetalle"
+                                                class="celda-input columna-paso-6">
+
+                                                <input
+                                                    type="number"
+                                                    class="form-control form-control-sm"
+                                                    v-model.number="item.otrasConversiones"
+                                                    step="any">
+
+                                            </td>
+
+
+                                            <!-- =================================================
+                                                PASO 7 - 2
+                                                ================================================= -->
+
+                                            <td v-if="mostrarDetalle"
+                                                class="celda-input columna-paso-7">
+
+                                                <input
+                                                    type="number"
+                                                    class="form-control form-control-sm"
+                                                    v-model.number="item.convertirPCa"
+                                                    step="any">
+
+                                            </td>
+
+                                            <td v-if="mostrarDetalle"
+                                                class="celda-input columna-paso-7">
+
+                                                <input
+                                                    type="text"
+                                                    class="form-control form-control-sm"
+                                                    v-model="item.unidadPCConvertido">
+
+                                            </td>
+
+
+                                            <!-- =================================================
+                                                PASO 8 - 4
+                                                ================================================= -->
+
+                                            <td v-if="mostrarDetalle"
+                                                class="celda-input columna-paso-8">
+
+                                                <input
+                                                    type="number"
+                                                    class="form-control form-control-sm"
+                                                    v-model.number="item.co2"
+                                                    step="any">
+
+                                            </td>
+
+                                            <td v-if="mostrarDetalle"
+                                                class="celda-input columna-paso-8">
+
+                                                <input
+                                                    type="number"
+                                                    class="form-control form-control-sm"
+                                                    v-model.number="item.ch4"
+                                                    step="any">
+
+                                            </td>
+
+                                            <td v-if="mostrarDetalle"
+                                                class="celda-input columna-paso-8">
+
+                                                <input
+                                                    type="number"
+                                                    class="form-control form-control-sm"
+                                                    v-model.number="item.n2o"
+                                                    step="any">
+
+                                            </td>
+
+                                            <td v-if="mostrarDetalle"
+                                                class="celda-input columna-paso-8">
+
+                                                <input
+                                                    type="number"
+                                                    class="form-control form-control-sm"
+                                                    v-model.number="item.otros"
+                                                    step="any">
+
+                                            </td>
+
+
+                                            <!-- =================================================
+                                                CONVERTIR FACTORES DE EMISIÓN - 3
+                                                SIEMPRE VISIBLE
+                                                ================================================= -->
+
+                                            <td class="celda-input">
+                                                <input
+                                                    type="number"
+                                                    class="form-control form-control-sm"
+                                                    v-model.number="item.co2GJ"
+                                                    step="any">
+                                            </td>
+
+                                            <td class="celda-input">
+                                                <input
+                                                    type="number"
+                                                    class="form-control form-control-sm"
+                                                    v-model.number="item.ch4GJ"
+                                                    step="any">
+                                            </td>
+
+                                            <td class="celda-input">
+                                                <input
+                                                    type="number"
+                                                    class="form-control form-control-sm"
+                                                    v-model.number="item.n2oGJ"
+                                                    step="any">
+                                            </td>
+
+                                            <!-- =================================================
+                                                PCG - 3
+                                                SIEMPRE VISIBLE
+                                                INPUTS
+                                                ================================================= -->
+
+                                            <td class="celda-input">
+                                                <input
+                                                    type="number"
+                                                    class="form-control form-control-sm"
+                                                    v-model.number="item.pcgCO2"
+                                                    step="any">
+                                            </td>
+
+                                            <td class="celda-input">
+                                                <input
+                                                    type="number"
+                                                    class="form-control form-control-sm"
+                                                    v-model.number="item.pcgCH4"
+                                                    step="any">
+                                            </td>
+
+                                            <td class="celda-input">
+                                                <input
+                                                    type="number"
+                                                    class="form-control form-control-sm"
+                                                    v-model.number="item.pcgN2O"
+                                                    step="any">
+                                            </td>
+
+                                            <!-- =================================================
+                                                CANTIDAD DE EMISIONES - 3
+                                                SIEMPRE VISIBLE
+                                                INPUTS
+                                                ================================================= -->
+                                            <td class="celda-input">
+                                                <input
+                                                    type="number"
+                                                    class="form-control form-control-sm"
+                                                    v-model.number="item.emisionesCO2"
+                                                    step="any">
+                                            </td>
+
+                                            <td class="celda-input">
+                                                <input
+                                                    type="number"
+                                                    class="form-control form-control-sm"
+                                                    v-model.number="item.emisionesCH4"
+                                                    step="any">
+                                            </td>
+                                            <td class="celda-input">
+                                                <input
+                                                    type="number"
+                                                    class="form-control form-control-sm"
+                                                    v-model.number="item.emisionesN2O"
+                                                    step="any">
+                                            </td>
+                                            <!-- =================================================
+                                                TOTAL - 1
+                                                ================================================= -->
+
+                                            <td class="fw-bold celda-total">
+                                                {{ totalPorCombustible[key].toFixed(2) }}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                        </table>
+                                    </div>
+
+
+                            <!-- ========================================================= -->
+                            <!-- TABLAS INFERIORES -->
+                            <!-- ========================================================= -->
+                            <div class="row mt-3 g-3">
+
+                              <!-- ===================================================== -->
+                                    <!-- TABLA ENERGÉTICOS -->
+                                    <!-- ===================================================== -->
+                                    <div class="col-12 col-lg-6">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-sm align-middle text-center tabla-emisiones">
+
+                                                <thead>
+                                                    <tr>
+                                                        <th class="encabezado-verde">Energético</th>
+                                                        <th class="encabezado-amarillo">Cantidad a convertir</th>
+                                                        <th class="encabezado-verde">Unidades</th>
+                                                        <th class="encabezado-verde">Factores de emisión</th>
+                                                        <th class="encabezado-verde">Unidad</th>
+                                                        <th class="encabezado-azul">Total<br>tCO₂e</th>
+                                                        <th class="encabezado-verde">Referencia / Fuente Oficial</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                    <tr v-for="(item, key) in energeticos" :key="key">
+
+                                                        <!-- Energético -->
+                                                        <td class="celda-input">
+                                                            <input
+                                                                type="text"
+                                                                class="form-control form-control-sm"
+                                                                v-model="item.nombre"
+                                                            >
+                                                        </td>
+
+                                                        <!-- Cantidad a convertir -->
+                                                        <td class="celda-input-importante celda-input">
+                                                            <input
+                                                                type="number"
+                                                                class="form-control form-control-sm"
+                                                                v-model.number="item.cantidad"
+                                                                step="any"
+                                                            >
+                                                        </td>
+
+                                                        <!-- Unidades -->
+                                                        <td class="celda-input">
+                                                            <input
+                                                                type="text"
+                                                                class="form-control form-control-sm"
+                                                                v-model="item.unidad"
+                                                            >
+                                                        </td>
+
+                                                        <!-- Factor de emisión -->
+                                                        <td class="celda-input">
+                                                            <input
+                                                                type="number"
+                                                                class="form-control form-control-sm"
+                                                                v-model.number="item.factorEmision"
+                                                                step="any"
+                                                            >
+                                                        </td>
+
+                                                        <!-- Unidad del factor -->
+                                                        <td class="celda-input">
+                                                            <input
+                                                                type="text"
+                                                                class="form-control form-control-sm"
+                                                                v-model="item.unidadFactor"
+                                                            >
+                                                        </td>
+
+                                                        <!-- Total tCO2e -->
+                                                        <td class="celda-input total-tco2e">
+                                                            <input
+                                                                type="number"
+                                                                class="form-control form-control-sm"
+                                                                v-model.number="item.totalTCO2e"
+                                                                step="any"
+                                                            >
+                                                        </td>
+
+                                                        <!-- Referencia / Fuente Oficial -->
+                                                        <td class="celda-input fuente-oficial">
+                                                            <input
+                                                                type="text"
+                                                                class="form-control form-control-sm"
+                                                                v-model="item.fuente"
+                                                            >
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+
+                                <!-- ===================================================== -->
+                                <!-- Emisiones equivalentes -->
+                                <!-- ===================================================== -->
+                                <div class="col-12 col-lg-6">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-sm align-middle text-center tabla-emisiones">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="2" class="grupo-verde">Emisiones equivalentes</th>
+                                                    <th colspan="2" class="grupo-verde">Convertir factores de emisión</th>
+                                                    <th colspan="2" class="grupo-verde">Factores de emisión</th>
+                                                    <th class="encabezado-azul">Total</th>
+                                                </tr>
+                                                <tr>
+                                                    <th class="encabezado-verde">Multiplicar DA x FE</th>
+                                                    <th class="encabezado-verde">Unidad</th>
+                                                    <th class="encabezado-verde">Convertir el F.E. a</th>
+                                                    <th class="encabezado-verde">Unidad</th>
+                                                    <th class="encabezado-verde">Factor de emisión</th>
+                                                    <th class="encabezado-verde">Unidad</th>
+                                                    <th class="encabezado-azul">tCO₂e</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="celda-input">
+                                                        <input type="number" class="form-control form-control-sm"
+                                                            v-model.number="emisionesEquivalentesElectricidad.multiplicarDAxFE" step="any">
+                                                    </td>
+
+                                                    <td class="celda-input">
+                                                        <input type="text" class="form-control form-control-sm"
+                                                            v-model="emisionesEquivalentesElectricidad.unidad">
+                                                    </td>
+
+                                                    <td class="celda-input">
+                                                        <input type="number" class="form-control form-control-sm"
+                                                            v-model.number="emisionesEquivalentesElectricidad.convertirFEa" step="any">
+                                                    </td>
+
+                                                    <td class="celda-input">
+                                                        <input type="text" class="form-control form-control-sm"
+                                                            v-model="emisionesEquivalentesElectricidad.unidadFE">
+                                                    </td>
+
+                                                    <td class="celda-input">
+                                                        <input type="number" class="form-control form-control-sm"
+                                                            v-model.number="emisionesEquivalentesElectricidad.factorEmision" step="any">
+                                                    </td>
+
+                                                    <td class="celda-input">
+                                                        <input type="text" class="form-control form-control-sm"
+                                                            v-model="emisionesEquivalentesElectricidad.unidadFactor">
+                                                    </td>
+
+                                                    <!-- TOTAL -> AZUL -->
+                                                    <td class="fw-bold celda-total">
+                                                        {{ totalElectricidad.toFixed(2) }}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                   <!--Fin contenido-->
+                </div>
+                <!--Fin calculadores FE combustibles-->
+
+            </div><!--cuerpo-->
             <div class="footer row" style="min-height:10vh;"> <!--pie-->
 
             </div>

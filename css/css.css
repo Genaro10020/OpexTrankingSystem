@@ -1074,6 +1074,135 @@ button {
 .bg-integridad{background: #99183f;}
 .bg-innovacion{background: #65293b;}
 
+/* Paleta pastel ambiental - complementa Bootstrap 5.1.3 */
+.tabla-emisiones {
+    --verde-header: #eaf4ea;      /* headers de grupo */
+    --verde-titulo: #7fb08a;      /* título Energético */
+    --verde-fila: #f6faf6;        /* filas alternas */
+    --gris-paso-1: #f1f2f3;       /* PASO impar */
+    --gris-paso-2: #e6e7e9;       /* PASO par */
+    --azul-cantidad: #e3f0fb;     /* cantidad a convertir */
+    --azul-total: #d9ecf7;        /* totales */
+    --borde-suave: #d7e5d7;
+    --amarillo-input: #faf7ce;
+
+    font-size: 0.85rem;
+}
+
+.tabla-emisiones th,
+.tabla-emisiones td {
+    border-color: var(--borde-suave) !important;
+    vertical-align: middle;
+}
+
+/* Fila de PASOS - grises tenues alternados */
+.tabla-emisiones .paso-gris-1 {
+    background-color: var(--gris-paso-1) !important;
+    color: #495057;
+    font-weight: 600;
+    font-size: 0.72rem;
+    letter-spacing: .4px;
+    text-transform: uppercase;
+}
+.tabla-emisiones .paso-gris-2 {
+    background-color: var(--gris-paso-2) !important;
+    color: #495057;
+    font-weight: 600;
+    font-size: 0.72rem;
+    letter-spacing: .4px;
+    text-transform: uppercase;
+}
+
+/* Fila de grupos (Datos de entrada, Poder calorífico, etc.) */
+.tabla-emisiones .grupo-verde {
+    background-color: var(--verde-header) !important;
+    color: #3f6b4a;
+    font-weight: 600;
+    font-size: 0.76rem;
+}
+
+/* Encabezados de columna */
+.tabla-emisiones .encabezado-verde {
+    background-color: #f3f8f3 !important;
+    color: #3f6b4a;
+    font-weight: 600;
+    font-size: 0.76rem;
+}
+
+/* Encabezados columna azul (cantidad / total) */
+.tabla-emisiones .encabezado-azul {
+    background-color: #eaf4fb !important;
+    color: #2c6a8f;
+    font-weight: 600;
+    font-size: 0.76rem;
+}
+
+.tabla-emisiones .encabezado-amarillo {
+    background-color: var(--amarillo-input) !important;
+    color: #403f3d;
+    font-weight: 600;
+    font-size: 0.76rem;
+}
+
+/* Título tabla Energético */
+.tabla-emisiones .titulo-tabla {
+    background-color: var(--verde-titulo);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-align: left;
+    padding-left: .75rem;
+}
+
+/* Filas del cuerpo */
+.tabla-emisiones tbody tr:nth-child(odd) {
+    background-color: var(--verde-fila);
+}
+.tabla-emisiones tbody tr:hover {
+    background-color: #eef6ee;
+}
+
+/* Footer */
+.tabla-emisiones tfoot td {
+    background-color: var(--verde-header) !important;
+    color: #3f6b4a;
+}
+
+/* Celdas input genéricas */
+.celda-input .form-control {
+    border: 1px solid var(--borde-suave);
+    background-color: #fff;
+    text-align: center;
+    padding: 2px 4px;
+}
+.celda-input .form-control:focus {
+    border-color: #7fb08a;
+    box-shadow: 0 0 0 .15rem rgba(127, 176, 138, .25);
+}
+
+/* Cantidad a convertir -> azul pastel */
+.celda-cantidad {
+    background-color: var(--azul-cantidad) !important;
+}
+.celda-cantidad .form-control {
+    background-color: #fff;
+    border-color: #a9cdea;
+}
+.celda-cantidad .form-control:focus {
+    border-color: #5fa3d6;
+    box-shadow: 0 0 0 .15rem rgba(95, 163, 214, .25);
+}
+
+/* Total -> azul pastel */
+.celda-total {
+    background-color: var(--azul-total) !important;
+    color: #1f5c7a;
+}
+.celda-input-importante {
+    background-color: var(--amarillo-input) !important;
+    color: #edd976;
+}
+
 
 
 /* Small devices (landscape phones, 576px and up)*/
@@ -1114,6 +1243,24 @@ button {
         font-size: 0.9em;
     }
 
+}
+
+.paso-morado-1,
+.grupo-paso-5,
+.columna-paso-5,
+.grupo-paso-7,
+.columna-paso-7 {
+    background-color: #c5eabc !important;
+    color:#2c2c2c
+}
+
+.paso-morado-2,
+.grupo-paso-6,
+.columna-paso-6,
+.grupo-paso-8,
+.columna-paso-8 {
+    background-color: #73b877 !important;
+    color: #f3ea99;
 }
 
 

@@ -303,8 +303,145 @@ const AltaProyectos = {
       requisito: "",
       mostrarListaRequisitos: false,
       requisitosFiltrados: [],
-    };
-  },
+      //////////CALCULADORES FE COMBUSTIBLES
+      //TABLA COMBUSTBLES ENERGETICOS
+         mostrarDetalle: false,
+
+    // ============================
+    // TABLA COMBUSTIBLES
+    // ============================
+    combustibles: {
+      gasolina: {
+        nombre: 'Gasolina',
+        cantidad: 0,              // input amarillo
+        unidad: 'Litros',
+        convertirDAa: 0,          // input
+        um: "L",
+        unidadConvertida: 'L',
+
+        poderCalorifico: 5613,    // input
+        unidadPC: 'MJ/Bl',
+
+        convertirPCa: 0.035304707,// input
+        unidadPCConvertido: 'GJ/L',
+
+        co2: 0.0000693,           // input (T/MJ)
+        ch4: 0.000025,            // input (KG/MJ)
+        n2o: 0.000008,            // input (KG/MJ)
+        otros: 0,                 // input
+
+        co2GJ: 0.0693,            // input (T/GJ)
+        ch4GJ: 0.000025,          // input (T/GJ)
+        n2oGJ: 0.000008,          // input (T/GJ)
+
+        pcgCO2: 1,   // fijo (GWP)
+        pcgCH4: 28,  // fijo (GWP)
+        pcgN2O: 265  // fijo (GWP)
+      },
+
+      diesel: {
+          nombre: 'Diésel',
+          cantidad: 0,
+          unidad: 'Litros',
+          convertirDAa: 0,
+          um: "L",
+          unidadConvertida: 'L',
+
+          poderCalorifico: 6065,
+          unidadPC: 'MJ/Bl',
+
+          convertirPCa: 0.038147701,
+          unidadPCConvertido: 'GJ/L',
+
+          co2: 0.0000741,
+          ch4: 0.0000039,
+          n2o: 0.0000039,
+          otros: 0,
+
+          co2GJ: 0.0741,
+          ch4GJ: 0.0000039,
+          n2oGJ: 0.0000039,
+
+          pcgCO2: 1,
+          pcgCH4: 28,
+          pcgN2O: 265
+      },
+
+      gasNatural: {
+                nombre: 'Gas Natural',
+                cantidad: 0,
+                unidad: 'm³',
+
+                poderCalorifico: 0,
+                unidadPC: '',
+                convertirDAa: 0,
+                um: "m3",
+                otrasConversiones: 0,
+
+                convertirPCa: 0,
+                unidadPCConvertido: '',
+
+                co2: 0,
+                ch4: 0,
+                n2o: 0,
+
+                pcgCO2: 1,
+                pcgCH4: 28,
+                pcgN2O: 265,
+
+                co2GJ: 0,
+                ch4GJ: 0,
+                n2oGJ: 0,
+
+                // Nuevas
+                emisionesCO2: 0,
+                emisionesCH4: 0,
+                emisionesN2O: 0
+            }
+    },
+
+// ============================
+// TABLA ENERGÉTICOS
+// ============================
+energeticos: {
+    electricidad: {
+        // Energético
+        nombre: 'Electricidad',
+
+        // Cantidad a convertir
+        cantidad: 1.00,
+
+        // Unidades de la cantidad
+        unidad: 'KWH',
+
+        // Factor de emisión
+        factorEmision: 0.444,
+
+        // Unidad del factor de emisión
+        unidadFactor: 'tCO₂/MWH',
+
+        // Total calculado
+        totalTCO2e: 0.000444,
+
+        // Referencia / Fuente Oficial
+        fuente: 'Factor de Emisión del Sistema Eléctrico Nacional (SEN), SEMARNAT/SENER, utilizado para COA-RENE 2026'
+    }
+},
+
+
+    // ============================
+    // TABLA EMISIONES EQUIVALENTES (parte inferior derecha)
+    // ============================
+        emisionesEquivalentesElectricidad: {
+          multiplicarDAxFE: 0,     // calculado, pero lo dejo como input editable
+          unidad: 'TON CO2 E',
+          convertirFEa: 0,         // input
+          unidadFE: '',
+          factorEmision: 0.444,    // input
+          unidadFactor: 'tCO2/MWH'
+        }
+      }
+    },
   mounted() {
     //  this.consultarUsuarios()
     this.whoWindows();
@@ -312,6 +449,34 @@ const AltaProyectos = {
         this.consultarSumaProyectos()
         this.tomarAnioActual() */
   },
+  computed: {
+      // Total tCO2e por combustible: cantidad -> GJ -> emisiones -> tCO2e
+      totalPorCombustible() {
+        const calc = (c) => {
+          const gj = c.cantidad * c.convertirDAa * c.convertirPCa; // energía en GJ
+          const co2e = gj * c.co2GJ * c.pcgCO2;
+          const ch4e = gj * c.ch4GJ * c.pcgCH4;
+          const n2oe = gj * c.n2oGJ * c.pcgN2O;
+          return co2e + ch4e + n2oe;
+        };
+
+        return {
+          gasolina: calc(this.combustibles.gasolina),
+          diesel: calc(this.combustibles.diesel),
+          gasNatural: calc(this.combustibles.gasNatural)
+        };
+      },
+
+      totalGeneralCombustibles() {
+        const t = this.totalPorCombustible;
+        return t.gasolina + t.diesel + t.gasNatural;
+      },
+
+      totalElectricidad() {
+        const e = this.emisionesEquivalentesElectricidad;
+        return this.energeticos.electricidad.cantidad * e.factorEmision;
+      }
+    },
   methods: {
     parseJSONSeguro(valor) {
       if (!valor) return [];
