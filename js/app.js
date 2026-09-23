@@ -1545,31 +1545,37 @@ energeticos: {
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR OBJETIVOS POR PILARES SELECCIONADA*/
     consultarObjetivosXpilaresSeleccionados() {
       if (this.checkPilares.length > 0) {
-        this.selectObjetivo = [];
-        this.checkObjetivos = [];
-        this.objetivos = [];
+        let objetivosPrevios = {};
+        if (this.checkObjetivos && this.checkObjetivos.length > 0) {
+          this.checkObjetivos.forEach((item) => {
+            let partes = item.split("<->");
+            let idObj = String(partes[0]).trim();
+            let idxObj = parseInt(partes[4]) - 1;
+            let tipo =
+              this.selectObjetivo && this.selectObjetivo[idxObj]
+                ? this.selectObjetivo[idxObj]
+                : "indirecto";
+            objetivosPrevios[idObj] = tipo;
+          });
+        }
+
         var ids_pilares = [];
         var indexs_pilar = [];
-        console.log(this.checkPilares);
 
-        //tomo los ids de los pilarese seleccionados y los inserto en arrelo ids.pilares y me mostrada los select correspondientes
         for (let i = 0; i < this.checkPilares.length; i++) {
           var id_pilar = this.checkPilares[i].split("<->")[0];
           var index = this.checkPilares[i].split("<->")[3];
           ids_pilares.push(id_pilar);
           indexs_pilar.push(index);
         }
-        this.idsPilares = ids_pilares;
-        console.log(indexs_pilar);
 
-        //creo posiciones
-        cantidad_pilares = [];
+        this.idsPilares = ids_pilares;
+
+        let cantidad_pilares = [];
         for (let index = 0; index < this.pilares.length; index++) {
           cantidad_pilares[index] = index + 1;
         }
-        console.log(cantidad_pilares);
 
-        //insertando indirecto check seleccionado por primera vez y que sean diferentes a Directo o Indirecto
         for (let i = 0; i < this.pilares.length; i++) {
           for (let j = 0; j < this.pilares.length; j++) {
             if (indexs_pilar[i] == j + 1) {
@@ -1580,7 +1586,6 @@ energeticos: {
           }
         }
 
-        // Buscar los números faltantes
         let faltantes = cantidad_pilares.filter(
           (elemento) => !indexs_pilar.includes(String(elemento)),
         );
@@ -1590,17 +1595,7 @@ energeticos: {
           for (let j = 0; j < this.pilares.length; j++) {
             if (separando[i] == j + 1) {
               this.selectPilar[j] = "";
-              //console.log("Reseteare"+(j+1)+"La posicion es i:"+i+"y la jota es:"+j)
             }
-          }
-        }
-
-        if (indexs_pilar.length < this.selectPilar.length) {
-          // Calcula la diferencia de longitud
-          const diferencia = this.selectPilar.length - this.idsPilares.length;
-          // Agrega elementos vacíos ("") al final de idsPilares
-          for (let i = 0; i < diferencia; i++) {
-            this.idsPilares.push("");
           }
         }
 
@@ -1609,17 +1604,44 @@ energeticos: {
             idsPilares: ids_pilares,
           })
           .then((response) => {
-            console.log(response.data[0]);
             if (response.data[0][1] == true) {
-              if (response.data[0][0].length > 0) {
-                //this.pilares = response.data[0][0]
-                this.objetivos = response.data[0][0];
+              let listaObjetivos = response.data[0][0] || [];
+              this.objetivos = listaObjetivos;
 
-                for (let i = 0; i < this.objetivos.length; i++) {
-                  this.selectObjetivo.push("");
+              let nuevosCheckObjetivos = [];
+              let nuevosIdsObjetivos = [];
+              let nuevoSelectObjetivo = new Array(listaObjetivos.length).fill(
+                "",
+              );
+
+              listaObjetivos.forEach((obj, index) => {
+                let idStr = String(obj.id).trim();
+
+                if (
+                  objetivosPrevios[idStr] &&
+                  ids_pilares.map(String).includes(String(obj.id_pilares))
+                ) {
+                  let valorCheck =
+                    obj.id +
+                    "<->" +
+                    obj.nombre +
+                    "<->" +
+                    obj.id_pilares +
+                    "<->" +
+                    obj.siglas +
+                    "<->" +
+                    (index + 1);
+
+                  nuevosCheckObjetivos.push(valorCheck);
+                  nuevosIdsObjetivos.push(obj.id);
+                  nuevosIdsObjetivos.push(String(obj.id));
+                  nuevoSelectObjetivo[index] = objetivosPrevios[idStr];
                 }
-              }
-              this.idsObjetivos = [];
+              });
+
+              this.checkObjetivos = nuevosCheckObjetivos;
+              this.idsObjetivos = nuevosIdsObjetivos;
+              this.selectObjetivo = nuevoSelectObjetivo;
             } else {
               alert(
                 "La consulta Objetivos por Pilares Seleccionados, no se realizo correctamente.",
@@ -1627,13 +1649,13 @@ energeticos: {
             }
           })
           .catch((error) => {
-            console.log("Erro :-(" + error);
-          })
-          .finally(() => {});
+            console.log("Error al consultar objetivos: ", error);
+          });
       } else {
         this.checkObjetivos = [];
         this.selectObjetivo = [];
         this.objetivos = [];
+        this.idsObjetivos = [];
         this.idsPilares = [];
       }
     },
@@ -4638,6 +4660,38 @@ energeticos: {
       return filePath.slice(filePath.lastIndexOf("/") + 1);
     },
     guardarAltaProyecto(insertar_o_actualizar) {
+      if (!this.checkObjetivos || this.checkObjetivos.length === 0) {
+        this.respondio = false;
+        Swal.fire({
+          title: "Objetivo Requerido",
+          text: "Debe seleccionar al menos un Objetivo Estratégico",
+          icon: "warning",
+        });
+        return;
+      }
+
+      let directosSeleccionados = 0;
+
+      for (let i = 0; i < this.checkObjetivos.length; i++) {
+        let partes = this.checkObjetivos[i].split("<->");
+        let indexObj = parseInt(partes[4]) - 1;
+
+        if (this.selectObjetivo[indexObj] === "directo") {
+          directosSeleccionados++;
+        }
+      }
+
+      if (directosSeleccionados === 0) {
+        this.respondio = false;
+        Swal.fire({
+          title: "Objetivo Directo Requerido",
+          text: "Un objetivo debe ser 'Directo'",
+          icon: "warning",
+        });
+
+        return;
+      }
+
       var fuente = "";
       var siglasFuente = "";
       var fuenteConSiglas = "";
