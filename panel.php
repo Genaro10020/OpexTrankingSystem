@@ -69,7 +69,7 @@ if (isset($_SESSION['nombre'])) {
                             <i class="bi bi-plus-circle"></i> Impactos Ambientales
                         </button>
 
-                        <button class="btn-menu  mb-sm-3" @click="verificarSesion(), ventana='Calculadora FE Combustibles',opcion=8,mostrarHeader=true"
+                        <button class="btn-menu  mb-sm-3" @click="verificarSesion(),consultarFactoresConversion(),consultarFactoresCombustibles(), ventana='Calculadora FE Combustibles',opcion=8,mostrarHeader=true"
                             :class="{'btn-menu-activo': opcion===8,'btn-menu': opcion !== 8}">
                             <i class="bi bi-plus-circle"></i> Calculadora FE Combustibles
                         </button>
@@ -3663,43 +3663,54 @@ if (isset($_SESSION['nombre'])) {
                                                 FILA DE PASOS
                                                 ===================================================== -->
                                             <tr>
+                                            <th><!----></th>
                                             <!-- Datos de entrada: 3 columnas -->
                                             <th colspan="3"></th>
 
                                             <!-- PASO 5: 1 columna -->
                                             <th v-if="mostrarDetalle"
                                                 colspan="2"
-                                                class="paso-morado-1">
+                                                class="paso-morado-2">
                                                 PASO 5
                                             </th>
 
                                             <!-- PASO 6: 3 columnas -->
                                             <th v-if="mostrarDetalle"
-                                                colspan="3"
-                                                class="paso-morado-2">
+                                                colspan="2"
+                                                class="paso-morado-1">
                                                 PASO 6
                                             </th>
 
                                             <!-- PASO 7: 2 columnas -->
                                             <th v-if="mostrarDetalle"
                                                 colspan="2"
-                                                class="paso-morado-1">
+                                                class="paso-morado-2">
                                                 PASO 7
                                             </th>
 
                                             <!-- PASO 8: 4 columnas -->
                                             <th v-if="mostrarDetalle"
-                                                colspan="4"
-                                                class="paso-morado-2">
+                                                colspan="3"
+                                                class="paso-morado-1">
                                                 PASO 8
                                             </th>
+                                        
+                                             <!-- PASO 9: 4 columnas -->
+                                            <th v-if="mostrarDetalle"
+                                                colspan="3"
+                                                class="paso-morado-2">
+                                                PASO 9
+                                            </th>
 
-                                            <!-- Siempre visibles -->
-                                            <th colspan="3"></th>
+                                            
+                                            <!-- Siempre visibles -->    
                                             <th colspan="3"></th>
                                             <th colspan="3"></th>
 
                                             <!-- Total -->
+                                            <th></th>
+
+                                            <!-- Referencia / Fuente Oficial -->
                                             <th></th>
 
                                         </tr>
@@ -3709,7 +3720,7 @@ if (isset($_SESSION['nombre'])) {
                                             FILA DE GRUPOS
                                             ===================================================== -->
                                         <tr>
-
+                                            <th class="encabezado-verde"><!----></th>
                                             <!-- DATOS DE ENTRADA -->
                                             <th colspan="3" class="grupo-verde">
                                                 Datos de Entrada
@@ -3726,7 +3737,7 @@ if (isset($_SESSION['nombre'])) {
 
                                             <!-- PASO 6 -->
                                             <th v-if="mostrarDetalle"
-                                                colspan="3"
+                                                colspan="2"
                                                 class="grupo-paso-6">
                                                 Buscar Poder Calorífico
                                             </th>
@@ -3742,7 +3753,7 @@ if (isset($_SESSION['nombre'])) {
 
                                             <!-- PASO 8 -->
                                             <th v-if="mostrarDetalle"
-                                                colspan="4"
+                                                colspan="3"
                                                 class="grupo-paso-8">
                                                 Buscar Factores de emisión
                                             </th>
@@ -3750,7 +3761,10 @@ if (isset($_SESSION['nombre'])) {
 
                                             <!-- SIEMPRE VISIBLES -->
 
-                                            <th colspan="3" class="grupo-verde">
+                                             <!-- PASO 6 -->
+                                            <th v-if="mostrarDetalle"
+                                                colspan="3"
+                                                class="grupo-paso-9">
                                                 Convertir Factores de emisión
                                             </th>
 
@@ -3765,7 +3779,9 @@ if (isset($_SESSION['nombre'])) {
                                             <th class="encabezado-azul">
                                                 Total
                                             </th>
-
+                                            <th rowspan="2" class="grupo-verde">
+                                                Referencia / Fuente Oficial
+                                            </th>
                                         </tr>
 
 
@@ -3775,7 +3791,7 @@ if (isset($_SESSION['nombre'])) {
                                         <tr>
 
                                             <!-- DATOS DE ENTRADA -->
-
+                                            <th class="encabezado-verde"><!----></th>
                                             <th class="encabezado-verde">
                                                 Combustible /<br>
                                                 Energético
@@ -3804,7 +3820,7 @@ if (isset($_SESSION['nombre'])) {
 
                                              <th v-if="mostrarDetalle"
                                                 class="columna-paso-5">
-                                               ---
+                                               U.M
                                             </th>
 
                                             <!-- =================================================
@@ -3823,13 +3839,6 @@ if (isset($_SESSION['nombre'])) {
                                                 class="columna-paso-6">
                                                 Unidad
                                             </th>
-
-                                            <th v-if="mostrarDetalle"
-                                                class="columna-paso-6">
-                                                OTRAS<br>
-                                                CONVERSIONES
-                                            </th>
-
 
                                             <!-- =================================================
                                                 PASO 7
@@ -3870,25 +3879,25 @@ if (isset($_SESSION['nombre'])) {
                                                 N₂O (KG/MJ)
                                             </th>
 
-                                            <th v-if="mostrarDetalle"
-                                                class="columna-paso-8">
-                                                otros
-                                            </th>
+                                           
 
                                             <!-- =================================================
                                                 CONVERTIR FACTORES DE EMISIÓN
                                                 SIEMPRE VISIBLE
                                                 ================================================= -->
 
-                                            <th class="encabezado-verde">
+                                            <th v-if="mostrarDetalle"
+                                                class="columna-paso-9">
                                                 CO₂ (T/GJ)
                                             </th>
 
-                                            <th class="encabezado-verde">
+                                            <th v-if="mostrarDetalle"
+                                                class="columna-paso-9">
                                                 CH₄ (T/GJ)
                                             </th>
 
-                                            <th class="encabezado-verde">
+                                            <th v-if="mostrarDetalle"
+                                                class="columna-paso-9">
                                                 N₂O (T/GJ)
                                             </th>
 
@@ -3922,12 +3931,12 @@ if (isset($_SESSION['nombre'])) {
 
                                             <th class="encabezado-verde">
                                                 CH₄<br>
-                                                <small>(tCO₂e)</small>
+                                                <small>(tCO₂eq)</small>
                                             </th>
 
                                             <th class="encabezado-verde">
                                                 N₂O<br>
-                                                <small>(tCO₂e)</small>
+                                                <small>(tCO₂eq)</small>
                                             </th>
 
                                             <!-- TOTAL -->
@@ -3943,6 +3952,15 @@ if (isset($_SESSION['nombre'])) {
                                             <tbody>
 
                                         <tr v-for="(item, key) in combustibles" :key="key">
+                                            
+                                            <td class="celda-input">
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-primary py-0"
+                                                    @click="actualizarDatosCombustible(item)">
+                                                    Guardar
+                                                </button>
+                                            </td>
 
                                             <!-- =================================================
                                                 DATOS DE ENTRADA
@@ -3952,34 +3970,37 @@ if (isset($_SESSION['nombre'])) {
                                                 {{ item.nombre }}
                                             </td>
 
-                                            <td class="celda-input-importante">
-                                                <input
-                                                    type="number"
-                                                    class="form-control form-control-sm"
-                                                    v-model.number="item.cantidad">
-                                            </td>
+                                      <td class="celda-input-importante">
+                                            <input
+                                                type="text"
+                                                class="form-control form-control-sm "
+                                                :value="formatearNumero(item.cantidad)"
+                                                @blur="actualizarCantidad(item, $event)"
+                                            >
+                                        </td>
 
-                                           <td 
-                                                class="celda-input">
-                                                <input
-                                                    type="text"
-                                                    class="form-control form-control-sm"
-                                                    v-model="item.um">
-
-                                            </td>
+                                        <td class="celda-input">
+                                            <input
+                                                type="text"
+                                                class="form-control form-control-sm"
+                                                v-model="item.unidad_nombre"
+                                            >
+                                        </td>
 
 
                                             <!-- =================================================
                                                 PASO 5 - 1
                                                 ================================================= -->
 
-                                            <td v-if="mostrarDetalle" class="celda-input columna-paso-5">
-                                                <input
-                                                    type="text"
-                                                    class="form-control form-control-sm"
-                                                    v-model.number="item.cantidad"
-                                                    step="any">
-                                            </td>
+                                           <td v-if="mostrarDetalle" class="celda-input columna-paso-5">
+                                            <input
+                                                type="text"
+                                                disabled
+                                                class="form-control form-control-sm bg-secondary text-white"
+                                                :title="formatearNumero(item.cantidad)"
+                                                :value="formatearNumero(item.cantidad)"
+                                                step="any">
+                                         </td>
 
                                               <td v-if="mostrarDetalle"
                                                 class="celda-input columna-paso-7">
@@ -4001,9 +4022,10 @@ if (isset($_SESSION['nombre'])) {
 
                                                 <input
                                                     type="number"
-                                                    class="form-control form-control-sm"
-                                                    v-model.number="item.poderCalorifico">
-
+                                                    class="form-control form-control-sm sin-flechas"
+                                                    v-model.number="item.poderCalorifico"
+                                                    @input="convertirPCa(item)">
+                                                    
                                             </td>
 
                                             <td v-if="mostrarDetalle"
@@ -4012,19 +4034,7 @@ if (isset($_SESSION['nombre'])) {
                                                 <input
                                                     type="text"
                                                     class="form-control form-control-sm"
-                                                    v-model="item.unidadPC">
-
-                                            </td>
-
-                                            <td v-if="mostrarDetalle"
-                                                class="celda-input columna-paso-6">
-
-                                                <input
-                                                    type="number"
-                                                    class="form-control form-control-sm"
-                                                    v-model.number="item.otrasConversiones"
-                                                    step="any">
-
+                                                    v-model="item.unidadPC_um">
                                             </td>
 
 
@@ -4032,30 +4042,29 @@ if (isset($_SESSION['nombre'])) {
                                                 PASO 7 - 2
                                                 ================================================= -->
 
-                                            <td v-if="mostrarDetalle"
-                                                class="celda-input columna-paso-7">
-
-                                                <input
-                                                    type="number"
-                                                    class="form-control form-control-sm"
-                                                    v-model.number="item.convertirPCa"
-                                                    step="any">
-
-                                            </td>
-
-                                            <td v-if="mostrarDetalle"
-                                                class="celda-input columna-paso-7">
-
+                                            <td v-if="mostrarDetalle" class="celda-input columna-paso-7">
                                                 <input
                                                     type="text"
-                                                    class="form-control form-control-sm"
-                                                    v-model="item.unidadPCConvertido">
+                                                    class="form-control form-control-sm sin-flecha bg-secondary text-white text-start"
+                                                    :title="formatearNumero(item.convertirPCa)"
+                                                    :value="formatearNumero(item.convertirPCa)"
+                                                    disabled
+                                                    readonly
+                                                >
+                                            </td>
 
+
+                                            <td v-if="mostrarDetalle"
+                                                class="celda-input columna-paso-7">
+                                                <input
+                                                    type="text"
+                                                    class="form-control form-control-sm sin-flecha bg-secondary text-white text-start"
+                                                    v-model="item.unidadPCConvertido">
                                             </td>
 
 
                                             <!-- =================================================
-                                                PASO 8 - 4
+                                                PASO 8 - 3
                                                 ================================================= -->
 
                                             <td v-if="mostrarDetalle"
@@ -4063,8 +4072,10 @@ if (isset($_SESSION['nombre'])) {
 
                                                 <input
                                                     type="number"
-                                                    class="form-control form-control-sm"
+                                                    class="form-control form-control-sm sin-flechas"
                                                     v-model.number="item.co2"
+                                                    :title="item.co2"
+                                                    @input="actualizarCo2(item)"
                                                     step="any">
 
                                             </td>
@@ -4074,8 +4085,10 @@ if (isset($_SESSION['nombre'])) {
 
                                                 <input
                                                     type="number"
-                                                    class="form-control form-control-sm"
+                                                    class="form-control form-control-sm sin-flechas"
                                                     v-model.number="item.ch4"
+                                                    :title="item.ch4"
+                                                    @input="actualizarCh4(item)"
                                                     step="any">
 
                                             </td>
@@ -4085,50 +4098,54 @@ if (isset($_SESSION['nombre'])) {
 
                                                 <input
                                                     type="number"
-                                                    class="form-control form-control-sm"
+                                                    class="form-control form-control-sm sin-flechas"
                                                     v-model.number="item.n2o"
+                                                    :title="item.n2o"
+                                                    @input="actualizarN2o(item)"
                                                     step="any">
 
                                             </td>
-
-                                            <td v-if="mostrarDetalle"
-                                                class="celda-input columna-paso-8">
-
-                                                <input
-                                                    type="number"
-                                                    class="form-control form-control-sm"
-                                                    v-model.number="item.otros"
-                                                    step="any">
-
-                                            </td>
-
 
                                             <!-- =================================================
                                                 CONVERTIR FACTORES DE EMISIÓN - 3
                                                 SIEMPRE VISIBLE
                                                 ================================================= -->
 
-                                            <td class="celda-input">
+                                           <td v-if="mostrarDetalle" class="celda-input columna-paso-9">
+                                            <input
+                                                type="number"
+                                                class="form-control form-control-sm 
+                                                    bg-secondary text-white sin-flechas
+                                                    text-start"
+                                                v-model.number="item.co2GJ"
+                                                :title="item.co2GJ"
+                                                disabled
+                                                step="any">
+                                        </td>
+
+                                            <td v-if="mostrarDetalle"
+                                                class="celda-input columna-paso-9">
                                                 <input
                                                     type="number"
-                                                    class="form-control form-control-sm"
-                                                    v-model.number="item.co2GJ"
+                                                    class="form-control form-control-sm 
+                                                    bg-secondary text-white sin-flechas
+                                                    text-start"
+                                                    :title="item.ch4"
+                                                    v-model.number="item.ch4"
+                                                    disabled
                                                     step="any">
                                             </td>
 
-                                            <td class="celda-input">
+                                            <td v-if="mostrarDetalle"
+                                                class="celda-input columna-paso-9">
                                                 <input
                                                     type="number"
-                                                    class="form-control form-control-sm"
-                                                    v-model.number="item.ch4GJ"
-                                                    step="any">
-                                            </td>
-
-                                            <td class="celda-input">
-                                                <input
-                                                    type="number"
-                                                    class="form-control form-control-sm"
-                                                    v-model.number="item.n2oGJ"
+                                                    class="form-control form-control-sm 
+                                                    bg-secondary text-white sin-flechas
+                                                    text-start"
+                                                    :title="item.n2o"
+                                                    v-model.number="item.n2o"
+                                                    disabled
                                                     step="any">
                                             </td>
 
@@ -4141,7 +4158,7 @@ if (isset($_SESSION['nombre'])) {
                                             <td class="celda-input">
                                                 <input
                                                     type="number"
-                                                    class="form-control form-control-sm"
+                                                     class="form-control form-control-sm sin-flechas"
                                                     v-model.number="item.pcgCO2"
                                                     step="any">
                                             </td>
@@ -4149,7 +4166,7 @@ if (isset($_SESSION['nombre'])) {
                                             <td class="celda-input">
                                                 <input
                                                     type="number"
-                                                    class="form-control form-control-sm"
+                                                     class="form-control form-control-sm sin-flechas"
                                                     v-model.number="item.pcgCH4"
                                                     step="any">
                                             </td>
@@ -4157,44 +4174,65 @@ if (isset($_SESSION['nombre'])) {
                                             <td class="celda-input">
                                                 <input
                                                     type="number"
-                                                    class="form-control form-control-sm"
+                                                     class="form-control form-control-sm sin-flechas"
                                                     v-model.number="item.pcgN2O"
                                                     step="any">
                                             </td>
 
                                             <!-- =================================================
-                                                CANTIDAD DE EMISIONES - 3
+                                                CANTIDAD DE EMISIONES POR GASES - 3
                                                 SIEMPRE VISIBLE
                                                 INPUTS
                                                 ================================================= -->
-                                            <td class="celda-input">
-                                                <input
-                                                    type="number"
-                                                    class="form-control form-control-sm"
-                                                    v-model.number="item.emisionesCO2"
-                                                    step="any">
+                                           <td class="celda-input">
+                                               <input
+                                                    type="text"
+                                                    class="form-control form-control-sm 
+                                                    bg-secondary text-white sin-flechas
+                                                    text-start"
+                                                    disabled
+                                                    :value="formatearNumero(item.emisionesCO2)"
+                                                    readonly
+                                                >
                                             </td>
 
                                             <td class="celda-input">
-                                                <input
-                                                    type="number"
-                                                    class="form-control form-control-sm"
-                                                    v-model.number="item.emisionesCH4"
-                                                    step="any">
+                                              <input
+                                                    type="text"
+                                                    class="form-control form-control-sm 
+                                                    bg-secondary text-white sin-flechas
+                                                    text-start"
+                                                    disabled
+                                                    :value="formatearNumero(item.emisionesCH4)"
+                                                    readonly
+                                                >
                                             </td>
                                             <td class="celda-input">
-                                                <input
-                                                    type="number"
-                                                    class="form-control form-control-sm"
-                                                    v-model.number="item.emisionesN2O"
-                                                    step="any">
+                                               <input
+                                                    type="text"
+                                                    class="form-control form-control-sm 
+                                                    bg-secondary text-white sin-flechas
+                                                    text-start"
+                                                    disabled
+                                                    :value="formatearNumero(item.emisionesN2O)"
+                                                    readonly
+                                                >
                                             </td>
                                             <!-- =================================================
                                                 TOTAL - 1
                                                 ================================================= -->
 
-                                            <td class="fw-bold celda-total">
-                                                {{ totalPorCombustible[key].toFixed(2) }}
+                                            <td class="fw-bold celda-total text-start">
+                                               {{formatearNumeroMenosDigitos(item.emisionesCO2+item.emisionesCH4+item.emisionesN2O)}}
+                                               
+                                            </td>
+                                             <!-- Referencia / Fuente Oficial -->
+                                            <td class="celda-input fuente-oficial text-start">
+                                                <input
+                                                    type="text"
+                                                    class="form-control form-control-sm"
+                                                    v-model="item.fuente"
+                                                >
                                             </td>
                                         </tr>
                                     </tbody>
@@ -4207,10 +4245,217 @@ if (isset($_SESSION['nombre'])) {
                             <!-- ========================================================= -->
                             <div class="row mt-3 g-3">
 
-                              <!-- ===================================================== -->
-                                    <!-- TABLA ENERGÉTICOS -->
-                                    <!-- ===================================================== -->
-                                    <div class="col-12 col-lg-6">
+                           <!-- ===================================================== -->
+                            <!-- TABLA FACTORES DE CONVERSIÓN -->
+                            <!-- ===================================================== -->
+                           <div class="col-12 col-xl-6">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-sm align-middle text-center tabla-emisiones">
+                                            <thead>
+                                               <tr>
+                                                    <th colspan="5" class="grupo-verde position-relative">
+                                                        <span>Factores de Conversión</span>
+                                                            <button
+                                                                type="button"
+                                                                class="btn btn-primary btn-sm position-absolute end-0 top-50 translate-middle-y me-2 p-0"
+                                                                @click="agregarFactorConversion()">
+                                                                <i class="fas fa-plus"></i>
+                                                                Agregar Factor
+                                                            </button>
+                                                    </th>
+                                                </tr>
+
+
+                                                <tr class="encabezado-verde">
+                                                    <th>Unidad</th>
+                                                    <th>Unidad de Medida</th>
+                                                    <th>Valor</th>
+                                                    <th>U.M. Poder Calorífico</th>
+                                                    <th>Acción</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                <tr v-for="factor in factoresConversion" :key="factor.id">
+                                                    <td>
+                                                        <input
+                                                            type="number"
+                                                            class="form-control form-control-sm text-center"
+                                                            v-model="factor.unidad"
+                                                            :disabled="factorEditando !== factor.id"
+                                                        >
+                                                    </td>
+
+                                                    <td>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control form-control-sm text-center"
+                                                            v-model="factor.unidad_medida"
+                                                            :disabled="factorEditando !== factor.id"
+                                                        >
+                                                    </td>
+
+                                                    <td>
+                                                        <input
+                                                            type="number"
+                                                            step="any"
+                                                            class="form-control form-control-sm text-center"
+                                                            v-model="factor.valor"
+                                                            @input="ejecutarOperaciones()"
+                                                            :disabled="factorEditando !== factor.id"
+                                                        >
+                                                    </td>
+
+                                                    <td>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control form-control-sm text-center"
+                                                            v-model="factor.um_poder_calorifico"
+                                                            :disabled="factorEditando !== factor.id"
+                                                        >
+                                                    </td>
+
+                                                    <td>
+                                                       <div class="d-flex justify-content-center gap-1">
+                                                                <!-- REGISTRO EXISTENTE -->
+                                                                <button
+                                                                    v-if="factorEditando !== factor.id && !factor.nuevo"
+                                                                    type="button"
+                                                                    class="btn btn-warning btn-sm"
+                                                                    @click="editarFactorConversion(factor.id)">
+                                                                    <i class="fas fa-edit"></i>
+                                                                    Editar
+                                                                </button>
+
+                                                                <!-- REGISTRO NUEVO O EN EDICIÓN -->
+                                                                <template v-if="factorEditando === factor.id">
+
+                                                                    <button
+                                                                        type="button"
+                                                                        class="btn btn-secondary btn-sm"
+                                                                        @click="cancelarEdicionFactor(factor)">
+                                                                        <i class="fas fa-times"></i>
+                                                                        Cancelar
+                                                                    </button>
+
+                                                                    <!-- NUEVO -->
+                                                                    <button
+                                                                        v-if="factor.nuevo"
+                                                                        type="button"
+                                                                        class="btn btn-success btn-sm"
+                                                                        @click="crearFactorConversion(factor)">
+                                                                        <i class="fas fa-plus"></i>
+                                                                        Agregar
+                                                                    </button>
+
+                                                                    <!-- EXISTENTE -->
+                                                                    <button
+                                                                        v-else
+                                                                        type="button"
+                                                                        class="btn btn-success btn-sm"
+                                                                        @click="actualizarFactorConversion(factor)">
+                                                                        <i class="fas fa-save"></i>
+                                                                        Guardar
+                                                                    </button>
+                                                                </template>
+
+                                                            </div>
+
+                                                    </td>
+                                                </tr>
+
+                                                <tr v-if="factoresConversion.length === 0">
+                                                    <td colspan="5" class="text-center">
+                                                        No hay factores de conversión registrados.
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+
+
+
+                                    <div class="col-12 col-xl-6">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-sm align-middle text-center tabla-emisiones">
+
+                                                <thead>
+                                                    <tr>
+                                                        <th class="encabezado-verde">Alcance</th>
+                                                        <th class="encabezado-azul">Descripción</th>
+                                                        <th class="encabezado-azul">Ejemplos aplicables en Enerya - RIASA</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+
+                                                    <!-- Alcance 1 -->
+                                                    <tr>
+                                                        <td class="fw-bold">
+                                                            Alcance 1
+                                                        </td>
+
+                                                        <td class="celda-descripcion">
+                                                            Emisiones directas de GEI provenientes de fuentes
+                                                            que son propiedad o están bajo control de la organización.
+                                                        </td>
+
+                                                        <td class="celda-ejemplos">
+                                                            Consumo de gas natural en hornos y ollas,
+                                                            consumo de diésel y gasolina en equipos o vehículos propios,
+                                                            emisiones fugitivas de refrigerantes, procesos de fundición y reciclaje.
+                                                        </td>
+                                                    </tr>
+
+                                                    <!-- Alcance 2 -->
+                                                    <tr>
+                                                        <td class="fw-bold">
+                                                            Alcance 2
+                                                        </td>
+
+                                                        <td class="celda-descripcion">
+                                                            Emisiones indirectas asociadas a la generación de electricidad,
+                                                            vapor, calefacción o enfriamiento adquiridos y consumidos
+                                                            por la organización.
+                                                        </td>
+
+                                                        <td class="celda-ejemplos">
+                                                            Consumo de energía eléctrica del Sistema Eléctrico Nacional
+                                                            en procesos productivos, oficinas, iluminación,
+                                                            compresores y sistemas de aire acondicionado.
+                                                        </td>
+                                                    </tr>
+
+                                                    <!-- Alcance 3 -->
+                                                    <tr>
+                                                        <td class="fw-bold">
+                                                            Alcance 3
+                                                        </td>
+
+                                                        <td class="celda-descripcion">
+                                                            Otras emisiones indirectas generadas a lo largo de la cadena
+                                                            de valor de la organización que ocurren fuera de sus
+                                                            límites operacionales.
+                                                        </td>
+
+                                                        <td class="celda-ejemplos">
+                                                            Transporte de materias primas y acumuladores usados por terceros,
+                                                            transporte de productos terminados, disposición final de residuos,
+                                                            viajes de negocios, consumo de papel y materiales adquiridos.
+                                                        </td>
+                                                    </tr>
+
+                                                </tbody>
+
+                                            </table>
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="col-12 col-xl-6">
                                         <div class="table-responsive">
                                             <table class="table table-bordered table-sm align-middle text-center tabla-emisiones">
 
@@ -4246,6 +4491,7 @@ if (isset($_SESSION['nombre'])) {
                                                                 v-model.number="item.cantidad"
                                                                 step="any"
                                                             >
+                                                            
                                                         </td>
 
                                                         <!-- Unidades -->
@@ -4304,7 +4550,7 @@ if (isset($_SESSION['nombre'])) {
                                 <!-- ===================================================== -->
                                 <!-- Emisiones equivalentes -->
                                 <!-- ===================================================== -->
-                                <div class="col-12 col-lg-6">
+                                 <div class="col-12 col-xl-6">
                                     <div class="table-responsive">
                                         <table class="table table-bordered table-sm align-middle text-center tabla-emisiones">
                                             <thead>
@@ -4358,7 +4604,7 @@ if (isset($_SESSION['nombre'])) {
 
                                                     <!-- TOTAL -> AZUL -->
                                                     <td class="fw-bold celda-total">
-                                                        {{ totalElectricidad.toFixed(2) }}
+                                                      <!-- {{ totalElectricidad.toFixed(2) }} -->
                                                     </td>
                                                 </tr>
                                             </tbody>

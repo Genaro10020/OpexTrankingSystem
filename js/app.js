@@ -303,104 +303,31 @@ const AltaProyectos = {
       requisito: "",
       mostrarListaRequisitos: false,
       requisitosFiltrados: [],
+
+      
+
       //////////CALCULADORES FE COMBUSTIBLES
       //TABLA COMBUSTBLES ENERGETICOS
          mostrarDetalle: false,
 
-    // ============================
+    
     // TABLA COMBUSTIBLES
+    combustibles: [],
+    factoresCombustibles: [],
+
     // ============================
-    combustibles: {
-      gasolina: {
-        nombre: 'Gasolina',
-        cantidad: 0,              // input amarillo
-        unidad: 'Litros',
-        convertirDAa: 0,          // input
-        um: "L",
-        unidadConvertida: 'L',
+    // TABLA EMISIONES EQUIVALENTES (parte inferior derecha)
+    // ============================
+        emisionesEquivalentesElectricidad: {
+          multiplicarDAxFE: 0,     // calculado, pero lo dejo como input editable
+          unidad: 'TON CO2 E',
+          convertirFEa: 0,         // input
+          unidadFE: '',
+          factorEmision: 0.444,    // input
+          unidadFactor: 'tCO2/MWH'
+        },
 
-        poderCalorifico: 5613,    // input
-        unidadPC: 'MJ/Bl',
-
-        convertirPCa: 0.035304707,// input
-        unidadPCConvertido: 'GJ/L',
-
-        co2: 0.0000693,           // input (T/MJ)
-        ch4: 0.000025,            // input (KG/MJ)
-        n2o: 0.000008,            // input (KG/MJ)
-        otros: 0,                 // input
-
-        co2GJ: 0.0693,            // input (T/GJ)
-        ch4GJ: 0.000025,          // input (T/GJ)
-        n2oGJ: 0.000008,          // input (T/GJ)
-
-        pcgCO2: 1,   // fijo (GWP)
-        pcgCH4: 28,  // fijo (GWP)
-        pcgN2O: 265  // fijo (GWP)
-      },
-
-      diesel: {
-          nombre: 'Diésel',
-          cantidad: 0,
-          unidad: 'Litros',
-          convertirDAa: 0,
-          um: "L",
-          unidadConvertida: 'L',
-
-          poderCalorifico: 6065,
-          unidadPC: 'MJ/Bl',
-
-          convertirPCa: 0.038147701,
-          unidadPCConvertido: 'GJ/L',
-
-          co2: 0.0000741,
-          ch4: 0.0000039,
-          n2o: 0.0000039,
-          otros: 0,
-
-          co2GJ: 0.0741,
-          ch4GJ: 0.0000039,
-          n2oGJ: 0.0000039,
-
-          pcgCO2: 1,
-          pcgCH4: 28,
-          pcgN2O: 265
-      },
-
-      gasNatural: {
-                nombre: 'Gas Natural',
-                cantidad: 0,
-                unidad: 'm³',
-
-                poderCalorifico: 0,
-                unidadPC: '',
-                convertirDAa: 0,
-                um: "m3",
-                otrasConversiones: 0,
-
-                convertirPCa: 0,
-                unidadPCConvertido: '',
-
-                co2: 0,
-                ch4: 0,
-                n2o: 0,
-
-                pcgCO2: 1,
-                pcgCH4: 28,
-                pcgN2O: 265,
-
-                co2GJ: 0,
-                ch4GJ: 0,
-                n2oGJ: 0,
-
-                // Nuevas
-                emisionesCO2: 0,
-                emisionesCH4: 0,
-                emisionesN2O: 0
-            }
-    },
-
-// ============================
+        // ============================
 // TABLA ENERGÉTICOS
 // ============================
 energeticos: {
@@ -428,18 +355,20 @@ energeticos: {
     }
 },
 
+    //FACTORES DE CONVERSION
+       factoresConversion: [],
 
-    // ============================
-    // TABLA EMISIONES EQUIVALENTES (parte inferior derecha)
-    // ============================
-        emisionesEquivalentesElectricidad: {
-          multiplicarDAxFE: 0,     // calculado, pero lo dejo como input editable
-          unidad: 'TON CO2 E',
-          convertirFEa: 0,         // input
-          unidadFE: '',
-          factorEmision: 0.444,    // input
-          unidadFactor: 'tCO2/MWH'
-        }
+        factorConversion: {
+            id: null,
+            unidad: '',
+            unidad_medida: '',
+            valor: '',
+            um_poder_calorifico: ''
+        },
+         factoresConversion: [],
+        factorEditando: null,
+        factorOriginal: null,
+        nuevo: true
       }
     },
   mounted() {
@@ -449,9 +378,14 @@ energeticos: {
         this.consultarSumaProyectos()
         this.tomarAnioActual() */
   },
+
+   
   computed: {
+    valoresFactoresConversion() {
+        return this.factoresConversion.map(factor => factor.valor);
+    }
       // Total tCO2e por combustible: cantidad -> GJ -> emisiones -> tCO2e
-      totalPorCombustible() {
+      /* totalPorCombustible() {
         const calc = (c) => {
           const gj = c.cantidad * c.convertirDAa * c.convertirPCa; // energía en GJ
           const co2e = gj * c.co2GJ * c.pcgCO2;
@@ -475,6 +409,11 @@ energeticos: {
       totalElectricidad() {
         const e = this.emisionesEquivalentesElectricidad;
         return this.energeticos.electricidad.cantidad * e.factorEmision;
+      } */
+    },
+    watch: {
+      valoresFactoresConversion(nuevosValores, valoresAnteriores) {
+        this.ejecutarOperaciones();
       }
     },
   methods: {
@@ -2011,31 +1950,459 @@ energeticos: {
         .catch((error) => {
           console.log("Error:", error);
         });
-    },
+      },
 
-    //*TEXT AREA REQUISITOS LEGALES ASOCIADOS* */
-    buscarRequisitos() {
-      if (!this.requisito.trim()) {
-        this.requisitosFiltrados = [];
-        return;
-      }
+          consultarFactoresCombustibles() {
+              axios.get("combustiblesController.php")
+                  .then((response) => {
+                      console.log("Respuesta combustibles:", response.data);
+                      if (response.data.status) {
+                          this.factoresCombustibles = response.data.resultado;
+                          this.prepararCombustibles();
+                      }
+                  })
+                  .catch((error) => {
+                      console.log("Error al consultar combustibles:", error);
+                  });
+          },
 
-      const texto = this.requisito.toLowerCase();
-      this.requisitosFiltrados = this.requisitos.filter((item) =>
-        item.toLowerCase().includes(texto),
-      );
-    },
+           prepararCombustibles() {
+    this.combustibles = this.factoresCombustibles.map(factor => ({
+        id: factor.id,
+        nombre: factor.combustible_energetico,
 
-    seleccionarRequisito(item) {
-      this.requisito = item;
-      this.mostrarListaRequisitos = false;
-    },
+        cantidad: 0,
+        unidad_nombre: factor.unidad_nombre,
 
-    ocultarLista() {
-      setTimeout(() => {
-        this.mostrarListaRequisitos = false;
-      }, 700); // Ajusta el tiempo según tus necesidades
-    },
+        convertirDAa: 0,
+        um: factor.da_um,
+        unidadConvertida: factor.da_um,
+
+        poderCalorifico: factor.poder_calorifico,
+        unidadPC_um: factor.poder_calorifico_um,
+
+        convertirPCa: 0,
+        unidadPCConvertido: factor.conversion_poder_calorifico_unidad,
+
+        co2: factor.factor_emision_co2_t_mj,
+        ch4: factor.factor_emision_ch4_kg_mj,
+        n2o: factor.factor_emision_n2o_kg_mj,
+        otros: 0,
+
+        co2GJ: 0,
+        ch4GJ: 0,
+        n2oGJ: 0,
+
+        pcgCO2: factor.potencial_calentamiento_c02,
+        pcgCH4: factor.potencial_calentamiento_ch4,
+        pcgN2O: factor.potencial_calentamiento_n2o,
+
+        emisionesCO2: 0,
+        emisionesCH4: 0,
+        emisionesN2O: 0,
+
+        fuente: factor.fuente_oficial
+    }));
+    this.ejecutarOperaciones()
+},
+
+          // Calcular valores iniciales
+            ejecutarOperaciones(){
+              this.combustibles.forEach(item => {
+                  this.actualizarCo2(item);
+                  this.actualizarCh4(item);
+                  this.actualizarN2o(item);
+
+                  this.convertirPCa(item);
+                  this.operacionEmisionesPorGases(item)
+                 
+              });
+
+            }, 
+
+              ejecutarOperaciones() {
+              this.combustibles.forEach(item => {
+
+                  this.actualizarCo2(item);
+                  this.actualizarCh4(item);
+                  this.actualizarN2o(item);
+                  this.convertirPCa(item);
+                  this.operacionEmisionesPorGases(item);
+              });
+          },
+
+          actualizarCo2(item) {
+              item.co2 = Number(item.co2) || 0;
+              item.co2GJ = this.formatearNumero(item.co2 * this.factoresConversion[0].valor);
+          },
+
+          
+          actualizarCh4(item){
+                item.ch4 = Number(item.ch4) || 0;
+                item.ch4GJ = item.ch4;
+            },
+
+            actualizarN2o(item){
+                item.n2o = Number(item.n2o) || 0;
+                item.n2oGJ = item.n2o
+            }, 
+
+          convertirPCa(item) {
+
+              if (!item.nombre) {
+                  item.convertirPCa = 0;
+                  return;
+              }
+
+              if (
+                  item.nombre === 'Gasolina' ||
+                  item.nombre === 'Diésel'
+              ) {
+                  item.convertirPCa =
+                      this.formatearNumero(item.poderCalorifico / 1000 / 158.9873);
+                  return;
+              }
+
+              if (item.nombre === 'Gas Natural') {
+                  item.convertirPCa =
+                      this.formatearNumero(item.poderCalorifico / this.factoresConversion[1].valor);
+
+                  return;
+              }
+
+              item.convertirPCa = 0;
+          },
+
+          operacionEmisionesPorGases(item) {
+
+             if (item.nombre === 'Gasolina' || item.nombre === 'Diésel') {
+                console.log("Sumando Gasolina y Diesel CO2:",Number(item.cantidad)+'*'+Number(item.convertirPCa)+'*'+Number(item.co2GJ)+'*'+Number(item.pcgCO2))
+                console.log("Sumando Gasolina y Diesel CH4:",Number(item.cantidad)+'*'+Number(item.convertirPCa)+'*'+Number(item.ch4GJ)+'*'+Number(item.pcgCH4))
+                console.log("Sumando Gasolina y Diesel N2O:",Number(item.cantidad)+'*'+Number(item.convertirPCa)+'*'+Number(item.n2oGJ)+'*'+Number(item.pcgN2O))
+                item.emisionesCO2 = Number(item.cantidad) * Number(item.convertirPCa) * Number(item.co2GJ) * Number(item.pcgCO2);
+                item.emisionesCH4 = Number(item.cantidad) * Number(item.convertirPCa) * Number(item.ch4GJ) * Number(item.pcgCH4);
+                item.emisionesN2O = Number(item.cantidad) * Number(item.convertirPCa) * Number(item.n2oGJ) * Number(item.pcgN2O);
+                return;
+              }
+               if (item.nombre === 'Diésel') {
+                console.log("Sumando Gasolina y Diesel CO2:",Number(item.cantidad)+'*'+Number(item.convertirPCa)+'*'+Number(item.co2GJ)+'*'+Number(item.pcgCO2))
+                console.log("Sumando Gasolina y Diesel CH4:",Number(item.cantidad)+'*'+Number(item.convertirPCa)+'*'+Number(item.ch4GJ)+'*'+Number(item.pcgCH4))
+                console.log("Sumando Gasolina y Diesel N2O:",Number(item.cantidad)+'*'+Number(item.convertirPCa)+'*'+Number(item.n2oGJ)+'*'+Number(item.pcgN2O))
+                item.emisionesCO2 = Number(item.cantidad) * Number(item.convertirPCa) * Number(item.co2GJ) * Number(item.pcgCO2);
+                item.emisionesCH4 = Number(item.cantidad) * Number(item.convertirPCa) * Number(item.ch4GJ) * Number(item.pcgCH4);
+                item.emisionesN2O = Number(item.cantidad) * Number(item.convertirPCa) * Number(item.n2oGJ) * Number(item.pcgN2O);
+                return;
+              }
+              if (item.nombre === 'Gas Natural') {
+                 console.log("Gas Natural:",Number(item.cantidad)+'*'+Number(item.convertirPCa)+'*'+Number(item.co2GJ)+'*'+Number(item.pcgCO2))
+                console.log("Gas Natural:",Number(item.cantidad)+'*'+Number(item.convertirPCa)+'*'+Number(item.ch4GJ)+'*'+Number(item.pcgCH4))
+                console.log("Gas Natural:",Number(item.cantidad)+'*'+Number(item.convertirPCa)+'*'+Number(item.n2oGJ)+'*'+Number(item.pcgN2O))
+                item.emisionesCO2 = Number(item.cantidad) * Number(item.convertirPCa) * Number(item.co2GJ) * Number(item.pcgCO2);
+                item.emisionesCH4 = Number(item.cantidad) * Number(item.convertirPCa) * Number(item.ch4GJ) * Number(item.pcgCH4);
+                item.emisionesN2O = Number(item.cantidad) * Number(item.convertirPCa) * Number(item.n2oGJ) * Number(item.pcgN2O);
+                return;
+              }
+          },
+
+
+    actualizarDatosCombustible(combustible) {
+    console.log("Combustible a actualizar:", combustible);
+
+    axios.post("combustiblesController.php", {
+        combustible: combustible
+    })
+    .then((response) => {
+        console.log("Respuesta actualizar:", response.data);
+
+        if (response.data.status) {
+            alert("Combustible actualizado correctamente.");
+        } else {
+            alert(
+                response.data.mensaje ||
+                "No se pudo actualizar el combustible."
+            );
+        }
+    })
+    .catch((error) => {
+        console.log("Error al actualizar combustible:", error);
+
+        alert("Ocurrió un error al actualizar el combustible.");
+    });
+},
+
+
+
+          actualizarCantidad(item, event) {
+
+              const valor = event.target.value
+                  .replace(/,/g, '');
+
+              item.cantidad =
+                  valor === ''
+                      ? 0
+                      : Number(valor);
+              this.ejecutarOperaciones();
+          },
+
+
+           formatearNumero(valor) {
+                  if (valor === null || valor === undefined || valor === '') {
+                      return '';
+                  }
+                  return Number(valor).toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 9
+                  });
+              },
+            
+              formatearNumeroMenosDigitos(valor) {
+              if (valor === null || valor === undefined || valor === '') {
+                  return '';
+              }
+
+              return Number(valor).toLocaleString('en-US', {
+                  minimumFractionDigits: 6,
+                  maximumFractionDigits: 6
+              });
+           },
+
+
+          consultarFactoresConversion() {
+            axios
+                .get("factoresConversionController.php", {
+                    params: {
+                        accion: "Consulta"
+                    }
+                })
+                .then((response) => {
+                    console.log("factores de conversion", response.data);
+                    if (response.data.status) {
+
+                        this.factoresConversion = response.data.resultado;
+                    } else {
+
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error",
+                            text: "La consulta de factores de conversión no se realizó correctamente."
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.log("Error :-( " + error);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "Ocurrió un error al consultar los factores de conversión."
+                    });
+                })
+                .finally(() => {});
+            },
+                editarFactorConversion(id) {
+                      if (this.factorEditando !== null && this.factorEditando !== id) {
+                          Swal.fire({
+                              icon: "warning",
+                              title: "Edición en curso",
+                              text: "Primero guarda o cancela el factor que estás editando.",
+                              showConfirmButton: false,
+                              timer: 2000
+                          });
+                          return;
+                      }
+                      const factor = this.factoresConversion.find(
+                          factor => factor.id === id
+                      );
+                      if (factor) {
+                          this.factorOriginal = { ...factor };
+                          this.factorEditando = id;
+                      }
+                  },
+
+            cancelarEdicionFactor(factor) {
+              // Si es un factor nuevo, eliminarlo de la tabla
+              if (factor.nuevo) {
+                  const indice = this.factoresConversion.findIndex(
+                      item => item.id === factor.id
+                  );
+                  if (indice !== -1) {
+                      this.factoresConversion.splice(indice, 1);
+                  }
+                  this.factorOriginal = null;
+                  this.factorEditando = null;
+                  return;
+              }
+
+              // Si es un factor existente, restaurar sus valores originales
+              const indice = this.factoresConversion.findIndex(
+                  item => item.id === factor.id
+              );
+              if (indice !== -1 && this.factorOriginal) {
+                  this.factoresConversion[indice] = {
+                      ...this.factorOriginal
+                  };
+              }
+              this.factorOriginal = null;
+              this.factorEditando = null;
+          },
+
+
+
+              actualizarFactorConversion(factor) {
+                  axios.put("factoresConversionController.php", factor).then((response) => {
+                          console.log("Respuesta actualizar:", response.data);
+                          if (response.data.status) {
+                              this.factorEditando = null;
+
+                              Swal.fire({
+                                  icon: "success",
+                                  title: "Actualizado",
+                                  text: "Factor de conversión actualizado correctamente.",
+                                  showConfirmButton: false,
+                                  timer: 1500
+                              });
+
+                          } else {
+
+                              Swal.fire({
+                                  icon: "error",
+                                  title: "Error",
+                                  text: response.data.mensaje || "No se pudo actualizar el factor de conversión.",
+                                  showConfirmButton: false,
+                                  timer: 2000
+                              });
+
+                          }
+
+                      })
+                      .catch((error) => {
+
+                          console.log("Error al actualizar:", error);
+
+                          Swal.fire({
+                              icon: "error",
+                              title: "Error",
+                              text: "Ocurrió un error al actualizar el factor de conversión.",
+                              showConfirmButton: false,
+                              timer: 2000
+                          });
+
+                      });
+              },
+
+              
+
+            agregarFactorConversion() {
+              const nuevoFactor = {
+                  id: "nuevo_" + Date.now(),
+                  unidad: "",
+                  unidad_medida: "",
+                  valor: "",
+                  um_poder_calorifico: "",
+                  nuevo: true
+              };
+
+              // Agregar el nuevo registro AL INICIO
+              this.factoresConversion.unshift(nuevoFactor);
+
+              // Ponerlo inmediatamente en modo edición
+              this.factorEditando = nuevoFactor.id;
+          },
+
+
+          validarFactorConversion(factor) {
+              if (
+                  factor.unidad === "" ||
+                  factor.unidad_medida === "" ||
+                  factor.valor === "" ||
+                  factor.um_poder_calorifico === ""
+              ) {
+                  return false;
+              }
+
+              return true;
+          },
+          crearFactorConversion(factor) {
+             if(!this.validarFactorConversion(factor)) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Campos incompletos',
+                            text: 'Debes llenar todos los campos del factor de conversión.'
+                        });
+
+                        return;
+                    }
+
+              axios.post("factoresConversionController.php", factor)
+                  .then((response) => {
+                      console.log("Respuesta crear:", response.data);
+                      if (response.data.status) {
+                          // El backend debe devolver el ID generado
+                          const indice = this.factoresConversion.findIndex(
+                              item => item.id === factor.id
+                          );
+                          if (indice !== -1) {
+
+                              this.factoresConversion[indice] = {
+                                  ...this.factoresConversion[indice],
+                                  id: response.data.id,
+                                  nuevo: false
+                              };
+                          }
+                          this.factorEditando = null;
+                          Swal.fire({
+                              icon: "success",
+                              title: "Agregado",
+                              text: "Factor de conversión agregado correctamente.",
+                              showConfirmButton: false,
+                              timer: 1500
+                          });
+                      } else {
+                          Swal.fire({
+                              icon: "error",
+                              title: "Error",
+                              text: response.data.mensaje ||
+                                      "No se pudo agregar el factor de conversión.",
+                              showConfirmButton: false,
+                              timer: 2000
+                          });
+                      }
+                  })
+                  .catch((error) => {
+                      console.log("Error al crear:", error);
+                      Swal.fire({
+                          icon: "error",
+                          title: "Error",
+                          text: "Ocurrió un error al agregar el factor de conversión.",
+                          showConfirmButton: false,
+                          timer: 2000
+                      });
+                  });
+          },
+
+
+        //*TEXT AREA REQUISITOS LEGALES ASOCIADOS* */
+        buscarRequisitos() {
+          if (!this.requisito.trim()) {
+            this.requisitosFiltrados = [];
+            return;
+          }
+
+          const texto = this.requisito.toLowerCase();
+          this.requisitosFiltrados = this.requisitos.filter((item) =>
+            item.toLowerCase().includes(texto),
+          );
+        },
+
+        seleccionarRequisito(item) {
+          this.requisito = item;
+          this.mostrarListaRequisitos = false;
+        },
+
+        ocultarLista() {
+          setTimeout(() => {
+            this.mostrarListaRequisitos = false;
+          }, 700); // Ajusta el tiempo según tus necesidades
+        },
 
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL X NOMBRE PARA OBTENER ID's*/
     consultarImpactoAmbientalPorNombre(nombresImpactos) {

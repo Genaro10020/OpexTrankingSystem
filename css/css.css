@@ -1203,6 +1203,17 @@ button {
     color: #edd976;
 }
 
+/*Elimina sube y baja de input tipo number*/
+.sin-flechas::-webkit-inner-spin-button,
+.sin-flechas::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.sin-flechas {
+    -moz-appearance: textfield;
+}
+
 
 
 /* Small devices (landscape phones, 576px and up)*/
@@ -1246,21 +1257,23 @@ button {
 }
 
 .paso-morado-1,
-.grupo-paso-5,
-.columna-paso-5,
-.grupo-paso-7,
-.columna-paso-7 {
-    background-color: #c5eabc !important;
-    color:#2c2c2c
-}
-
-.paso-morado-2,
 .grupo-paso-6,
 .columna-paso-6,
 .grupo-paso-8,
 .columna-paso-8 {
-    background-color: #73b877 !important;
-    color: #f3ea99;
+    background-color: #e0f9d9 !important;
+    color:#2c2c2c
+}
+
+.paso-morado-2,
+.grupo-paso-5,
+.columna-paso-5,
+.grupo-paso-7,
+.columna-paso-7,
+.grupo-paso-9,
+.columna-paso-9  {
+    background-color: #a0d4a3 !important;
+    color: #115a52;
 }
 
 
