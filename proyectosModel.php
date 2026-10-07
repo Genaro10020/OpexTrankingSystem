@@ -574,43 +574,63 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
         $mesesPresupuestados = !is_array($mesesPresupuestados) ? json_decode($mesesPresupuestados, true) : $mesesPresupuestados;
 
         $estado = true;
-        $impacto_ambiental_existentes = [];
 
-        $consultaImp = "SELECT * FROM impacto_ambiental_proyecto WHERE id_proyecto = '$id'";
-        $queryImp = $conexion->query($consultaImp);
+        if (!empty($impacto_ambiental)) {
+                    $impacto_ambiental_existentes = [];
 
-        if ($queryImp && $queryImp->num_rows > 0) {
-            while ($datos = mysqli_fetch_array($queryImp)) {
-                $impacto_ambiental_existentes[] = $datos['impacto_ambiental'];
-            }
+                    $consultaImp = "SELECT * FROM impacto_ambiental_proyecto WHERE id_proyecto = '$id'";
+                    $queryImp = $conexion->query($consultaImp);
 
-            $diferentes         = array_diff($impacto_ambiental, $impacto_ambiental_existentes);
-            $diferentesEliminar = array_diff($impacto_ambiental_existentes, $impacto_ambiental);
-        } else {
-            $diferentes         = $impacto_ambiental;
-            $diferentesEliminar = [];
-        }
+                    if ($queryImp && $queryImp->num_rows > 0) {
+                        while ($datos = mysqli_fetch_array($queryImp)) {
+                            $impacto_ambiental_existentes[] = $datos['impacto_ambiental'];
+                        }
 
-        if (count($diferentes) > 0) {
-            foreach ($diferentes as $impacto) {
-                $consultaIns = "INSERT INTO impacto_ambiental_proyecto (id_proyecto, impacto_ambiental) VALUES ('$id', '$impacto')";
-                if ($conexion->query($consultaIns) !== TRUE) {
-                    return "El nuevo impacto ambiental no fue agregado";
-                }
-            }
-        }
+                        $diferentes         = array_diff($impacto_ambiental, $impacto_ambiental_existentes);
+                        $diferentesEliminar = array_diff($impacto_ambiental_existentes, $impacto_ambiental);
+                    } else {
+                        $diferentes         = $impacto_ambiental;
+                        $diferentesEliminar = [];
+                    }
 
-        if (count($diferentesEliminar) > 0) {
-            $consultaDelete = "DELETE FROM impacto_ambiental_proyecto WHERE impacto_ambiental = ? AND id_proyecto = ?";
-            $stmtDelete = $conexion->prepare($consultaDelete);
+                    if (count($diferentes) > 0) {
+                        foreach ($diferentes as $impacto) {
+                            $consultaIns = "INSERT INTO impacto_ambiental_proyecto (id_proyecto, impacto_ambiental) VALUES ('$id', '$impacto')";
+                            if ($conexion->query($consultaIns) !== TRUE) {
+                                return "El nuevo impacto ambiental no fue agregado";
+                            }
+                        }
+                    }
+                    if (count($diferentesEliminar) > 0) {
+                        $consultaDelete = "DELETE FROM impacto_ambiental_proyecto WHERE impacto_ambiental = ? AND id_proyecto = ?";
+                        $stmtDelete = $conexion->prepare($consultaDelete);
 
-            if ($stmtDelete) {
-                foreach ($diferentesEliminar as $impacto) {
-                    $stmtDelete->bind_param("si", $impacto, $id);
-                    $stmtDelete->execute();
-                }
-                $stmtDelete->close();
-            }
+                        if ($stmtDelete) {
+                            foreach ($diferentesEliminar as $impacto) {
+                                try {
+                                    $stmtDelete->bind_param("si", $impacto, $id);
+                                    $stmtDelete->execute();
+                                } catch (mysqli_sql_exception $e) {
+                                    error_log("No se pudo eliminar el impacto '$impacto' del proyecto '$id': " . $e->getMessage());
+                                    continue;
+                                }
+                            }
+                            $stmtDelete->close();
+                        }
+                    }
+
+                    /* if (count($diferentesEliminar) > 0) {
+                        $consultaDelete = "DELETE FROM impacto_ambiental_proyecto WHERE impacto_ambiental = ? AND id_proyecto = ?";
+                        $stmtDelete = $conexion->prepare($consultaDelete);
+
+                        if ($stmtDelete) {
+                            foreach ($diferentesEliminar as $impacto) {
+                                $stmtDelete->bind_param("si", $impacto, $id);
+                                $stmtDelete->execute();
+                            }
+                            $stmtDelete->close();
+                        }
+                    } */
         }
 
         $cantidad_ids   = is_array($idsPlanMesual) ? count($idsPlanMesual) : 0;
