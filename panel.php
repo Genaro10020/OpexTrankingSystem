@@ -3951,7 +3951,7 @@ if (isset($_SESSION['nombre'])) {
                                                 ========================================================= -->
                                             <tbody>
 
-                                        <tr v-for="(item, key) in combustibles" :key="key">
+                                        <tr v-for="(item, key) in combustibles.filter(items=>items.nombre !== 'Electricidad')" :key="key">
                                             
                                             <td class="celda-input">
                                                 <button
@@ -4075,7 +4075,7 @@ if (isset($_SESSION['nombre'])) {
                                                     class="form-control form-control-sm sin-flechas"
                                                     v-model.number="item.co2"
                                                     :title="item.co2"
-                                                    @input="actualizarCo2(item)"
+                                                    @input="ejecutarOperaciones()"
                                                     step="any">
 
                                             </td>
@@ -4088,7 +4088,7 @@ if (isset($_SESSION['nombre'])) {
                                                     class="form-control form-control-sm sin-flechas"
                                                     v-model.number="item.ch4"
                                                     :title="item.ch4"
-                                                    @input="actualizarCh4(item)"
+                                                    @input="ejecutarOperaciones()"
                                                     step="any">
 
                                             </td>
@@ -4101,7 +4101,7 @@ if (isset($_SESSION['nombre'])) {
                                                     class="form-control form-control-sm sin-flechas"
                                                     v-model.number="item.n2o"
                                                     :title="item.n2o"
-                                                    @input="actualizarN2o(item)"
+                                                    @input="ejecutarOperaciones()"
                                                     step="any">
 
                                             </td>
@@ -4393,16 +4393,16 @@ if (isset($_SESSION['nombre'])) {
 
                                                     <!-- Alcance 1 -->
                                                     <tr>
-                                                        <td class="fw-bold">
+                                                        <td class="fw-bold w-bold text-nowrap">
                                                             Alcance 1
                                                         </td>
 
-                                                        <td class="celda-descripcion">
+                                                        <td class="celda-descripcion text-justify">
                                                             Emisiones directas de GEI provenientes de fuentes
                                                             que son propiedad o están bajo control de la organización.
                                                         </td>
 
-                                                        <td class="celda-ejemplos">
+                                                        <td class="celda-ejemplos text-justify">
                                                             Consumo de gas natural en hornos y ollas,
                                                             consumo de diésel y gasolina en equipos o vehículos propios,
                                                             emisiones fugitivas de refrigerantes, procesos de fundición y reciclaje.
@@ -4411,17 +4411,17 @@ if (isset($_SESSION['nombre'])) {
 
                                                     <!-- Alcance 2 -->
                                                     <tr>
-                                                        <td class="fw-bold">
+                                                        <td class="fw-bold w-bold text-nowrap">
                                                             Alcance 2
                                                         </td>
 
-                                                        <td class="celda-descripcion">
+                                                        <td class="celda-descripcion text-justify">
                                                             Emisiones indirectas asociadas a la generación de electricidad,
                                                             vapor, calefacción o enfriamiento adquiridos y consumidos
                                                             por la organización.
                                                         </td>
 
-                                                        <td class="celda-ejemplos">
+                                                        <td class="celda-ejemplos text-justify">
                                                             Consumo de energía eléctrica del Sistema Eléctrico Nacional
                                                             en procesos productivos, oficinas, iluminación,
                                                             compresores y sistemas de aire acondicionado.
@@ -4430,17 +4430,17 @@ if (isset($_SESSION['nombre'])) {
 
                                                     <!-- Alcance 3 -->
                                                     <tr>
-                                                        <td class="fw-bold">
+                                                        <td class="fw-bold w-bold text-nowrap">
                                                             Alcance 3
                                                         </td>
 
-                                                        <td class="celda-descripcion">
+                                                        <td class="celda-descripcion text-justify">
                                                             Otras emisiones indirectas generadas a lo largo de la cadena
                                                             de valor de la organización que ocurren fuera de sus
                                                             límites operacionales.
                                                         </td>
 
-                                                        <td class="celda-ejemplos">
+                                                        <td class="celda-ejemplos text-justify">
                                                             Transporte de materias primas y acumuladores usados por terceros,
                                                             transporte de productos terminados, disposición final de residuos,
                                                             viajes de negocios, consumo de papel y materiales adquiridos.
@@ -4461,6 +4461,7 @@ if (isset($_SESSION['nombre'])) {
 
                                                 <thead>
                                                     <tr>
+                                                        <th class="encabezado-verde"></th>
                                                         <th class="encabezado-verde">Energético</th>
                                                         <th class="encabezado-amarillo">Cantidad a convertir</th>
                                                         <th class="encabezado-verde">Unidades</th>
@@ -4472,15 +4473,19 @@ if (isset($_SESSION['nombre'])) {
                                                 </thead>
 
                                                 <tbody>
-                                                    <tr v-for="(item, key) in energeticos" :key="key">
+                                                    <tr v-for="(item, key) in combustibles.filter(item=>item.nombre === 'Electricidad')" :key="key">
 
+                                                     <td class="celda-input">
+                                                        <button
+                                                            type="button"
+                                                            class="btn btn-primary py-0"
+                                                            @click="actualizarDatosCombustible(item)">
+                                                            Guardar
+                                                        </button>
+                                                    </td>
                                                         <!-- Energético -->
-                                                        <td class="celda-input">
-                                                            <input
-                                                                type="text"
-                                                                class="form-control form-control-sm"
-                                                                v-model="item.nombre"
-                                                            >
+                                                        <td class="text-start">
+                                                            {{item.nombre}}
                                                         </td>
 
                                                         <!-- Cantidad a convertir -->
@@ -4499,7 +4504,7 @@ if (isset($_SESSION['nombre'])) {
                                                             <input
                                                                 type="text"
                                                                 class="form-control form-control-sm"
-                                                                v-model="item.unidad"
+                                                                v-model="item.unidad_nombre"
                                                             >
                                                         </td>
 
@@ -4508,7 +4513,7 @@ if (isset($_SESSION['nombre'])) {
                                                             <input
                                                                 type="number"
                                                                 class="form-control form-control-sm"
-                                                                v-model.number="item.factorEmision"
+                                                                v-model.number="item.factor_emision"
                                                                 step="any"
                                                             >
                                                         </td>
@@ -4518,18 +4523,19 @@ if (isset($_SESSION['nombre'])) {
                                                             <input
                                                                 type="text"
                                                                 class="form-control form-control-sm"
-                                                                v-model="item.unidadFactor"
+                                                                v-model="item.factor_emision_um"
                                                             >
                                                         </td>
 
                                                         <!-- Total tCO2e -->
-                                                        <td class="celda-input total-tco2e">
-                                                            <input
-                                                                type="number"
-                                                                class="form-control form-control-sm"
-                                                                v-model.number="item.totalTCO2e"
-                                                                step="any"
-                                                            >
+                                                        <td class="celda-input celda-total fw-bolder">
+                                                            {{
+                                                                (
+                                                                    (Number(item.cantidad) || 0) *
+                                                                    (Number(item.factor_emision) || 0) /
+                                                                    1000
+                                                                ).toFixed(6)
+                                                            }}
                                                         </td>
 
                                                         <!-- Referencia / Fuente Oficial -->
@@ -4550,7 +4556,7 @@ if (isset($_SESSION['nombre'])) {
                                 <!-- ===================================================== -->
                                 <!-- Emisiones equivalentes -->
                                 <!-- ===================================================== -->
-                                 <div class="col-12 col-xl-6">
+                                 <!-- <div class="col-12 col-xl-6">
                                     <div class="table-responsive">
                                         <table class="table table-bordered table-sm align-middle text-center tabla-emisiones">
                                             <thead>
@@ -4602,15 +4608,18 @@ if (isset($_SESSION['nombre'])) {
                                                             v-model="emisionesEquivalentesElectricidad.unidadFactor">
                                                     </td>
 
-                                                    <!-- TOTAL -> AZUL -->
                                                     <td class="fw-bold celda-total">
-                                                      <!-- {{ totalElectricidad.toFixed(2) }} -->
+                                                      
                                                     </td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
-                                </div>
+                                </div> -->
+                                 <!-- ===================================================== -->
+                                <!-- Fin Emisiones equivalentes -->
+                                <!-- ===================================================== -->
+
                             </div>
                         </div>
                    <!--Fin contenido-->

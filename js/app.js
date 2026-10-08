@@ -1984,6 +1984,9 @@ energeticos: {
         convertirPCa: 0,
         unidadPCConvertido: factor.conversion_poder_calorifico_unidad,
 
+        factor_emision: factor.factor_emision,
+        factor_emision_um: factor.factor_emision_um,
+
         co2: factor.factor_emision_co2_t_mj,
         ch4: factor.factor_emision_ch4_kg_mj,
         n2o: factor.factor_emision_n2o_kg_mj,
