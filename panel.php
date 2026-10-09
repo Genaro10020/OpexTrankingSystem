@@ -3970,12 +3970,13 @@ if (isset($_SESSION['nombre'])) {
                                                 {{ item.nombre }}
                                             </td>
 
-                                      <td class="celda-input-importante">
+                                        <td class="celda-input-importante">
                                             <input
                                                 type="text"
                                                 class="form-control form-control-sm "
                                                 :value="formatearNumero(item.cantidad)"
                                                 @blur="actualizarCantidad(item, $event)"
+                                                @keyup.enter="actualizarCantidad(item, $event)"
                                             >
                                         </td>
 
@@ -4488,16 +4489,16 @@ if (isset($_SESSION['nombre'])) {
                                                             {{item.nombre}}
                                                         </td>
 
-                                                        <!-- Cantidad a convertir -->
-                                                        <td class="celda-input-importante celda-input">
-                                                            <input
-                                                                type="number"
-                                                                class="form-control form-control-sm"
-                                                                v-model.number="item.cantidad"
-                                                                step="any"
-                                                            >
-                                                            
+                                                       <td class="celda-input-importante">
+                                                        <input
+                                                            type="text"
+                                                            class="form-control form-control-sm "
+                                                            :value="formatearNumero(item.cantidad)"
+                                                            @blur="actualizarCantidad(item, $event)"
+                                                            @keyup.enter="actualizarCantidad(item, $event)"
+                                                        >
                                                         </td>
+                                                       <!---->
 
                                                         <!-- Unidades -->
                                                         <td class="celda-input">

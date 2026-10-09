@@ -1967,47 +1967,47 @@ energeticos: {
           },
 
            prepararCombustibles() {
-    this.combustibles = this.factoresCombustibles.map(factor => ({
-        id: factor.id,
-        nombre: factor.combustible_energetico,
+            this.combustibles = this.factoresCombustibles.map(factor => ({
+                id: factor.id,
+                nombre: factor.combustible_energetico,
 
-        cantidad: 0,
-        unidad_nombre: factor.unidad_nombre,
+                cantidad: 0,
+                unidad_nombre: factor.unidad_nombre,
 
-        convertirDAa: 0,
-        um: factor.da_um,
-        unidadConvertida: factor.da_um,
+                convertirDAa: 0,
+                um: factor.da_um,
+                unidadConvertida: factor.da_um,
 
-        poderCalorifico: factor.poder_calorifico,
-        unidadPC_um: factor.poder_calorifico_um,
+                poderCalorifico: factor.poder_calorifico,
+                unidadPC_um: factor.poder_calorifico_um,
 
-        convertirPCa: 0,
-        unidadPCConvertido: factor.conversion_poder_calorifico_unidad,
+                convertirPCa: 0,
+                unidadPCConvertido: factor.conversion_poder_calorifico_unidad,
 
-        factor_emision: factor.factor_emision,
-        factor_emision_um: factor.factor_emision_um,
+                factor_emision: factor.factor_emision,
+                factor_emision_um: factor.factor_emision_um,
 
-        co2: factor.factor_emision_co2_t_mj,
-        ch4: factor.factor_emision_ch4_kg_mj,
-        n2o: factor.factor_emision_n2o_kg_mj,
-        otros: 0,
+                co2: factor.factor_emision_co2_t_mj,
+                ch4: factor.factor_emision_ch4_kg_mj,
+                n2o: factor.factor_emision_n2o_kg_mj,
+                otros: 0,
 
-        co2GJ: 0,
-        ch4GJ: 0,
-        n2oGJ: 0,
+                co2GJ: 0,
+                ch4GJ: 0,
+                n2oGJ: 0,
 
-        pcgCO2: factor.potencial_calentamiento_c02,
-        pcgCH4: factor.potencial_calentamiento_ch4,
-        pcgN2O: factor.potencial_calentamiento_n2o,
+                pcgCO2: factor.potencial_calentamiento_c02,
+                pcgCH4: factor.potencial_calentamiento_ch4,
+                pcgN2O: factor.potencial_calentamiento_n2o,
 
-        emisionesCO2: 0,
-        emisionesCH4: 0,
-        emisionesN2O: 0,
+                emisionesCO2: 0,
+                emisionesCH4: 0,
+                emisionesN2O: 0,
 
-        fuente: factor.fuente_oficial
-    }));
-    this.ejecutarOperaciones()
-},
+                fuente: factor.fuente_oficial
+            }));
+            this.ejecutarOperaciones()
+        },
 
           // Calcular valores iniciales
             ejecutarOperaciones(){
@@ -2108,57 +2108,61 @@ energeticos: {
           },
 
 
-    actualizarDatosCombustible(combustible) {
-    console.log("Combustible a actualizar:", combustible);
+          actualizarDatosCombustible(combustible) {
+          console.log("Combustible a actualizar:", combustible);
 
-    axios.post("combustiblesController.php", {
-        combustible: combustible
-    })
-    .then((response) => {
-        console.log("Respuesta actualizar:", response.data);
+          axios.post("combustiblesController.php", {
+              combustible: combustible
+          })
+          .then((response) => {
+              console.log("Respuesta actualizar:", response.data);
 
-        if (response.data.status) {
-            alert("Combustible actualizado correctamente.");
-        } else {
-            alert(
-                response.data.mensaje ||
-                "No se pudo actualizar el combustible."
-            );
-        }
-    })
-    .catch((error) => {
-        console.log("Error al actualizar combustible:", error);
+              if (response.data.status) {
+                  alert("Combustible actualizado correctamente.");
+              } else {
+                  alert(
+                      response.data.mensaje ||
+                      "No se pudo actualizar el combustible."
+                  );
+              }
+          })
+          .catch((error) => {
+              console.log("Error al actualizar combustible:", error);
 
-        alert("Ocurrió un error al actualizar el combustible.");
-    });
-},
+              alert("Ocurrió un error al actualizar el combustible.");
+          });
+      },
 
-
-
-          actualizarCantidad(item, event) {
-
-              const valor = event.target.value
-                  .replace(/,/g, '');
-
-              item.cantidad =
-                  valor === ''
-                      ? 0
-                      : Number(valor);
-              this.ejecutarOperaciones();
-          },
+          
 
 
-           formatearNumero(valor) {
-                  if (valor === null || valor === undefined || valor === '') {
-                      return '';
-                  }
-                  return Number(valor).toLocaleString('en-US', {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 9
-                  });
-              },
+         formatearNumero(valor) {
+            if (valor === null || valor === undefined || valor === '') {
+                return '';
+            }
+
+            return Number(valor).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 9
+            });
+        },
+
+        actualizarCantidad(item, event) {
+            const valor = event.target.value.replace(/,/g, '');
+
+            // Permitir borrar todo sin convertirlo en cero
+            if (valor.trim() === '') {
+                item.cantidad = '';
+                return;
+            }
+
+            item.cantidad = Number(valor);
+
+            this.ejecutarOperaciones();
+        },
+
             
-              formatearNumeroMenosDigitos(valor) {
+          formatearNumeroMenosDigitos(valor) {
               if (valor === null || valor === undefined || valor === '') {
                   return '';
               }
