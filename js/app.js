@@ -428,19 +428,6 @@ const AltaProyectos = {
         );
       });
     },
-    coincideFechaSeguimiento(proyecto) {
-      if (!this.filtroFechaSeguimiento) return true;
-
-      const busqueda = this.filtroFechaSeguimiento.toLowerCase();
-
-      const mesNombre = this.mostrandoMes(proyecto.mes)
-        ? this.mostrandoMes(proyecto.mes).toLowerCase()
-        : "";
-      const anio = String(proyecto.anio);
-      const fecha = `${mesNombre} ${anio}`;
-
-      return fecha.includes(busqueda);
-    },
     valoresFactoresConversion() {
       return this.factoresConversion.map((factor) => factor.valor);
     },
@@ -477,6 +464,19 @@ const AltaProyectos = {
     },
   },
   methods: {
+    coincideFechaSeguimiento(proyecto) {
+      if (!this.filtroFechaSeguimiento) return true;
+
+      const busqueda = this.filtroFechaSeguimiento.toLowerCase();
+
+      const mesNombre = this.mostrandoMes(proyecto.mes)
+        ? this.mostrandoMes(proyecto.mes).toLowerCase()
+        : "";
+      const anio = String(proyecto.anio);
+      const fecha = `${mesNombre} ${anio}`;
+
+      return fecha.includes(busqueda);
+    },
     parseJSONSeguro(valor) {
       if (!valor) return [];
       if (Array.isArray(valor)) return valor;
