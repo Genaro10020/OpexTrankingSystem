@@ -7,6 +7,7 @@ const AltaProyectos = {
       filtroBusqueda: "",
       filtroNombreProyecto: "",
       filtroFechaSeguimiento: "",
+      mostrarSugerencias: "",
       /*/////////////////////////////////////////////////////////////////////////////////VARIBLES USUARIOS Y DEPARTAMENTOS INICIO*/
       opcion: 0,
       ventana: "",
