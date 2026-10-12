@@ -394,6 +394,20 @@ const AltaProyectos = {
   },
 
   computed: {
+    proyectosSugeridos() {
+      if (!this.filtroNombreProyecto) {
+        return [];
+      }
+
+      const busqueda = this.filtroNombreProyecto.toLowerCase();
+
+      return this.proyectoSelect.filter((p) => {
+        return (
+          p.nombre_proyecto &&
+          p.nombre_proyecto.toLowerCase().includes(busqueda)
+        );
+      });
+    },
     proyectosFiltrados() {
       if (!this.filasImpactosNuevos) {
         return this.proyectos;
