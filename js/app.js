@@ -367,6 +367,18 @@ const AltaProyectos = {
       factorEditando: null,
       factorOriginal: null,
       nuevo: true,
+      filasImpactosNuevos: [
+        {
+          diagrama: "",
+          tipo: "",
+          concepto: "",
+          alcance: "",
+          cantidad: 0,
+          um: "",
+          tco2: 0,
+          referencia: "",
+        },
+      ],
     };
   },
   mounted() {
