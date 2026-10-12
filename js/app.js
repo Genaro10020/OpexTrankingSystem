@@ -5,6 +5,8 @@ const AltaProyectos = {
   data() {
     return {
       filtroBusqueda: "",
+      filtroNombreProyecto: "",
+      filtroFechaSeguimiento: "",
       /*/////////////////////////////////////////////////////////////////////////////////VARIBLES USUARIOS Y DEPARTAMENTOS INICIO*/
       opcion: 0,
       ventana: "",
