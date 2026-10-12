@@ -2363,8 +2363,8 @@ if (isset($_SESSION['nombre'])) {
                 <!---------------------------VENTANA DE SEGUIMIENTO DE PROYECTO------------------------------->
                 <div v-if="ventana=='Seguimiento'">
                     <div class="col-12">
-                        <div class="row">
-                            <div class="col-12 col-lg-6">
+                        <div class="row align-items-center">
+                            <div class="col-12 col-lg-4">
                                 <div class="input-group mt-3 mx-2 mb-2 ">
                                     <span class="input-group-text w-5">Seleccione Proyecto</span>
                                     <select class="w-50" @keydown.up="cancelarEvento" @keydown.down="cancelarEvento" @keydown.left="cancelarEvento" @keydown.right="cancelarEvento" @change="verificarSesion(), consultarImpactoAmbieltalXProyectoID() " v-model="id_proyecto">
@@ -2375,6 +2375,22 @@ if (isset($_SESSION['nombre'])) {
                                     <button v-show="id_proyecto!=''" v-else type="button" class="btn btn-secondary" title="Visualizar/Subir Archivos" @click="modal_seguimiento()" style="font-size:12px"><i class="bi bi-paperclip">{{documentos_seguimiento.length}} Evidencias Encontrados</i></button>
                                 </div>
                             </div>
+
+                            <div class="col-12 col-lg-4">
+                                <div class="input-group mt-3 mx-2 mb-2 shadow-sm">
+                                    <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                                    <input type="text" class="form-control" v-model="filtroNombreProyecto" placeholder="Filtrar nombre de proyecto...">
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-lg-4">
+                                <div class="input-group mt-3 mx-2 mb-2 shadow-sm">
+                                    <span class="input-group-text bg-white"><i class="bi bi-calendar3"></i></span>
+                                    <input type="text" class="form-control" v-model="filtroFechaSeguimiento" placeholder="Buscar por fecha (ej. Abril 2025)...">
+                                </div>
+                            </div>
+
+
                            <!--  <div class="col-12 col-lg-12">
                                  <div v-for="impacto in impactoAmbientalConID" class="input-group mt-3 mx-2 mb-2 d-flex justify-content-start justify-content-lg-center">
                                     <span class="input-group-text w-5">Documentos estandares CO
