@@ -2419,7 +2419,7 @@ if (isset($_SESSION['nombre'])) {
                             </thead>
                             <tbody>
                                 <!-----------------------------------------------------------------------------CUANDO YA EXISTE MINIMO UN SEGUIMIENTO -->
-                                <tr v-if="seguimientos>0" style="vertical-align: middle; font-size: 1.1em;" v-for="(proyecto,posicion) in arregloID" :key="posicion">
+                                <tr v-if="seguimientos>0" v-show="coincideFechaSeguimiento(proyecto)" style="vertical-align: middle; font-size: 1.1em;" v-for="(proyecto,posicion) in arregloID" :key="posicion">
                                     <?php if ($_SESSION['acceso'] != "Financiero") { ?>
                                         <td v-if="seguimiento_status">
                                             <button v-if="actualizar==0 && actualizatabla == false && proyecto.validado!='Validado'" type="button" class="boton-actualizar" v-if="actualizatabla == false" @Click="asignarDatosActualizar(posicion)">Actualizar</button>
