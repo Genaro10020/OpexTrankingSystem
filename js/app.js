@@ -479,6 +479,22 @@ const AltaProyectos = {
     },
   },
   methods: {
+    seleccionarProyectoDeSugerencia(proyecto) {
+      this.id_proyecto = proyecto.id;
+
+      this.filtroNombreProyecto = proyecto.nombre_proyecto;
+
+      this.mostrarSugerencias = false;
+
+      this.verificarSesion();
+
+      this.consultarImpactoAmbieltalXProyectoID();
+    },
+    ocultarSugerencias() {
+      setTimeout(() => {
+        this.mostrarSugerencias = false;
+      }, 200);
+    },
     coincideFechaSeguimiento(proyecto) {
       if (!this.filtroFechaSeguimiento) return true;
 
