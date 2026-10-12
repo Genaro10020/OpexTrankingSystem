@@ -414,6 +414,20 @@ const AltaProyectos = {
         );
       });
     },
+    proyectosSeguimientoFiltrados() {
+      if (!this.filtroNombreProyecto) {
+        return this.proyectoSelect;
+      }
+
+      const busqueda = this.filtroNombreProyecto.toLowerCase();
+
+      return this.proyectoSelect.filter((p) => {
+        return (
+          p.nombre_proyecto &&
+          p.nombre_proyecto.toLowerCase().includes(busqueda)
+        );
+      });
+    },
     valoresFactoresConversion() {
       return this.factoresConversion.map((factor) => factor.valor);
     },
