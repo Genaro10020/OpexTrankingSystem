@@ -1483,7 +1483,7 @@ if (isset($_SESSION['nombre'])) {
                 <!--AQUI TRABAJA //ALTA DE PROYECTOS-->
                 <div class="text-center mt-2" v-if="ventana=='Altas'">
                     <div class="col-12" >
-                        <div class= "row">
+                        <div class= "row align-items-center">
                             <!-- Select de los nombres de los proyectos -->
                             <?php if ($_SESSION['acceso'] == 'Admin') { ?>
                                 <div class="col-4">
@@ -1496,6 +1496,13 @@ if (isset($_SESSION['nombre'])) {
                                     </div>
                                 </div>
                             <?php } ?>
+
+                            <div class="col-4">
+                                <div class="input-group mt-3 mx-2 mb-2 shadow-sm">
+                                    <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                                    <input type="text" class="form-control" v-model="filtroBusqueda" placeholder="Buscar folio, nombre, planta, responsable...">
+                                </div>
+                            </div>
 
                             <!-- BOTÓN ALTA PROYECTOS -->
                             <div class="col-4">
