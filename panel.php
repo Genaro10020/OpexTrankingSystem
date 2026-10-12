@@ -1544,7 +1544,7 @@ if (isset($_SESSION['nombre'])) {
                                 <?php } ?>
                             </thead>
                             <tbody class=" border:1px solid black" style="text-align: center">
-                                <template v-for="(proyecto,index) in proyectos">
+                                <template v-for="(proyecto,index) in proyectosFiltrados">
                                     <tr v-if="folioAnteriorSinNumeral(proyecto.folio, index)" :class="{ 'divisor-tr-creados': folioAnteriorSinNumeral(proyecto.folio, index)==true}">
                                         <td colspan="21" v-if="index>0"></td>
                                     </tr><!-- Pero como como puedo hacer que se pinte el index actual u el siguiente que ees con el que se esta comparando??? -->
