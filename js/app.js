@@ -4,6 +4,7 @@ let sumandoExcelenciaSustentable = 0;
 const AltaProyectos = {
   data() {
     return {
+      filtroBusqueda: "",
       /*/////////////////////////////////////////////////////////////////////////////////VARIBLES USUARIOS Y DEPARTAMENTOS INICIO*/
       opcion: 0,
       ventana: "",
