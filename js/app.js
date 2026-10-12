@@ -391,6 +391,27 @@ const AltaProyectos = {
   },
 
   computed: {
+    proyectosFiltrados() {
+      if (!this.filasImpactosNuevos) {
+        return this.proyectos;
+      }
+
+      const busqueda = this.filtroBusqueda.toLowerCase();
+
+      return this.proyectos.filter((p) => {
+        return (
+          (p.nombre_proyecto &&
+            p.nombre_proyecto.toLowerCase().includes(busqueda)) ||
+          (p.folio && p.folio.toLowerCase().includes(busqueda)) ||
+          (p.planta && p.planta.toLowerCase().includes(busqueda)) ||
+          (p.area && p.area.toLowerCase().includes(busqueda)) ||
+          (p.departamento && p.departamento.toLowerCase().includes(busqueda)) ||
+          (p.responsable && p.responsable.toLowerCase().includes(busqueda)) ||
+          (p.status_seguimiento &&
+            p.status_seguimiento.toLowerCase().includes(busqueda))
+        );
+      });
+    },
     valoresFactoresConversion() {
       return this.factoresConversion.map((factor) => factor.valor);
     },
