@@ -5724,17 +5724,15 @@ const AltaProyectos = {
     },
 
     folioAnteriorSinNumeral(nombre, index) {
-      // Compara el nombre actual con el anterior y asigna un color diferente si es diferente
       if (
         index > 0 &&
         this.obtenerPrefijo(nombre) !==
-          this.obtenerPrefijo(this.proyectos[index - 1].folio)
+          this.obtenerPrefijo(this.proyectosFiltrados[index - 1].folio)
       ) {
-        return (
-          this.obtenerPrefijo(nombre) !=
-          this.obtenerPrefijo(this.proyectos[index - 1].folio)
-        ); // Cambia el color según tus preferencias
+        return true;
       }
+
+      return false;
     },
     colocarCursor(input) {
       var val = document.getElementById("tons_co2").value;
