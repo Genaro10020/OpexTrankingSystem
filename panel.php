@@ -2363,32 +2363,39 @@ if (isset($_SESSION['nombre'])) {
                 <!---------------------------VENTANA DE SEGUIMIENTO DE PROYECTO------------------------------->
                 <div v-if="ventana=='Seguimiento'">
                     <div class="col-12">
-                        <div class="row align-items-center">
+                        <div class="row align-items-center">                            
+                            <div class="col-12 col-lg-4 position-relative">
+                                <div class="input-group mt-3 mx-2 mb-2 shadow-sm">
+                                    <span class="input-group-text bg-white">
+                                        <i class="bi bi-search"></i>
+                                    </span>
+                                    <input type="text" class="form-control" v-model="filtroNombreProyecto" @focus="mostrarSugerencias = true" @blur="ocultarSugerencias" placeholder="Escribe para autocompletar proyecto...">
+                                </div>
+                                <ul class="list-group position-absolute w-100 mx-2 shadow-sm" style="z-index: 1000; max-height: 200px; overflow-y: auto;" v-show="mostrarSugerencias && proyectosSugeridos.length > 0">
+                                    <li class="list-group-item list-group-item-action text-start" style="cursor: pointer; font-size: 14px;" v-for="proyecto in proyectosSugeridos" :key="proyecto.id" @mousedown="seleccionarProyectoDeSugerencia(proyecto)">
+                                        {{ proyecto.nombre_proyecto }}
+                                    </li>
+                                </ul>
+                            </div>
+
                             <div class="col-12 col-lg-4">
                                 <div class="input-group mt-3 mx-2 mb-2 ">
-                                    <span class="input-group-text w-5">Seleccione Proyecto</span>
+                                    <span class="input-group-text w-5">Seleccionar</span>
                                     <select class="w-50" @keydown.up="cancelarEvento" @keydown.down="cancelarEvento" @keydown.left="cancelarEvento" @keydown.right="cancelarEvento" @change="verificarSesion(), consultarImpactoAmbieltalXProyectoID() " v-model="id_proyecto">
                                         <option value="" disabled>Seleccione...</option>
-                                        <option v-for="proyecto in proyectoSelect.sort((a, b) => a.nombre_proyecto.localeCompare(b.nombre_proyecto))" :value="proyecto.id" style="font-size:15px;">{{proyecto.nombre_proyecto}}</option>
+                                        <option v-for="proyecto in proyectoSelect.sort((a, b) => a.nombre_proyecto.localeCompare(b.nombre_proyecto))" :key="proyecto.id" :value="proyecto.id" style="font-size:15px;">{{proyecto.nombre_proyecto}}</option>
                                     </select>
-                                    <button v-show="id_proyecto!=''" v-if="documentos_seguimiento.length>0" type="button" class="btn btn-success" title="Visualizar/Subir Archivos" @click="modal_seguimiento()" style="font-size:12px"><i class="bi bi-paperclip">{{documentos_seguimiento.length}} Evidencias Encontrados</i></button>
-                                    <button v-show="id_proyecto!=''" v-else type="button" class="btn btn-secondary" title="Visualizar/Subir Archivos" @click="modal_seguimiento()" style="font-size:12px"><i class="bi bi-paperclip">{{documentos_seguimiento.length}} Evidencias Encontrados</i></button>
+                                    <button v-show="id_proyecto!=''" v-if="documentos_seguimiento.length>0" type="button" class="btn btn-success" title="Visualizar/Subir Archivos" @click="modal_seguimiento()" style="font-size:12px"><i class="bi bi-paperclip">{{documentos_seguimiento.length}} Evidencias</i></button>
+                                    <button v-show="id_proyecto!=''" v-else type="button" class="btn btn-secondary" title="Visualizar/Subir Archivos" @click="modal_seguimiento()" style="font-size:12px"><i class="bi bi-paperclip">{{documentos_seguimiento.length}} Evidencias</i></button>
                                 </div>
                             </div>
-
-                            <div class="col-12 col-lg-4">
-                                <div class="input-group mt-3 mx-2 mb-2 shadow-sm">
-                                    <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
-                                    <input type="text" class="form-control" v-model="filtroNombreProyecto" placeholder="Filtrar nombre de proyecto...">
-                                </div>
-                            </div>
-
+                        <!-- 
                             <div class="col-12 col-lg-4">
                                 <div class="input-group mt-3 mx-2 mb-2 shadow-sm">
                                     <span class="input-group-text bg-white"><i class="bi bi-calendar3"></i></span>
                                     <input type="text" class="form-control" v-model="filtroFechaSeguimiento" placeholder="Buscar por fecha (ej. Abril 2025)...">
                                 </div>
-                            </div>
+                            </div> -->
 
 
                            <!--  <div class="col-12 col-lg-12">
