@@ -1497,12 +1497,17 @@ if (isset($_SESSION['nombre'])) {
                                 </div>
                             <?php } ?>
 
-                            <div class="col-4">
+                            <div class="col-4 offset-lg-4">
                                 <div class="input-group mt-3 mx-2 mb-2 shadow-sm">
                                     <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
-                                    <input type="text" class="form-control" v-model="filtroBusqueda" placeholder="Buscar folio, nombre, planta, responsable...">
+                                    <input type="text" class="form-control border-end-0" v-model="filtroBusqueda" placeholder="Buscar folio, nombre, planta, responsable...">
+                                    
+                                    <button v-show="filtroBusqueda !== ''" class="btn border border-start-0 bg-white text-secondary" type="button" @click="limpiarFiltrosAltas()" title="Limpiar búsqueda">
+                                        <i class="bi bi-x-circle-fill"></i>
+                                    </button>
                                 </div>
                             </div>
+
 
                             <!-- BOTÓN ALTA PROYECTOS -->
                             <div class="col-4">
