@@ -479,6 +479,9 @@ const AltaProyectos = {
     },
   },
   methods: {
+    limpiarFiltrosAltas() {
+      this.filtroBusqueda = "";
+    },
     seleccionarProyectoDeSugerencia(proyecto) {
       this.id_proyecto = proyecto.id;
 
