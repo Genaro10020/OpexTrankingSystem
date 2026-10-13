@@ -697,20 +697,22 @@ const AltaProyectos = {
       this.N2OCO2e = "";
     }, */
     proyectoSeleccionado() {
-      /* return this.proyectos.find(p => p.id === this.id_proyecto);  asignar proyectos a proyectoselect*/
       if (this.id_proyecto === "") {
         this.consultarProyectos();
       } else {
         if (this.whoPerson != "Admin") {
-          this.id_proyecto = ""; ///Resetea solo si es dif a admin
+          this.id_proyecto = "";
           this.consultarProyectos();
         } else {
-          let ObjetoNuevo = [];
-          ObjetoNuevo.push(
-            this.proyectoSelect.find((p) => p.id === this.id_proyecto),
+          let proyectoEncontrado = this.proyectoSelect.find(
+            (p) => p.id === this.id_proyecto,
           );
-          this.proyectos = ObjetoNuevo;
-          console.log(" this.proyectos ", ObjetoNuevo);
+
+          if (proyectoEncontrado) {
+            this.filtroBusqueda = proyectoEncontrado.nombre_proyecto;
+
+            console.log("Filtrando automáticamente por:", this.filtroBusqueda);
+          }
         }
       }
     },
