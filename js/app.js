@@ -7052,17 +7052,9 @@ const AltaProyectos = {
       if (this.select_anio_calendario >= 2025) {
         // console.log('meta:',this.metaPres,'se lleva:',this.selleva)
         //  console.log('pres:',parseFloat((this.selleva/this.metaPres)*100).toFixed(2))
-        return this.metaPres === 0 || this.totalSumaPersonalizada === 0
-          ? 0
-          : parseFloat(
-              (this.totalSumaPersonalizada / this.metaPres) * 100,
-            ).toFixed(2);
+        return this.metaPres === 0 || this.totalSumaPersonalizada === 0 ? 0 : parseFloat((this.totalSumaPersonalizada / this.metaPres) * 100,).toFixed(2);
       } else {
-        return this.meta === 0 || this.totalSumaPersonalizada === 0
-          ? 0
-          : parseFloat((this.totalSumaPersonalizada / this.meta) * 100).toFixed(
-              2,
-            );
+        return this.meta === 0 || this.totalSumaPersonalizada === 0 ? 0 : parseFloat((this.totalSumaPersonalizada / this.meta) * 100).toFixed( 2,);
       }
     },
 

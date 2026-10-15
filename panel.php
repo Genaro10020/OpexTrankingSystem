@@ -3208,8 +3208,8 @@ if (isset($_SESSION['nombre'])) {
                                     </div>
                                       <div class="col-4 text-center my-auto">
                                        <div class="progress" style="height: 20px;">
-                                            <div v-if="parseInt(calcularPorcentajeSumaPersonalizada())>=100" class="progress-bar bg-success" role="progressbar" :style="'width:'+calcularPorcentajeSumaPersonalizada()+'%!important;'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentaje()}} % </label></div>
-                                            <div v-else class="progress-bar bg-primary" role="progressbar" :style="'width:'+calcularPorcentajeSumaPersonalizada()+'%!important;'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentaje()}} % </label></div>
+                                            <div v-if="parseInt(calcularPorcentajeSumaPersonalizada())>=100" class="progress-bar bg-success" role="progressbar" :style="'width:'+calcularPorcentajeSumaPersonalizada()+'%!important;'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentajeSumaPersonalizada()}} % </label></div>
+                                            <div v-else class="progress-bar bg-primary" role="progressbar" :style="'width:'+calcularPorcentajeSumaPersonalizada()+'%!important;'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentajeSumaPersonalizada()}} % </label></div>
                                         </div>
                                     </div>
                                      <div class="col-12 d-flex justify-content-center">
