@@ -3014,6 +3014,60 @@ const AltaProyectos = {
         return Number(tco2e.toFixed(6));
       }
     },
+    descargarImagenTabla() {
+      const elementoTabla = document.getElementById("tablaImpactosAmbientales");
+
+      if (!elementoTabla)
+        return Swal.fire("Error", "No se encontró la tabla", "error");
+
+      const inputsOriginales = elementoTabla.querySelectorAll("input, select");
+      const valoresOriginales = Array.from(inputsOriginales).map((el) => {
+        if (el.tagName === "SELECT")
+          return el.options[el.selectedIndex]
+            ? el.options[el.selectedIndex].text
+            : "";
+        return el.value || "";
+      });
+
+      Swal.fire({
+        title: "Generando imagen...",
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+
+      html2canvas(elementoTabla, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        onclone: (documentoClonado) => {
+          const tablaClonada = documentoClonado.getElementById(
+            "tablaImpactosAmbientales",
+          );
+          const inputsClonados = tablaClonada.querySelectorAll("input, select");
+          inputsClonados.forEach((input, index) => {
+            const divTexto = documentoClonado.createElement("div");
+            divTexto.innerText = valoresOriginales[index];
+            divTexto.className = input.className;
+            divTexto.style.cssText =
+              "border: 1px solid #dee2e6; border-radius: 0.375rem; padding: 0.25rem 0.5rem; display: flex; align-items: center; justify-content: center; min-height: 31px; width: 100%; word-break: break-word;";
+            divTexto.style.backgroundColor =
+              input.style.backgroundColor ||
+              (input.disabled ? "#e9ecef" : "#ffffff");
+            input.parentNode.replaceChild(divTexto, input);
+          });
+        },
+      }).then((canvas) => {
+        let enlaceTemporal = document.createElement("a");
+        let nombreArchivo = this.nombre_indicador
+          ? this.nombre_indicador.replace(/\s+/g, "_")
+          : "EAD";
+        enlaceTemporal.download = `Impactos_Ambientales_${nombreArchivo}.png`;
+        enlaceTemporal.href = canvas.toDataURL("image/png");
+        enlaceTemporal.click();
+        Swal.close();
+      });
+    },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL X NOMBRE PARA OBTENER ID's*/
     consultarImpactoAmbientalPorNombre(nombresImpactos) {
       console.log("nombre????????", nombresImpactos);
