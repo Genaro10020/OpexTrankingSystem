@@ -2856,6 +2856,27 @@ const AltaProyectos = {
         referencia: "",
       });
     },
+    eliminarImpacto(index) {
+      if (this.emisiones_aspectos_ambientales_proyecto_ead.length === 1) {
+        Swal.fire({
+          icon: "warning",
+          title: "No se puede eliminar",
+          text: "Debe existir al menos un impacto ambiental",
+        });
+
+        return;
+      }
+
+      const impacto = this.emisiones_aspectos_ambientales_proyecto_ead[index];
+
+      if (!impacto.id) {
+        this.emisiones_aspectos_ambientales_proyecto_ead.splice(index, 1);
+
+        return;
+      }
+
+      this.emisiones_aspectos_ambientales_proyecto_ead.splice(index, 1);
+    },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL X NOMBRE PARA OBTENER ID's*/
     consultarImpactoAmbientalPorNombre(nombresImpactos) {
       console.log("nombre????????", nombresImpactos);
