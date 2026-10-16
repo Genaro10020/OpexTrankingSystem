@@ -2957,6 +2957,63 @@ const AltaProyectos = {
 
       return Array.from(unicos.values());
     },
+    calculartco2(impacto) {
+      const conceptoImpacto = impacto.concepto;
+      const datos = this.calculadoraFeCombustibles.find(
+        (item) => item.combustible_energetico === conceptoImpacto,
+      );
+      if (!datos) return 0;
+
+      if (impacto.concepto === "Electricidad") {
+        const tco2e =
+          ((Number(impacto.cantidad) || 0) *
+            (Number(datos.factor_emision) || 0)) /
+          1000;
+        return Number(tco2e.toFixed(6));
+      } else {
+        let datoConversion;
+        if (impacto.concepto === "Gasolina" || impacto.concepto === "Diésel") {
+          const buscarValor = this.factoresConversion.find(
+            (item) =>
+              item.unidad_medida === "GJ" && item.um_poder_calorifico === "MG",
+          );
+          datoConversion = buscarValor ? buscarValor.valor : 0;
+        } else {
+          datoConversion = 1000;
+        }
+        let poderCalorificoConver;
+        if (impacto.concepto === "Gas Natural") {
+          poderCalorificoConver = (datos.poder_calorifico / 1000000).toFixed(5);
+        } else {
+          poderCalorificoConver = (
+            datos.poder_calorifico /
+            1000 /
+            158.9873
+          ).toFixed(9);
+        }
+        const co2t_gj = (
+          datos.factor_emision_co2_t_mj * datoConversion
+        ).toFixed(4);
+        const co2_tco2e =
+          impacto.cantidad *
+          poderCalorificoConver *
+          co2t_gj *
+          datos.potencial_calentamiento_c02;
+        const ch4_tco2eq =
+          impacto.cantidad *
+          poderCalorificoConver *
+          datos.factor_emision_ch4_kg_mj *
+          datos.potencial_calentamiento_ch4;
+        const n20_tco2eq =
+          impacto.cantidad *
+          poderCalorificoConver *
+          datos.factor_emision_n2o_kg_mj *
+          datos.potencial_calentamiento_n2o;
+        const tco2e = co2_tco2e + ch4_tco2eq + n20_tco2eq;
+
+        return Number(tco2e.toFixed(6));
+      }
+    },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL X NOMBRE PARA OBTENER ID's*/
     consultarImpactoAmbientalPorNombre(nombresImpactos) {
       console.log("nombre????????", nombresImpactos);
