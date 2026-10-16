@@ -2877,6 +2877,9 @@ const AltaProyectos = {
 
       this.emisiones_aspectos_ambientales_proyecto_ead.splice(index, 1);
     },
+    ocultarAyuda() {
+      this.alcanceAyudaVisible = false;
+    },
     mostrarAyuda(alcance) {
       const descripciones = {
         1: "Alcance 1: Emisiones directas de GEI provenientes de fuentes que son propiedad o están bajo control de la organización.",
