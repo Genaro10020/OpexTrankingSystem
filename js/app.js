@@ -2843,6 +2843,19 @@ const AltaProyectos = {
           });
         });
     },
+    nuevaFilaEmision() {
+      this.emisiones_aspectos_ambientales_proyecto_ead.push({
+        id: null,
+        diagrama: "",
+        tipo: "",
+        concepto: "",
+        alcance: "",
+        cantidad: 0,
+        um: "",
+        co2: 0,
+        referencia: "",
+      });
+    },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL X NOMBRE PARA OBTENER ID's*/
     consultarImpactoAmbientalPorNombre(nombresImpactos) {
       console.log("nombre????????", nombresImpactos);
