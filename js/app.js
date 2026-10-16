@@ -2944,6 +2944,19 @@ const AltaProyectos = {
       });
       return Array.from(unicos.values());
     },
+    obtenerOpcionesCatalogo(campo) {
+      const valores = this.catalogoImpactosAmbientalesEAD
+        .map((item) => item[campo])
+        .filter((valor) => valor);
+      const unicos = new Map();
+      valores.forEach((valor) => {
+        const texto = String(valor).trim();
+        if (!unicos.has(texto.toLowerCase()))
+          unicos.set(texto.toLowerCase(), texto);
+      });
+
+      return Array.from(unicos.values());
+    },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL X NOMBRE PARA OBTENER ID's*/
     consultarImpactoAmbientalPorNombre(nombresImpactos) {
       console.log("nombre????????", nombresImpactos);
