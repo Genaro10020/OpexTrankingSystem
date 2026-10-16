@@ -2877,6 +2877,16 @@ const AltaProyectos = {
 
       this.emisiones_aspectos_ambientales_proyecto_ead.splice(index, 1);
     },
+    mostrarAyuda(alcance) {
+      const descripciones = {
+        1: "Alcance 1: Emisiones directas de GEI provenientes de fuentes que son propiedad o están bajo control de la organización.",
+        2: "Alcance 2: Emisiones indirectas asociadas a la generación de electricidad, vapor, calefacción o enfriamiento adquiridos y consumidos por la organización.",
+        3: "Alcance 3: Otras emisiones indirectas generadas a lo largo de la cadena de valor de la organización que ocurren fuera de sus límites operacionales.",
+      };
+
+      this.textoAyudaAlcance = descripciones[alcance];
+      this.alcanceAyudaVisible = true;
+    },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL X NOMBRE PARA OBTENER ID's*/
     consultarImpactoAmbientalPorNombre(nombresImpactos) {
       console.log("nombre????????", nombresImpactos);
