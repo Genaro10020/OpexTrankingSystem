@@ -416,7 +416,69 @@ const AltaProyectos = {
         this.consultarSumaProyectos()
         this.tomarAnioActual() */
   },
-  watch: {},
+  watch: {
+    emisiones_aspectos_ambientales_proyecto_ead: {
+      deep: true,
+      handler(impactos) {
+        if (!Array.isArray(impactos)) return;
+
+        try {
+          impactos.forEach((impacto) => {
+            if (!impacto) return;
+
+            const concepto = impacto.concepto;
+
+            if (
+              concepto === "" ||
+              concepto === null ||
+              concepto === undefined
+            ) {
+              if (impacto.um !== "") impacto.um = "";
+
+              if (impacto.referencia !== "") impacto.referencia = "";
+
+              return;
+            }
+
+            const existeEnFe =
+              this.umConceptoFe &&
+              Object.prototype.hasOwnProperty.call(this.umConceptoFe, concepto);
+
+            if (existeEnFe) {
+              const datos = this.umConceptoFe[concepto];
+              const um = datos?.da_um ?? "";
+              const referencia = datos?.fuente_oficial ?? "";
+
+              if (impacto.um !== um) impacto.um = um;
+              if (impacto.referencia !== referencia)
+                impacto.referencia = referencia;
+
+              const tco2e = this.calculartco2(impacto);
+              if (
+                tco2e !== null &&
+                tco2e !== undefined &&
+                impacto.co2 !== tco2e
+              ) {
+                impacto.co2 = tco2e;
+              }
+            } else if (
+              this.umConceptoImpactoAmbiental &&
+              Object.prototype.hasOwnProperty.call(
+                this.umConceptoImpactoAmbiental,
+                concepto,
+              )
+            ) {
+              const um = this.umConceptoImpactoAmbiental[concepto];
+
+              if (impacto.um !== um) impacto.um = um;
+            }
+          });
+        } catch (error) {
+          console.error("Error en el watcher de impactos: ", error);
+        }
+      },
+    },
+  },
   computed: {
     umConceptoFe() {
       return this.calculadoraFeCombustibles.reduce((resultado, item) => {
