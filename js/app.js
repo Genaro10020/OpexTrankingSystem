@@ -2926,6 +2926,24 @@ const AltaProyectos = {
 
       return Array.from(unicos.values);
     },
+    obtenerOpcionesUM() {
+      const valores = [];
+      this.catalogoImpactosAmbientalesEAD.forEach((item) => {
+        if (item.um) valores.push(String(item.um).trim());
+      });
+      if (Array.isArray(this.catalogoUnidadesOTS)) {
+        this.catalogoUnidadesOTS.forEach((unidad) => {
+          if (unidad) valores.push(String(unidad).trim());
+        });
+      }
+      const unicos = new Map();
+      valores.forEach((valor) => {
+        const texto = String(valor).trim();
+        if (!unicos.has(texto.toLowerCase()))
+          unicos.set(texto.toLowerCase(), texto);
+      });
+      return Array.from(unicos.values());
+    },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL X NOMBRE PARA OBTENER ID's*/
     consultarImpactoAmbientalPorNombre(nombresImpactos) {
       console.log("nombre????????", nombresImpactos);
