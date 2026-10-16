@@ -383,6 +383,30 @@ const AltaProyectos = {
           referencia: "",
         },
       ],
+      //Impactos Ambientales
+      emisiones_aspectos_ambientales_proyecto_ead: [
+        {
+          id: null,
+          diagrama: "",
+          tipo: "",
+          concepto: "",
+          alcance: "",
+          cantidad: 0,
+          um: "",
+          co2: 0,
+          referencia: "",
+        },
+      ],
+      banderaImpactoGuardado: false,
+      catalogoImpactosAmbientalesEAD: [],
+      catalogoImpactosAmbientalesOTS: [],
+      calculadoraFeCombustibles: [],
+      factoresConversion: [],
+      catalogoUnidadesOTS: [],
+      catalogoImpactosAmbientalesOTSCompleto: [],
+      alcanceAyudaVisible: false,
+      textoAyudaAlcance: "",
+      nombre_indicador: "",
     };
   },
   mounted() {
@@ -392,8 +416,99 @@ const AltaProyectos = {
         this.consultarSumaProyectos()
         this.tomarAnioActual() */
   },
+  watch: {
+    emisiones_aspectos_ambientales_proyecto_ead: {
+      deep: true,
+      handler(impactos) {
+        if (!Array.isArray(impactos)) return;
 
+        try {
+          impactos.forEach((impacto) => {
+            if (!impacto) return;
+
+            const concepto = impacto.concepto;
+
+            if (
+              concepto === "" ||
+              concepto === null ||
+              concepto === undefined
+            ) {
+              if (impacto.um !== "") impacto.um = "";
+
+              if (impacto.referencia !== "") impacto.referencia = "";
+
+              return;
+            }
+
+            const existeEnFe =
+              this.umConceptoFe &&
+              Object.prototype.hasOwnProperty.call(this.umConceptoFe, concepto);
+
+            if (existeEnFe) {
+              const datos = this.umConceptoFe[concepto];
+              const um = datos?.da_um ?? "";
+              const referencia = datos?.fuente_oficial ?? "";
+
+              if (impacto.um !== um) impacto.um = um;
+              if (impacto.referencia !== referencia)
+                impacto.referencia = referencia;
+
+              const tco2e = this.calculartco2(impacto);
+              if (
+                tco2e !== null &&
+                tco2e !== undefined &&
+                impacto.co2 !== tco2e
+              ) {
+                impacto.co2 = tco2e;
+              }
+            } else if (
+              this.umConceptoImpactoAmbiental &&
+              Object.prototype.hasOwnProperty.call(
+                this.umConceptoImpactoAmbiental,
+                concepto,
+              )
+            ) {
+              const um = this.umConceptoImpactoAmbiental[concepto];
+
+              if (impacto.um !== um) impacto.um = um;
+            }
+          });
+        } catch (error) {
+          console.error("Error en el watcher de impactos: ", error);
+        }
+      },
+    },
+  },
   computed: {
+    umConceptoFe() {
+      return this.calculadoraFeCombustibles.reduce((resultado, item) => {
+        resultado[item.combustible_energetico] = {
+          da_um: item.da_um,
+          fuente_oficial: item.fuente_oficial,
+        };
+        return resultado;
+      }, {});
+    },
+    umConceptoImpactoAmbiental() {
+      return this.catalogoImpactosAmbientalesOTS.reduce((resultado, item) => {
+        const conceptoEncontrado =
+          this.catalogoImpactosAmbientalesOTSCompleto.find((itemCompleto) =>
+            itemCompleto.nombre.toLowerCase().startsWith(item.toLowerCase()),
+          );
+        if (conceptoEncontrado) {
+          resultado[item] = conceptoEncontrado.unidad;
+        }
+        return resultado;
+      }, {});
+    },
+    totalCo2Sumar() {
+      return this.emisiones_aspectos_ambientales_proyecto_ead.reduce(
+        (total, impacto) => {
+          return total + (parseFloat(impacto.co2) || 0);
+        },
+        0,
+      );
+    },
     proyectosSugeridos() {
       if (!this.filtroNombreProyecto) {
         return [];
@@ -2597,6 +2712,362 @@ const AltaProyectos = {
       }, 700); // Ajusta el tiempo según tus necesidades
     },
 
+    /* TABLA DE IMPACTOS AMBIENTALES */
+    guardarImpactoDeProyecto() {
+      if (this.nombre_indicador?.trim() == "") {
+        Swal.fire({
+          icon: "warning",
+          title: "Sin nombre de indicador?",
+          text: "Agregue un nombre al indicador KPI en (Nom. Indicador) y después podría registra los impactos.",
+          confirmButtonText: "Aceptar",
+        });
+
+        return;
+      }
+
+      // Verificar que exista al menos un impacto
+      if (
+        !Array.isArray(this.emisiones_aspectos_ambientales_proyecto_ead) ||
+        this.emisiones_aspectos_ambientales_proyecto_ead.length === 0
+      ) {
+        Swal.fire({
+          icon: "warning",
+          title: "Sin impactos",
+          text: "Debes agregar al menos un impacto ambiental.",
+          confirmButtonText: "Aceptar",
+        });
+
+        return;
+      }
+
+      // Campos requeridos
+      const camposRequeridos = {
+        diagrama: "Diagrama",
+        tipo: "Tipo",
+        concepto: "Concepto",
+        alcance: "Alcance",
+        cantidad: "Cantidad",
+        um: "Unidad de medida",
+        co2: "CO2",
+        referencia: "Referencia",
+      };
+
+      // Validar TODOS los impactos
+      for (
+        let index = 0;
+        index < this.emisiones_aspectos_ambientales_proyecto_ead.length;
+        index++
+      ) {
+        const impacto = this.emisiones_aspectos_ambientales_proyecto_ead[index];
+
+        for (const campo in camposRequeridos) {
+          const valor = impacto[campo];
+          if (
+            valor === null ||
+            valor === undefined ||
+            (typeof valor === "string" && valor.trim() === "")
+          ) {
+            Swal.fire({
+              icon: "warning",
+              title: "Campo requerido",
+              text: `El campo "${camposRequeridos[campo]}" es requerido en el impacto #${index + 1}.`,
+              confirmButtonText: "Aceptar",
+            });
+            return;
+          }
+        }
+      }
+
+      // Datos que se enviarán
+      const datos = {
+        // Datos generales
+        nombre_indicador: this.nombre_indicador,
+        id_equipo: this.select_session_equipo?.split("<->")[0],
+        // Impactos ambientales
+        impactos: this.emisiones_aspectos_ambientales_proyecto_ead.map(
+          (impacto) => ({
+            // ID del impacto
+            // Si existe = actualizar
+            // Si no existe = insertar
+            id: impacto.id ?? null,
+            diagrama: impacto.diagrama,
+            tipo: impacto.tipo,
+            concepto: impacto.concepto,
+            alcance: impacto.alcance,
+            cantidad: impacto.cantidad,
+            um: impacto.um,
+            co2: impacto.co2,
+            referencia: impacto.referencia,
+          }),
+        ),
+      };
+      console.log("Impactos a guardar/actualizar:", datos);
+      // Enviar TODOS los impactos en una sola petición
+      axios
+        .post("impactosAmbientalesController.php", datos)
+        .then((response) => {
+          console.log("Respuesta del servidor:", response.data);
+          if (response.data.status === "success") {
+            Swal.fire({
+              icon: "success",
+              title: "¡Guardado correctamente!",
+              text: `${response.data.cantidad} impacto(s) ambiental(es) procesado(s) correctamente.`,
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+            });
+            this.banderaImpactoGuardado = true;
+            setTimeout(() => {
+              this.banderaImpactoGuardado = false;
+            }, 3000);
+            this.consultarTodosImpactosProyectosEAD();
+          } else {
+            console.error("Error en la base de datos:", response.data);
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text:
+                response.data.message ||
+                "No se pudieron guardar los impactos ambientales.",
+              confirmButtonText: "Aceptar",
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("Error al guardar los impactos:", error);
+          Swal.fire({
+            icon: "error",
+            title: "Error de conexión",
+            text: "Ocurrió un error al intentar guardar los impactos ambientales.",
+            confirmButtonText: "Aceptar",
+          });
+        });
+    },
+    nuevaFilaEmision() {
+      this.emisiones_aspectos_ambientales_proyecto_ead.push({
+        id: null,
+        diagrama: "",
+        tipo: "",
+        concepto: "",
+        alcance: "",
+        cantidad: 0,
+        um: "",
+        co2: 0,
+        referencia: "",
+      });
+    },
+    eliminarImpacto(index) {
+      if (this.emisiones_aspectos_ambientales_proyecto_ead.length === 1) {
+        Swal.fire({
+          icon: "warning",
+          title: "No se puede eliminar",
+          text: "Debe existir al menos un impacto ambiental",
+        });
+
+        return;
+      }
+
+      const impacto = this.emisiones_aspectos_ambientales_proyecto_ead[index];
+
+      if (!impacto.id) {
+        this.emisiones_aspectos_ambientales_proyecto_ead.splice(index, 1);
+
+        return;
+      }
+
+      this.emisiones_aspectos_ambientales_proyecto_ead.splice(index, 1);
+    },
+    ocultarAyuda() {
+      this.alcanceAyudaVisible = false;
+    },
+    mostrarAyuda(alcance) {
+      const descripciones = {
+        1: "Alcance 1: Emisiones directas de GEI provenientes de fuentes que son propiedad o están bajo control de la organización.",
+        2: "Alcance 2: Emisiones indirectas asociadas a la generación de electricidad, vapor, calefacción o enfriamiento adquiridos y consumidos por la organización.",
+        3: "Alcance 3: Otras emisiones indirectas generadas a lo largo de la cadena de valor de la organización que ocurren fuera de sus límites operacionales.",
+      };
+
+      this.textoAyudaAlcance = descripciones[alcance];
+      this.alcanceAyudaVisible = true;
+    },
+    obtenerOpcionesConceptos() {
+      const valores = [];
+      this.catalogoImpactosAmbientalesEAD.forEach((item) => {
+        const valor = item.concepto;
+
+        if (valor) {
+          const conceptos = String(valor)
+            .split(",")
+            .map((c) => c.trim().filter((c) => c !== ""));
+          valores.push(...conceptos);
+        }
+      });
+
+      if (Array.isArray(this.catalogoImpactosAmbientalesOTS)) {
+        this.catalogoImpactosAmbientalesOTS.forEach((valor) => {
+          if (valor) valores.push(String(valor).trim());
+        });
+      }
+
+      this.calculadoraFeCombustibles.forEach((valor) => {
+        if (valor) {
+          const titulo = String(valor.combustible_energetico ?? "").trim();
+
+          if (titulo) valores.push(titulo);
+        }
+      });
+
+      const unicos = new Map();
+      valores.forEach((valor) => {
+        const texto = String(valor).trim();
+        if (!unicos.has(texto.toLowerCase()))
+          unicos.set(texto.toLowerCase(), texto);
+      });
+
+      return Array.from(unicos.values);
+    },
+    obtenerOpcionesUM() {
+      const valores = [];
+      this.catalogoImpactosAmbientalesEAD.forEach((item) => {
+        if (item.um) valores.push(String(item.um).trim());
+      });
+      if (Array.isArray(this.catalogoUnidadesOTS)) {
+        this.catalogoUnidadesOTS.forEach((unidad) => {
+          if (unidad) valores.push(String(unidad).trim());
+        });
+      }
+      const unicos = new Map();
+      valores.forEach((valor) => {
+        const texto = String(valor).trim();
+        if (!unicos.has(texto.toLowerCase()))
+          unicos.set(texto.toLowerCase(), texto);
+      });
+      return Array.from(unicos.values());
+    },
+    obtenerOpcionesCatalogo(campo) {
+      const valores = this.catalogoImpactosAmbientalesEAD
+        .map((item) => item[campo])
+        .filter((valor) => valor);
+      const unicos = new Map();
+      valores.forEach((valor) => {
+        const texto = String(valor).trim();
+        if (!unicos.has(texto.toLowerCase()))
+          unicos.set(texto.toLowerCase(), texto);
+      });
+
+      return Array.from(unicos.values());
+    },
+    calculartco2(impacto) {
+      const conceptoImpacto = impacto.concepto;
+      const datos = this.calculadoraFeCombustibles.find(
+        (item) => item.combustible_energetico === conceptoImpacto,
+      );
+      if (!datos) return 0;
+
+      if (impacto.concepto === "Electricidad") {
+        const tco2e =
+          ((Number(impacto.cantidad) || 0) *
+            (Number(datos.factor_emision) || 0)) /
+          1000;
+        return Number(tco2e.toFixed(6));
+      } else {
+        let datoConversion;
+        if (impacto.concepto === "Gasolina" || impacto.concepto === "Diésel") {
+          const buscarValor = this.factoresConversion.find(
+            (item) =>
+              item.unidad_medida === "GJ" && item.um_poder_calorifico === "MG",
+          );
+          datoConversion = buscarValor ? buscarValor.valor : 0;
+        } else {
+          datoConversion = 1000;
+        }
+        let poderCalorificoConver;
+        if (impacto.concepto === "Gas Natural") {
+          poderCalorificoConver = (datos.poder_calorifico / 1000000).toFixed(5);
+        } else {
+          poderCalorificoConver = (
+            datos.poder_calorifico /
+            1000 /
+            158.9873
+          ).toFixed(9);
+        }
+        const co2t_gj = (
+          datos.factor_emision_co2_t_mj * datoConversion
+        ).toFixed(4);
+        const co2_tco2e =
+          impacto.cantidad *
+          poderCalorificoConver *
+          co2t_gj *
+          datos.potencial_calentamiento_c02;
+        const ch4_tco2eq =
+          impacto.cantidad *
+          poderCalorificoConver *
+          datos.factor_emision_ch4_kg_mj *
+          datos.potencial_calentamiento_ch4;
+        const n20_tco2eq =
+          impacto.cantidad *
+          poderCalorificoConver *
+          datos.factor_emision_n2o_kg_mj *
+          datos.potencial_calentamiento_n2o;
+        const tco2e = co2_tco2e + ch4_tco2eq + n20_tco2eq;
+
+        return Number(tco2e.toFixed(6));
+      }
+    },
+    descargarImagenTabla() {
+      const elementoTabla = document.getElementById("tablaImpactosAmbientales");
+
+      if (!elementoTabla)
+        return Swal.fire("Error", "No se encontró la tabla", "error");
+
+      const inputsOriginales = elementoTabla.querySelectorAll("input, select");
+      const valoresOriginales = Array.from(inputsOriginales).map((el) => {
+        if (el.tagName === "SELECT")
+          return el.options[el.selectedIndex]
+            ? el.options[el.selectedIndex].text
+            : "";
+        return el.value || "";
+      });
+
+      Swal.fire({
+        title: "Generando imagen...",
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+
+      html2canvas(elementoTabla, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        onclone: (documentoClonado) => {
+          const tablaClonada = documentoClonado.getElementById(
+            "tablaImpactosAmbientales",
+          );
+          const inputsClonados = tablaClonada.querySelectorAll("input, select");
+          inputsClonados.forEach((input, index) => {
+            const divTexto = documentoClonado.createElement("div");
+            divTexto.innerText = valoresOriginales[index];
+            divTexto.className = input.className;
+            divTexto.style.cssText =
+              "border: 1px solid #dee2e6; border-radius: 0.375rem; padding: 0.25rem 0.5rem; display: flex; align-items: center; justify-content: center; min-height: 31px; width: 100%; word-break: break-word;";
+            divTexto.style.backgroundColor =
+              input.style.backgroundColor ||
+              (input.disabled ? "#e9ecef" : "#ffffff");
+            input.parentNode.replaceChild(divTexto, input);
+          });
+        },
+      }).then((canvas) => {
+        let enlaceTemporal = document.createElement("a");
+        let nombreArchivo = this.nombre_indicador
+          ? this.nombre_indicador.replace(/\s+/g, "_")
+          : "EAD";
+        enlaceTemporal.download = `Impactos_Ambientales_${nombreArchivo}.png`;
+        enlaceTemporal.href = canvas.toDataURL("image/png");
+        enlaceTemporal.click();
+        Swal.close();
+      });
+    },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL X NOMBRE PARA OBTENER ID's*/
     consultarImpactoAmbientalPorNombre(nombresImpactos) {
       console.log("nombre????????", nombresImpactos);
@@ -7052,9 +7523,17 @@ const AltaProyectos = {
       if (this.select_anio_calendario >= 2025) {
         // console.log('meta:',this.metaPres,'se lleva:',this.selleva)
         //  console.log('pres:',parseFloat((this.selleva/this.metaPres)*100).toFixed(2))
-        return this.metaPres === 0 || this.totalSumaPersonalizada === 0 ? 0 : parseFloat((this.totalSumaPersonalizada / this.metaPres) * 100,).toFixed(2);
+        return this.metaPres === 0 || this.totalSumaPersonalizada === 0
+          ? 0
+          : parseFloat(
+              (this.totalSumaPersonalizada / this.metaPres) * 100,
+            ).toFixed(2);
       } else {
-        return this.meta === 0 || this.totalSumaPersonalizada === 0 ? 0 : parseFloat((this.totalSumaPersonalizada / this.meta) * 100).toFixed( 2,);
+        return this.meta === 0 || this.totalSumaPersonalizada === 0
+          ? 0
+          : parseFloat((this.totalSumaPersonalizada / this.meta) * 100).toFixed(
+              2,
+            );
       }
     },
 
