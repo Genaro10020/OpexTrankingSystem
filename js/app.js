@@ -2890,6 +2890,42 @@ const AltaProyectos = {
       this.textoAyudaAlcance = descripciones[alcance];
       this.alcanceAyudaVisible = true;
     },
+    obtenerOpcionesConceptos() {
+      const valores = [];
+      this.catalogoImpactosAmbientalesEAD.forEach((item) => {
+        const valor = item.concepto;
+
+        if (valor) {
+          const conceptos = String(valor)
+            .split(",")
+            .map((c) => c.trim().filter((c) => c !== ""));
+          valores.push(...conceptos);
+        }
+      });
+
+      if (Array.isArray(this.catalogoImpactosAmbientalesOTS)) {
+        this.catalogoImpactosAmbientalesOTS.forEach((valor) => {
+          if (valor) valores.push(String(valor).trim());
+        });
+      }
+
+      this.calculadoraFeCombustibles.forEach((valor) => {
+        if (valor) {
+          const titulo = String(valor.combustible_energetico ?? "").trim();
+
+          if (titulo) valores.push(titulo);
+        }
+      });
+
+      const unicos = new Map();
+      valores.forEach((valor) => {
+        const texto = String(valor).trim();
+        if (!unicos.has(texto.toLowerCase()))
+          unicos.set(texto.toLowerCase(), texto);
+      });
+
+      return Array.from(unicos.values);
+    },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL X NOMBRE PARA OBTENER ID's*/
     consultarImpactoAmbientalPorNombre(nombresImpactos) {
       console.log("nombre????????", nombresImpactos);
