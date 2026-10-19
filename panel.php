@@ -92,9 +92,9 @@ if (isset($_SESSION['nombre'])) {
                                 </div>
                                 <div class="modal-body">
 
-
-                                    <div class="d-flex col-12">
-                                        <div class="col-9 "><!--bloque imagen-->
+                                    <!-- Formulario + Imagen -->
+                                    <div class="row m-0 w-100">
+                                        <div class="col-12 col-lg-9 p-0 pe-lg-3">
                                             <!--Formulario Alta Proyecto-->
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-25">Fecha</span>
@@ -161,6 +161,7 @@ if (isset($_SESSION['nombre'])) {
                                                 </div>
                                                 <div v-if="selectDepartamento !==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
+                                            
                                             <!---Metodologías-->
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-25">Metodología</span>
@@ -175,6 +176,7 @@ if (isset($_SESSION['nombre'])) {
                                                 </div>
                                                 <div v-if="selectMetodologia !==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
+                                            
                                             <!---Responsables-->
                                             <div v-if="actualizar_proyecto==false" class="d-flex d-flex-row justify-content-center">
                                                 <div><button class="btn-anadir" title="Crear " @click="crearResponsable()"><i class="bi bi-plus-circle"></i></button></div>
@@ -190,6 +192,7 @@ if (isset($_SESSION['nombre'])) {
                                                 </select>
                                                 <div v-if="selectResponsable !==''" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
+                                            
                                             <!--Campos Responsable-->
                                             <div class="row pt-2 mt-3" :class="{'mostrar nuevo_responsable': nuevoResponsable ===true && actualizarResponsable === false , 'ocultar':nuevoResponsable ===false && actualizarResponsable === false, 'mostrar actualizar_responsable': actualizarResponsable === true}">
                                                 <div class="col-10">
@@ -209,10 +212,6 @@ if (isset($_SESSION['nombre'])) {
                                                         <span class="input-group-text w-25">Teléfono</span>
                                                         <input type="text" v-model="telefono" class="w-75" :disabled="!nuevoResponsable">
                                                     </div>
-                                                    <!--<div class="mb-3">
-                                                        <label class="me-2 text-center">¿Es usuario de finanzas?</label>
-                                                        <input type="checkbox" v-model="financiero" :disabled="!nuevoResponsable">
-                                                    </div>-->
                                                 </div>
                                                 <div class="col-2 my-auto text-center">
                                                     <button type="button" v-if="nuevoResponsable==true && actualizarResponsable==false" class="btn-nuevo-responsable" @click="insertarResponsable()">Crear</button>
@@ -220,6 +219,7 @@ if (isset($_SESSION['nombre'])) {
                                                     <button type="button" class="btn-cancelar-responsable mt-3" @click="cancelar()">Cancelar</button>
                                                 </div>
                                             </div>
+                                            
                                             <!--Observadores-->
                                             <div class="input-group">
                                                 <span class="input-group-text w-25">Observador (Opcional)</span>
@@ -234,7 +234,6 @@ if (isset($_SESSION['nombre'])) {
                                             </div>
 
                                             <!--Misiones-->
-
                                             <div class="input-group mb-3 mt-3 ">
                                                 <span class="input-group-text w-25 text-start">Misión </span>
                                                 <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkMisiones.length<=0, '': checkMisiones.length>0}">
@@ -245,11 +244,6 @@ if (isset($_SESSION['nombre'])) {
                                                         </label>
                                                     </div>
                                                 </div>
-                                                <!--<div class="my-auto">
-                                                                                <div class="col-12"><button class="btn-anadir" title="Crear "><i class="bi bi-plus-circle"></i></button></div>
-                                                                                <div class="col-12"><button class="btn-up" title="Actualizar"><i class="bi bi-arrow-up-circle"></i></button></div>
-                                                                                <div class="col-12"><button class="btn-delete" title="Eliminar"><i class="bi bi-x-circle"></i></button></div>
-                                                                            </div>-->
                                                 <div v-if="checkMisiones.length>0" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
 
@@ -262,26 +256,12 @@ if (isset($_SESSION['nombre'])) {
                                                         <label class="form-check-label w-75">
                                                             {{ pilar.nombre }} ({{pilar.siglas}})
                                                         </label>
-                                                        <!--<label class="w-25" v-if="idsPilares.includes(pilar.id) && checkPilares.length>0">
-                                                                <select v-model="selectPilar[index]" @change="verificarCantidadDirectosPilares()">
-                                                                    <option v-if="idsPilares.includes(pilar.id)" value="" disabled selected>Seleccione...</option>
-                                                                    <option value="directo">Directo</option>
-                                                                    <option value="indirecto">Indirecto</option>
-                                                                </select>
-                                                            </label>-->
                                                     </div>
                                                 </div>
-
-                                                <!--<div class="my-auto">
-                                                            <div class="col-12"><button class="btn-anadir" title="Crear " @click="abrirModal('CRUD','Pilar','Crear')"><i class="bi bi-plus-circle"></i></button></div>
-                                                            <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Pilar','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
-                                                            <div class="col-12"><button class="btn-delete" title="Eliminar" @click="eliminarPilar()"><i class="bi bi-x-circle"></i></button></div>
-                                                        </div>-->
                                                 <div v-if="checkPilares.length>0" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
 
                                             <!--Objetivos-->
-
                                             <div v-if="checkPilares.length>0" class="input-group mb-3 " :class="{'mostrar':checkPilares.length>0, 'ocultar': checkPilares.length <= 0}">
                                                 <span class="input-group-text w-25 text-start">Objetivos <br>Estratégicos</span>
                                                 <div class="div-mision-pilares-impacto" :class="{'nocontestado': respondio === false && checkObjetivos.length<=0 || respondio === false && selectObjetivo.length>0 && !selectObjetivo.includes('directo'), '': checkObjetivos.length>0}">
@@ -299,41 +279,8 @@ if (isset($_SESSION['nombre'])) {
                                                         </label>
                                                     </div>
                                                 </div>
-                                                <!--<div>
-                                                    <div class="col-12"><button class="btn-anadir" title="Crear" @click="abrirModal('CRUD','Objetivo','Crear')"><i class="bi bi-plus-circle"></i></button></div>
-                                                    <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Objetivo','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
-                                                    <div class="col-12"><button class="btn-delete" title="Eliminar"  @click="eliminarObjetivo()"><i class="bi bi-x-circle"></i></button></div>
-                                                </div>-->
                                                 <div v-if="checkObjetivos.length>0" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
-                                            <!-- IMPACTOS AMBIENTALES -->
-                                            <?php include("../EAD-System/templateImpactosAmbientales.php") ?><!--Solo se incluyo la plantilla, aún no se declaran las variables o metodos-->
-                                            <!-- <div class="input-group mb-3">
-                                                <span class="input-group-text w-25 text-start">Impacto <br>Ambiental<br><label class=""><i class="bi bi-question-circle"></label></i></span>
-                                                <div class="div-mision-pilares-impacto scroll" :class="{'nocontestado': respondio === false && checkImpactoAmbiental.length<=0 || respondio === false && checkImpactoAmbiental.length>0 && checkImpactoAmbiental.filter(elemento => elemento !='').length != selectEmisiones.filter(elemento => elemento !='').length, '': checkImpactoAmbiental.length>0}">
-                                                  
-                                                    <div v-for="(impacto,index) in impactoAmbiental" class="form-check border border-1  mt-1">
-                                                        <input class="form-check-input" type="checkbox" id="checkbox1" v-model="checkImpactoAmbiental" :value="impacto.id+'<->'+impacto.nombre" @change="checkeandoImpactoAmbiental(impacto.id,impacto.nombre)" :disabled="verificarImpacto(impacto.id+'<->'+impacto.nombre)" />
-                                                        <label class="form-check-label w-75" for="checkbox1">
-                                                          {{impacto.nombre}}
-                                                        </label>
-                                                        <label class="w-25" v-if="idsCheckImpacto.includes(impacto.id) && checkImpactoAmbiental.length>0">
-                                                            <select v-model="selectEmisiones[index]" class="w-100">
-                                                                <option v-show="!selectEmisiones[index]" value="" selected disabled>Seleccione...</option>
-                                                                <option :value="impacto.id+'<->'+impacto.nombre+'-> Alcance 1'" title="Emisiones directas de GEI">Alcance 1</option>
-                                                                <option :value="impacto.id+'<->'+impacto.nombre+'-> Alcance 2'" title="Emisiones indirectas de GEI asociadas a la electricidad">Alcance 2</option>
-                                                                <option :value="impacto.id+'<->'+impacto.nombre+'-> Alcance 3'" title="Otras emisiones indirectas de GEI">Alcance 3</option>
-                                                            </select>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div v-show="actualizar_proyecto==false" class="my-auto">
-                                                    <div class="col-12"><button class="btn-anadir" title="Crear" @click="abrirModal('CRUD','Impacto Ambiental','Crear')"><i class="bi bi-plus-circle"></i></button></div>
-                                                    <div class="col-12"><button class="btn-up" title="Actualizar" @click="abrirModal('CRUD','Impacto Ambiental','Actualizar')"><i class="bi bi-arrow-up-circle"></i></button></div>
-                                                    <div class="col-12"><button class="btn-delete" title="Eliminar" @click="eliminarImpactoAmbiental()"><i class="bi bi-x-circle"></i></button></div>
-                                                </div>
-                                                <div v-if="checkImpactoAmbiental.length>0" class="text-center my-auto ms-2"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
-                                            </div> -->
 
                                             <!--Valores Gonher-->
                                             <div class="input-group mb-3 mt-3 ">
@@ -348,145 +295,52 @@ if (isset($_SESSION['nombre'])) {
                                                 </div>
                                                 <div v-if="valoresCheck.length>0" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
                                             </div>
-                                            <!-- <div v-if="actualizar_proyecto==true">
-                                                        <div class="input-group mb-3">
-                                                            <span class="input-group-text w-50">Tons CO2 por Evitar (Proyectado)</span>
-                                                            <input id="tons_co2" type="text" v-model="tons_co2" min="0" class="w-25" :class="{'nocontestado': respondio === false && (tons_co2 == 0 || tons_co2 == '' ), '': respondio !== false && tons_co2 !== 0 && tons_co2 !== ''}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputSinPesos('tons_co2')"
-                                                            :disabled="actualizar_proyecto">
-                                                            <div v-if="tons_co2 !== '' && tons_co2 !== '0'" class="text-center my-auto ms-3">
-                                                                <i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i>
-                                                            </div>
-                                                        </div>
 
-                                                        <div class="input-group mb-3">
-                                                            <span class="input-group-text w-50">Ahorro Duro $MXN/Año (Proyectado )</span>
-                                                            <input id="ahorro_duro" type="text" v-model="ahorro_duro" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_duro==='$.00', '': respondio !== false && ahorro_duro!==0 && ahorro_duro!==''}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('ahorro_duro')"
-                                                            :disabled="actualizar_proyecto">
-                                                            <div v-if="ahorro_duro!=='' && ahorro_duro !== '$0.00' && ahorro_duro !== '$.00' && ahorro_duro !== '$.0' && ahorro_duro !== '$.'  && ahorro_duro !== '$'" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
-                                                        </div>
-                                                
-                                                        <div class="input-group mb-3">
-                                                            <span class="input-group-text w-50">Ahorro Suave $MXN/Año (Proyectado)</span>
-                                                            <input id="ahorro_suave" type="text" v-model="ahorro_suave" min="0" class="w-25" :class="{'nocontestado': respondio === false && ahorro_suave==='$.00', '': respondio === false && ahorro_suave!==0 && ahorro_suave!==''}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('ahorro_suave')"
-                                                            :disabled="actualizar_proyecto">
-                                                            <div v-if="ahorro_suave!=='' && ahorro_suave !== '$0.00' && ahorro_suave !== '$.00' && ahorro_suave !== '$.0' && ahorro_suave !== '$.'  && ahorro_suave !== '$'" class="text-center my-auto ms-3"><i class="bi bi-check-circle text-light rounded-circle px-1 py-1 bg-success"></i></div>
-                                                        </div>
-                                                </div>-->
-                                            <!--bloque1-->
-                                            <!--<div class="col-12 d-flex ">
-                                                    <div class="text-center d-flex align-items-center pb-3">
-                                                        <div class="rounded-circle bg-success mx-2 text-white d-flex justify-content-center align-items-center btn-menu" @click="incrementarMeses()"  style=" width: 40px;height:40px; font-weight:bold; cursor: pointer;">   
-                                                                <i class="bi bi-plus"></i>
-                                                        </div>
-                                                        <span class="badge alert-info">
-                                                            Presione la cántidad de meses que desea agregar. {{cantidadMeses}} {{anio_select}}
-                                                        </span>
-                                                    </div>
-                                                </div>-->
-
-                                            <!--<div class="row border border-1 mx-1 mb-1 div-color-cajas" v-for="(item, index) in cantidadMeses" :key="index">
-                                                        <span class="badge alert-secondary mb-2 mx-auto">
-                                                            Mes {{index+1}}
-                                                        </span>
-                                                                    <div class="col-3 mb-3">
-                                                                        <div class="input-group">
-                                                                            <span class="input-group-text w-50">Anio</span>
-                                                                            <select :value="anio_select" class="w-50 bg-white">
-                                                                                <option v-for="year in years" :value="year">{{year}}</option>
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-3 mb-3">
-                                                                        <div class="input-group">
-                                                                            <span class="input-group-text w-50">Mes</span>
-                                                                            <select v-model="mesDinamico[index]" class="w-50 bg-white">
-                                                                                <option v-for="(month, monthIndex) in months" :value="(monthIndex + 1)">{{month}}</option>
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-8">
-                                                                            <div class="input-group mb-3">
-                                                                            <span class="input-group-text w-50">Tons CO2 por Evitar (Proyectado)</span>
-                                                                            <input type="text" min="0" class="w-25" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputSinPesos('tons_co2')"
-                                                                            :disabled="actualizar_proyecto">
-                                                                            </div>
-
-                                                                            <div class="input-group mb-3">
-                                                                            <span class="input-group-text w-50">Ahorro Duro $MXN/Año (Proyectado )</span>
-                                                                            <input  type="text" min="0" class="w-25" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('ahorro_duro')"
-                                                                            :disabled="actualizar_proyecto">
-                                                                            </div>
-
-                                                                            <div class="input-group mb-3">
-                                                                                <span class="input-group-text w-50">Ahorro Suave $MXN/Año (Proyectado)</span>
-                                                                                <input  type="text" min="0" class="w-25" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 || event.charCode === 46 || event.charCode === 44)" @blur="formatInputPesos('ahorro_suave')"
-                                                                                :disabled="actualizar_proyecto">
-                                                                            </div>
-                                                                    </div>
-                                                                    <div class="col-4 text-center">
-                                                                            <div class="rounded-circle bg-danger mx-2 text-white d-flex justify-content-center align-items-center btn-menu" @click="quitarMeses()"  style=" width: 40px;height:40px; font-weight:bold; cursor: pointer;">   
-                                                                                <i class="bi bi-dash"></i>
-                                                                            </div>
-                                                                    </div>
-                                                    </div>
-                                                </div>-->
-                                            <!--Finbloque-->
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text w-25 me-2">Objetivo Estrategico</span>
-                                                <input type="checkbox" v-model="objetivo_estrategico" :disabled="actualizar_proyecto">
-
-                                                <!--<div class="d-flex align-items-center ps-5">
-                                                    ESTE ERA BOTON PARA PRESUPUESTAR EL PROYECTO, Y NO SE USA
-                                                    <div class="form-check form-switch">
-                                                       ///<label class="form-check-label" for="switchCheckDefault">Presupuestado</label>/// >
-                                                        <input :style="{ backgroundColor: colorPresupuestado ? '#f4ca31ff' : '#B3F09B'}" class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault" v-model="presupuestado" @change="proyectoSIoNOpresupuestado()" >
-                                                        <label class="fw-light text-sm">
-                                                            <strong>{{ presupuestado ? 'Presupuestado' : 'No presupuestado' }}</strong>
-                                                        </label>
-                                                    </div>
-                                                </div>-->
+                                                <input type="checkbox" v-model="objetivo_estrategico">
                                             </div>
-                                        </div>
-                                        <div class="col-3 my-auto mx-auto "><!--bloque imagen Alta Proyecto-->
+
+                                        </div> <!-- Fin Columna Izquierda -->
+
+                                        <div class="col-12 col-lg-3 my-auto mx-auto text-center mt-4 mt-lg-0">
                                             <form @submit.prevent="uploadFile('Alta Proyecto')">
-                                                <div class="row mx-auto">
-                                                    <input type="file" id="input_file_subir" @change="varificandoSelecion()" ref="ref_imagen" accept="*.jpg/*.png" class="btn-success py-1" required />
+                                                <div class="row mx-auto justify-content-center">
+                                                    <input type="file" id="input_file_subir" @change="varificandoSelecion()" ref="ref_imagen" accept="*.jpg/*.png" class="btn-success py-1 w-100" required />
                                                 </div>
-                                                <div v-if="imagenes.length>0" class="row">
+                                                <div v-if="imagenes.length>0" class="row mt-3">
                                                     <div class="col-12 d-flex justify-content-center">
-                                                        <img :src="imagenes[0]+'?'+random" style=" width:250px; height:200px;" alt="No existe imagen, para mostrar"></img>
+                                                        <img :src="imagenes[0]+'?'+random" style="max-width:100%; height:auto; max-height:220px; object-fit: contain; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" alt="No existe imagen, para mostrar"></img>
                                                     </div>
                                                 </div>
-                                                <div v-if="existeImagenSeleccionada==true && login!=true" class="row mx-auto">
-                                                    <input class="btn-success" type="submit" value="Subir" />
+                                                <div v-if="existeImagenSeleccionada==true && login!=true" class="row mx-auto mt-3">
+                                                    <input class="btn-success w-100 py-2 rounded-2" type="submit" value="Subir" />
                                                 </div>
-                                                <div v-if="login==true" class="d-flex justify-content-center">
+                                                <div v-if="login==true" class="d-flex justify-content-center mt-3">
                                                     <div>
                                                         <img class="mx-auto" style="width:50px;" src="img/loading.gif" /><label>Subiendo...</label>
                                                     </div>
                                                 </div>
                                             </form>
+                                        </div> <!-- Fin Columna Derecha -->
+                                    </div> <!-- Fin ROW Superior -->
+
+                                    <!-- IMPACTOS AMBIENTALES -->
+                                    <div class="row m-0 w-100 mt-4 mb-4">
+                                        <div class="col-12 p-0">
+                                            <?php include("../EAD-System/templateImpactosAmbientales.php") ?>
                                         </div>
                                     </div>
+                                    
+                                    <!-- TABLA DE MESES Y AHORROS -->
                                     <div class="col-12 pb-2">
                                         <table class="table table-striped table-bordered">
                                             <thead class="text-center">
-                                                <!-- esta era fila par Activar o desactivar Presupuestados NO SE USA -->
-                                                <!-- <tr class="sin-fondo">
-                                                    <th>Ahorro</th> 
-                                                    <th scope="col" v-for="(numero, index) in 12"> 
-                                                        <div style="display: flex; justify-content: center; align-items: center">
-                                                            <div class="form-check form-switch"> 
-                                                                <input :style="{ backgroundColor: mesesPresupuestados[index] ? '#f4ca31ff' : '#B3F09B'}" v-model="mesesPresupuestados[index]" class="form-check-input" type="checkbox" role="switch" :id="'switch' + index">
-                                                            </div>
-                                                        </div>
-                                                    </th>
-                                                </tr> -->
                                                 <tr>
                                                     <th>Año</th>
                                                     <th scope="col" v-for="(numero,index) in 12">
                                                         <select v-model="AnioXMes[numero-1]" style="width:70px" @change="cambiandoMes(MesXAnio[0], AnioXMes[0])" :disabled="index!=0 || hayDatos==true">
-                                                            <option v-for="(year,index) in years.slice().reverse()" :value="year">{{year}}</option><!--asi los anio me aparecen del menor al mayor-->
+                                                            <option v-for="(year,index) in years.slice().reverse()" :value="year">{{year}}</option>
                                                         </select>
                                                     </th>
                                                 </tr>
@@ -503,40 +357,19 @@ if (isset($_SESSION['nombre'])) {
                                                 <tr class="align-middle">
                                                     <td scope="row" style="font-size: 0.9em;">Tons CO2 x Evitar</td>
                                                     <td v-for="numero in 12">
-                                                        <!--<div v-if="flagEditCOMes!==numero" class="d-flex flex-column">
-                                                                        <button class="w-100" style="border-style: outset; border-width: 1.5px; height: 24px;"  @click="editarCOMes(numero)"><i class="bi bi-pencil-fill"></i></button>
-                                                                        <input class="w-100" type="text" :value="inputValorMensualCO[numero-1]" disabled> </input>
-                                                                    </div>  
-                                                                    <div v-else class="d-flex flex-column">-->
-                                                        <!--<button class="w-100"  style="border-style: outset; border-width: 1.5px; height: 24px; background:#bae3a3; color:9cc783" ><i class="bi bi-floppy-fill"></i></button>    @click="guardarPlanMes(x)"-->
                                                         <input class="w-100" v-model="inputValorMensualCO[numero-1]" type="text" @blur="formatInputSinPesosCO(numero-1)"> </input>
-                                                        <!--</div>-->
                                                     </td>
                                                 </tr>
                                                 <tr class="align-middle">
                                                     <td scope="row" style="font-size: 0.9em;">Ahorro Duro $MXN</td>
                                                     <td v-for="numero in 12">
-                                                        <!--<div v-if="flagEditAhorroDuroMes!==numero" class="d-flex flex-column">
-                                                                        <button class="w-100" style="border-style: outset; border-width: 1.5px; height: 24px;"  @click="editarADMes(numero)"><i class="bi bi-pencil-fill"></i></button>
-                                                                        <input class="w-100" type="text" :value="inputValorMensualAD[numero-1]" disabled> </input>
-                                                                    </div>  
-                                                                    <div v-else class="d-flex flex-column">
-                                                                        <button class="w-100"  style="border-style: outset; border-width: 1.5px; height: 24px; background:#bae3a3; color:9cc783" ><i class="bi bi-floppy-fill"></i></button>--> <!-- @click="guardarPlanMes(x)"-->
                                                         <input class="w-100" v-model="inputValorMensualAD[numero-1]" type="text" @blur="darFormatoInputValorMensual(numero-1,'AD')"> </input>
-                                                        <!--</div>-->
                                                     </td>
                                                 </tr>
                                                 <tr class="align-middle">
                                                     <td scope="row" style="font-size: 0.9em;">Ahorro Suave $MXN</td>
                                                     <td v-for="numero in 12">
-                                                        <!--<div v-if="flagEditAhorroSuaveMes!==numero" class="d-flex flex-column">
-                                                                        <button class="w-100" style="border-style: outset; border-width: 1.5px; height: 24px;"  @click="editarASMes(numero)"><i class="bi bi-pencil-fill"></i></button>
-                                                                        <input class="w-100" type="text" :value="inputValorMensualAS[numero-1]" disabled> </input>
-                                                                    </div>  
-                                                                    <div v-else class="d-flex flex-column">
-                                                                        <button class="w-100"  style="border-style: outset; border-width: 1.5px; height: 24px; background:#bae3a3; color:9cc783" ><i class="bi bi-floppy-fill"></i></button>--> <!-- @click="guardarPlanMes(x)"-->
                                                         <input class="w-100" v-model="inputValorMensualAS[numero-1]" type="text" @blur="darFormatoInputValorMensual(numero-1,'AS')"> </input>
-                                                        <!--</div>-->
                                                     </td>
                                                 </tr>
                                             </tbody>
