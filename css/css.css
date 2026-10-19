@@ -1784,3 +1784,55 @@ button {
 .ia-btn-success:hover {
   background-color: #059669;
 }
+
+.ia-table th:first-child,
+.ia-index-col {
+  width: 45px !important;
+  min-width: 45px !important;
+  max-width: 45px !important;
+  padding: 0.5rem !important;
+}
+
+.ia-col-alcance {
+  position: relative;
+  width: 120px;
+  min-width: 120px;
+}
+
+.ia-tooltip-mejorado {
+  position: absolute;
+  bottom: calc(100% + 5px);
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #1e293b;
+  color: #ffffff;
+  padding: 0.6rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  width: 260px;
+  text-align: justify;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  pointer-events: none;
+  line-height: 1.3;
+}
+
+.ia-tooltip-mejorado::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #1e293b transparent transparent transparent;
+}
+
+.ia-footer-delgado {
+  padding: 0.75rem 1.5rem !important;
+}
+
+.ia-footer-delgado .py-1 {
+  padding-top: 0.35rem !important;
+  padding-bottom: 0.35rem !important;
+}
