@@ -407,6 +407,7 @@ const AltaProyectos = {
       alcanceAyudaVisible: false,
       textoAyudaAlcance: "",
       nombre_indicador: "",
+      filaAyudaActiva: null,
     };
   },
   mounted() {
