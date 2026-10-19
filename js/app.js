@@ -2879,9 +2879,10 @@ const AltaProyectos = {
       this.emisiones_aspectos_ambientales_proyecto_ead.splice(index, 1);
     },
     ocultarAyuda() {
-      this.alcanceAyudaVisible = false;
+      this.filaAyudaActiva = null;
     },
-    mostrarAyuda(alcance) {
+    mostrarAyuda(alcance, index) {
+      this.filaAyudaActiva = index;
       const descripciones = {
         1: "Alcance 1: Emisiones directas de GEI provenientes de fuentes que son propiedad o están bajo control de la organización.",
         2: "Alcance 2: Emisiones indirectas asociadas a la generación de electricidad, vapor, calefacción o enfriamiento adquiridos y consumidos por la organización.",
@@ -2889,7 +2890,6 @@ const AltaProyectos = {
       };
 
       this.textoAyudaAlcance = descripciones[alcance];
-      this.alcanceAyudaVisible = true;
     },
     obtenerOpcionesConceptos() {
       const valores = [];
