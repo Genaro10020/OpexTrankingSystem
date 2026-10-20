@@ -96,10 +96,10 @@ if (isset($_SESSION['nombre'])) {
                 $objetivos = json_encode($objetivos, JSON_UNESCAPED_UNICODE); //conviertiendo arreglos en cadena
                 $impacto_ambiental = json_encode($impacto_ambiental, JSON_UNESCAPED_UNICODE); //conviertiendo arreglos en cadena
                 $impacto_ambiental_emisiones = json_encode($impacto_ambiental_emisiones, JSON_UNESCAPED_UNICODE); //conviertiendo arreglos en cadena
-                $diagrama_proceso = json_decode($diagrama_proceso, JSON_UNESCAPED_UNICODE);
-                $tipo = json_decode($tipo, JSON_UNESCAPED_UNICODE);
-                $cantidad = json_decode($cantidad, JSON_UNESCAPED_UNICODE);
-                $referencia = json_decode($referencia, JSON_UNESCAPED_UNICODE);
+                $diagrama_proceso = json_encode($diagrama_proceso, JSON_UNESCAPED_UNICODE);
+                $tipo             = json_encode($tipo, JSON_UNESCAPED_UNICODE);
+                $cantidad         = json_encode($cantidad, JSON_UNESCAPED_UNICODE);
+                $referencia       = json_encode($referencia, JSON_UNESCAPED_UNICODE);
 
                 $valores = json_encode($valores, JSON_UNESCAPED_UNICODE); //conviertiendo arreglos en cadena
 
