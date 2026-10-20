@@ -5891,7 +5891,7 @@ const AltaProyectos = {
         diagrama_proceso.push(imp.diagrama || "");
         tipo_impacto.push(imp.tipo || "");
         conceptos.push(imp.concepto || "Sin Impacto");
-        alcances.push(imp.alcane || "");
+        alcances.push(imp.alcance || "");
         cantidades.push(imp.cantidad || 0);
         referencias.push(imp.referencia || "");
       });
@@ -5948,7 +5948,8 @@ const AltaProyectos = {
           objetivos: combinadoObjetivo,
           // Impactos Ambientales
           impacto_ambiental: conceptos,
-          impacto_ambiental_emisiones: diagrama_proceso,
+          impacto_ambiental_emisiones: alcances,
+          diagrama_proceso: diagrama_proceso,
           tipo: tipo_impacto,
           cantidad: cantidades,
           referencia: referencias,
