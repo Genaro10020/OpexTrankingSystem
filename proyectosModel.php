@@ -552,28 +552,11 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
         }
     }
 
-    $update = "UPDATE proyectos_creados SET folio=?, fecha=?, nombre_proyecto=?, fuente=?, planta=?, area=?, departamento=?, metodologia=?, responsable=?, nomina=?, correo=?, telefono=?, observador=?, misiones=?, pilares=?, objetivos=?, impacto_ambiental=?, valores=?, presupuestado=? WHERE id=?";
+    $update = "UPDATE proyectos_creados SET folio=?, fecha=?, nombre_proyecto=?, fuente=?, planta=?, area=?, departamento=?, metodologia=?, responsable=?, nomina=?, correo=?, telefono=?, observador=?, misiones=?, pilares=?, objetivos=?, impacto_ambiental=?, impacto_ambiental_emisiones=?, valores=?, presupuestado=?, diagrama_proceso=?, tipo=?, cantidad=?, referencia=? WHERE id=?";
     $stmt = $conexion->prepare($update);
-    $stmt->bind_param("sssssssssssssssssssi", 
-        $folio_final, 
-        $fecha_alta_invertida, 
-        $nombre_proyecto, 
-        $selectFuente, 
-        $planta, 
-        $area, 
-        $departamento, 
-        $metodologia, 
-        $nombre_responsable, 
-        $nomina, 
-        $correo_responsable, 
-        $telefono_responsable, 
-        $observador, 
-        $misiones, 
-        $pilares, 
-        $objetivos, 
-        $impacto_ambiental_emisiones, 
-        $valores, 
-        $presupuestado, 
+    $stmt->bind_param("ssssssssssssssssssssssssi", 
+        $folio_final, $fecha_alta_invertida, $nombre_proyecto, $selectFuente, $planta, $area, $departamento, $metodologia, $nombre_responsable, $nomina, $correo_responsable, $telefono_responsable, $observador, $misiones, $pilares, $objetivos, $impacto_ambiental, $impacto_ambiental_emisiones, $valores, $presupuestado, 
+        $diagrama_proceso, $tipo, $cantidad, $referencia, 
         $id
     );
 
