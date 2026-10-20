@@ -2732,6 +2732,41 @@ const AltaProyectos = {
           console.error("Error al consultar todos los impactos: ", error);
         });
     },
+    consultarImpactosAmbientalesOTS() {
+      axios
+        .get("impactosAmbientalesControllerOTS.php", {
+          params: { accion: "impactosAmbientalesOTS" },
+        })
+        .then((response) => {
+          if (response.data.status === "success") {
+            this.catalogoImpactosAmbientalesOTSCompleto =
+              response.data.impactos;
+            this.catalogoImpactosAmbientalesOTS = response.data.impactos
+              .map((item) => {
+                const nombre = item.nombre;
+                const posicion = nombre.lastIndexOf("(");
+
+                if (posicion !== -1) {
+                  return nombre.substring(0, posicion).trim();
+                }
+
+                return nombre.trim();
+              })
+              .filter((nombre) => nombre);
+
+            this.catalogoUnidadesOTS = response.data.impactos
+              .map((item) => item.unidad)
+              .filter(
+                (unidad) =>
+                  unidad !== null && unidad !== undefined && unidad !== "",
+              )
+              .map((unidad) => String(unidad).trim());
+          }
+        })
+        .catch((error) => {
+          console.error("Error al consultar impactos ambientales OTS: ", error);
+        });
+    },
     guardarImpactoDeProyecto() {
       if (this.nombre_indicador?.trim() == "") {
         Swal.fire({
