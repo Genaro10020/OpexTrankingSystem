@@ -113,7 +113,7 @@ if (isset($_SESSION['nombre'])) {
 
                     if($arreglo['accion']=="Alta Proyecto"){
                         $val[] = insertarProyecto($folio, $fecha_alta_invertida, $nombre_proyecto, $fuente, $planta, $area, $departamento, $metodologia, $responsable_id, $observador, $misiones, $pilares, $objetivos, $impacto_ambiental, $impacto_ambiental_emisiones, $valores, $tons_co2, $ahorro_duro, $ahorro_suave, 
-                        $anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS, $presupuestado, $mesesPresupuestados);
+                        $anioXmes,$mesXAnio,$valoresMensualCO,$valoresMensualAD,$valoresMensualAS, $presupuestado, $mesesPresupuestados, $presupuestado, $mesesPresupuestados, $diagrama_proceso, $tipo, $cantidad, $referencia, $impactos_completos);
                     }
                     else if($arreglo['accion']=="Actualizar Proyecto"){//ACTUALIZAR PROYECTO
                         if(isset($arreglo['id_actualizar'])){
@@ -143,7 +143,14 @@ if (isset($_SESSION['nombre'])) {
                                 $valoresMensualAS,
                                 $idsPlanMesual,
                                 $presupuestado,
-                                $mesesPresupuestados
+                                $mesesPresupuestados,
+                                $presupuestado, 
+                                $mesesPresupuestados,
+                                $diagrama_proceso, 
+                                $tipo, 
+                                $cantidad, 
+                                $referencia, 
+                                $impactos_completos
                             );
                         }else{
                             $val[] = "No llego el ID proyecto actualizar";
