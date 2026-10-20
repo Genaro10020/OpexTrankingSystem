@@ -134,13 +134,13 @@ function guardarImpacto($datos) {
     // INCLUIR CONEXIÓN OTS
     // ============================================================
 
-    include("conexionOTS.php");
+    include("conexionGhoner.php");
 
     // Guardamos la conexión OTS en una variable independiente
     $conexionOTS = $conexion;
 
     // Restauramos la conexión de Ghonher
-    include("conexionGhoner.php");
+    include("conexionEAD.php");
 
 
     // ============================================================
