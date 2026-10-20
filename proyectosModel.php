@@ -560,6 +560,23 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
         }
     }
 
+    $impactos_completos = is_string($impactos_completos) ? json_decode($impactos_completos, true) : $impactos_completos;
+
+    if (!empty($impactos_completos) && is_array($impactos_completos)) {
+        foreach ($impactos_completos as $imp) {
+            if (empty($imp['concepto']) || $imp['concepto'] === 'Sin Impacto') continue;
+
+            $concepto = $conexion->real_escape_string(trim($imp['concepto']));
+            $um = $conexion->real_escape_string(trim($imp['um']));
+            $ref = $conexion->real_escape_string(trim($imp['referencia']));
+
+            $check = $conexion->query("SELECT id FROM impacto_ambiental WHERE nombre = '$concepto'");
+            if ($check && $check->num_rows == 0) {
+                $conexion->query("INSERT INTO impacto_ambiental (nombre, unidad, requisito) VALUES ('$concepto', '$um', '$ref')");
+            }
+        }
+    }
+
     $update = "UPDATE proyectos_creados SET folio=?, fecha=?, nombre_proyecto=?, fuente=?, planta=?, area=?, departamento=?, metodologia=?, responsable=?, nomina=?, correo=?, telefono=?, observador=?, misiones=?, pilares=?, objetivos=?, impacto_ambiental=?, valores=?, presupuestado=?, diagrama_proceso=?, tipo=?, cantidad=?, referencia=? WHERE id=?";
     $stmt = $conexion->prepare($update);
     $stmt->bind_param("sssssssssssssssssssssssi", 
