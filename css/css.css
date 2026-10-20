@@ -1437,8 +1437,11 @@ button {
   }
 }
 
-/* IMPACTOS AMBIENTALES */
+/* =========================================================
+  IMPACTOS AMBIENTALES
+========================================================= */
 
+/* ------ Contenedor ------ */
 .ia-container {
   background-color: #ffffff;
   border-radius: 12px;
@@ -1453,6 +1456,7 @@ button {
   margin-bottom: 2rem;
 }
 
+/* ------ Header ------ */
 .ia-header {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   padding: 1.25rem 1.5rem;
@@ -1511,6 +1515,7 @@ button {
   gap: 0.5rem;
 }
 
+/* ------ Tabla ------ */
 .ia-body {
   padding: 0;
 }
@@ -1549,59 +1554,88 @@ button {
   background-color: #f8fafc;
 }
 
-.ia-index {
-  font-weight: 600;
-  color: #94a3b8;
+/* Columna # */
+.ia-table th:first-child,
+.ia-index-col {
+  width: 45px !important;
+  min-width: 45px !important;
+  max-width: 45px !important;
+  padding: 0.5rem !important;
 }
 
-.ia-input,
-.ia-select,
-.ia-textarea {
+/* ------ Controles de formulario (uniformes) ------ */
+.ia-table .ia-input,
+.ia-table .ia-select {
+  box-sizing: border-box;
   width: 100%;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  padding: 0.5rem;
-  font-size: 0.85rem;
+  height: 34px;
+  padding: 0 0.5rem;
+  font-family: inherit;
+  font-size: 0.8rem;
+  line-height: 1.2;
   color: #334155;
   background-color: #ffffff;
-  transition: all 0.2s ease;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
   text-align: center;
+  transition: all 0.2s ease;
 }
 
-.ia-textarea {
-  resize: vertical;
-  min-height: 36px;
+/* Inputs angostos (Cant., UM, CO2) */
+.ia-table .ia-input-number,
+.ia-table .ia-input-small,
+.ia-table .ia-input-calc {
+  display: block;
+  width: 100%;
+  min-width: 90px;
+  max-width: 120px;
+  margin: 0 auto;
+}
+
+/* Campo calculado automáticamente */
+.ia-table .ia-input-calc {
+  background-color: rgba(16, 185, 129, 0.1);
+  font-weight: 600;
+  color: #059669;
+}
+
+/* ------ Textarea (Referencia) ------ */
+.ia-table .ia-textarea {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 200px;
+  min-height: 56px;
+  padding: 0.4rem 0.5rem;
+  font-family: inherit;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: #334155;
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
   text-align: left;
+  resize: vertical;
+  transition: all 0.2s ease;
 }
 
-.ia-input:focus,
-.ia-select:focus,
-.ia-textarea:focus {
+/* ------ Focus ------ */
+.ia-table .ia-input:focus,
+.ia-table .ia-select:focus,
+.ia-table .ia-textarea:focus {
   outline: none;
   border-color: #10b981;
   box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
 }
 
-.ia-input:disabled,
-.ia-select:disabled,
-.ia-textarea:disabled {
+/* ------ Disabled (legible) ------ */
+.ia-table .ia-input:disabled,
+.ia-table .ia-select:disabled,
+.ia-table .ia-textarea:disabled {
   background-color: #f1f5f9;
-  color: #94a3b8;
+  color: #475569;
+  -webkit-text-fill-color: #475569;
+  opacity: 1;
   cursor: not-allowed;
-}
-
-.ia-input-number {
-  width: 80px;
-}
-
-.ia-input-small {
-  width: 90px;
-}
-
-.ia-input-calc {
-  background-color: rgba(16, 185, 129, 0.1);
-  font-weight: 600;
-  color: #059669;
 }
 
 .ia-hint {
@@ -1609,6 +1643,13 @@ button {
   font-size: 0.65rem;
   color: #94a3b8;
   margin-top: 0.25rem;
+}
+
+/* ------ Alcance + tooltip ------ */
+.ia-col-alcance {
+  position: relative;
+  width: 120px;
+  min-width: 120px;
 }
 
 .ia-scope-container {
@@ -1644,24 +1685,36 @@ button {
   color: #334155;
 }
 
-.ia-tooltip {
+.ia-tooltip-mejorado {
   position: absolute;
-  bottom: 100%;
+  bottom: calc(100% + 5px);
   left: 50%;
   transform: translateX(-50%);
   background-color: #1e293b;
   color: #ffffff;
-  padding: 0.5rem 0.75rem;
+  padding: 0.6rem 0.8rem;
   border-radius: 6px;
   font-size: 0.75rem;
-  width: 220px;
-  text-align: left;
-  margin-bottom: 0.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 100;
+  width: 260px;
+  text-align: justify;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
   pointer-events: none;
+  line-height: 1.3;
 }
 
+.ia-tooltip-mejorado::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #1e293b transparent transparent transparent;
+}
+
+/* ------ Botón eliminar ------ */
 .ia-btn-icon {
   border: none;
   border-radius: 6px;
@@ -1692,18 +1745,34 @@ button {
   color: #cbd5e1;
 }
 
+/* ===== Footer de la tabla (tfoot) ===== */
 .ia-table tfoot td {
   background-color: #f8fafc;
   border-top: 2px solid #e2e8f0;
-  padding: 1rem 0.75rem;
+  padding: 0.6rem 0.75rem;
 }
 
 .ia-footer-actions {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
 }
 
+.ia-total-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+  white-space: nowrap;
+}
+
+.ia-total-value {
+  color: #059669;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* ===== Botones generales ===== */
 .ia-btn {
   display: inline-flex;
   align-items: center;
@@ -1717,6 +1786,14 @@ button {
   border: 1px solid transparent;
 }
 
+.ia-footer-actions .ia-btn {
+  padding: 0.3rem 0.75rem;
+  font-size: 0.78rem;
+  line-height: 1.2;
+  gap: 0.35rem;
+  white-space: nowrap;
+}
+
 .ia-btn-outline-success {
   background-color: transparent;
   border-color: #10b981;
@@ -1726,43 +1803,6 @@ button {
 .ia-btn-outline-success:hover {
   background-color: #10b981;
   color: white;
-}
-
-.ia-total-label {
-  font-weight: 600;
-  color: #475569;
-}
-
-.ia-total-value {
-  color: #059669;
-  font-weight: 700;
-  font-size: 1.1rem;
-}
-
-.ia-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 1.5rem;
-  background-color: #f8fafc;
-  border-top: 1px solid #e2e8f0;
-}
-
-.ia-badge-success {
-  background-color: #d1fae5;
-  color: #065f46;
-  padding: 0.4rem 0.75rem;
-  border-radius: 6px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.ia-actions {
-  display: flex;
-  gap: 0.75rem;
 }
 
 .ia-btn-outline-primary {
@@ -1785,47 +1825,14 @@ button {
   background-color: #059669;
 }
 
-.ia-table th:first-child,
-.ia-index-col {
-  width: 45px !important;
-  min-width: 45px !important;
-  max-width: 45px !important;
-  padding: 0.5rem !important;
-}
-
-.ia-col-alcance {
-  position: relative;
-  width: 120px;
-  min-width: 120px;
-}
-
-.ia-tooltip-mejorado {
-  position: absolute;
-  bottom: calc(100% + 5px);
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #1e293b;
-  color: #ffffff;
-  padding: 0.6rem 0.8rem;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  width: 260px;
-  text-align: justify;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
-  z-index: 9999;
-  pointer-events: none;
-  line-height: 1.3;
-}
-
-.ia-tooltip-mejorado::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #1e293b transparent transparent transparent;
+/* ===== Pie de tarjeta ===== */
+.ia-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background-color: #f8fafc;
+  border-top: 1px solid #e2e8f0;
 }
 
 .ia-footer-delgado {
@@ -1835,4 +1842,21 @@ button {
 .ia-footer-delgado .py-1 {
   padding-top: 0.35rem !important;
   padding-bottom: 0.35rem !important;
+}
+
+.ia-badge-success {
+  background-color: #d1fae5;
+  color: #065f46;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.ia-actions {
+  display: flex;
+  gap: 0.75rem;
 }
