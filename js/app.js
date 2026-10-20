@@ -481,6 +481,9 @@ const AltaProyectos = {
       valoresFactoresConversion(nuevosValores, valoresAnteriores) {
         this.ejecutarOperaciones();
       },
+      nombre_proyecto(nuevoValor) {
+        this.nombre_indicador = nuevoValor;
+      },
     },
   },
   computed: {
