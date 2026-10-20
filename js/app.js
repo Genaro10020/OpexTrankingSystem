@@ -2893,13 +2893,15 @@ const AltaProyectos = {
     },
     obtenerOpcionesConceptos() {
       const valores = [];
+
       this.catalogoImpactosAmbientalesEAD.forEach((item) => {
         const valor = item.concepto;
-
         if (valor) {
           const conceptos = String(valor)
             .split(",")
-            .map((c) => c.trim().filter((c) => c !== ""));
+            .map((c) => c.trim())
+            .filter((c) => c !== "");
+
           valores.push(...conceptos);
         }
       });
@@ -2913,7 +2915,6 @@ const AltaProyectos = {
       this.calculadoraFeCombustibles.forEach((valor) => {
         if (valor) {
           const titulo = String(valor.combustible_energetico ?? "").trim();
-
           if (titulo) valores.push(titulo);
         }
       });
@@ -2925,7 +2926,7 @@ const AltaProyectos = {
           unicos.set(texto.toLowerCase(), texto);
       });
 
-      return Array.from(unicos.values);
+      return Array.from(unicos.values());
     },
     obtenerOpcionesUM() {
       const valores = [];
