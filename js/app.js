@@ -5946,8 +5946,13 @@ const AltaProyectos = {
           misiones: misiones_nombres,
           pilares: pilares_nombres,
           objetivos: combinadoObjetivo,
-          impacto_ambiental: impacto_ambiental_nombres, // utilizada para insertar en tabla impactos ambientales
-          impacto_ambiental_emisiones: emisiones_ordenadas, // utilizada para insertar en tabla proyectos creados
+          // Impactos Ambientales
+          impacto_ambiental: conceptos,
+          impacto_ambiental_emisiones: diagrama_proceso,
+          tipo: tipo_impacto,
+          cantidad: cantidades,
+          referencia: referencias,
+          impactos_completos: this.emisiones_aspectos_ambientales_proyecto_ead,
           valores: valores,
           tons_co2: this.tons_co2,
           ahorro_duro: this.ahorro_duro,
