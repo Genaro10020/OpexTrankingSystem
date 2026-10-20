@@ -5880,6 +5880,56 @@ const AltaProyectos = {
         arreglo_observador.push("");
       }
 
+      var misiones_nombres = [];
+      for (let i = 0; i < this.checkMisiones.length; i++) {
+        var mision_nom = this.checkMisiones[i].split("<->")[1];
+        misiones_nombres.push(mision_nom);
+      }
+
+      var pilares_nombres = [];
+      var pilarOrden = "";
+      var siglasPilaresConcatenado = "";
+      for (let i = 0; i < this.checkPilares.length; i++) {
+        var pilar_nom = this.checkPilares[i].split("<->")[1];
+        var siglas = this.checkPilares[i].split("<->")[2];
+        var orden = this.checkPilares[i].split("<->")[3];
+        pilares_nombres.push(pilar_nom + " (" + siglas + ")");
+        pilarOrden += orden;
+        siglasPilaresConcatenado += "-" + siglas;
+      }
+
+      var objetivos_nombres = [];
+      var objetivoOrden = "";
+      var siglasObjetivosConcatenado = "";
+      for (var i = 0; i < this.checkObjetivos.length; i++) {
+        var nombre_objetivo = this.checkObjetivos[i].split("<->")[1];
+        var siglas = this.checkObjetivos[i].split("<->")[3];
+        var orden = this.checkObjetivos[i].split("<->")[4];
+        objetivos_nombres.push(nombre_objetivo + "  " + siglas + " ");
+        objetivoOrden += orden;
+        siglasObjetivosConcatenado += "-" + siglas;
+      }
+
+      var objetivosDirectosIndirectos = [];
+      for (let i = 0; i < this.selectObjetivo.length; i++) {
+        if (this.selectObjetivo[i] != "") {
+          objetivosDirectosIndirectos.push(this.selectObjetivo[i]);
+        }
+      }
+
+      var combinadoObjetivo = [];
+      if (objetivos_nombres.length == objetivosDirectosIndirectos.length) {
+        for (let i = 0; i < objetivos_nombres.length; i++) {
+          if (objetivosDirectosIndirectos[i] == "directo") {
+            combinadoObjetivo.push(
+              objetivos_nombres[i] + "->" + objetivosDirectosIndirectos[i],
+            );
+          } else {
+            combinadoObjetivo.push(objetivos_nombres[i]);
+          }
+        }
+      }
+
       let diagrama_proceso = [];
       let tipo_impacto = [];
       let conceptos = [];
