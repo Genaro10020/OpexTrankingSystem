@@ -2767,6 +2767,23 @@ const AltaProyectos = {
           console.error("Error al consultar impactos ambientales OTS: ", error);
         });
     },
+    consultarCalculadorafeOTS() {
+      axios
+        .get("impactosAmbientalesControllerOTS.php", {
+          params: { accion: "calculadorafe" },
+        })
+        .then((response) => {
+          if (response.data.status === "success") {
+            this.calculadoraFeCombustibles = response.data.calcFe;
+          }
+        })
+        .catch((error) => {
+          console.log(
+            "Error al consultar calculadora fe combustibles energéticos: ",
+            error,
+          );
+        });
+    },
     guardarImpactoDeProyecto() {
       if (this.nombre_indicador?.trim() == "") {
         Swal.fire({
