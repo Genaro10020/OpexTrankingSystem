@@ -478,6 +478,9 @@ const AltaProyectos = {
           console.error("Error en el watcher de impactos: ", error);
         }
       },
+      valoresFactoresConversion(nuevosValores, valoresAnteriores) {
+        this.ejecutarOperaciones();
+      },
     },
   },
   computed: {
