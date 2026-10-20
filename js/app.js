@@ -2714,6 +2714,24 @@ const AltaProyectos = {
     },
 
     /* TABLA DE IMPACTOS AMBIENTALES */
+    consultarTodosImpactosProyectosEAD() {
+      axios
+        .get("impactosAmbientalesController.php", {
+          params: { accion: "consultarTodo" },
+        })
+        .then((response) => {
+          if (response.data.status === "success") {
+            this.catalogoImpactosAmbientalesEAD = response.data.impactos;
+          } else {
+            console.warn(
+              "No se pudieron consultar los impactos ambientales EAD",
+            );
+          }
+        })
+        .catch((error) => {
+          console.error("Error al consultar todos los impactos: ", error);
+        });
+    },
     guardarImpactoDeProyecto() {
       if (this.nombre_indicador?.trim() == "") {
         Swal.fire({
