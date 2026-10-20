@@ -67,6 +67,11 @@ if (isset($_SESSION['nombre'])) {
                 $objetivos = $arreglo['objetivos'];
                 $impacto_ambiental = $arreglo['impacto_ambiental'];
                 $impacto_ambiental_emisiones = $arreglo['impacto_ambiental_emisiones'];
+                $diagrama_proceso = $arreglo['diagrama_proceso'];
+                $tipo = $arreglo['tipo'];
+                $cantidad = $arreglo['cantidad'];
+                $referencia = $arreglo['referencia'];
+                $impactos_completos = $arreglo['impactos_completos'];
                 $valores = $arreglo['valores'];
                 $tons_co2 = $arreglo['tons_co2'];
                 if ($tons_co2 == "") {
