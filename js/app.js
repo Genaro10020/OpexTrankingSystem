@@ -5073,6 +5073,11 @@ const AltaProyectos = {
         this.consultarMetodologias();
         this.consultarResponsables();
         this.consultarImpactoAmbiental();
+
+        this.consultarTodosImpactosProyectosEAD();
+        this.consultarImpactosAmbientalesOTS();
+        this.consultarCalculadorafeOTS();
+
         this.consultarMisiones();
         this.consultarFuentes();
         this.consultarValores();
@@ -5099,6 +5104,11 @@ const AltaProyectos = {
         this.consultarMetodologias();
         this.consultarResponsables();
         this.consultarImpactoAmbiental();
+
+        this.consultarTodosImpactosProyectosEAD();
+        this.consultarImpactosAmbientalesOTS();
+        this.consultarCalculadorafeOTS();
+
         this.consultarMisiones();
         this.consultarFuentes();
         this.consultarValores();
