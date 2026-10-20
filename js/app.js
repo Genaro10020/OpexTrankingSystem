@@ -5880,114 +5880,30 @@ const AltaProyectos = {
         arreglo_observador.push("");
       }
 
-      //Utilizo para tomar todos los nombres.
-      console.log(this.checkMisiones);
-      var misiones_nombres = [];
-      for (let i = 0; i < this.checkMisiones.length; i++) {
-        var mision_nom = this.checkMisiones[i].split("<->")[1];
-        misiones_nombres.push(mision_nom);
-      }
-      //console.log(misiones_nombres)
+      let diagrama_proceso = [];
+      let tipo_impacto = [];
+      let conceptos = [];
+      let alcances = [];
+      let cantidades = [];
+      let referencias = [];
 
-      //Utilizo para tomar todos los nombres.
-      console.log(this.checkPilares);
-      var pilares_nombres = [];
-      var pilarOrden = "";
-      var siglasPilaresConcatenado = "";
-      for (let i = 0; i < this.checkPilares.length; i++) {
-        var pilar_nom = this.checkPilares[i].split("<->")[1];
-        var siglas = this.checkPilares[i].split("<->")[2];
-        var orden = this.checkPilares[i].split("<->")[3];
-        pilares_nombres.push(pilar_nom + " (" + siglas + ")");
-        pilarOrden += orden;
-        siglasPilaresConcatenado += "-" + siglas;
-      }
-      // console.log(pilares_nombres);
-      //console.log(pilarOrden);
+      this.emisiones_aspectos_ambientales_proyecto_ead.forEach((imp) => {
+        diagrama_proceso.push(imp.diagrama || "");
+        tipo_impacto.push(imp.tipo || "");
+        conceptos.push(imp.concepto || "Sin Impacto");
+        alcances.push(imp.alcane || "");
+        cantidades.push(imp.cantidad || 0);
+        referencias.push(imp.referencia || "");
+      });
 
-      //Utilizo para tomar todos los nombres.
-      //console.log(this.checkObjetivos)
-      var objetivos_nombres = [];
-      var objetivoOrden = "";
-      var siglasObjetivosConcatenado = "";
-      for (var i = 0; i < this.checkObjetivos.length; i++) {
-        var nombre_objetivo = this.checkObjetivos[i].split("<->")[1]; //tomo el nombre
-        var siglas = this.checkObjetivos[i].split("<->")[3];
-        var orden = this.checkObjetivos[i].split("<->")[4];
-        objetivos_nombres.push(nombre_objetivo + "  " + siglas + " ");
-        objetivoOrden += orden;
-        siglasObjetivosConcatenado += "-" + siglas;
-      }
-      //console.log(objetivos_nombres)
-
-      var objetivosDirectosIndirectos = [];
-      for (let i = 0; i < this.selectObjetivo.length; i++) {
-        //insertando directo e indirectos de selectPilares
-        if (this.selectObjetivo[i] != "") {
-          objetivosDirectosIndirectos.push(this.selectObjetivo[i]); //nuevo arreglo eliminado los "" del arreglo anterior1
-        }
-      }
-
-      var combinadoObjetivo = [];
-      if (objetivos_nombres.length == objetivosDirectosIndirectos.length) {
-        for (let i = 0; i < objetivos_nombres.length; i++) {
-          if (objetivosDirectosIndirectos[i] == "directo") {
-            combinadoObjetivo.push(
-              objetivos_nombres[i] + "->" + objetivosDirectosIndirectos[i],
-            ); // solo insertar el que es directo
-          } else {
-            combinadoObjetivo.push(objetivos_nombres[i]); // si son indirecto no agregar indirecto
-          }
-        }
-        //console.log("Combinado Objetivos")
-        console.log(combinadoObjetivo);
-      } else {
-        console.log(
-          "los nombres del pilar y directos e indirecto de pilar no tienen el mismo tamaño",
+      if (alcances.some((a) => a === "") && conceptos[0] !== "Sin Impacto") {
+        return Swal.fire(
+          "Faltan datos",
+          "Seleccione el Alcance para todos los impactos",
+          "warinig",
         );
       }
 
-      //Utilizo para tomar todos los nombres.
-      console.log(this.checkImpactoAmbiental);
-      var impacto_ambiental_nombres = [];
-      for (let i = 0; i < this.checkImpactoAmbiental.length; i++) {
-        var nombre_impacto = this.checkImpactoAmbiental[i].split("<->")[1];
-        impacto_ambiental_nombres.push(nombre_impacto);
-      }
-
-      if (impacto_ambiental_nombres.length <= 0) {
-        impacto_ambiental_nombres.push("Sin Impacto");
-      }
-      //console.log("impacto ambienta nombres", impacto_ambiental_nombres)
-
-      let idsImpacto = this.checkImpactoAmbiental.map(
-        (element) => element.split("<->")[0],
-      );
-      console.log("Ids", idsImpacto);
-
-      var impacto_ambiental_emisiones = this.selectEmisiones;
-      let idsImpactosSinEnlace = [];
-      //ordeno las emisiones como el arreglo de impacto ambieltal
-      let emisiones_ordenadas = idsImpacto.flatMap((element) => {
-        let coincidencias = impacto_ambiental_emisiones
-          .filter((ids) => element == ids.split("<->")[0])
-          .map((elementos) => elementos.split("<->")[1]); //primero reviso que sea igual al id y des tomo el restp
-        if (coincidencias.length === 0) {
-          idsImpactosSinEnlace.push(element); // Guardamos los que no se encontraron
-        }
-        return coincidencias;
-      });
-
-      if (emisiones_ordenadas.length <= 0) {
-        //Si no hay impactos tambien colocarlo sin impacto
-        emisiones_ordenadas.push("Sin Impacto");
-      }
-      console.log("idsImpactosSinEnlace");
-      if (idsImpactosSinEnlace.length > 0) {
-        return alert("Seleccione el Alcance del impacto");
-      }
-
-      console.log("Ya acomodados", emisiones_ordenadas);
       var valores = [];
       for (let index = 0; index < this.valoresCheck.length; index++) {
         if (this.valoresCheck[index] != "") {
