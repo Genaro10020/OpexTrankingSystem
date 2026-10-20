@@ -589,11 +589,6 @@ const AltaProyectos = {
         return this.energeticos.electricidad.cantidad * e.factorEmision;
       } */
   },
-  watch: {
-    valoresFactoresConversion(nuevosValores, valoresAnteriores) {
-      this.ejecutarOperaciones();
-    },
-  },
   methods: {
     limpiarFiltrosAltas() {
       this.filtroBusqueda = "";
