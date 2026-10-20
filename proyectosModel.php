@@ -538,6 +538,20 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
         }
     }
 
+    if (!empty($impactos_completos)) {
+        foreach ($impactos_completos as $imp) {
+            if (empty($imp['concepto']) || $imp['concepto'] === "Sin Impacto") continue;
+
+            $concepto = $conexion->real_escape_string(trim($imp['concepto']));
+            $um = $conexion->real_escape_string(trim($imp['referencia']));
+
+            $check = $conexion->query("SELECT id FROM impacto_ambiental WHERE nombre = '$concepto'");
+            if ($check && $check->num_rows === 0) {
+                $conexion->query("INSERT INTO impacto_ambiental (nombre, unidad, requisito) VALUES ('$concepto', '$um', '$ref')");
+            }
+        }
+    }
+
     $update = "UPDATE proyectos_creados SET folio=?, fecha=?, nombre_proyecto=?, fuente=?, planta=?, area=?, departamento=?, metodologia=?, responsable=?, nomina=?, correo=?, telefono=?, observador=?, misiones=?, pilares=?, objetivos=?, impacto_ambiental=?, valores=?, presupuestado=? WHERE id=?";
     $stmt = $conexion->prepare($update);
     $stmt->bind_param("sssssssssssssssssssi", 
