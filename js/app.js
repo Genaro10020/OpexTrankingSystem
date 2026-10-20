@@ -2786,18 +2786,16 @@ const AltaProyectos = {
         });
     },
     guardarImpactoDeProyecto() {
-      if (this.nombre_indicador?.trim() == "") {
+      if (this.nombre_proyecto?.trim() == "") {
         Swal.fire({
           icon: "warning",
-          title: "Sin nombre de indicador?",
-          text: "Agregue un nombre al indicador KPI en (Nom. Indicador) y después podría registra los impactos.",
+          title: "Sin nombre de proyecto",
+          text: "Agregue el Nombre del Proyecto en la parte superior antes de registrar los impactos.",
           confirmButtonText: "Aceptar",
         });
-
         return;
       }
 
-      // Verificar que exista al menos un impacto
       if (
         !Array.isArray(this.emisiones_aspectos_ambientales_proyecto_ead) ||
         this.emisiones_aspectos_ambientales_proyecto_ead.length === 0
@@ -2808,11 +2806,9 @@ const AltaProyectos = {
           text: "Debes agregar al menos un impacto ambiental.",
           confirmButtonText: "Aceptar",
         });
-
         return;
       }
 
-      // Campos requeridos
       const camposRequeridos = {
         diagrama: "Diagrama",
         tipo: "Tipo",
@@ -2824,14 +2820,12 @@ const AltaProyectos = {
         referencia: "Referencia",
       };
 
-      // Validar TODOS los impactos
       for (
         let index = 0;
         index < this.emisiones_aspectos_ambientales_proyecto_ead.length;
         index++
       ) {
         const impacto = this.emisiones_aspectos_ambientales_proyecto_ead[index];
-
         for (const campo in camposRequeridos) {
           const valor = impacto[campo];
           if (
@@ -2850,17 +2844,11 @@ const AltaProyectos = {
         }
       }
 
-      // Datos que se enviarán
       const datos = {
-        // Datos generales
-        nombre_indicador: this.nombre_indicador,
-        id_equipo: this.select_session_equipo?.split("<->")[0],
-        // Impactos ambientales
+        nombre_indicador: this.nombre_proyecto,
+        id_equipo: this.id_actualizar !== "" ? this.id_actualizar : null,
         impactos: this.emisiones_aspectos_ambientales_proyecto_ead.map(
           (impacto) => ({
-            // ID del impacto
-            // Si existe = actualizar
-            // Si no existe = insertar
             id: impacto.id ?? null,
             diagrama: impacto.diagrama,
             tipo: impacto.tipo,
@@ -2873,8 +2861,9 @@ const AltaProyectos = {
           }),
         ),
       };
+
       console.log("Impactos a guardar/actualizar:", datos);
-      // Enviar TODOS los impactos en una sola petición
+
       axios
         .post("impactosAmbientalesController.php", datos)
         .then((response) => {
@@ -2894,7 +2883,6 @@ const AltaProyectos = {
             }, 3000);
             this.consultarTodosImpactosProyectosEAD();
           } else {
-            console.error("Error en la base de datos:", response.data);
             Swal.fire({
               icon: "error",
               title: "Error",
