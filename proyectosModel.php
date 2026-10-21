@@ -25,6 +25,42 @@ function consultarProyectos()
 
     return array($resultado, $estado);
 }
+function consultarProyectosPorAnioSelected($anio){
+    global $conexion;
+    $resultado1 = [];
+    $sumasPorMes['sumas_ahorro_duro'] = [];
+    $sumasPorMes['sumas_ahorro_suave'] = [];
+    $estado = false;
+    $suma = 0;
+    $consulta = "SELECT DISTINCT proyectos_creados.id AS proyectoID, proyectos_creados.nombre_proyecto, registros_impacto_ambiental.mes, registros_impacto_ambiental.tons_co2, registros_impacto_ambiental.anio, registros_impacto_ambiental.ahorro_duro, registros_impacto_ambiental.ahorro_suave, registros_impacto_ambiental.status_rechazo, registros_impacto_ambiental.motivo_rechazo, registros_impacto_ambiental.validado, proyectos_creados.id /*Datos Proyecto */
+    FROM impacto_ambiental_proyecto JOIN proyectos_creados ON impacto_ambiental_proyecto.id_proyecto = proyectos_creados.id 
+    JOIN registros_impacto_ambiental ON impacto_ambiental_proyecto.id = registros_impacto_ambiental.id_impacto_ambiental_proyecto WHERE registros_impacto_ambiental.anio ='$anio'";
+    $query = $conexion->query($consulta);
+    if ($query) {
+        $sumaTotalAhorroDuro = 0;
+        while ($datos = mysqli_fetch_array($query)) {
+            $ahorro_duro = str_replace(['$',','],'', $datos['ahorro_duro']);//eliminando caracteres
+            $ahorro_duro= floatval($ahorro_duro);//conviertiendolo a número
+            $sumaTotalAhorroDuro += $ahorro_duro;
+            if(!isset($sumasPorMes['sumas_ahorro_duro'][$datos['mes']])){
+                $sumasPorMes['sumas_ahorro_duro'][$datos['mes']]=0;
+            }
+            $sumasPorMes['sumas_ahorro_duro'][$datos['mes']]+=$ahorro_duro;
+            $resultado1[] = $datos;
+        }
+        //dandole formato a las posiciones
+        foreach ($sumasPorMes['sumas_ahorro_duro'] as $elmes => $suma) {
+            $sumasPorMes['sumas_ahorro_duro'][$elmes] = "$".number_format($suma,2,".",","); 
+        }
+        $sumasPorMes['global_anual_ahorro_duro'] = "$" . number_format($sumaTotalAhorroDuro, 2, ".", ",");
+        
+        $estado = true;
+    } else {
+        $estado = false;
+    }
+    return array($resultado1, $estado, $sumasPorMes);
+}
+
 
 function sumaValoresGonher(){
     global $conexion;

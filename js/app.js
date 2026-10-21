@@ -989,6 +989,23 @@ const AltaProyectos = {
         .finally(() => {});
     },
 
+    consultasGlobales(){
+      axios.get("proyectosController.php",{
+        params:{
+          accion:"consulta Global",
+          anio: this.select_anio_calendario
+        }
+      }).then(respuesta=>{
+          console.info("respuesta:",respuesta)
+          this.todosRegistrosProyectosAnual = respuesta.data[0][0]
+          this.globalAhorroDuroAnual = respuesta.data[0][2].global_anual_ahorro_duro
+          this.globalAhorroDuroAnualNumerico = parseFloat(String(this.globalAhorroDuroAnual).replace(/[$,]/g, '')) || 0;
+          this.sumaTotalPersonalizada()
+      }).catch(e=>{
+        console.log("Error en axios",e)
+      })
+    },
+
     consultarMesesCapturadosYsumaXProyecto() {
       axios
         .get("impactoAmbientalProyectoController.php", {

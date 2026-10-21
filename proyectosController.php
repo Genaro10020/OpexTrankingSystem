@@ -23,6 +23,12 @@ if (isset($_SESSION['nombre'])) {
                 if($_GET['accion']=='sumar valores'){
                     $val[] = sumaValoresGonher();
                 }
+                if($_GET['accion']=='consulta Global'){
+                    $anio=$_GET['anio'];
+                    //$val[] = 'Hola'.$anio;
+                    $val[] = consultarProyectosPorAnioSelected($anio);
+                }
+
             }else {
                 $val[] = consultarProyectos();
             }
