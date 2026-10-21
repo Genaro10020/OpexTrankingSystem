@@ -44,7 +44,7 @@ if (isset($_SESSION['nombre'])) {
                     <?php } ?>
                     
                     <?php if ($_SESSION['acceso'] == 'Admin' || $_SESSION['acceso'] == 'Financiero') { ?>
-                        <button class="btn-menu ms-sm-3 mb-sm-3" @click="verificarSesion(), ventana='Calendario',opcion=5,mostrarHeader=true,consultarPlantas(),  consultarCalendarioProyectos(),consultarDatoSumaPersonalizada()"
+                        <button class="btn-menu ms-sm-3 mb-sm-3" @click="verificarSesion(), ventana='Calendario',opcion=5,mostrarHeader=true,consultarPlantas(),  consultarCalendarioProyectos(),consultarDatoSumaPersonalizada(),consultasGlobales()"
                             :class="{'btn-menu-activo': opcion===5,'btn-menu': opcion !== 5}">
                             <i class="bi bi-plus-circle"></i> Estatus Captura
                         </button>
@@ -2958,7 +2958,7 @@ if (isset($_SESSION['nombre'])) {
                             <div class="col-3" style="min-width:250px">
                                 <div class="input-group mt-3 mb-2">
                                     <span class="input-group-text" style="width: 150px;">Seleccione año</span>
-                                    <select style="width: 100px;" v-model="select_anio_calendario" @change="verificarSesion(), consultarCalendarioProyectos(),consultarDatoSumaPersonalizada()">
+                                    <select style="width: 100px;" v-model="select_anio_calendario" @change="verificarSesion(), consultarCalendarioProyectos(),consultarDatoSumaPersonalizada(),consultasGlobales()">
                                         <option v-for="(year,index) in years" :value="year">{{year}}</option>
                                     </select>
                                 </div>
