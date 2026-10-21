@@ -6263,6 +6263,19 @@ const AltaProyectos = {
       this.numero_nomina = "";
       this.correo = "";
       this.telefono = "";
+      this.emisiones_aspectos_ambientales_proyecto_ead = [
+        {
+          id: null,
+          diagrama: "",
+          tipo: "",
+          concepto: "",
+          alcance: "",
+          cantidad: 0,
+          um: "",
+          co2: 0,
+          referencia: "",
+        },
+      ];
     },
     verificarSiEsActualizar() {
       if (this.actualizar_proyecto == true) {
