@@ -4711,157 +4711,179 @@ const AltaProyectos = {
 
         console.log("RESPUESTA CONSULTA PROYECTO", response.data[0]);
 
-        if (
-          typeof response.data[0][4] === "object" &&
-          !Array.isArray(response.data[0][4]) &&
-          response.data[0][4] !== null
-        ) {
-          this.selectFuente =
-            response.data[0][4].id +
-            "<->" +
-            response.data[0][4].nombre +
-            "<->" +
-            response.data[0][4].siglas;
-        }
-        if (
-          typeof response.data[0][6] === "object" &&
-          !Array.isArray(response.data[0][6]) &&
-          response.data[0][6] !== null
-        ) {
-          this.selectPlanta =
-            response.data[0][6].id +
-            "<->" +
-            response.data[0][6].nombre +
-            "<->" +
-            response.data[0][6].siglas;
-        }
-        if (
-          typeof response.data[0][8] === "object" &&
-          !Array.isArray(response.data[0][8]) &&
-          response.data[0][8] !== null
-        ) {
-          this.selectArea =
-            response.data[0][8].id +
-            "<->" +
-            response.data[0][8].nombre +
-            "<->" +
-            response.data[0][8].siglas;
-        }
-        if (
-          typeof response.data[0][10] === "object" &&
-          !Array.isArray(response.data[0][10]) &&
-          response.data[0][10] !== null
-        ) {
-          this.selectDepartamento =
-            response.data[0][10].id +
-            "<->" +
-            response.data[0][10].nombre +
-            "<->" +
-            response.data[0][10].siglas;
-        }
-        if (
-          typeof response.data[0][12] === "object" &&
-          !Array.isArray(response.data[0][12]) &&
-          response.data[0][12] !== null
-        ) {
-          this.selectMetodologia =
-            response.data[0][12].id + "<->" + response.data[0][12].nombre;
-        }
-        if (
-          typeof response.data[0][14] === "object" &&
-          !Array.isArray(response.data[0][14]) &&
-          response.data[0][14] !== null
-        ) {
-          this.selectResponsable =
-            response.data[0][14].id + "<->" + response.data[0][14].nombre;
-        }
-
-        if (
-          Array.isArray(response.data[0][19]) &&
-          response.data[0][19] !== null
-        ) {
-          this.checkObservadores = [];
-          for (let index = 0; index < response.data[0][19].length; index++) {
-            if (response.data[0][19][index].nombre !== "Pte") {
-              this.checkObservadores.push(
-                response.data[0][19][index].nombre +
-                  "<->" +
-                  response.data[0][19][index].numero_nomina,
-              );
-            }
-          }
-        }
-
         if (response.data[0][1] == true) {
-          this.idsCheckImpacto = [];
-          this.checkImpactoAmbiental = [];
-          let impactosAmbientaslesBD = this.impactoAmbiental;
-
           let proyecto = response.data[0][0][0];
           console.log("PROYECTO RECUPERADO: ", proyecto);
+
+          if (
+            typeof response.data[0][4] === "object" &&
+            !Array.isArray(response.data[0][4]) &&
+            response.data[0][4] !== null
+          ) {
+            this.selectFuente =
+              response.data[0][4].id +
+              "<->" +
+              response.data[0][4].nombre +
+              "<->" +
+              response.data[0][4].siglas;
+          }
+          if (
+            typeof response.data[0][6] === "object" &&
+            !Array.isArray(response.data[0][6]) &&
+            response.data[0][6] !== null
+          ) {
+            this.selectPlanta =
+              response.data[0][6].id +
+              "<->" +
+              response.data[0][6].nombre +
+              "<->" +
+              response.data[0][6].siglas;
+          }
+          if (
+            typeof response.data[0][8] === "object" &&
+            !Array.isArray(response.data[0][8]) &&
+            response.data[0][8] !== null
+          ) {
+            this.selectArea =
+              response.data[0][8].id +
+              "<->" +
+              response.data[0][8].nombre +
+              "<->" +
+              response.data[0][8].siglas;
+          }
+          if (
+            typeof response.data[0][10] === "object" &&
+            !Array.isArray(response.data[0][10]) &&
+            response.data[0][10] !== null
+          ) {
+            this.selectDepartamento =
+              response.data[0][10].id +
+              "<->" +
+              response.data[0][10].nombre +
+              "<->" +
+              response.data[0][10].siglas;
+          }
+          if (
+            typeof response.data[0][12] === "object" &&
+            !Array.isArray(response.data[0][12]) &&
+            response.data[0][12] !== null
+          ) {
+            this.selectMetodologia =
+              response.data[0][12].id + "<->" + response.data[0][12].nombre;
+          }
+          if (
+            typeof response.data[0][14] === "object" &&
+            !Array.isArray(response.data[0][14]) &&
+            response.data[0][14] !== null
+          ) {
+            this.selectResponsable =
+              response.data[0][14].id + "<->" + response.data[0][14].nombre;
+          }
+
+          if (
+            Array.isArray(response.data[0][19]) &&
+            response.data[0][19] !== null
+          ) {
+            this.checkObservadores = [];
+            for (let index = 0; index < response.data[0][19].length; index++) {
+              if (response.data[0][19][index].nombre !== "Pte") {
+                this.checkObservadores.push(
+                  response.data[0][19][index].nombre +
+                    "<->" +
+                    response.data[0][19][index].numero_nomina,
+                );
+              }
+            }
+          }
 
           let separando = proyecto.fecha.split("-");
           let ordenado = separando[2] + "-" + separando[1] + "-" + separando[0];
           this.fecha_alta = ordenado;
           this.fechaAltaProyecto = separando;
           this.nombre_proyecto = proyecto.nombre_proyecto;
+
           this.valoresCheck = proyecto.valores
             ? JSON.parse(proyecto.valores)
             : [];
+          this.presupuestado = proyecto.presupuestado === "Presupuestado";
+          this.colorPresupuestado = this.presupuestado;
 
           let impacto_ambientales = proyecto.impacto_ambiental
             ? JSON.parse(proyecto.impacto_ambiental)
             : [];
-          let impacto_ambiental = impacto_ambientales.map(
-            (impactos) => impactos.split("->")[0],
-          );
+          let emisiones_alcances = proyecto.impacto_ambiental_emisiones
+            ? JSON.parse(proyecto.impacto_ambiental_emisiones)
+            : [];
+          let diagramas = proyecto.diagrama_proceso
+            ? JSON.parse(proyecto.diagrama_proceso)
+            : [];
+          let tipos = proyecto.tipo ? JSON.parse(proyecto.tipo) : [];
+          let cantidades = proyecto.cantidad
+            ? JSON.parse(proyecto.cantidad)
+            : [];
+          let referencias = proyecto.referencia
+            ? JSON.parse(proyecto.referencia)
+            : [];
+
+          let impactos_reconstruidos = [];
 
           if (
             !impacto_ambientales.some(
-              (sinImpacto) => sinImpacto == "Sin Impacto",
+              (imp) => imp === "Sin Impacto" || imp === "",
             )
           ) {
-            let impactos_con_id = impacto_ambiental.flatMap((impactos) => {
-              return impactosAmbientaslesBD.filter(
-                (elementos) => elementos.nombre == impactos,
-              );
-            });
+            for (let i = 0; i < impacto_ambientales.length; i++) {
+              let conceptoCrudo = impacto_ambientales[i] || "";
+              let alcance = emisiones_alcances[i] || "";
+              let conceptoPuro = conceptoCrudo;
+              let umExtraida = "";
 
-            let checkImpacto = impactos_con_id.map(
-              (impacto) => impacto.id + "<->" + impacto.nombre,
-            );
-            this.idsCheckImpacto = checkImpacto.map(
-              (impactoids) => impactoids.split("<->")[0],
-            );
-            this.checkImpactoAmbiental = checkImpacto;
-
-            let resultado = [];
-            impactosAmbientaslesBD.forEach((elementos, index) => {
-              resultado[index] = "";
-              if (
-                impacto_ambientales.some((imp) => imp.split("->")[1]) &&
-                impacto_ambientales.some(
-                  (imp) => imp.split("->")[0] == elementos.nombre,
-                )
-              ) {
-                resultado[index] =
-                  elementos.id +
-                  "<->" +
-                  elementos.nombre +
-                  "->" +
-                  impacto_ambientales
-                    .filter((imp) => imp.split("->")[0] == elementos.nombre)
-                    .map((imp) => imp.split("->")[1]);
+              if (conceptoCrudo.includes("->")) {
+                let partes = conceptoCrudo.split("->");
+                conceptoPuro = partes[0].trim();
+                if (!alcance) alcance = partes[1].trim();
               }
-            });
 
-            if (
-              impacto_ambientales.some(
-                (verificando) => verificando.split("->")[1],
-              )
-            ) {
-              this.selectEmisiones = resultado;
+              let matchUM = conceptoPuro.match(/\(([^)]+)\)/);
+              if (matchUM) {
+                umExtraida = matchUM[1].trim();
+              }
+
+              if (alcance.includes("Alcance")) {
+                alcance = alcance.replace("Alcance", "").trim();
+              }
+
+              impactos_reconstruidos.push({
+                id: null,
+                diagrama: diagramas[i] || "",
+                tipo: tipos[i] || "",
+                concepto: conceptoPuro,
+                alcance: alcance,
+                cantidad: cantidades[i] ? parseFloat(cantidades[i]) : 0,
+                um: umExtraida,
+                co2: 0,
+                referencia: referencias[i] || "",
+              });
             }
+          }
+
+          if (impactos_reconstruidos.length > 0) {
+            this.emisiones_aspectos_ambientales_proyecto_ead =
+              impactos_reconstruidos;
+          } else {
+            this.emisiones_aspectos_ambientales_proyecto_ead = [
+              {
+                id: null,
+                diagrama: "",
+                tipo: "",
+                concepto: "",
+                alcance: "",
+                cantidad: 0,
+                um: "",
+                co2: 0,
+                referencia: "",
+              },
+            ];
           }
 
           let mesProyecto = parseInt(this.fechaAltaProyecto[1]);
@@ -4873,9 +4895,6 @@ const AltaProyectos = {
           ) {
             this.calculandoMesesDesdeFechaCredaEnProyecto();
           }
-
-          this.presupuestado = proyecto.presupuestado === "Presupuestado";
-          this.colorPresupuestado = this.presupuestado;
 
           const limpiarCadena = (str) => {
             if (!str) return "";
@@ -5013,6 +5032,7 @@ const AltaProyectos = {
                         (index + 1);
                       this.checkObjetivos.push(valorCheckObj);
                       this.idsObjetivos.push(obj.id);
+                      this.idsObjetivos.push(String(obj.id));
 
                       let esDirecto = objGuardado
                         .toLowerCase()
