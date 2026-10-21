@@ -4828,6 +4828,7 @@ const AltaProyectos = {
           let impactos_reconstruidos = [];
 
           if (
+            impacto_ambientales.length > 0 &&
             !impacto_ambientales.some(
               (imp) => imp === "Sin Impacto" || imp === "",
             )
@@ -4847,6 +4848,7 @@ const AltaProyectos = {
               let matchUM = conceptoPuro.match(/\(([^)]+)\)/);
               if (matchUM) {
                 umExtraida = matchUM[1].trim();
+                conceptoPuro = conceptoPuro.replace(/\([^)]+\)/g, "").trim();
               }
 
               if (alcance.includes("Alcance")) {
@@ -4993,6 +4995,7 @@ const AltaProyectos = {
 
               this.idsPilares = ids_pilares_detectados;
 
+              // 4. Consultar y Marcar Objetivos
               if (this.checkPilares.length > 0) {
                 const resObjetivos = await axios.post(
                   "objetivosController.php",
@@ -5031,6 +5034,7 @@ const AltaProyectos = {
                         "<->" +
                         (index + 1);
                       this.checkObjetivos.push(valorCheckObj);
+
                       this.idsObjetivos.push(obj.id);
                       this.idsObjetivos.push(String(obj.id));
 
