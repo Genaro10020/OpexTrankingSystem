@@ -6019,66 +6019,62 @@ const AltaProyectos = {
           presupuestado: presupuestado,
         })
         .then((response) => {
-          console.log(
-            "Resultado " + insertar_o_actualizar + ":",
-            response.data,
-          );
           if (insertar_o_actualizar == "Alta Proyecto") {
             if (response.data[0][0] == true) {
               if (response.data[0][1] == true) {
-                this.myModal.hide();
-                this.consultarProyectos();
-                alert(
-                  "El proyecto '" +
+                Swal.fire({
+                  icon: "success",
+                  title: "¡Guardado!",
+                  text:
+                    "El proyecto '" +
                     this.nombre_proyecto +
-                    "' se creó con éxito..",
-                );
-                this.fecha_alta = "";
-                this.selectFuente = "";
-                this.selectPlanta = "";
-                this.selectArea = "";
-                this.selectDepartamento = "";
-                this.selectMetodologia = "";
-                this.selectResponsable = "";
-                this.checkObservadores = [];
-                this.checkMisiones = [];
-                this.checkPilares = [];
-                this.selectPilar = [];
-                this.checkObjetivos = [];
-                this.selectObjetivo = [];
-                this.idsCheckImpacto = [];
-                this.checkImpactoAmbiental = [];
-                this.impactoAmbiental = [];
-                this.selectEmisiones = [];
-                this.valoresCheck = [];
-                this.tons_co2 = "";
-                this.ahorro_duro = "$.00";
-                this.ahorro_suave = "$.00";
-                this.objetivo_estrategico = false;
+                    "' se creó con éxito.",
+                  showConfirmButton: false,
+                  timer: 2000,
+                });
+
+                this.myModal.hide();
+
+                this.consultarProyectos();
+
                 this.ultimo_proyecto_actualizado_o_creado =
                   this.nombre_proyecto;
+
                 setTimeout(() => {
                   this.ultimo_proyecto_actualizado_o_creado = "";
-                  this.nombre_proyecto = "";
                 }, 10000);
               }
             } else {
-              alert("No se dio de alta el proyecto.");
+              Swal.fire("Error", "No se dio de alta el proyecto", "error");
             }
           } else if (insertar_o_actualizar == "Actualizar Proyecto") {
             if (response.data[0] == true) {
-              this.reiniciarVariables();
+              Swal.fire({
+                icon: "success",
+                title: "Actualizado",
+                text: "Actualizado con éxito",
+                showConfirmButton: false,
+                timer: 2000,
+              });
+
               this.consultarProyectos();
+
               this.myModal.hide();
-              alert("Actualizado con éxito.");
+
               this.ultimo_proyecto_actualizado_o_creado = this.nombre_proyecto;
+
               setTimeout(() => {
                 this.ultimo_proyecto_actualizado_o_creado = "";
               }, 10000);
-              this.nombre_proyecto = "";
+
+              this.reiniciarVariables();
+            } else {
+              Swal.fire(
+                "Error",
+                "La actualización, no se realizo correctamente",
+                "error",
+              );
             }
-          } else {
-            console.log("No es ni insertar ni actualizar");
           }
         })
         .catch((error) => {
