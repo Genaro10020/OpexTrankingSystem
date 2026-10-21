@@ -2980,7 +2980,7 @@ if (isset($_SESSION['nombre'])) {
                                     </div>
                                     <div class="col-4 text-start">
                                         {{sumaPlan}}<br>
-                                        {{sumaTotales}}
+                                        {{globalAhorroDuroAnual}}
                                     </div>
                                     <div class="col-4 text-center my-auto">
                                         <div class="progress" style="height: 20px;">
@@ -3001,7 +3001,7 @@ if (isset($_SESSION['nombre'])) {
                                     </div>
                                     <div class="col-4 text-start">
                                         {{sumaPres}}<br>
-                                        {{sumaTotales}}
+                                        {{globalAhorroDuroAnual}}
                                     </div>
                                     <div class="col-4 text-center my-auto">
                                         <div class="progress" style="height: 20px;">
