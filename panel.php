@@ -3034,9 +3034,14 @@ if (isset($_SESSION['nombre'])) {
                                 </div>
                             </div>
                             <div class="col-3 my-auto text-center" style="font-size:10px;min-width:350px">
-                                <div class="row m-0 col-4 alert alert-primary p-0" style="font-size:10px;min-width:350px">
-                                    <label class="text-dark">GLOBAL</label>
-                                    <label class="text-dark">Suma total Personalizada/Presupuestado</label>
+                                <div class="row m-0 col-4 alert alert-primary p-0" style="font-size:10px; min-width:350px">
+                                     <label class="text-dark">GLOBAL</label>
+                                    <label class="text-dark">Suma total Personalizada/Presupuestado
+                                          <input class="form-check-input ms-2" type="checkbox"role="switch" id="switchBloqueo" v-model="bloqueado" style="transform: scale(1.6);">
+                                            <label class="form-check-label mb-0 ms-2" for="switchBloqueo">
+                                            {{ bloqueado ? 'Desbloqueado' : 'Bloqueado' }}
+                                            </label>
+                                    </label>
                                     <div class="col-4  text-start">
                                         Personalizada:<br>
                                         Suma Pres:
@@ -3051,16 +3056,7 @@ if (isset($_SESSION['nombre'])) {
                                             <div v-else class="progress-bar bg-primary" role="progressbar" :style="'width:'+calcularPorcentajeSumaPersonalizada()+'%!important;'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><label style="font-size:10px">{{calcularPorcentajeSumaPersonalizada()}} % </label></div>
                                         </div>
                                     </div>
-                                     <div class="col-12 d-flex justify-content-center">
-                                        <div class="form-check form-switch d-flex my-auto gap-2 mt-1">
-                                            <input class="form-check-input " type="checkbox"role="switch" id="switchBloqueo" v-model="bloqueado" style="transform: scale(1.6);">
-                                            <label class="form-check-label mb-0" for="switchBloqueo">
-                                            {{ bloqueado ? 'Desbloqueado' : 'Bloqueado' }}
-                                            </label>
-                                        </div>
-                                     </div>
                                 </div>
-                                
                             </div>
                         </div>
                     </div>
