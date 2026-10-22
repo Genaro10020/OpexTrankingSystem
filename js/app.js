@@ -1230,24 +1230,28 @@ const AltaProyectos = {
         currency: "MXN",
       });
     },
-    sumaTotalPersonalizada() {
+        sumaTotalPersonalizada() {
       let total = 0;
       const anioSeleccionado = Number(this.select_anio_calendario);
-      this.proyectosSeleccionados.forEach((id) => {
-        const proyecto = this.mesesCapturadoYSumaXProyecto[id];
-        if (!proyecto) return;
-        proyecto.registros.forEach((r) => {
-          if (r.anio === anioSeleccionado) {
-            total += this.parseMoney(r.ahorroDuro);
-          }
-        });
+
+      this.todosRegistrosProyectosAnual.forEach((r) => {
+        const proyectoId = String(r.proyectoID);
+
+        if (
+          this.proyectosSeleccionados.map(String).includes(proyectoId) &&
+          Number(r.anio) === anioSeleccionado
+        ) {
+          total += this.parseMoney(r.ahorro_duro);
+        }
       });
+
       this.totalSumaPersonalizada = total;
-      return total.toLocaleString("es-MX", {
+
+     /*  return total.toLocaleString("es-MX", {
         style: "currency",
         currency: "MXN",
-      });
-    },
+      }); */
+},
     // Fin de suma personalizada
 
     ///////////////////////////////////////////////////////////////////////////////////busca el valor para luego mostraarlo, se da formato al num en input se y quita formato al guardar o actualizar
