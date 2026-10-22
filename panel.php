@@ -2970,7 +2970,7 @@ if (isset($_SESSION['nombre'])) {
                                     </select>
                                 </div>
                             </div>
-                            <!--ESTE DIV SE USA PARA AÑOS MENORES AL 2025 -->
+                             <!--ESTE DIV SE USA PARA AÑOS MENORES AL 2025 -->
                             <div v-if="select_anio_calendario < 2025" class="col-3 my-auto text-center" style="font-size:10px;min-width:350px">
                                 <div class="row m-0 col-4 alert alert-primary p-0" style="font-size:10px;min-width:350px">
                                     <label class="text-dark">Teórico Acumulado Anual (Ahorro Duro / Plan)</label>
@@ -2994,6 +2994,7 @@ if (isset($_SESSION['nombre'])) {
                             <!--ESTE DIV SE USA DEL 2025 EN ADELANTE 1904371-->
                             <div v-if="select_anio_calendario >= 2025" class="col-3 my-auto text-center" style="font-size:10px;min-width:350px">
                                 <div class="row m-0 col-4 alert alert-primary p-0" style="font-size:10px;min-width:350px">
+                                    <label class="text-dark">GLOBAL</label>
                                     <label class="text-dark">Pres. Acumulado Anual (Totales / Pres.)</label>
                                     <div class="col-4  text-start">
                                         Suma Pres:<br>
@@ -3001,7 +3002,7 @@ if (isset($_SESSION['nombre'])) {
                                     </div>
                                     <div class="col-4 text-start">
                                         {{sumaPres}}<br>
-                                        {{globalAhorroDuroAnual}}
+                                        {{globalAhorroDuroAnual}}<br>
                                     </div>
                                     <div class="col-4 text-center my-auto">
                                         <div class="progress" style="height: 20px;">
@@ -3014,6 +3015,7 @@ if (isset($_SESSION['nombre'])) {
 
                             <div class="col-3 my-auto text-center" style="font-size:10px;min-width:350px">
                                 <div class="row m-0 col-4 alert alert-primary p-0" style="font-size:10px;min-width:350px">
+                                     <label class="text-dark">GLOBAL</label>
                                     <label class="text-dark">Real Acumulado Anual (Real / Plan)</label>
                                     <div class="col-4  text-start">
                                         Suma Planeada:<br>
@@ -3033,6 +3035,7 @@ if (isset($_SESSION['nombre'])) {
                             </div>
                             <div class="col-3 my-auto text-center" style="font-size:10px;min-width:350px">
                                 <div class="row m-0 col-4 alert alert-primary p-0" style="font-size:10px;min-width:350px">
+                                    <label class="text-dark">GLOBAL</label>
                                     <label class="text-dark">Suma total Personalizada/Presupuestado</label>
                                     <div class="col-4  text-start">
                                         Personalizada:<br>
