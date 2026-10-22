@@ -3098,12 +3098,11 @@ if (isset($_SESSION['nombre'])) {
                                         </template>
                                     </th>
                                     <td class="sticky2 text-start" style="font-size:10px; background:#f4f4f4">
-                                        <i class="bi bi-info-circle-fill me-2 text-primary" style="font-size: 1.3em" :title="' Responsable: '+proyectosXanio.responsable+'\n Correo: '+proyectosXanio.correo+'\n Teléfono: '+proyectosXanio.telefono"></i>
+                                    <i class="bi bi-info-circle-fill me-2 text-primary" style="font-size: 1.3em" :title="' Responsable: '+proyectosXanio.responsable+'\n Correo: '+proyectosXanio.correo+'\n Teléfono: '+proyectosXanio.telefono"></i>
                                         {{proyectosXanio.nombre_proyecto}}<br>
                                         <span class="badge" style=" background:#0e989a; font-weight: lighter;">{{proyectosXanio.directo}}</span><br>
                                         <!-- <span class="badge text-black" style=" background:#F5C227; font-weight: lighter;">{{proyectosXanio.presupuestado}}</span><br> -->
                                         <?php if ($_SESSION['acceso'] == "Admin") { ?>
-
                                            <label class="checkbox-custom" >
                                                 <input
                                                     type="checkbox"

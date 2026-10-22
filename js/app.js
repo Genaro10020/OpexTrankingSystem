@@ -1153,20 +1153,26 @@ const AltaProyectos = {
       } else if (this.select_planta_calendario != "") {
         tomaPlanta = this.select_planta_calendario;
       }
+      console.log("Planta de proyecto:",tomaPlanta,"ID Proyecto:",idProyecto,"Año del calendario",this.select_anio_calendario)
       axios
         .post("sumaPersonalizadaController.php", {
           anio: this.select_anio_calendario,
           planta: tomaPlanta,
           idProyecto: idProyecto,
         })
-        .then((response) => {
-          console.log(
-            "Respuesta del controlador de suma personalizada:",
-            response.data,
-          );
+       .then((response) => {
+            const data = response.data;
+            console.log("Respuesta del controlador de suma personalizada:", data);
+            if (data.success === "agregado" || data.success === "eliminado") {
+                console.log("Proyecto agregado/eliminado correctamente.");
+                this.consultasGlobales();
+            }else {
+                console.error("Error al guardar:", data.mensaje || data.success);
+            }
+           
         })
         .catch((error) => {
-          console.log("Error al guardar datos de suma personalizada:", error);
+            console.error("Error en la petición:", error.response?.data || error.message);
         });
     },
 

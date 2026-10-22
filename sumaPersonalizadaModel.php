@@ -26,42 +26,74 @@ function consultarSumaPersonalizada($anio, $planta){
 }
 
 
-    function insertarOActualizarSumaPersonalizada($proyectoId, $anio, $planta) {
+  
+function insertarOActualizarSumaPersonalizada($proyectoId, $anio, $planta) {
     global $conexion;
 
-    // 1 Buscar registro existente
-    $queryCheck = "SELECT id, selected_projects 
-                   FROM sumas_personalizadas 
-                   WHERE `year` = ? AND `plant` = ?";
+    // Normalizar el ID para evitar diferencias entre "15" y 15
+    $proyectoId = (string)$proyectoId;
+
+    $queryCheck = "SELECT id, selected_projects
+                   FROM sumas_personalizadas
+                   WHERE `year` = ? AND `plant` = ?
+                   LIMIT 1";
 
     $stmtCheck = $conexion->prepare($queryCheck);
     $stmtCheck->bind_param("is", $anio, $planta);
-    $stmtCheck->execute();
+
+    if (!$stmtCheck->execute()) {
+        error_log("Error SELECT: " . $stmtCheck->error);
+        $stmtCheck->close();
+        return false;
+    }
+
     $result = $stmtCheck->get_result();
 
     if ($result->num_rows > 0) {
 
-        // 2 Ya existe
+        // Ya existe un registro para ese año y planta
         $row = $result->fetch_assoc();
-        $idRegistro = $row['id'];
+        $idRegistro = (int)$row['id'];
 
-        // Decodificar JSON actual
-        $proyectosActuales = json_decode($row['selected_projects'], true);
+        $proyectosActuales = json_decode(
+            $row['selected_projects'],
+            true
+        );
 
         if (!is_array($proyectosActuales)) {
             $proyectosActuales = [];
         }
 
-        // 3 Agregar nuevo ID si no existe
-        if (!in_array($proyectoId, $proyectosActuales)) {
+        // Normalizar los IDs existentes
+        $proyectosActuales = array_map(
+            'strval',
+            $proyectosActuales
+        );
+
+        // Buscar si el proyecto ya está seleccionado
+        $indice = array_search(
+            $proyectoId,
+            $proyectosActuales,
+            true
+        );
+
+        if ($indice !== false) {
+            // Ya existe: quitarlo
+            unset($proyectosActuales[$indice]);
+            $accion = "eliminado";
+        } else {
+            // No existe: agregarlo
             $proyectosActuales[] = $proyectoId;
+            $accion = "agregado";
         }
 
-        $nuevoJson = json_encode($proyectosActuales);
+        // Reindexar el arreglo antes de convertirlo a JSON
+        $nuevoJson = json_encode(
+            array_values($proyectosActuales)
+        );
 
-        // 4 Actualizar
-        $queryUpdate = "UPDATE sumas_personalizadas 
-                        SET selected_projects = ? 
+        $queryUpdate = "UPDATE sumas_personalizadas
+                        SET selected_projects = ?
                         WHERE id = ?";
 
         $stmt = $conexion->prepare($queryUpdate);
@@ -69,12 +101,13 @@ function consultarSumaPersonalizada($anio, $planta){
 
     } else {
 
-        // 5 No existe → crear nuevo registro
-        $nuevoArray = [$proyectoId];
-        $nuevoJson = json_encode($nuevoArray);
+        // No existe registro para ese año y planta:
+        // crear uno con el proyecto seleccionado
+        $nuevoJson = json_encode([$proyectoId]);
+        $accion = "agregado";
 
-        $queryInsert = "INSERT INTO sumas_personalizadas 
-                        (selected_projects, year, plant) 
+        $queryInsert = "INSERT INTO sumas_personalizadas
+                        (selected_projects, `year`, `plant`)
                         VALUES (?, ?, ?)";
 
         $stmt = $conexion->prepare($queryInsert);
@@ -83,10 +116,14 @@ function consultarSumaPersonalizada($anio, $planta){
 
     $estado = $stmt->execute();
 
-    $stmtCheck->close();
-    $stmt->close();
+    if (!$estado) {
+        error_log("Error guardando suma personalizada: " . $stmt->error);
+    }
 
-    return $estado;
+    $stmt->close();
+    $stmtCheck->close();
+
+    return $estado ? $accion : false;
 }
 
 /* 
