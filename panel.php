@@ -3039,7 +3039,7 @@ if (isset($_SESSION['nombre'])) {
                                         Suma Pres:
                                     </div>
                                     <div class="col-4 text-start">
-                                         {{ sumaTotalPersonalizada() }}<br>
+                                         {{ formatoNumeroApesos(totalSumaPersonalizada) }}<br>
                                          {{sumaPres}}
                                     </div>
                                       <div class="col-4 text-center my-auto">
