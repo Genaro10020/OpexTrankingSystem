@@ -7605,15 +7605,13 @@ const AltaProyectos = {
     },
     calcularPorcentaje() {
       if (this.select_anio_calendario >= 2025) {
-        // console.log('meta:',this.metaPres,'se lleva:',this.selleva)
-        //  console.log('pres:',parseFloat((this.selleva/this.metaPres)*100).toFixed(2))
-        return this.metaPres === 0 || this.selleva === 0
+        return this.metaPres === 0 || this.globalAhorroDuroAnualNumerico === 0
           ? 0
-          : parseFloat((this.selleva / this.metaPres) * 100).toFixed(2);
+          : parseFloat((this.globalAhorroDuroAnualNumerico / this.metaPres) * 100).toFixed(2);
       } else {
-        return this.meta === 0 || this.selleva === 0
+        return this.meta === 0 || this.globalAhorroDuroAnualNumerico === 0
           ? 0
-          : parseFloat((this.selleva / this.meta) * 100).toFixed(2);
+          : parseFloat((this.globalAhorroDuroAnualNumerico / this.meta) * 100).toFixed(2);
       }
     },
     calcularPorcentajeSumaPersonalizada() {
