@@ -275,6 +275,9 @@ const AltaProyectos = {
       hayDatos: false,
       mesesCapturadoYSumaXProyecto: [],
       proyectosSeleccionados: [],
+      globalAhorroDuroAnual:"",
+      globalAhorroDuroAnualNumerico:[],
+      todosRegistrosProyectosAnual:[],
 
       //////////////////////SYMA ASPECTOS AMBINETALES
       isEditMode: false,
