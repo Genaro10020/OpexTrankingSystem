@@ -7,7 +7,7 @@ if (isset($_SESSION['nombre'])) {
     <head>
         <?php
         include('head.php'); ?>
-        <link rel="stylesheet" href="CSS/CSS.css">
+        <link rel="stylesheet" href="css/css.css">
         <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     </head>
 
