@@ -3238,6 +3238,45 @@ const AltaProyectos = {
           }
         });
     },
+    seleccionarProyectoEAD(proyecto) {
+      axios
+        .get("integracionEADController.php", {
+          params: {
+            accion: "obtenerImpactosProyecto",
+            id_equipo: proyecto.id_equipo,
+          },
+        })
+        .then((response) => {
+          if (
+            response.data.status === "success" &&
+            response.data.impactos.length > 0
+          ) {
+            this.emisiones_aspectos_ambientales_proyecto_ead =
+              response.data.impactos.map((imp) => ({
+                id: null,
+                id_eads: imp.id,
+                diagrama: imp.diagrama || "",
+                tipo: imp.tip || "",
+                concepto: imp.concepto || "",
+                alcance: imp.alcance || "",
+                cantidad: parseFloat(imp.cantidad) || 0,
+                um: imp.um || "",
+                co2: parseFloat(imp.co2) || 0,
+                referencia: imp.referencia || "",
+              }));
+
+            if (!this.nombre_proyecto) {
+              this.nombre_proyecto = proyecto.nombre_indicador;
+            }
+
+            this.mostrarMenuEAD = false;
+            this.filtroBuscarEAD = "";
+          }
+        })
+        .cath((error) =>
+          console.error("Error al cargar impactos del sistema EAD: ", error),
+        );
+    },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL CON DOCUMENTOS*/
     consultarImpactoAmbientalConDocumentos() {
       axios
