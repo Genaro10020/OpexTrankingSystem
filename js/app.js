@@ -275,9 +275,9 @@ const AltaProyectos = {
       hayDatos: false,
       mesesCapturadoYSumaXProyecto: [],
       proyectosSeleccionados: [],
-      globalAhorroDuroAnual:"",
-      globalAhorroDuroAnualNumerico:[],
-      todosRegistrosProyectosAnual:[],
+      globalAhorroDuroAnual: "",
+      globalAhorroDuroAnualNumerico: [],
+      todosRegistrosProyectosAnual: [],
 
       //////////////////////SYMA ASPECTOS AMBINETALES
       isEditMode: false,
@@ -387,9 +387,13 @@ const AltaProyectos = {
         },
       ],
       //Impactos Ambientales
+      mostrarMenuEAD: false,
+      filtroBuscarEAD: "",
+      catalogoProyectosEAD: [],
       emisiones_aspectos_ambientales_proyecto_ead: [
         {
           id: null,
+          id_eads: null,
           diagrama: "",
           tipo: "",
           concepto: "",
@@ -992,21 +996,28 @@ const AltaProyectos = {
         .finally(() => {});
     },
 
-    consultasGlobales(){
-      axios.get("proyectosController.php",{
-        params:{
-          accion:"consulta Global",
-          anio: this.select_anio_calendario
-        }
-      }).then(respuesta=>{
-          console.info("respuesta:",respuesta)
-          this.todosRegistrosProyectosAnual = respuesta.data[0][0]
-          this.globalAhorroDuroAnual = respuesta.data[0][2].global_anual_ahorro_duro
-          this.globalAhorroDuroAnualNumerico = parseFloat(String(this.globalAhorroDuroAnual).replace(/[$,]/g, '')) || 0;
-          this.sumaTotalPersonalizada()
-      }).catch(e=>{
-        console.log("Error en axios",e)
-      })
+    consultasGlobales() {
+      axios
+        .get("proyectosController.php", {
+          params: {
+            accion: "consulta Global",
+            anio: this.select_anio_calendario,
+          },
+        })
+        .then((respuesta) => {
+          console.info("respuesta:", respuesta);
+          this.todosRegistrosProyectosAnual = respuesta.data[0][0];
+          this.globalAhorroDuroAnual =
+            respuesta.data[0][2].global_anual_ahorro_duro;
+          this.globalAhorroDuroAnualNumerico =
+            parseFloat(
+              String(this.globalAhorroDuroAnual).replace(/[$,]/g, ""),
+            ) || 0;
+          this.sumaTotalPersonalizada();
+        })
+        .catch((e) => {
+          console.log("Error en axios", e);
+        });
     },
 
     consultarMesesCapturadosYsumaXProyecto() {
@@ -1233,7 +1244,7 @@ const AltaProyectos = {
         currency: "MXN",
       });
     },
-        sumaTotalPersonalizada() {
+    sumaTotalPersonalizada() {
       let total = 0;
       const anioSeleccionado = Number(this.select_anio_calendario);
 
@@ -1250,11 +1261,11 @@ const AltaProyectos = {
 
       this.totalSumaPersonalizada = total;
 
-     /*  return total.toLocaleString("es-MX", {
+      /*  return total.toLocaleString("es-MX", {
         style: "currency",
         currency: "MXN",
       }); */
-},
+    },
     // Fin de suma personalizada
 
     ///////////////////////////////////////////////////////////////////////////////////busca el valor para luego mostraarlo, se da formato al num en input se y quita formato al guardar o actualizar
@@ -7610,11 +7621,15 @@ const AltaProyectos = {
       if (this.select_anio_calendario >= 2025) {
         return this.metaPres === 0 || this.globalAhorroDuroAnualNumerico === 0
           ? 0
-          : parseFloat((this.globalAhorroDuroAnualNumerico / this.metaPres) * 100).toFixed(2);
+          : parseFloat(
+              (this.globalAhorroDuroAnualNumerico / this.metaPres) * 100,
+            ).toFixed(2);
       } else {
         return this.meta === 0 || this.globalAhorroDuroAnualNumerico === 0
           ? 0
-          : parseFloat((this.globalAhorroDuroAnualNumerico / this.meta) * 100).toFixed(2);
+          : parseFloat(
+              (this.globalAhorroDuroAnualNumerico / this.meta) * 100,
+            ).toFixed(2);
       }
     },
     calcularPorcentajeSumaPersonalizada() {
