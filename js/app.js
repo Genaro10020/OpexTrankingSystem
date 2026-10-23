@@ -494,6 +494,15 @@ const AltaProyectos = {
     },
   },
   computed: {
+    proyectosFiltradosEAD() {
+      if (!this.filtroEAD) return this.catalogoProyectosEAD || [];
+      const busqueda = this.filtroEAD.toLowerCase();
+      return (this.catalogoProyectosEAD || []).filter(
+        (p) =>
+          p.nombre_indicador &&
+          p.nombre_indicador.toLowerCase().includes(busqueda),
+      );
+    },
     umConceptoFe() {
       return this.calculadoraFeCombustibles.reduce((resultado, item) => {
         resultado[item.combustible_energetico] = {
@@ -3163,15 +3172,6 @@ const AltaProyectos = {
         enlaceTemporal.click();
         Swal.close();
       });
-    },
-    proyectosFiltradosEAD() {
-      if (!this.filtroEAD) return this.catalogoProyectosEAD || [];
-      const busqueda = this.filtroEAD.toLowerCase();
-      return (this.catalogoProyectosEAD || []).filter(
-        (p) =>
-          p.nombre_indicador &&
-          p.nombre_indicador.toLowerCase().includes(busqueda),
-      );
     },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL X NOMBRE PARA OBTENER ID's*/
     consultarImpactoAmbientalPorNombre(nombresImpactos) {
