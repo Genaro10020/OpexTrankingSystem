@@ -6139,6 +6139,7 @@ const AltaProyectos = {
           tipo: tipo_impacto,
           cantidad: cantidades,
           referencia: referencias,
+          id_eads: id_eads_array,
           impactos_completos: this.emisiones_aspectos_ambientales_proyecto_ead,
           valores: valores,
           tons_co2: this.tons_co2,
