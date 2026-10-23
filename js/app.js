@@ -3225,6 +3225,19 @@ const AltaProyectos = {
           p.nombre_indicador.toLowerCase().includes(busqueda),
       );
     },
+    consultarListaProyectosEAD() {
+      axios
+        .get("integracionEADController.php", {
+          params: {
+            accion: "listarProyectos",
+          },
+        })
+        .then((response) => {
+          if (response.data.status === "success") {
+            this.catalogoProyectosEAD = response.data.proyectos;
+          }
+        });
+    },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL CON DOCUMENTOS*/
     consultarImpactoAmbientalConDocumentos() {
       axios
