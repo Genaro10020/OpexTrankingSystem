@@ -3212,6 +3212,19 @@ const AltaProyectos = {
           console.log("Error:", error);
         });
     },
+    proyectosEADFiltrados() {
+      if (!this.filtroBuscarEAD) {
+        return this.catalogoProyectosEAD;
+      }
+
+      const busqueda = this.filtroBuscarEAD.toLowerCase();
+
+      return this.catalogoProyectosEAD.filter(
+        (p) =>
+          p.nombre_indicador &&
+          p.nombre_indicador.toLowerCase().includes(busqueda),
+      );
+    },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL CON DOCUMENTOS*/
     consultarImpactoAmbientalConDocumentos() {
       axios
