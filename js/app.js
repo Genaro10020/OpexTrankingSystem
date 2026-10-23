@@ -6400,6 +6400,9 @@ const AltaProyectos = {
           referencia: "",
         },
       ];
+      this.mostrarMenuEAD = false;
+      this.filtroBuscarEAD = "";
+      this.catalogoProyectosEAD = [];
     },
     verificarSiEsActualizar() {
       if (this.actualizar_proyecto == true) {
