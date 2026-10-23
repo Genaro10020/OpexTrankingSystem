@@ -1860,3 +1860,65 @@ button {
   display: flex;
   gap: 0.75rem;
 }
+
+.ia-ead-container {
+  position: relative;
+  display: inline-block;
+  margin-left: auto;
+  margin-right: 15px;
+}
+
+.ia-ead-dropdown {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  width: 300px;
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  z-index: 1050;
+  animation: despliegueSuave 0.2 ease-out;
+}
+
+.ia-ead-search {
+  padding: 10px;
+  border-bottom: 1px solid #f1f3f5;
+  background-color: #f8f9fa;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.ia-ead-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.ia-ead-item {
+  padding: 10px 15px;
+  font-size: 0.9rem;
+  color: #495057;
+  border-bottom: 1px solid #f1f3f5;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+
+.ia-ead-item:last-child {
+  border-bottom: none;
+}
+
+.ia-ead-item:hover {
+  background-color: #e9ecef;
+  color: #0d6efd;
+}
+
+.ia-ead-empty {
+  padding: 15px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #868e96;
+}
