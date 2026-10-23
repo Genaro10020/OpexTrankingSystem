@@ -6070,6 +6070,7 @@ const AltaProyectos = {
       let alcances = [];
       let cantidades = [];
       let referencias = [];
+      let id_eads_array = [];
 
       this.emisiones_aspectos_ambientales_proyecto_ead.forEach((imp) => {
         diagrama_proceso.push(imp.diagrama || "");
