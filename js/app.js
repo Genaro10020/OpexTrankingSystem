@@ -3282,7 +3282,7 @@ const AltaProyectos = {
             this.filtroBuscarEAD = "";
           }
         })
-        .cath((error) =>
+        .catch((error) =>
           console.error("Error al cargar impactos del sistema EAD: ", error),
         );
     },
