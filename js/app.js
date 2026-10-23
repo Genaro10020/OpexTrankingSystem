@@ -387,8 +387,8 @@ const AltaProyectos = {
         },
       ],
       //Impactos Ambientales
-      mostrarMenuEAD: false,
-      filtroBuscarEAD: "",
+      mostrarListaEAD: false,
+      filtroEAD: "",
       catalogoProyectosEAD: [],
       emisiones_aspectos_ambientales_proyecto_ead: [
         {
@@ -3164,6 +3164,15 @@ const AltaProyectos = {
         Swal.close();
       });
     },
+    proyectosFiltradosEAD() {
+      if (!this.filtroEAD) return this.catalogoProyectosEAD || [];
+      const busqueda = this.filtroEAD.toLowerCase();
+      return (this.catalogoProyectosEAD || []).filter(
+        (p) =>
+          p.nombre_indicador &&
+          p.nombre_indicador.toLowerCase().includes(busqueda),
+      );
+    },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL X NOMBRE PARA OBTENER ID's*/
     consultarImpactoAmbientalPorNombre(nombresImpactos) {
       console.log("nombre????????", nombresImpactos);
@@ -5196,6 +5205,7 @@ const AltaProyectos = {
         this.consultarValores();
         this.buscarDocumentos("Alta Proyecto");
         this.incrementarMeses();
+        this.consultarListaProyectosEAD();
         this.inicializarArreglosPlanMensual();
       } else if (modal == "Actualizar Proyecto") {
         this.reiniciarVariables();
