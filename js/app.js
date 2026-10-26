@@ -3342,6 +3342,37 @@ const AltaProyectos = {
           console.error("Error al cargar impactos del sistema EAD: ", error),
         );
     },
+    formatearImpactoVisual(conceptoBruto, alcancesJSON, index) {
+      if (!conceptoBruto) return "";
+
+      if (conceptoBruto.includes("->")) {
+        return conceptoBruto;
+      }
+
+      let um = "";
+      if (this.umConceptoFe && this.umConceptoFe[conceptoBruto]) {
+        um = this.umConceptoFe[conceptoBruto].da_um || "";
+      } else if (
+        this.umConceptoImpactoAmbiental &&
+        this.umConceptoImpactoAmbiental[conceptoBruto]
+      ) {
+        um = this.umConceptoImpactoAmbiental[conceptoBruto] || "";
+      }
+
+      let textoFinal = um ? `${conceptoBruto} (${um})` : conceptoBruto;
+
+      if (alcancesJSON) {
+        let alcances = this.parseJSONSeguro(alcancesJSON);
+        if (alcances && alcances[index]) {
+          let textoAlcance = String(alcances[index])
+            .replace("Alcance", "")
+            .trim();
+          textoFinal += ` -> Alcance ${textoAlcance}`;
+        }
+      }
+
+      return textoFinal;
+    },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL CON DOCUMENTOS*/
     consultarImpactoAmbientalConDocumentos() {
       axios
