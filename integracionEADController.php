@@ -17,7 +17,7 @@ $conexionEAD->set_charset("utf8");
 $accion = $_GET['accion'] ?? '';
 
 if ($accion === 'listarProyectos') {
-    $query = "SELECT id_equipo, nombre_indicador FROM reportes_impactos_ambientales_proyectos WHERE nombre_indicador IS NOT NULL AND nombre_indicador != '' GROUP BY nombre_indicador";
+    $query = "SELECT id_equipo, nombre_indicador, GROUP_CONCAT(id) as ids_impactos FROM reportes_impactos_ambientales_proyectos WHERE nombre_indicador IS NOT NULL AND nombre_indicador != '' GROUP BY nombre_indicador, id_equipo";
     $result = $conexionEAD->query($query);
     
     $proyectos = [];
