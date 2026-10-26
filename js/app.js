@@ -495,12 +495,49 @@ const AltaProyectos = {
   },
   computed: {
     proyectosFiltradosEAD() {
-      if (!this.filtroEAD) return this.catalogoProyectosEAD || [];
-      const busqueda = this.filtroEAD.toLowerCase();
-      return (this.catalogoProyectosEAD || []).filter(
+      let busqueda = (this.filtroEAD || "").toLowerCase();
+
+      let lista = (this.catalogoProyectosEAD || []).filter(
         (p) =>
           p.nombre_indicador &&
           p.nombre_indicador.toLowerCase().includes(busqueda),
+      );
+
+      let idsCargadosEnOpex = [];
+      this.proyectos.forEach((opex) => {
+        if (opex.id_eads) {
+          try {
+            let ids = JSON.parse(opex.id_eads);
+            if (Array.isArray(ids)) {
+              idsCargadosEnOpex.push(...ids.map(Number));
+            }
+          } catch (e) {}
+        }
+      });
+
+      lista = lista.map((p) => {
+        let estaCargado = false;
+
+        if (
+          p.ids_impactos !== null &&
+          p.ids_impactos !== undefined &&
+          p.ids_impactos !== ""
+        ) {
+          let idsDeEsteProyecto = String(p.ids_impactos)
+            .split(",")
+            .map((id) => Number(id.trim()))
+            .filter((id) => !isNaN(id) && id > 0);
+
+          estaCargado = idsDeEsteProyecto.some((id) =>
+            idsCargadosEnOpex.includes(id),
+          );
+        }
+
+        return { ...p, cargado: estaCargado };
+      });
+
+      return lista.sort((a, b) =>
+        a.cargado === b.cargado ? 0 : a.cargado ? 1 : -1,
       );
     },
     umConceptoFe() {
