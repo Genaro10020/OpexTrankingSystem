@@ -3173,6 +3173,25 @@ const AltaProyectos = {
         Swal.close();
       });
     },
+    limpiarProyectoEAD() {
+      this.emisiones_aspectos_ambientales_proyecto_ead = [
+        {
+          id: null,
+          id_eads: null,
+          diagrama: "",
+          tipo: "",
+          concept: "",
+          alcane: "",
+          cantidad: 0,
+          um: "",
+          co2: 0,
+          referencia: "",
+        },
+      ];
+      this.nombre_proyecto = "";
+      this.filtroEAD = "";
+      this.mostrarListaEAD = false;
+    },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL X NOMBRE PARA OBTENER ID's*/
     consultarImpactoAmbientalPorNombre(nombresImpactos) {
       console.log("nombre????????", nombresImpactos);
