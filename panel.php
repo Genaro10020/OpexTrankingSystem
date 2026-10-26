@@ -1416,7 +1416,9 @@ if (isset($_SESSION['nombre'])) {
                                         </td>
                                         <td class="border border-secondary text-start">
                                             <ul v-if="proyecto.impacto_ambiental">
-                                                <li v-for="impacto in parseJSONSeguro(proyecto.impacto_ambiental)">{{impacto}}</li>
+                                                <li v-for="(impacto, i) in parseJSONSeguro(proyecto.impacto_ambiental)" :key="i">
+                                                    {{ formatearImpactoVisual(impacto, proyecto.impacto_ambiental_emisiones, i) }}
+                                                </li>
                                             </ul>
                                         </td>
                                         <td class="border border-secondary text-start">
