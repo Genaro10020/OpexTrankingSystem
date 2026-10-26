@@ -117,7 +117,7 @@ if (isset($_SESSION['nombre'])) {
                             $objetivos, $impacto_ambiental, $impacto_ambiental_emisiones, $valores, 
                             $anioXmes, $mesXAnio, $valoresMensualCO, $valoresMensualAD, $valoresMensualAS, 
                             $idsPlanMesual, $presupuestado, $mesesPresupuestados, 
-                            $diagrama_proceso, $tipo, $cantidad, $referencia, $impactos_completos
+                            $diagrama_proceso, $tipo, $cantidad, $referencia, $id_eads, $impactos_completos
                         );
                     } else {
                         $val[] = "No llego el ID proyecto actualizar";

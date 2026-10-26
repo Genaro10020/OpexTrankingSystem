@@ -587,7 +587,8 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
             if (empty($imp['concepto']) || $imp['concepto'] === "Sin Impacto") continue;
 
             $concepto = $conexion->real_escape_string(trim($imp['concepto']));
-            $um = $conexion->real_escape_string(trim($imp['referencia']));
+            $um = $conexion->real_escape_string(trim($imp['um']));
+            $ref = $conexion->real_escape_string(trim($imp['referencia']));
 
             $check = $conexion->query("SELECT id FROM impacto_ambiental WHERE nombre = '$concepto'");
             if ($check && $check->num_rows === 0) {
