@@ -6079,7 +6079,7 @@ const AltaProyectos = {
         alcances.push(imp.alcance || "");
         cantidades.push(imp.cantidad || 0);
         referencias.push(imp.referencia || "");
-        id_eads_array.push(imp.Id_eads || null);
+        id_eads_array.push(imp.id_eads || null);
       });
 
       if (alcances.some((a) => a === "") && conceptos[0] !== "Sin Impacto") {
