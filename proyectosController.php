@@ -106,7 +106,7 @@ if (isset($_SESSION['nombre'])) {
                         $objetivos, $impacto_ambiental, $impacto_ambiental_emisiones, $valores, 
                         $tons_co2, $ahorro_duro, $ahorro_suave, $anioXmes, $mesXAnio, $valoresMensualCO, 
                         $valoresMensualAD, $valoresMensualAS, $presupuestado, $mesesPresupuestados, 
-                        $diagrama_proceso, $tipo, $cantidad, $referencia, $impactos_completos
+                        $diagrama_proceso, $tipo, $cantidad, $referencia, $id_eads, $impactos_completos
                     );
                 } else if($arreglo['accion'] == "Actualizar Proyecto"){
                     if(isset($arreglo['id_actualizar'])){
