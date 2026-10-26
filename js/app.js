@@ -3348,6 +3348,37 @@ const AltaProyectos = {
           console.error("Error al cargar impactos del sistema EAD: ", error),
         );
     },
+    formatearImpactoVisual(conceptoBruto, alcancesJSON, index) {
+      if (!conceptoBruto) return "";
+
+      if (conceptoBruto.includes("->")) {
+        return conceptoBruto;
+      }
+
+      let um = "";
+      if (this.umConceptoFe && this.umConceptoFe[conceptoBruto]) {
+        um = this.umConceptoFe[conceptoBruto].da_um || "";
+      } else if (
+        this.umConceptoImpactoAmbiental &&
+        this.umConceptoImpactoAmbiental[conceptoBruto]
+      ) {
+        um = this.umConceptoImpactoAmbiental[conceptoBruto] || "";
+      }
+
+      let textoFinal = um ? `${conceptoBruto} (${um})` : conceptoBruto;
+
+      if (alcancesJSON) {
+        let alcances = this.parseJSONSeguro(alcancesJSON);
+        if (alcances && alcances[index]) {
+          let textoAlcance = String(alcances[index])
+            .replace("Alcance", "")
+            .trim();
+          textoFinal += ` -> Alcance ${textoAlcance}`;
+        }
+      }
+
+      return textoFinal;
+    },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL CON DOCUMENTOS*/
     consultarImpactoAmbientalConDocumentos() {
       axios
@@ -4982,8 +5013,8 @@ const AltaProyectos = {
           let impacto_ambientales = proyecto.impacto_ambiental
             ? JSON.parse(proyecto.impacto_ambiental)
             : [];
-          let emisiones_alcances = proyecto.impacto_ambiental_emisiones
-            ? JSON.parse(proyecto.impacto_ambiental_emisiones)
+          let emisiones_alcances = proyecto.alcance
+            ? JSON.parse(proyecto.alcance)
             : [];
           let diagramas = proyecto.diagrama_proceso
             ? JSON.parse(proyecto.diagrama_proceso)
@@ -5006,7 +5037,11 @@ const AltaProyectos = {
           ) {
             for (let i = 0; i < impacto_ambientales.length; i++) {
               let conceptoCrudo = impacto_ambientales[i] || "";
-              let alcance = emisiones_alcances[i] || "";
+              let alcance =
+                emisiones_alcances[i] !== null &&
+                emisiones_alcances[i] !== undefined
+                  ? String(emisiones_alcances[i])
+                  : "";
               let conceptoPuro = conceptoCrudo;
               let umExtraida = "";
 
