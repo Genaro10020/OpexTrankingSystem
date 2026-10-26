@@ -1,18 +1,7 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
 
-$hostname = 'localhost';
-$database = 'ead';
-$username = 'root';
-$password = '';
-
-$conexionEAD = new mysqli($hostname, $username, $password, $database);
-
-if ($conexionEAD->connect_errno) {
-    echo json_encode(["status" => "error", "message" => "Error al conectarse con la BD EAD"]);
-    exit;
-}
-$conexionEAD->set_charset("utf8");
+include("conexionEAD.php");
 
 $accion = $_GET['accion'] ?? '';
 
@@ -22,7 +11,7 @@ if ($accion === 'listarProyectos') {
             LEFT JOIN equipos_ead e ON r.id_equipo = e.id 
             WHERE r.nombre_indicador IS NOT NULL AND r.nombre_indicador != '' 
             GROUP BY r.nombre_indicador, r.id_equipo, e.nombre_ead";
-    $result = $conexionEAD->query($query);
+    $result = $conexion->query($query);
     
     $proyectos = [];
     if ($result) {
@@ -40,7 +29,7 @@ if ($accion === 'listarProyectos') {
         exit;
     }
 
-    $stmt = $conexionEAD->prepare("SELECT * FROM reportes_impactos_ambientales_proyectos WHERE id_equipo = ?");
+    $stmt = $conexion->prepare("SELECT * FROM reportes_impactos_ambientales_proyectos WHERE id_equipo = ?");
     $stmt->bind_param("s", $id_equipo);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -57,5 +46,5 @@ if ($accion === 'listarProyectos') {
     echo json_encode(["status" => "error", "message" => "Acción no válida"]);
 }
 
-$conexionEAD->close();
+$conexion->close();
 ?>
