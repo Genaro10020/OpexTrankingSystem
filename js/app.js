@@ -3321,7 +3321,7 @@ const AltaProyectos = {
                 id: null,
                 id_eads: imp.id,
                 diagrama: imp.diagrama || "",
-                tipo: imp.tip || "",
+                tipo: imp.tipo || "",
                 concepto: imp.concepto || "",
                 alcance: imp.alcance || "",
                 cantidad: parseFloat(imp.cantidad) || 0,
