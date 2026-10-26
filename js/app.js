@@ -275,9 +275,9 @@ const AltaProyectos = {
       hayDatos: false,
       mesesCapturadoYSumaXProyecto: [],
       proyectosSeleccionados: [],
-      globalAhorroDuroAnual:"",
-      globalAhorroDuroAnualNumerico:[],
-      todosRegistrosProyectosAnual:[],
+      globalAhorroDuroAnual: "",
+      globalAhorroDuroAnualNumerico: [],
+      todosRegistrosProyectosAnual: [],
 
       //////////////////////SYMA ASPECTOS AMBINETALES
       isEditMode: false,
@@ -387,9 +387,13 @@ const AltaProyectos = {
         },
       ],
       //Impactos Ambientales
+      mostrarListaEAD: false,
+      filtroEAD: "",
+      catalogoProyectosEAD: [],
       emisiones_aspectos_ambientales_proyecto_ead: [
         {
           id: null,
+          id_eads: null,
           diagrama: "",
           tipo: "",
           concepto: "",
@@ -490,6 +494,52 @@ const AltaProyectos = {
     },
   },
   computed: {
+    proyectosFiltradosEAD() {
+      let busqueda = (this.filtroEAD || "").toLowerCase();
+
+      let lista = (this.catalogoProyectosEAD || []).filter(
+        (p) =>
+          p.nombre_indicador &&
+          p.nombre_indicador.toLowerCase().includes(busqueda),
+      );
+
+      let idsCargadosEnOpex = [];
+      this.proyectos.forEach((opex) => {
+        if (opex.id_eads) {
+          try {
+            let ids = JSON.parse(opex.id_eads);
+            if (Array.isArray(ids)) {
+              idsCargadosEnOpex.push(...ids.map(Number));
+            }
+          } catch (e) {}
+        }
+      });
+
+      lista = lista.map((p) => {
+        let estaCargado = false;
+
+        if (
+          p.ids_impactos !== null &&
+          p.ids_impactos !== undefined &&
+          p.ids_impactos !== ""
+        ) {
+          let idsDeEsteProyecto = String(p.ids_impactos)
+            .split(",")
+            .map((id) => Number(id.trim()))
+            .filter((id) => !isNaN(id) && id > 0);
+
+          estaCargado = idsDeEsteProyecto.some((id) =>
+            idsCargadosEnOpex.includes(id),
+          );
+        }
+
+        return { ...p, cargado: estaCargado };
+      });
+
+      return lista.sort((a, b) =>
+        a.cargado === b.cargado ? 0 : a.cargado ? 1 : -1,
+      );
+    },
     umConceptoFe() {
       return this.calculadoraFeCombustibles.reduce((resultado, item) => {
         resultado[item.combustible_energetico] = {
@@ -992,21 +1042,28 @@ const AltaProyectos = {
         .finally(() => {});
     },
 
-    consultasGlobales(){
-      axios.get("proyectosController.php",{
-        params:{
-          accion:"consulta Global",
-          anio: this.select_anio_calendario
-        }
-      }).then(respuesta=>{
-          console.info("respuesta:",respuesta)
-          this.todosRegistrosProyectosAnual = respuesta.data[0][0]
-          this.globalAhorroDuroAnual = respuesta.data[0][2].global_anual_ahorro_duro
-          this.globalAhorroDuroAnualNumerico = parseFloat(String(this.globalAhorroDuroAnual).replace(/[$,]/g, '')) || 0;
-          this.sumaTotalPersonalizada()
-      }).catch(e=>{
-        console.log("Error en axios",e)
-      })
+    consultasGlobales() {
+      axios
+        .get("proyectosController.php", {
+          params: {
+            accion: "consulta Global",
+            anio: this.select_anio_calendario,
+          },
+        })
+        .then((respuesta) => {
+          console.info("respuesta:", respuesta);
+          this.todosRegistrosProyectosAnual = respuesta.data[0][0];
+          this.globalAhorroDuroAnual =
+            respuesta.data[0][2].global_anual_ahorro_duro;
+          this.globalAhorroDuroAnualNumerico =
+            parseFloat(
+              String(this.globalAhorroDuroAnual).replace(/[$,]/g, ""),
+            ) || 0;
+          this.sumaTotalPersonalizada();
+        })
+        .catch((e) => {
+          console.log("Error en axios", e);
+        });
     },
 
     consultarMesesCapturadosYsumaXProyecto() {
@@ -1239,7 +1296,7 @@ const AltaProyectos = {
         currency: "MXN",
       });
     },
-        sumaTotalPersonalizada() {
+    sumaTotalPersonalizada() {
       let total = 0;
       const anioSeleccionado = Number(this.select_anio_calendario);
 
@@ -1256,11 +1313,11 @@ const AltaProyectos = {
 
       this.totalSumaPersonalizada = total;
 
-     /*  return total.toLocaleString("es-MX", {
+      /*  return total.toLocaleString("es-MX", {
         style: "currency",
         currency: "MXN",
       }); */
-},
+    },
     // Fin de suma personalizada
 
     ///////////////////////////////////////////////////////////////////////////////////busca el valor para luego mostraarlo, se da formato al num en input se y quita formato al guardar o actualizar
@@ -3159,6 +3216,25 @@ const AltaProyectos = {
         Swal.close();
       });
     },
+    limpiarProyectoEAD() {
+      this.emisiones_aspectos_ambientales_proyecto_ead = [
+        {
+          id: null,
+          id_eads: null,
+          diagrama: "",
+          tipo: "",
+          concept: "",
+          alcane: "",
+          cantidad: 0,
+          um: "",
+          co2: 0,
+          referencia: "",
+        },
+      ];
+      this.nombre_proyecto = "";
+      this.filtroEAD = "";
+      this.mostrarListaEAD = false;
+    },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL X NOMBRE PARA OBTENER ID's*/
     consultarImpactoAmbientalPorNombre(nombresImpactos) {
       console.log("nombre????????", nombresImpactos);
@@ -3206,6 +3282,71 @@ const AltaProyectos = {
         .catch((error) => {
           console.log("Error:", error);
         });
+    },
+    proyectosEADFiltrados() {
+      if (!this.filtroBuscarEAD) {
+        return this.catalogoProyectosEAD;
+      }
+
+      const busqueda = this.filtroBuscarEAD.toLowerCase();
+
+      return this.catalogoProyectosEAD.filter(
+        (p) =>
+          p.nombre_indicador &&
+          p.nombre_indicador.toLowerCase().includes(busqueda),
+      );
+    },
+    consultarListaProyectosEAD() {
+      axios
+        .get("integracionEADController.php", {
+          params: {
+            accion: "listarProyectos",
+          },
+        })
+        .then((response) => {
+          if (response.data.status === "success") {
+            this.catalogoProyectosEAD = response.data.proyectos;
+          }
+        });
+    },
+    seleccionarProyectoEAD(proyecto) {
+      axios
+        .get("integracionEADController.php", {
+          params: {
+            accion: "obtenerImpactosProyecto",
+            id_equipo: proyecto.id_equipo,
+          },
+        })
+        .then((response) => {
+          if (
+            response.data.status === "success" &&
+            response.data.impactos.length > 0
+          ) {
+            this.emisiones_aspectos_ambientales_proyecto_ead =
+              response.data.impactos.map((imp) => ({
+                id: null,
+                id_eads: imp.id,
+                diagrama: imp.diagrama || "",
+                tipo: imp.tip || "",
+                concepto: imp.concepto || "",
+                alcance: imp.alcance || "",
+                cantidad: parseFloat(imp.cantidad) || 0,
+                um: imp.um || "",
+                co2: parseFloat(imp.co2) || 0,
+                referencia: imp.referencia || "",
+              }));
+
+            if (!this.nombre_proyecto) {
+              this.nombre_proyecto = proyecto.nombre_indicador;
+            }
+
+            this.mostrarMenuEAD = false;
+            this.filtroBuscarEAD = "";
+          }
+        })
+        .catch((error) =>
+          console.error("Error al cargar impactos del sistema EAD: ", error),
+        );
     },
     /*/////////////////////////////////////////////////////////////////////////////////CONSULTAR IMPACTO AMBIENTAL CON DOCUMENTOS*/
     consultarImpactoAmbientalConDocumentos() {
@@ -5126,6 +5267,7 @@ const AltaProyectos = {
         this.consultarValores();
         this.buscarDocumentos("Alta Proyecto");
         this.incrementarMeses();
+        this.consultarListaProyectosEAD();
         this.inicializarArreglosPlanMensual();
       } else if (modal == "Actualizar Proyecto") {
         this.reiniciarVariables();
@@ -5990,6 +6132,7 @@ const AltaProyectos = {
       let alcances = [];
       let cantidades = [];
       let referencias = [];
+      let id_eads_array = [];
 
       this.emisiones_aspectos_ambientales_proyecto_ead.forEach((imp) => {
         diagrama_proceso.push(imp.diagrama || "");
@@ -5998,6 +6141,7 @@ const AltaProyectos = {
         alcances.push(imp.alcance || "");
         cantidades.push(imp.cantidad || 0);
         referencias.push(imp.referencia || "");
+        id_eads_array.push(imp.id_eads || null);
       });
 
       if (alcances.some((a) => a === "") && conceptos[0] !== "Sin Impacto") {
@@ -6057,6 +6201,7 @@ const AltaProyectos = {
           tipo: tipo_impacto,
           cantidad: cantidades,
           referencia: referencias,
+          id_eads: id_eads_array,
           impactos_completos: this.emisiones_aspectos_ambientales_proyecto_ead,
           valores: valores,
           tons_co2: this.tons_co2,
@@ -6330,6 +6475,9 @@ const AltaProyectos = {
           referencia: "",
         },
       ];
+      this.mostrarMenuEAD = false;
+      this.filtroBuscarEAD = "";
+      this.catalogoProyectosEAD = [];
     },
     verificarSiEsActualizar() {
       if (this.actualizar_proyecto == true) {
@@ -7616,11 +7764,15 @@ const AltaProyectos = {
       if (this.select_anio_calendario >= 2025) {
         return this.metaPres === 0 || this.globalAhorroDuroAnualNumerico === 0
           ? 0
-          : parseFloat((this.globalAhorroDuroAnualNumerico / this.metaPres) * 100).toFixed(2);
+          : parseFloat(
+              (this.globalAhorroDuroAnualNumerico / this.metaPres) * 100,
+            ).toFixed(2);
       } else {
         return this.meta === 0 || this.globalAhorroDuroAnualNumerico === 0
           ? 0
-          : parseFloat((this.globalAhorroDuroAnualNumerico / this.meta) * 100).toFixed(2);
+          : parseFloat(
+              (this.globalAhorroDuroAnualNumerico / this.meta) * 100,
+            ).toFixed(2);
       }
     },
     calcularPorcentajeSumaPersonalizada() {

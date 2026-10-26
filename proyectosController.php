@@ -75,6 +75,7 @@ if (isset($_SESSION['nombre'])) {
                 $tipo = $arreglo['tipo'] ?? [];
                 $cantidad = $arreglo['cantidad'] ?? [];
                 $referencia = $arreglo['referencia'] ?? [];
+                $id_eads = $arreglo['id_eads'];
                 $impactos_completos = $arreglo['impactos_completos'] ?? []; 
                 
                 $misiones = json_encode($misiones, JSON_UNESCAPED_UNICODE);
@@ -96,6 +97,7 @@ if (isset($_SESSION['nombre'])) {
                 $tipo = json_encode($tipo, JSON_UNESCAPED_UNICODE);
                 $cantidad = json_encode($cantidad, JSON_UNESCAPED_UNICODE);
                 $referencia = json_encode($referencia, JSON_UNESCAPED_UNICODE);
+                $id_eads = json_encode($id_eads, JSON_UNESCAPED_UNICODE);
 
                 if($arreglo['accion'] == "Alta Proyecto"){
                     $val[] = insertarProyecto(
@@ -104,7 +106,7 @@ if (isset($_SESSION['nombre'])) {
                         $objetivos, $impacto_ambiental, $impacto_ambiental_emisiones, $valores, 
                         $tons_co2, $ahorro_duro, $ahorro_suave, $anioXmes, $mesXAnio, $valoresMensualCO, 
                         $valoresMensualAD, $valoresMensualAS, $presupuestado, $mesesPresupuestados, 
-                        $diagrama_proceso, $tipo, $cantidad, $referencia, $impactos_completos
+                        $diagrama_proceso, $tipo, $cantidad, $referencia, $id_eads, $impactos_completos
                     );
                 } else if($arreglo['accion'] == "Actualizar Proyecto"){
                     if(isset($arreglo['id_actualizar'])){

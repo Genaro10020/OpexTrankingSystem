@@ -327,8 +327,11 @@ if (isset($_SESSION['nombre'])) {
 
                                     <!-- IMPACTOS AMBIENTALES -->
                                     <div class="row m-0 w-100 mt-4 mb-4">
-                                        <div class="col-12 p-0">
-                                            <?php include("../EAD-System/templateImpactosAmbientales.php") ?>
+                                        <div class="col-12 p-0 opex-impactos-scope">
+                                            <?php 
+                                                $origenOPEX = true; 
+                                                include("../EAD-System/templateImpactosAmbientales.php"); 
+                                            ?>
                                         </div>
                                     </div>
                                     
