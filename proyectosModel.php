@@ -493,13 +493,22 @@ function insertarProyecto($folio, $fecha_alta_invertida, $nombre_proyecto, $fuen
 
         $estado = true;
 
+        if (is_string($impactos_completos)) {
+            $dec = json_decode($impactos_completos, true);
+            if (is_string($dec)) { $dec = json_decode($dec, true); } 
+            $impactos_completos = is_array($dec) ? $dec : [];
+        }
+        if (!is_array($impactos_completos)) {
+            $impactos_completos = [];
+        }
+
         if (!empty($impactos_completos)) {
             foreach ($impactos_completos as $imp) {
                 if (empty($imp['concepto']) || $imp['concepto'] === 'Sin Impacto') continue;
 
                 $concepto = $conexion->real_escape_string(trim($imp['concepto']));
-                $um = $conexion->real_escape_string(trim($imp['um']));
-                $ref = $conexion->real_escape_string(trim($imp['referencia']));
+                $um = $conexion->real_escape_string(trim($imp['um'] ?? ''));
+                $ref = $conexion->real_escape_string(trim($imp['referencia'] ?? ''));
 
                 $check = $conexion->query("SELECT id FROM impacto_ambiental WHERE nombre = '$concepto'");
                 if ($check && $check->num_rows == 0) {
@@ -508,16 +517,31 @@ function insertarProyecto($folio, $fecha_alta_invertida, $nombre_proyecto, $fuen
             }
         }
 
-        $queryIns = "INSERT INTO proyectos_creados (folio, fecha, fuente, nombre_proyecto, planta, area, departamento, metodologia, nomina, responsable, correo, telefono, misiones, pilares, objetivos, impacto_ambiental, alcance, valores, tons_co2, ahorro_duro, ahorro_suave, observador, presupuestado, diagrama_proceso, tipo, cantidad, referencia, id_eads) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-
+        $queryIns = "INSERT INTO proyectos_creados (folio, fecha, fuente, nombre_proyecto, planta, area, departamento, metodologia, nomina, responsable, correo, telefono, misiones, pilares, objetivos, impacto_ambiental, valores, tons_co2, ahorro_duro, ahorro_suave, observador, presupuestado, diagrama_proceso, tipo, cantidad, referencia, id_eads) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        
         $stmt = $conexion->prepare($queryIns);
-        $stmt->bind_param("ssssssssssssssssssssssssssss", 
-            $nuevo_folio, $fecha_alta_invertida, $fuente, $nombre_proyecto, $planta, $area, $departamento, $metodologia, $nomina, $nombre_responsable, $correo_responsable, $telefono_responsable, $misiones, $pilares, $objetivos, $impacto_ambiental, $impacto_ambiental_emisiones, $valores, $tons_co2, $ahorro_duro, $ahorro_suave, $observador, $presupuestado, $diagrama_proceso, $tipo, $cantidad, $referencia, $id_eads
+        $stmt->bind_param("sssssssssssssssssssssssssss", 
+            $nuevo_folio, $fecha_alta_invertida, $fuente, $nombre_proyecto, $planta, $area, $departamento, $metodologia, $nomina, $nombre_responsable, $correo_responsable, $telefono_responsable, $misiones, $pilares, $objetivos, $impacto_ambiental, $valores, $tons_co2, $ahorro_duro, $ahorro_suave, $observador, $presupuestado, $diagrama_proceso, $tipo, $cantidad, $referencia, $id_eads
         );
 
         if ($stmt->execute()) {
             $estado = true;
             $ultimo_id = $conexion->insert_id;
+
+            if (!empty($impactos_completos)) {
+                $stmtImpacto = $conexion->prepare("INSERT INTO impacto_ambiental_proyecto (id_proyecto, impacto_ambiental) VALUES (?, ?)");
+                foreach ($impactos_completos as $imp) {
+                    if (empty($imp['concepto']) || $imp['concepto'] === 'Sin Impacto') continue;
+                    
+                    $concepto = trim($imp['concepto']);
+                    $um = trim($imp['um'] ?? '');
+                    $texto_impacto = $um !== '' ? "$concepto ($um)" : $concepto;
+                    
+                    $stmtImpacto->bind_param("is", $ultimo_id, $texto_impacto);
+                    $stmtImpacto->execute();
+                }
+                $stmtImpacto->close();
+            }
             
             $anioXmes = !is_array($anioXmes) ? json_decode($anioXmes, true) : $anioXmes;
             $mesXAnio = !is_array($mesXAnio) ? json_decode($mesXAnio, true) : $mesXAnio;
@@ -528,7 +552,11 @@ function insertarProyecto($folio, $fecha_alta_invertida, $nombre_proyecto, $fuen
 
             $cantidad_meses = is_array($mesXAnio) ? count($mesXAnio) : 0;
             for ($i = 0; $i < $cantidad_meses; $i++) {
-                $insertarPlan = "INSERT INTO plan_mensual_por_proyecto (id_proyecto, mes, anio, ahorro_co, ahorro_d, ahorro_s, mes_presupuestado) VALUES ('$ultimo_id','$mesXAnio[$i]','$anioXmes[$i]','$valoresMensualCO[$i]','$valoresMensualAD[$i]','$valoresMensualAS[$i]','$mesesPresupuestados[$i]')";
+                $co = $valoresMensualCO[$i] ?? '';
+                $ad = $valoresMensualAD[$i] ?? '';
+                $as = $valoresMensualAS[$i] ?? '';
+                $mp = $mesesPresupuestados[$i] ?? '';
+                $insertarPlan = "INSERT INTO plan_mensual_por_proyecto (id_proyecto, mes, anio, ahorro_co, ahorro_d, ahorro_s, mes_presupuestado) VALUES ('$ultimo_id','$mesXAnio[$i]','$anioXmes[$i]','$co','$ad','$as','$mp')";
                 
                 if ($conexion->query($insertarPlan) !== TRUE) {
                     $impacto_mensual = $conexion->error . " Incorrecto";
@@ -546,66 +574,56 @@ function insertarProyecto($folio, $fecha_alta_invertida, $nombre_proyecto, $fuen
     return array($estado, $estado_folios, $folio_recuperado, $folio_sin_numero, $igual, "Correcto", [], $impacto_mensual);
 }
 
-function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto, $selectFuente, $planta, $area, $departamento, $metodologia, $responsable_id, $observador, $misiones, $pilares, $objetivos, $impacto_ambiental, $impacto_ambiental_emisiones, $valores, $anioXmes, $mesXAnio, $valoresMensualCO, $valoresMensualAD, $valoresMensualAS, $idsPlanMesual, $presupuestado, $mesesPresupuestados, $diagrama_proceso, $tipo, $cantidad, $referencia, $id_eads, $impactos_completos){
+function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto, $selectFuente, $planta, $area, $departamento, $metodologia, $responsable_id, $observador, $misiones, $pilares, $objetivos, $impacto_ambiental, $impacto_ambiental_emisiones, $valores, $anioXmes, $mesXAnio, $valoresMensualCO, $valoresMensualAD, $valoresMensualAS, $idsPlanMesual, $presupuestado, $mesesPresupuestados, $diagrama_proceso, $tipo, $cantidad, $referencia, $id_eads, $impactos_completos)
+{
     global $conexion;
     $estado = false;
 
-    $nomina = "";
-    $nombre_responsable = "";
-    $correo_responsable = "";
-    $telefono_responsable = "";
+    $nomina = '';
+    $nombre_responsable = '';
+    $correo_responsable = '';
+    $telefono_responsable = '';
 
     if (!empty($responsable_id)) {
         $consulta = "SELECT * FROM responsables WHERE id = '$responsable_id'";
         $query = $conexion->query($consulta);
-
-        if($query && $query->num_rows > 0) {
+        if ($query && $query->num_rows > 0) {
             $fila = $query->fetch_assoc();
             $nomina = $fila['numero_nomina'];
-            $nombre_responsable   = $fila['nombre'];
-            $correo_responsable   = $fila['correo'];
-            $telefono_responsable = $fila['telefono']; 
+            $nombre_responsable = $fila['nombre'];
+            $correo_responsable =  $fila['correo'];
+            $telefono_responsable =  $fila['telefono'];
         }
     }
 
-    $folio_final   = $folio;
+    $folio_final = $folio;
     $consultaFolio = "SELECT folio FROM proyectos_creados WHERE id = '$id'";
     $queryFolio = $conexion->query($consultaFolio);
-
     if ($queryFolio && $queryFolio->num_rows > 0) {
         $filaF = $queryFolio->fetch_assoc();
         $partesFolio = explode("#", $filaF['folio']);
-
         if (count($partesFolio) > 1) {
-            $ultimoNum   = end($partesFolio);
+            $ultimoNum = end($partesFolio);
             $folio_final = $folio . "-#" . $ultimoNum;
         }
     }
 
-    if (!empty($impactos_completos)) {
-        foreach ($impactos_completos as $imp) {
-            if (empty($imp['concepto']) || $imp['concepto'] === "Sin Impacto") continue;
-
-            $concepto = $conexion->real_escape_string(trim($imp['concepto']));
-            $um = $conexion->real_escape_string(trim($imp['um']));
-            $ref = $conexion->real_escape_string(trim($imp['referencia']));
-
-            $check = $conexion->query("SELECT id FROM impacto_ambiental WHERE nombre = '$concepto'");
-            if ($check && $check->num_rows === 0) {
-                $conexion->query("INSERT INTO impacto_ambiental (nombre, unidad, requisito) VALUES ('$concepto', '$um', '$ref')");
-            }
-        }
+    if (is_string($impactos_completos)) {
+        $dec = json_decode($impactos_completos, true);
+        if (is_string($dec)) { $dec = json_decode($dec, true); } 
+        $impactos_completos = is_array($dec) ? $dec : [];
+    }
+    if (!is_array($impactos_completos)) {
+        $impactos_completos = [];
     }
 
-    $impactos_completos = is_string($impactos_completos) ? json_decode($impactos_completos, true) : $impactos_completos;
-
-    if (!empty($impactos_completos) && is_array($impactos_completos)) {
+    if (!empty($impactos_completos)) {
         foreach ($impactos_completos as $imp) {
             if (empty($imp['concepto']) || $imp['concepto'] === 'Sin Impacto') continue;
 
             $concepto = $conexion->real_escape_string(trim($imp['concepto']));
-            $um = $conexion->real_escape_string(trim($imp['um']));
-            $ref = $conexion->real_escape_string(trim($imp['referencia']));
+            $um = $conexion->real_escape_string(trim($imp['um'] ?? ''));
+            $ref = $conexion->real_escape_string(trim($imp['referencia'] ?? ''));
 
             $check = $conexion->query("SELECT id FROM impacto_ambiental WHERE nombre = '$concepto'");
             if ($check && $check->num_rows == 0) {
@@ -614,15 +632,35 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
         }
     }
 
-    $update = "UPDATE proyectos_creados SET folio=?, fecha=?, nombre_proyecto=?, fuente=?, planta=?, area=?, departamento=?, metodologia=?, responsable=?, nomina=?, correo=?, telefono=?, observador=?, misiones=?, pilares=?, objetivos=?, impacto_ambiental=?, alcance=?, valores=?, presupuestado=?, diagrama_proceso=?, tipo=?, cantidad=?, referencia=?, id_eads=? WHERE id=?";
-
+    $update = "UPDATE proyectos_creados SET folio=?, fecha=?, nombre_proyecto=?, fuente=?, planta=?, area=?, departamento=?, metodologia=?, responsable=?, nomina=?, correo=?, telefono=?, observador=?, misiones=?, pilares=?, objetivos=?, impacto_ambiental=?, valores=?, presupuestado=?, diagrama_proceso=?, tipo=?, cantidad=?, referencia=?, id_eads=? WHERE id=?";
+    
     $stmt = $conexion->prepare($update);
-    $stmt->bind_param("sssssssssssssssssssssssssi", 
-        $folio_final, $fecha_alta_invertida, $nombre_proyecto, $selectFuente, $planta, $area, $departamento, $metodologia, $nombre_responsable, $nomina, $correo_responsable, $telefono_responsable, $observador, $misiones, $pilares, $objetivos, $impacto_ambiental, $impacto_ambiental_emisiones, $valores, $presupuestado, $diagrama_proceso, $tipo, $cantidad, $referencia, $id_eads, $id
+    $stmt->bind_param("ssssssssssssssssssssssssi", 
+        $folio_final, $fecha_alta_invertida, $nombre_proyecto, $selectFuente, $planta, $area, $departamento, $metodologia, $nombre_responsable, $nomina, $correo_responsable, $telefono_responsable, $observador, $misiones, $pilares, $objetivos, $impacto_ambiental, $valores, $presupuestado, $diagrama_proceso, $tipo, $cantidad, $referencia, $id_eads, $id
     );
 
     if ($stmt->execute()) {
         $estado = true;
+
+        $stmtDelImpacto = $conexion->prepare("DELETE FROM impacto_ambiental_proyecto WHERE id_proyecto = ?");
+        $stmtDelImpacto->bind_param("i", $id);
+        $stmtDelImpacto->execute();
+        $stmtDelImpacto->close();
+
+        if (!empty($impactos_completos)) {
+            $stmtImpacto = $conexion->prepare("INSERT INTO impacto_ambiental_proyecto (id_proyecto, impacto_ambiental) VALUES (?, ?)");
+            foreach ($impactos_completos as $imp) {
+                if (empty($imp['concepto']) || $imp['concepto'] === 'Sin Impacto') continue;
+                
+                $concepto = trim($imp['concepto']);
+                $um = trim($imp['um'] ?? '');
+                $texto_impacto = $um !== '' ? "$concepto ($um)" : $concepto;
+                
+                $stmtImpacto->bind_param("is", $id, $texto_impacto);
+                $stmtImpacto->execute();
+            }
+            $stmtImpacto->close();
+        }
 
         $anioXmes = !is_array($anioXmes) ? json_decode($anioXmes, true) : $anioXmes;
         $mesXAnio = !is_array($mesXAnio) ? json_decode($mesXAnio, true) : $mesXAnio;
@@ -637,7 +675,12 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
         
         if ($cantidad_ids > 0) {
             for ($i = 0; $i < $cantidad_meses; $i++) {
-                $updPlan = "UPDATE plan_mensual_por_proyecto SET mes='$mesXAnio[$i]', anio='$anioXmes[$i]', ahorro_co='$valoresMensualCO[$i]', ahorro_d='$valoresMensualAD[$i]', ahorro_s='$valoresMensualAS[$i]', mes_presupuestado='$mesesPresupuestados[$i]' WHERE id='$idsPlanMesual[$i]' AND id_proyecto='$id'";
+                $co = $valoresMensualCO[$i] ?? '';
+                $ad = $valoresMensualAD[$i] ?? '';
+                $as = $valoresMensualAS[$i] ?? '';
+                $mp = $mesesPresupuestados[$i] ?? '';
+
+                $updPlan = "UPDATE plan_mensual_por_proyecto SET mes='$mesXAnio[$i]', anio='$anioXmes[$i]', ahorro_co='$co', ahorro_d='$ad', ahorro_s='$as', mes_presupuestado='$mp' WHERE id='$idsPlanMesual[$i]' AND id_proyecto='$id'";
                 if ($conexion->query($updPlan) !== TRUE) {
                     $estado = $conexion->error . " Incorrecto";
                     break;
@@ -646,9 +689,14 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
                 }   
             }  
         } else {
-            if (!empty(array_filter($valoresMensualCO)) && !empty(array_filter($valoresMensualAD)) && !empty(array_filter($valoresMensualAS)) || !empty(array_filter($mesesPresupuestados))) {
+            if (!empty(array_filter((array)$valoresMensualCO)) || !empty(array_filter((array)$valoresMensualAD)) || !empty(array_filter((array)$valoresMensualAS)) || !empty(array_filter((array)$mesesPresupuestados))) {
                 for ($i = 0; $i < $cantidad_meses; $i++) {
-                    $insPlan = "INSERT INTO plan_mensual_por_proyecto (id_proyecto, mes, anio, ahorro_co, ahorro_d, ahorro_s, mes_presupuestado) VALUES ('$id', '$mesXAnio[$i]', '$anioXmes[$i]', '$valoresMensualCO[$i]', '$valoresMensualAD[$i]', '$valoresMensualAS[$i]', '$mesesPresupuestados[$i]')";
+                    $co = $valoresMensualCO[$i] ?? '';
+                    $ad = $valoresMensualAD[$i] ?? '';
+                    $as = $valoresMensualAS[$i] ?? '';
+                    $mp = $mesesPresupuestados[$i] ?? '';
+
+                    $insPlan = "INSERT INTO plan_mensual_por_proyecto (id_proyecto, mes, anio, ahorro_co, ahorro_d, ahorro_s, mes_presupuestado) VALUES ('$id', '$mesXAnio[$i]', '$anioXmes[$i]', '$co', '$ad', '$as', '$mp')";
                     if ($conexion->query($insPlan) !== TRUE) {
                         $estado = $conexion->error . " Incorrecto";
                         break;
