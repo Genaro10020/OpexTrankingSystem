@@ -550,17 +550,17 @@ function insertarProyecto($folio, $fecha_alta_invertida, $nombre_proyecto, $fuen
 
                     if ($stmtEAD) {
                         foreach ($impactos_completos as $imp) {
-                            $id_ead_row = $imp["id_eads"] ?? null;
+                            $id_ead_row = $imp['id_eads'] ?? $imp['Id_eads'] ?? null;
                             if (!empty($id_ead_row)) {
-                                $diagrama_ead = $imp["diagrama"] ?? "";
-                                $tipo_ead     = $imp["tipo"] ?? "";
-                                $concepto_ead = $imp["concepto"] ?? "";
-                                $alcance_ead  = $imp["alcance"] ?? "";
-                                $cantidad_ead = $imp["cantidad"] ?? 0;
-                                $um_ead       = $imp["um"] ?? "";
-                                $co2_ead      = $imp["co2"] ?? 0;
-                                $ref_ead      = $imp["referencia"] ?? "";
-
+                                $diagrama_ead = $imp['diagrama'] ?? '';
+                                $tipo_ead     = $imp['tipo'] ?? '';
+                                $concepto_ead = $imp['concepto'] ?? '';
+                                $alcance_ead  = $imp['alcance'] ?? '';
+                                $cantidad_ead = (float)($imp['cantidad'] ?? 0);
+                                $um_ead       = $imp['um'] ?? '';
+                                $co2_ead      = (float)($imp['co2'] ?? 0);
+                                $ref_ead      = $imp['referencia'] ?? '';
+                                
                                 $stmtEAD->bind_param("ssssdsdsi", $diagrama_ead, $tipo_ead, $concepto_ead, $alcance_ead, $cantidad_ead, $um_ead, $co2_ead, $ref_ead, $id_ead_row);
                                 $stmtEAD->execute();
                             }
@@ -688,6 +688,33 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
                 $stmtImpacto->execute();
             }
             $stmtImpacto->close();
+
+            $conexionEAD = new mysqli('localhost', 'root', '', 'ead');
+
+            if (!$conexionEAD->connect_errno) {
+                $conexionEAD->set_charset("utf8");
+                                $stmtEAD = $conexionEAD->prepare("UPDATE reportes_impactos_ambientales_proyectos SET diagrama=?, tipo=?, concepto=?, alcance=?, cantidad=?, um=?, co2=?, referencia=? WHERE id=?");
+                if ($stmtEAD) {
+                    foreach ($impactos_completos as $imp) {
+                        $id_ead_row = $imp['id_eads'] ?? $imp['Id_eads'] ?? null;
+                        if (!empty($id_ead_row)) {
+                            $diagrama_ead = $imp['diagrama'] ?? '';
+                            $tipo_ead     = $imp['tipo'] ?? '';
+                            $concepto_ead = $imp['concepto'] ?? '';
+                            $alcance_ead  = $imp['alcance'] ?? '';
+                            $cantidad_ead = (float)($imp['cantidad'] ?? 0);
+                            $um_ead       = $imp['um'] ?? '';
+                            $co2_ead      = (float)($imp['co2'] ?? 0);
+                            $ref_ead      = $imp['referencia'] ?? '';
+                            
+                            $stmtEAD->bind_param("ssssdsdsi", $diagrama_ead, $tipo_ead, $concepto_ead, $alcance_ead, $cantidad_ead, $um_ead, $co2_ead, $ref_ead, $id_ead_row);
+                            $stmtEAD->execute();
+                        }
+                    }
+                    $stmtEAD->close();
+                }
+                $conexionEAD->close();
+            }
         }
 
         $anioXmes = !is_array($anioXmes) ? json_decode($anioXmes, true) : $anioXmes;
