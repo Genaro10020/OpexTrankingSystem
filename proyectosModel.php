@@ -716,51 +716,91 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
 
     if ($stmt->execute()) {
         $estado = true;
-
-        $stmtDelImpacto = $conexion->prepare("DELETE FROM impacto_ambiental_proyecto WHERE id_proyecto = ?");
-        $stmtDelImpacto->bind_param("i", $id);
-        $stmtDelImpacto->execute();
-        $stmtDelImpacto->close();
-
-        if (!empty($impactos_completos)) {
-            $stmtImpacto = $conexion->prepare("INSERT INTO impacto_ambiental_proyecto (id_proyecto, impacto_ambiental) VALUES (?, ?)");
+        $conexionOPEX = $conexion; 
+        
+        include("conexionEAD.php"); 
+        $conexionEAD = $conexion;   
+        
+        $conexion = $conexionOPEX;  
+        
+        if (isset($conexionEAD) && !$conexionEAD->connect_errno) {
+            $conexionEAD->set_charset("utf8");
+            
+            $id_equipo_ead = null;
+            $nombre_indicador_ead = $nombre_proyecto;
+            
             foreach ($impactos_completos as $imp) {
-                if (empty($imp['concepto']) || $imp['concepto'] === 'Sin Impacto') continue;
-                
-                $concepto = trim($imp['concepto']);
-                $um = trim($imp['um'] ?? '');
-                $texto_impacto = $um !== '' ? "$concepto ($um)" : $concepto;
-                
-                $stmtImpacto->bind_param("is", $id, $texto_impacto);
-                $stmtImpacto->execute();
-            }
-            $stmtImpacto->close();
-
-            $conexionEAD = new mysqli('localhost', 'root', '', 'ead');
-
-            if (!$conexionEAD->connect_errno) {
-                $conexionEAD->set_charset("utf8");
-                                $stmtEAD = $conexionEAD->prepare("UPDATE reportes_impactos_ambientales_proyectos SET diagrama=?, tipo=?, concepto=?, alcance=?, cantidad=?, um=?, co2=?, referencia=? WHERE id=?");
-                if ($stmtEAD) {
-                    foreach ($impactos_completos as $imp) {
-                        $id_ead_row = $imp['id_eads'] ?? $imp['Id_eads'] ?? null;
-                        if (!empty($id_ead_row)) {
-                            $diagrama_ead = $imp['diagrama'] ?? '';
-                            $tipo_ead     = $imp['tipo'] ?? '';
-                            $concepto_ead = $imp['concepto'] ?? '';
-                            $alcance_ead  = $imp['alcance'] ?? '';
-                            $cantidad_ead = (float)($imp['cantidad'] ?? 0);
-                            $um_ead       = $imp['um'] ?? '';
-                            $co2_ead      = (float)($imp['co2'] ?? 0);
-                            $ref_ead      = $imp['referencia'] ?? '';
-                            
-                            $stmtEAD->bind_param("ssssdsdsi", $diagrama_ead, $tipo_ead, $concepto_ead, $alcance_ead, $cantidad_ead, $um_ead, $co2_ead, $ref_ead, $id_ead_row);
-                            $stmtEAD->execute();
+                $id_ead_row = $imp['id_eads'] ?? $imp['Id_eads'] ?? null;
+                if (!empty($id_ead_row)) {
+                    $stmtFind = $conexionEAD->prepare("SELECT id_equipo, nombre_indicador FROM reportes_impactos_ambientales_proyectos WHERE id = ? LIMIT 1");
+                    if ($stmtFind) {
+                        $stmtFind->bind_param("i", $id_ead_row);
+                        $stmtFind->execute();
+                        $res = $stmtFind->get_result();
+                        if ($row = $res->fetch_assoc()) {
+                            $id_equipo_ead = $row['id_equipo'];
+                            $nombre_indicador_ead = $row['nombre_indicador'];
                         }
+                        $stmtFind->close();
                     }
-                    $stmtEAD->close();
+                    break;
                 }
-                $conexionEAD->close();
+            }
+            
+            $nuevos_ids_eads = [];
+            $hubo_inserciones = false;
+            
+            $stmtUpdateEAD = $conexionEAD->prepare("UPDATE reportes_impactos_ambientales_proyectos SET diagrama=?, tipo=?, concepto=?, alcance=?, cantidad=?, um=?, co2=?, referencia=? WHERE id=?");
+            
+            $stmtInsertEAD = null;
+            if (!empty($id_equipo_ead)) {
+                $stmtInsertEAD = $conexionEAD->prepare("INSERT INTO reportes_impactos_ambientales_proyectos (id_equipo, nombre_indicador, diagrama, tipo, concepto, alcance, cantidad, um, co2, referencia) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            }
+            
+            foreach ($impactos_completos as $imp) {
+                $diagrama_ead = $imp['diagrama'] ?? '';
+                $tipo_ead = $imp['tipo'] ?? '';
+                $concepto_ead = $imp['concepto'] ?? '';
+                $alcance_ead = $imp['alcance'] ?? '';
+                $cantidad_ead = (float)($imp['cantidad'] ?? 0);
+                $um_ead = $imp['um'] ?? '';
+                $co2_ead = (float)($imp['co2'] ?? 0);
+                $ref_ead = $imp['referencia'] ?? '';
+                
+                $id_ead_row = $imp['id_eads'] ?? $imp['Id_eads'] ?? null;
+                
+                if (!empty($id_ead_row)) {
+                    if ($stmtUpdateEAD) {
+                        $stmtUpdateEAD->bind_param("ssssdsdsi", $diagrama_ead, $tipo_ead, $concepto_ead, $alcance_ead, $cantidad_ead, $um_ead, $co2_ead, $ref_ead, $id_ead_row);
+                        $stmtUpdateEAD->execute();
+                    }
+                    $nuevos_ids_eads[] = $id_ead_row;
+                } else {
+                    if (!empty($id_equipo_ead) && $stmtInsertEAD) {
+                        $stmtInsertEAD->bind_param("ssssssdsds", $id_equipo_ead, $nombre_indicador_ead, $diagrama_ead, $tipo_ead, $concepto_ead, $alcance_ead, $cantidad_ead, $um_ead, $co2_ead, $ref_ead);
+                        $stmtInsertEAD->execute();
+                        
+                        $nuevo_id = $conexionEAD->insert_id;
+                        $nuevos_ids_eads[] = $nuevo_id;
+                        $hubo_inserciones = true;
+                    } else {
+                        $nuevos_ids_eads[] = null;
+                    }
+                }
+            }
+            
+            if ($stmtUpdateEAD) $stmtUpdateEAD->close();
+            if ($stmtInsertEAD) $stmtInsertEAD->close();
+            $conexionEAD->close();
+            
+            if ($hubo_inserciones) {
+                $json_ids_actualizado = json_encode($nuevos_ids_eads, JSON_UNESCAPED_UNICODE);
+                $stmtUpdateOpex = $conexion->prepare("UPDATE proyectos_creados SET id_eads = ? WHERE id = ?");
+                if ($stmtUpdateOpex) {
+                    $stmtUpdateOpex->bind_param("si", $json_ids_actualizado, $id);
+                    $stmtUpdateOpex->execute();
+                    $stmtUpdateOpex->close();
+                }
             }
         }
 
