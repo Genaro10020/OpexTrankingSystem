@@ -1210,26 +1210,35 @@ const AltaProyectos = {
       } else if (this.select_planta_calendario != "") {
         tomaPlanta = this.select_planta_calendario;
       }
-      console.log("Planta de proyecto:",tomaPlanta,"ID Proyecto:",idProyecto,"Año del calendario",this.select_anio_calendario)
+      console.log(
+        "Planta de proyecto:",
+        tomaPlanta,
+        "ID Proyecto:",
+        idProyecto,
+        "Año del calendario",
+        this.select_anio_calendario,
+      );
       axios
         .post("sumaPersonalizadaController.php", {
           anio: this.select_anio_calendario,
           planta: tomaPlanta,
           idProyecto: idProyecto,
         })
-       .then((response) => {
-            const data = response.data;
-            console.log("Respuesta del controlador de suma personalizada:", data);
-            if (data.success === "agregado" || data.success === "eliminado") {
-                console.log("Proyecto agregado/eliminado correctamente.");
-                this.consultasGlobales();
-            }else {
-                console.error("Error al guardar:", data.mensaje || data.success);
-            }
-           
+        .then((response) => {
+          const data = response.data;
+          console.log("Respuesta del controlador de suma personalizada:", data);
+          if (data.success === "agregado" || data.success === "eliminado") {
+            console.log("Proyecto agregado/eliminado correctamente.");
+            this.consultasGlobales();
+          } else {
+            console.error("Error al guardar:", data.mensaje || data.success);
+          }
         })
         .catch((error) => {
-            console.error("Error en la petición:", error.response?.data || error.message);
+          console.error(
+            "Error en la petición:",
+            error.response?.data || error.message,
+          );
         });
     },
 
@@ -5027,6 +5036,9 @@ const AltaProyectos = {
             ? JSON.parse(proyecto.referencia)
             : [];
 
+          let eads_crudo = proyecto.id_eads ? JSON.parse(proyecto.id_eads) : [];
+          let ids_eads = Array.isArray(eads_crudo) ? eads_crudo : [];
+
           let impactos_reconstruidos = [];
 
           if (
@@ -5037,11 +5049,7 @@ const AltaProyectos = {
           ) {
             for (let i = 0; i < impacto_ambientales.length; i++) {
               let conceptoCrudo = impacto_ambientales[i] || "";
-              let alcance =
-                emisiones_alcances[i] !== null &&
-                emisiones_alcances[i] !== undefined
-                  ? String(emisiones_alcances[i])
-                  : "";
+              let alcance = emisiones_alcances[i] || "";
               let conceptoPuro = conceptoCrudo;
               let umExtraida = "";
 
@@ -5063,6 +5071,7 @@ const AltaProyectos = {
 
               impactos_reconstruidos.push({
                 id: null,
+                id_eads: ids_eads[i] || null,
                 diagrama: diagramas[i] || "",
                 tipo: tipos[i] || "",
                 concepto: conceptoPuro,
@@ -5082,6 +5091,7 @@ const AltaProyectos = {
             this.emisiones_aspectos_ambientales_proyecto_ead = [
               {
                 id: null,
+                id_eads: null,
                 diagrama: "",
                 tipo: "",
                 concepto: "",
