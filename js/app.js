@@ -5022,8 +5022,10 @@ const AltaProyectos = {
           let impacto_ambientales = proyecto.impacto_ambiental
             ? JSON.parse(proyecto.impacto_ambiental)
             : [];
-          let emisiones_alcances = proyecto.impacto_ambiental_emisiones
-            ? JSON.parse(proyecto.impacto_ambiental_emisiones)
+          let emisiones_alcances_raw =
+            proyecto.alcance || proyecto.impacto_ambiental_emisiones;
+          let emisiones_alcances = emisiones_alcances_raw
+            ? JSON.parse(emisiones_alcances_raw)
             : [];
           let diagramas = proyecto.diagrama_proceso
             ? JSON.parse(proyecto.diagrama_proceso)
@@ -5069,8 +5071,8 @@ const AltaProyectos = {
                 conceptoPuro = conceptoPuro.replace(/\([^)]+\)/g, "").trim();
               }
 
-              if (alcance.includes("Alcance")) {
-                alcance = alcance.replace("Alcance", "").trim();
+              if (alcance.toLowerCase().includes("alcance")) {
+                alcance = alcance.replace(/Alcance/i, "").trim();
               }
 
               impactos_reconstruidos.push({
