@@ -5022,8 +5022,8 @@ const AltaProyectos = {
           let impacto_ambientales = proyecto.impacto_ambiental
             ? JSON.parse(proyecto.impacto_ambiental)
             : [];
-          let emisiones_alcances = proyecto.alcance
-            ? JSON.parse(proyecto.alcance)
+          let emisiones_alcances = proyecto.impacto_ambiental_emisiones
+            ? JSON.parse(proyecto.impacto_ambiental_emisiones)
             : [];
           let diagramas = proyecto.diagrama_proceso
             ? JSON.parse(proyecto.diagrama_proceso)
@@ -5049,7 +5049,11 @@ const AltaProyectos = {
           ) {
             for (let i = 0; i < impacto_ambientales.length; i++) {
               let conceptoCrudo = impacto_ambientales[i] || "";
-              let alcance = emisiones_alcances[i] || "";
+              let alcance =
+                emisiones_alcances[i] !== null &&
+                emisiones_alcances[i] !== undefined
+                  ? String(emisiones_alcances[i])
+                  : "";
               let conceptoPuro = conceptoCrudo;
               let umExtraida = "";
 
