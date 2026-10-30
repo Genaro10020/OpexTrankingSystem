@@ -541,6 +541,21 @@ function insertarProyecto($folio, $fecha_alta_invertida, $nombre_proyecto, $fuen
                 $id_equipo_ead = null;
                 $nombre_indicador_ead = $nombre_proyecto;
 
+                 if (!empty($impactos_completos)) {
+                    $stmtImpacto = $conexion->prepare("INSERT INTO impacto_ambiental_proyecto (id_proyecto, impacto_ambiental) VALUES (?, ?)");
+                    foreach ($impactos_completos as $imp) {
+                        if (empty($imp['concepto']) || $imp['concepto'] === 'Sin Impacto') continue;
+                        
+                        $concepto = trim($imp['concepto']);
+                        $um = trim($imp['um'] ?? '');
+                        $texto_impacto = $um !== '' ? "$concepto ($um)" : $concepto;
+                        
+                        $stmtImpacto->bind_param("is", $ultimo_id, $texto_impacto);
+                        $stmtImpacto->execute();
+                    }
+                    $stmtImpacto->close();
+                }
+
                 foreach ($impactos_completos as $imp) {
                     $id_ead_row = $imp["id_eads"] ?? $imp["Id_eads"] ?? null;
                     if (!empty($id_ead_row)) {
@@ -716,12 +731,32 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
 
     if ($stmt->execute()) {
         $estado = true;
+
+        $stmtDelImpacto = $conexion->prepare("DELETE FROM impacto_ambiental_proyecto WHERE id_proyecto = ?");
+        $stmtDelImpacto->bind_param("i", $id);
+        $stmtDelImpacto->execute();
+        $stmtDelImpacto->close();
+
+        if (!empty($impactos_completos)) {
+            $stmtImpacto = $conexion->prepare("INSERT INTO impacto_ambiental_proyecto (id_proyecto, impacto_ambiental) VALUES (?, ?)");
+            foreach ($impactos_completos as $imp) {
+                if (empty($imp['concepto']) || $imp['concepto'] === 'Sin Impacto') continue;
+                
+                $concepto = trim($imp['concepto']);
+                $um = trim($imp['um'] ?? '');
+                $texto_impacto = $um !== '' ? "$concepto ($um)" : $concepto;
+                
+                $stmtImpacto->bind_param("is", $id, $texto_impacto);
+                $stmtImpacto->execute();
+            }
+            $stmtImpacto->close();
+        }
+
         $conexionOPEX = $conexion; 
         
         include("conexionEAD.php"); 
         $conexionEAD = $conexion;   
         
-        $conexion = $conexionOPEX;  
         
         if (isset($conexionEAD) && !$conexionEAD->connect_errno) {
             $conexionEAD->set_charset("utf8");
@@ -795,7 +830,7 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
             
             if ($hubo_inserciones) {
                 $json_ids_actualizado = json_encode($nuevos_ids_eads, JSON_UNESCAPED_UNICODE);
-                $stmtUpdateOpex = $conexion->prepare("UPDATE proyectos_creados SET id_eads = ? WHERE id = ?");
+                $stmtUpdateOpex = $conexionOPEX->prepare("UPDATE proyectos_creados SET id_eads = ? WHERE id = ?");
                 if ($stmtUpdateOpex) {
                     $stmtUpdateOpex->bind_param("si", $json_ids_actualizado, $id);
                     $stmtUpdateOpex->execute();
@@ -823,8 +858,8 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
                 $mp = $mesesPresupuestados[$i] ?? '';
 
                 $updPlan = "UPDATE plan_mensual_por_proyecto SET mes='$mesXAnio[$i]', anio='$anioXmes[$i]', ahorro_co='$co', ahorro_d='$ad', ahorro_s='$as', mes_presupuestado='$mp' WHERE id='$idsPlanMesual[$i]' AND id_proyecto='$id'";
-                if ($conexion->query($updPlan) !== TRUE) {
-                    $estado = $conexion->error . " Incorrecto";
+                if ($conexionOPEX->query($updPlan) !== TRUE) {
+                    $estado = $conexionOPEX->error . " Incorrecto";
                     break;
                 } else {
                     $estado = true;
@@ -839,8 +874,8 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
                     $mp = $mesesPresupuestados[$i] ?? '';
 
                     $insPlan = "INSERT INTO plan_mensual_por_proyecto (id_proyecto, mes, anio, ahorro_co, ahorro_d, ahorro_s, mes_presupuestado) VALUES ('$id', '$mesXAnio[$i]', '$anioXmes[$i]', '$co', '$ad', '$as', '$mp')";
-                    if ($conexion->query($insPlan) !== TRUE) {
-                        $estado = $conexion->error . " Incorrecto";
+                    if ($conexionOPEX->query($insPlan) !== TRUE) {
+                        $estado = $conexionOPEX->error . " Incorrecto";
                         break;
                     } else {
                         $estado = true;
