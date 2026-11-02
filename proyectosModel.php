@@ -742,11 +742,34 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
 
     if ($stmt->execute()) {
         $estado = true;
-        $conexionOPEX = $conexion; 
         
+        $impactos_nuevos = json_decode($impacto_ambiental, true);
+        if (!is_array($impactos_nuevos)) $impactos_nuevos = [];
+
+        $impactos_existentes = [];
+        $resImpactos = $conexion->query("SELECT impacto_ambiental FROM impacto_ambiental_proyecto WHERE id_proyecto = '$id'");
+        if ($resImpactos) {
+            while ($row = $resImpactos->fetch_assoc()) {
+                $impactos_existentes[] = $row['impacto_ambiental'];
+            }
+        }
+
+        $impactos_a_borrar = array_diff($impactos_existentes, $impactos_nuevos);
+
+        if (!empty($impactos_a_borrar)) {
+            $stmtDelImpactos = $conexion->prepare("DELETE FROM impacto_ambiental_proyecto WHERE id_proyecto = ? AND impacto_ambiental = ?");
+            if ($stmtDelImpactos) {
+                foreach ($impactos_a_borrar as $imp_borrar) {
+                    $stmtDelImpactos->bind_param("is", $id, $imp_borrar);
+                    $stmtDelImpactos->execute();
+                }
+                $stmtDelImpactos->close();
+            }
+        }
+
+        $conexionOPEX = $conexion; 
         include("conexionEAD.php"); 
         $conexionEAD = $conexion;   
-        
         $conexion = $conexionOPEX;  
         
         if (isset($conexionEAD) && !$conexionEAD->connect_errno) {
@@ -817,13 +840,13 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
 
             $ids_eads_antiguos_validos = array_filter($ids_eads_antiguos);
             $nuevos_ids_eads_validos = array_filter($nuevos_ids_eads);
-            $ids_a_borrar = array_diff($ids_eads_antiguos_validos, $nuevos_ids_eads_validos);
+            $ids_a_borrar_ead = array_diff($ids_eads_antiguos_validos, $nuevos_ids_eads_validos);
 
-            if (!empty($ids_a_borrar)) {
+            if (!empty($ids_a_borrar_ead)) {
                 $stmtDeleteEAD = $conexionEAD->prepare("DELETE FROM reportes_impactos_ambientales_proyectos WHERE id = ?");
                 if ($stmtDeleteEAD) {
-                    foreach ($ids_a_borrar as $id_borrar) {
-                        $stmtDeleteEAD->bind_param("i", $id_borrar);
+                    foreach ($ids_a_borrar_ead as $id_borrar_ead) {
+                        $stmtDeleteEAD->bind_param("i", $id_borrar_ead);
                         $stmtDeleteEAD->execute();
                     }
                     $stmtDeleteEAD->close();
@@ -834,7 +857,7 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
             if ($stmtInsertEAD) $stmtInsertEAD->close();
             $conexionEAD->close();
             
-            if ($hubo_inserciones || !empty($ids_a_borrar)) {
+            if ($hubo_inserciones || !empty($ids_a_borrar_ead)) {
                 $json_ids_actualizado = json_encode($nuevos_ids_eads, JSON_UNESCAPED_UNICODE);
                 $stmtUpdateOpex = $conexion->prepare("UPDATE proyectos_creados SET id_eads = ? WHERE id = ?");
                 if ($stmtUpdateOpex) {
@@ -974,6 +997,14 @@ function eliminarProyecto($id)
             if (is_string($dec_borrar)) { $dec_borrar = json_decode($dec_borrar, true); }
             $ids_eads_a_borrar = is_array($dec_borrar) ? $dec_borrar : [];
         }
+    }
+
+    $deleteOpexImpactos = "DELETE FROM impacto_ambiental_proyecto WHERE id_proyecto=?";
+    $stmtOpexImpactos = $conexion->prepare($deleteOpexImpactos);
+    if ($stmtOpexImpactos) {
+        $stmtOpexImpactos->bind_param("i", $id);
+        $stmtOpexImpactos->execute();
+        $stmtOpexImpactos->close();
     }
 
     $delete = "DELETE FROM proyectos_creados WHERE id=?";
