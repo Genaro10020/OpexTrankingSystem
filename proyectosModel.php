@@ -669,6 +669,17 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
     global $conexion;
     $estado = false;
 
+    $ids_eads_antiguos = [];
+    $consultaAntigua = $conexion->query("SELECT id_eads FROM proyectos_creados WHERE id = '$id'");
+    if ($consultaAntigua && $consultaAntigua->num_rows > 0) {
+        $filaAntigua = $consultaAntigua->fetch_assoc();
+        if (!empty($filaAntigua['id_eads'])) {
+            $dec_antiguos = json_decode($filaAntigua['id_eads'], true);
+            if (is_string($dec_antiguos)) { $dec_antiguos = json_decode($dec_antiguos, true); }
+            $ids_eads_antiguos = is_array($dec_antiguos) ? $dec_antiguos : [];
+        }
+    }
+
     $nomina = '';
     $nombre_responsable = '';
     $correo_responsable = '';
@@ -731,32 +742,12 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
 
     if ($stmt->execute()) {
         $estado = true;
-
-        $stmtDelImpacto = $conexion->prepare("DELETE FROM impacto_ambiental_proyecto WHERE id_proyecto = ?");
-        $stmtDelImpacto->bind_param("i", $id);
-        $stmtDelImpacto->execute();
-        $stmtDelImpacto->close();
-
-        if (!empty($impactos_completos)) {
-            $stmtImpacto = $conexion->prepare("INSERT INTO impacto_ambiental_proyecto (id_proyecto, impacto_ambiental) VALUES (?, ?)");
-            foreach ($impactos_completos as $imp) {
-                if (empty($imp['concepto']) || $imp['concepto'] === 'Sin Impacto') continue;
-                
-                $concepto = trim($imp['concepto']);
-                $um = trim($imp['um'] ?? '');
-                $texto_impacto = $um !== '' ? "$concepto ($um)" : $concepto;
-                
-                $stmtImpacto->bind_param("is", $id, $texto_impacto);
-                $stmtImpacto->execute();
-            }
-            $stmtImpacto->close();
-        }
-
         $conexionOPEX = $conexion; 
         
         include("conexionEAD.php"); 
         $conexionEAD = $conexion;   
         
+        $conexion = $conexionOPEX;  
         
         if (isset($conexionEAD) && !$conexionEAD->connect_errno) {
             $conexionEAD->set_charset("utf8");
@@ -823,14 +814,29 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
                     }
                 }
             }
+
+            $ids_eads_antiguos_validos = array_filter($ids_eads_antiguos);
+            $nuevos_ids_eads_validos = array_filter($nuevos_ids_eads);
+            $ids_a_borrar = array_diff($ids_eads_antiguos_validos, $nuevos_ids_eads_validos);
+
+            if (!empty($ids_a_borrar)) {
+                $stmtDeleteEAD = $conexionEAD->prepare("DELETE FROM reportes_impactos_ambientales_proyectos WHERE id = ?");
+                if ($stmtDeleteEAD) {
+                    foreach ($ids_a_borrar as $id_borrar) {
+                        $stmtDeleteEAD->bind_param("i", $id_borrar);
+                        $stmtDeleteEAD->execute();
+                    }
+                    $stmtDeleteEAD->close();
+                }
+            }
             
             if ($stmtUpdateEAD) $stmtUpdateEAD->close();
             if ($stmtInsertEAD) $stmtInsertEAD->close();
             $conexionEAD->close();
             
-            if ($hubo_inserciones) {
+            if ($hubo_inserciones || !empty($ids_a_borrar)) {
                 $json_ids_actualizado = json_encode($nuevos_ids_eads, JSON_UNESCAPED_UNICODE);
-                $stmtUpdateOpex = $conexionOPEX->prepare("UPDATE proyectos_creados SET id_eads = ? WHERE id = ?");
+                $stmtUpdateOpex = $conexion->prepare("UPDATE proyectos_creados SET id_eads = ? WHERE id = ?");
                 if ($stmtUpdateOpex) {
                     $stmtUpdateOpex->bind_param("si", $json_ids_actualizado, $id);
                     $stmtUpdateOpex->execute();
@@ -858,8 +864,8 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
                 $mp = $mesesPresupuestados[$i] ?? '';
 
                 $updPlan = "UPDATE plan_mensual_por_proyecto SET mes='$mesXAnio[$i]', anio='$anioXmes[$i]', ahorro_co='$co', ahorro_d='$ad', ahorro_s='$as', mes_presupuestado='$mp' WHERE id='$idsPlanMesual[$i]' AND id_proyecto='$id'";
-                if ($conexionOPEX->query($updPlan) !== TRUE) {
-                    $estado = $conexionOPEX->error . " Incorrecto";
+                if ($conexion->query($updPlan) !== TRUE) {
+                    $estado = $conexion->error . " Incorrecto";
                     break;
                 } else {
                     $estado = true;
@@ -874,8 +880,8 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
                     $mp = $mesesPresupuestados[$i] ?? '';
 
                     $insPlan = "INSERT INTO plan_mensual_por_proyecto (id_proyecto, mes, anio, ahorro_co, ahorro_d, ahorro_s, mes_presupuestado) VALUES ('$id', '$mesXAnio[$i]', '$anioXmes[$i]', '$co', '$ad', '$as', '$mp')";
-                    if ($conexionOPEX->query($insPlan) !== TRUE) {
-                        $estado = $conexionOPEX->error . " Incorrecto";
+                    if ($conexion->query($insPlan) !== TRUE) {
+                        $estado = $conexion->error . " Incorrecto";
                         break;
                     } else {
                         $estado = true;
