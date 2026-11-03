@@ -743,6 +743,21 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
     if ($stmt->execute()) {
         $estado = true;
         
+        if (!empty($impactos_completos)) {
+            $stmtImpacto = $conexion->prepare("INSERT INTO impacto_ambiental_proyecto (id_proyecto, impacto_ambiental) VALUES (?, ?)");
+            foreach ($impactos_completos as $imp) {
+                if (empty($imp['concepto']) || $imp['concepto'] === 'Sin Impacto') continue;
+                
+                $concepto = trim($imp['concepto']);
+                $um = trim($imp['um'] ?? '');
+                $texto_impacto = $um !== '' ? "$concepto ($um)" : $concepto;
+                
+                $stmtImpacto->bind_param("is", $id, $texto_impacto);
+                $stmtImpacto->execute();
+            }
+            $stmtImpacto->close();
+        }
+
         $impactos_nuevos = json_decode($impacto_ambiental, true);
         if (!is_array($impactos_nuevos)) $impactos_nuevos = [];
 
