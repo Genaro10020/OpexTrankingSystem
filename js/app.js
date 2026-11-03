@@ -117,6 +117,7 @@ const AltaProyectos = {
       flagEditCOMes: "",
       flagEditAhorroDuroMes: "",
       flagEditAhorroSuaveMes: "",
+      aplicarNA: false,
 
       /*Planta*/ /*Área*/ /*Departamento*/ nueva: "",
       nuevoNombre: "",
@@ -2998,6 +2999,40 @@ const AltaProyectos = {
             confirmButtonText: "Aceptar",
           });
         });
+    },
+
+    marcarImpactoNoAplica(impacto) {
+          Swal.fire({
+              title: '¿Estás seguro?',
+              text: 'Los campos se marcaran con: (N/A). ¿Deseas continuar?',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#1c7836',
+              cancelButtonColor: '#6c757d',
+              confirmButtonText: 'Sí, marcar como N/A',
+              cancelButtonText: 'Cancelar'
+          }).then((result) => {
+              if (result.isConfirmed) {
+
+                  impacto.diagrama = 'N/A';
+                  impacto.tipo = 'N/A';
+                  impacto.concepto = 'N/A';
+                  impacto.alcance = 0;
+                  impacto.um = 'N/A';
+                  impacto.referencia = 'N/A';
+
+                  this.aplicarNA = true;
+              }
+          });
+      },
+    reviertirNoAplica(impacto) {
+        impacto.diagrama = '';
+        impacto.tipo = '';
+        impacto.concepto = '';
+        impacto.alcance = '';
+        impacto.um = '';
+        impacto.referencia = '';
+        this.aplicarNA = false;
     },
     nuevaFilaEmision() {
       this.emisiones_aspectos_ambientales_proyecto_ead.push({
