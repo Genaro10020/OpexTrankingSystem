@@ -743,33 +743,38 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
     if ($stmt->execute()) {
         $estado = true;
         
+        $impactos_nuevos_formateados = [];
         if (!empty($impactos_completos)) {
-            $stmtImpacto = $conexion->prepare("INSERT INTO impacto_ambiental_proyecto (id_proyecto, impacto_ambiental) VALUES (?, ?)");
             foreach ($impactos_completos as $imp) {
-                if (empty($imp['concepto']) || $imp['concepto'] === 'Sin Impacto') continue;
-                
-                $concepto = trim($imp['concepto']);
-                $um = trim($imp['um'] ?? '');
+                if (empty($imp["concepto"]) || $imp["concepto"] === "Sin Impacto") continue;
+                $concepto      = trim($imp["concepto"]);
+                $um            = trim($imp["um"] ?? "");
                 $texto_impacto = $um !== '' ? "$concepto ($um)" : $concepto;
-                
-                $stmtImpacto->bind_param("is", $id, $texto_impacto);
-                $stmtImpacto->execute();
+                $impactos_nuevos_formateados[] = $texto_impacto;
             }
-            $stmtImpacto->close();
         }
-
-        $impactos_nuevos = json_decode($impacto_ambiental, true);
-        if (!is_array($impactos_nuevos)) $impactos_nuevos = [];
 
         $impactos_existentes = [];
         $resImpactos = $conexion->query("SELECT impacto_ambiental FROM impacto_ambiental_proyecto WHERE id_proyecto = '$id'");
         if ($resImpactos) {
             while ($row = $resImpactos->fetch_assoc()) {
-                $impactos_existentes[] = $row['impacto_ambiental'];
+                $impactos_existentes[] = $row["impacto_ambiental"];
             }
         }
 
-        $impactos_a_borrar = array_diff($impactos_existentes, $impactos_nuevos);
+        $impactos_a_insertar = array_diff($impactos_nuevos_formateados, $impactos_existentes);
+        $impactos_a_borrar   = array_diff($impactos_existentes, $impactos_nuevos_formateados);
+
+        if (!empty($impactos_a_insertar)) {
+            $stmtInsImpactos = $conexion->prepare("INSERT INTO impacto_ambiental_proyecto (id_proyecto, impacto_ambiental) VALUES (?, ?)");
+            if ($stmtInsImpactos) {
+                foreach ($impactos_a_insertar as $imp_insert) {
+                    $stmtInsImpactos->bind_param("is", $id, $imp_insert);
+                    $stmtInsImpactos->execute();
+                }
+                $stmtInsImpactos->close();
+            }
+        }
 
         if (!empty($impactos_a_borrar)) {
             $stmtDelImpactos = $conexion->prepare("DELETE FROM impacto_ambiental_proyecto WHERE id_proyecto = ? AND impacto_ambiental = ?");
