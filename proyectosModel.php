@@ -1007,20 +1007,10 @@ function eliminarProyecto($id)
 {
     global $conexion;
     $estado = false;
-    
-    $ids_eads_a_borrar = [];
-    $consultaIDs = $conexion->query("SELECT id_eads FROM proyectos_creados WHERE id = '$id'");
-    if ($consultaIDs && $consultaIDs->num_rows > 0) {
-        $fila = $consultaIDs->fetch_assoc();
-        if (!empty($fila['id_eads'])) {
-            $dec_borrar = json_decode($fila['id_eads'], true);
-            if (is_string($dec_borrar)) { $dec_borrar = json_decode($dec_borrar, true); }
-            $ids_eads_a_borrar = is_array($dec_borrar) ? $dec_borrar : [];
-        }
-    }
 
     $deleteOpexImpactos = "DELETE FROM impacto_ambiental_proyecto WHERE id_proyecto=?";
     $stmtOpexImpactos = $conexion->prepare($deleteOpexImpactos);
+
     if ($stmtOpexImpactos) {
         $stmtOpexImpactos->bind_param("i", $id);
         $stmtOpexImpactos->execute();
@@ -1030,31 +1020,13 @@ function eliminarProyecto($id)
     $delete = "DELETE FROM proyectos_creados WHERE id=?";
     $stmt = $conexion->prepare($delete);
     $stmt->bind_param("i", $id);
+
     if ($stmt->execute()) {
         $estado = true;
-        
-        $ids_eads_a_borrar = array_filter($ids_eads_a_borrar);
-        if (!empty($ids_eads_a_borrar)) {
-            $conexionOPEX = $conexion; 
-            include("conexionEAD.php"); 
-            $conexionEAD = $conexion;   
-            $conexion = $conexionOPEX;
-            
-            if (isset($conexionEAD) && !$conexionEAD->connect_errno) {
-                $stmtDeleteEAD = $conexionEAD->prepare("DELETE FROM reportes_impactos_ambientales_proyectos WHERE id = ?");
-                if ($stmtDeleteEAD) {
-                    foreach ($ids_eads_a_borrar as $id_borrar) {
-                        $stmtDeleteEAD->bind_param("i", $id_borrar);
-                        $stmtDeleteEAD->execute();
-                    }
-                    $stmtDeleteEAD->close();
-                }
-                $conexionEAD->close();
-            }
-        }
     }
 
     $stmt->close();
+
     return $estado;
 }
 
