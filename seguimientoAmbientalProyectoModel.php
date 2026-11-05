@@ -77,6 +77,7 @@ function consultarSeguimientos($anio)
     $sumasPorObjetivo = [];
     $sume = [];
     // Iterar sobre los objetivos
+    $idsProyectosInvolucrados = [];
     foreach ($objetivosNombre as $objetivoNombre) {
         // Buscar el nombre del objetivo en el arreglo de posiciones
         if (isset($posicionNombresconIdsObjetivos[$objetivoNombre])) {
@@ -98,29 +99,32 @@ function consultarSeguimientos($anio)
                 $consulta = "SELECT 
                 DISTINCT registros_impacto_ambiental.mes,registros_impacto_ambiental.ahorro_suave,registros_impacto_ambiental.ahorro_duro, registros_impacto_ambiental.tons_co2 
                 FROM registros_impacto_ambiental JOIN  impacto_ambiental_proyecto ON impacto_ambiental_proyecto.id = registros_impacto_ambiental.id_impacto_ambiental_proyecto 
-                WHERE impacto_ambiental_proyecto.id_proyecto = '$idProyecto' AND registros_impacto_ambiental.anio LIKE '$anio%'";
+                WHERE impacto_ambiental_proyecto.id_proyecto = '$idProyecto' AND registros_impacto_ambiental.anio = '$anio'";
                 $resultado = $conexion->query($consulta);
                 // Verificar si la consulta fue exitosa
                 if ($resultado) {
+                   
                     $estadoSeguimiento = true;
                     $pilar=$pilaresArreglos[$idProyecto][0];
                     // Procesar los resultados y almacenarlos en el array
                     while ($fila = $resultado->fetch_assoc()) {
-                       
+                       if (!in_array($idProyecto, $idsProyectosInvolucrados)) {
+                                $idsProyectosInvolucrados[] = $idProyecto;
+                            }
                         // Convertir la columna "tons_co2" a float y sumarla
                         $ahorro_duro = str_replace(['$', ','], '', $fila['ahorro_duro']); // Eliminar símbolo de dólar y comas
-                        $ahorro_suave = str_replace(['$', ','], '', $fila['ahorro_suave']); // Eliminar símbolo de dólar y comas
+                        //$ahorro_suave = str_replace(['$', ','], '', $fila['ahorro_suave']); // Eliminar símbolo de dólar y comas
                         //$sumeAhorroDuro[] = $sumaAhorroDuro;
 
                         $sumaAhorroDuro += floatval($ahorro_duro);
-                        $sumaAhorroSuave += floatval($ahorro_suave);
+                        //$sumaAhorroSuave += floatval($ahorro_suave);
                         $ahorros[] = $sumaAhorroDuro;
                         $idProyets[] = $idProyecto;
 
                         $sumaTonsCo2 += floatval($fila['tons_co2']);
                         //$sumaDato += floatval($fila['dato']);
 
-                        $valor = $sumaAhorroDuro + $sumaAhorroSuave;
+                        $valor = $sumaAhorroDuro ;//+ $sumaAhorroSuave
                         //$sustentable = $sumaTonsCo2 + $sumaDato;
                         $sustentable = $sumaTonsCo2;
                         // Formatear la suma de sustentable con formato de moneda
@@ -144,7 +148,7 @@ function consultarSeguimientos($anio)
     }
 
     //$objetivosNombre, $idsConcidenConCadaPilar, $posicionNombresconIdsObjetivos
-    return array($pilasconSiglas, $estadoPilar, $estadoObjetivos, $estadoProyectos, $sumasPorObjetivo, $estadoSeguimiento,$pilaresArreglos,$estadoProyectos,$anio,$ahorros,$idProyets);
+    return array($pilasconSiglas, $estadoPilar, $estadoObjetivos, $estadoProyectos, $sumasPorObjetivo, $estadoSeguimiento,$pilaresArreglos,$objetivosArreglos,$anio,$ahorros,$objetivosNombre,$posicionNombresconIdsObjetivos,$idsProyectosInvolucrados);
 }
 
 
