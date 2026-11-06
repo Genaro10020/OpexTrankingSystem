@@ -84,7 +84,7 @@ if (isset($_SESSION['nombre'])) {
 
                     <!--Modal Alta Proyectos-->
                     <div id="modal-alta-proyecto" class="modal text-start" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
-                       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width: 80%; width: 80%;">
+                       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width: 95%; width: 95%;">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h6 class="modal-title me-5"> {{titulo_modal}}</h6><label style="font-size: 16px; color: #ec9826; text-shadow: 0px 1px #fff;" v-show="actualizar_proyecto">{{titulo_nombre_proyecto}}</label>
@@ -326,7 +326,7 @@ if (isset($_SESSION['nombre'])) {
                                     </div> <!-- Fin ROW Superior -->
 
                                     <!-- IMPACTOS AMBIENTALES -->
-                                    <div class="row m-0 w-100 mt-4 mb-4">
+                                    <div class="col-12 pb-2">
                                         <div class="col-12 p-0 opex-impactos-scope">
                                             <?php 
                                                 $origenOPEX = true; 
