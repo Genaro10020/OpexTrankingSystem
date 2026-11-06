@@ -755,33 +755,89 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
         }
 
         $impactos_existentes = [];
-        $resImpactos = $conexion->query("SELECT impacto_ambiental FROM impacto_ambiental_proyecto WHERE id_proyecto = '$id'");
-        if ($resImpactos) {
-            while ($row = $resImpactos->fetch_assoc()) {
-                $impactos_existentes[] = $row["impacto_ambiental"];
+        $stmtSelect = $conexion->prepare("SELECT id, impacto_ambiental FROM impacto_ambiental_proyecto WHERE id_proyecto = ? ORDER BY id ASC");
+
+        $stmtSelect->bind_param("i", $id);
+        $stmtSelect->execute();
+        $resImpactos = $stmtSelect->get_result();
+
+        while ($row = $resImpactos->fetch_assoc()) {
+            $impactos_existentes[] = $row;
+        }
+        $stmtSelect->close();
+
+        $impactos_nuevos = array_values($impactos_nuevos_formateados);
+
+        $total_existentes = count($impactos_existentes);
+        $total_nuevos = count($impactos_nuevos);
+
+        $limite = min($total_existentes, $total_nuevos);
+
+        // Actualizar los registros existentes por posición
+        if ($limite > 0) {
+            $stmtUpdate = $conexion->prepare("UPDATE impacto_ambiental_proyecto SET impacto_ambiental = ? WHERE id = ? AND id_proyecto = ?
+            ");
+
+            for ($i = 0; $i < $limite; $i++) {
+                $nuevo_impacto = $impactos_nuevos[$i];
+                $id_registro = $impactos_existentes[$i]['id'];
+
+                $stmtUpdate->bind_param("sii", $nuevo_impacto, $id_registro, $id);
+                $stmtUpdate->execute();
             }
+
+            $stmtUpdate->close();
         }
 
-        $impactos_a_insertar = array_diff($impactos_nuevos_formateados, $impactos_existentes);
-        $impactos_a_borrar   = array_diff($impactos_existentes, $impactos_nuevos_formateados);
+        // Insertar los impactos adicionales
+        if ($total_nuevos > $total_existentes) {
+            $stmtInsert = $conexion->prepare("
+                INSERT INTO impacto_ambiental_proyecto
+                (id_proyecto, impacto_ambiental)
+                VALUES (?, ?)
+            ");
 
-        if (!empty($impactos_a_insertar)) {
-            $stmtInsImpactos = $conexion->prepare("INSERT INTO impacto_ambiental_proyecto (id_proyecto, impacto_ambiental) VALUES (?, ?)");
-            if ($stmtInsImpactos) {
-                foreach ($impactos_a_insertar as $imp_insert) {
-                    $stmtInsImpactos->bind_param("is", $id, $imp_insert);
-                    $stmtInsImpactos->execute();
+            for ($i = $total_existentes; $i < $total_nuevos; $i++) {
+                $nuevo_impacto = $impactos_nuevos[$i];
+
+                $stmtInsert->bind_param("is", $id, $nuevo_impacto);
+                $stmtInsert->execute();
+            }
+
+            $stmtInsert->close();
+        }
+
+       // Eliminar los registros sobrantes
+        if ($total_nuevos < $total_existentes) {
+            $stmtDelete = $conexion->prepare("DELETE FROM impacto_ambiental_proyecto WHERE id = ? AND id_proyecto = ?");
+
+            if ($stmtDelete) {
+                for ($i = $total_nuevos; $i < $total_existentes; $i++) {
+                    $id_registro = $impactos_existentes[$i]['id'];
+                    $stmtDelete->bind_param("ii", $id_registro, $id);
+                    try {
+                        $stmtDelete->execute();
+                    } catch (mysqli_sql_exception $e) {
+                        continue;
+                    }
                 }
-                $stmtInsImpactos->close();
+                $stmtDelete->close();
             }
         }
 
+        // Eliminar impactos seleccionados para borrar
         if (!empty($impactos_a_borrar)) {
             $stmtDelImpactos = $conexion->prepare("DELETE FROM impacto_ambiental_proyecto WHERE id_proyecto = ? AND impacto_ambiental = ?");
+
             if ($stmtDelImpactos) {
                 foreach ($impactos_a_borrar as $imp_borrar) {
                     $stmtDelImpactos->bind_param("is", $id, $imp_borrar);
-                    $stmtDelImpactos->execute();
+
+                    try {
+                        $stmtDelImpactos->execute();
+                    } catch (mysqli_sql_exception $e) {
+                        continue;
+                    }
                 }
                 $stmtDelImpactos->close();
             }

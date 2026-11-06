@@ -6362,8 +6362,10 @@ const AltaProyectos = {
             }
           }
         })
-        .catch((error) => {
-          console.log("Error :-( ", error);
+        .catch(error => {
+          console.log('Error:', error.response?.data);
+          console.log('Status:', error.response?.status);
+          console.log('Mensaje:', error.message);
         });
     },
 
