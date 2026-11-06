@@ -6187,7 +6187,7 @@ const AltaProyectos = {
         var nombre_objetivo = this.checkObjetivos[i].split("<->")[1];
         var siglas = this.checkObjetivos[i].split("<->")[3];
         var orden = this.checkObjetivos[i].split("<->")[4];
-        objetivos_nombres.push(nombre_objetivo + "  " + siglas + " ");
+        objetivos_nombres.push(nombre_objetivo + " (" + siglas + ")");
         objetivoOrden += orden;
         siglasObjetivosConcatenado += "-" + siglas;
       }
