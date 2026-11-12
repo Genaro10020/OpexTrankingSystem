@@ -7220,29 +7220,50 @@ const AltaProyectos = {
         })
         .finally(() => {});
     },
-    enviarCorreoRechazo(anio, status_rechazo, enviar_a) {
-      axios
-        .post("enviarCorreoRechazo.php", {
-          correo: enviar_a,
-          nombre_proyecto: this.nombre_del_proyecto,
-          status: status_rechazo,
-          motivo: this.motivo_rechazo,
-          mes: this.mes_rechazo,
-          anio: anio,
-        })
-        .then((response) => {
-          console.log(response.data);
-          if (response.data == true) {
-            console.log("SI, envió el correo");
-          } else {
-            console.log("NO, se envió el corre.");
-          }
-        })
-        .catch((error) => {
-          console.log("Error en axios" + error);
-        })
-        .finally(() => {});
-    },
+   enviarCorreoRechazo(anio, status_rechazo, enviar_a) {
+    axios
+      .post("enviarCorreoRechazo.php", {
+        correo: enviar_a,
+        nombre_proyecto: this.nombre_del_proyecto,
+        status: status_rechazo,
+        motivo: this.motivo_rechazo,
+        mes: this.mes_rechazo,
+        anio: anio,
+      })
+      .then((response) => {
+
+        console.log("RESPUESTA COMPLETA PHP:", response.data);
+
+        if (response.data.success === true) {
+
+          console.log("SMTP ACEPTÓ EL CORREO");
+          console.log("Destinatario:", response.data.destinatario);
+          console.log("Mensaje:", response.data.mensaje);
+
+        } else {
+
+          console.error("NO SE PUDO ENVIAR EL CORREO");
+          console.error("Error:", response.data.error);
+
+        }
+
+      })
+      .catch((error) => {
+
+        console.error("ERROR EN AXIOS");
+
+        if (error.response) {
+          console.error("Código HTTP:", error.response.status);
+          console.error("Respuesta PHP:", error.response.data);
+        } else {
+          console.error("Detalle:", error.message);
+        }
+
+      })
+      .finally(() => {
+        console.log("Proceso de envío finalizado");
+      });
+  },
     consultarSeguimientos() {
       this.sumarSoloUnaVez = 0;
       axios
