@@ -766,117 +766,70 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
 
     if ($stmt->execute()) {
         $estado = true;
-        
-        $impactos_nuevos_formateados = [];
-        if (!empty($impactos_completos)) {
-            foreach ($impactos_completos as $imp) {
-                if (empty($imp["concepto"]) || $imp["concepto"] === "Sin Impacto") continue;
-                $concepto      = trim($imp["concepto"]);
-                $um            = trim($imp["um"] ?? "");
-                $texto_impacto = $um !== '' ? "$concepto ($um)" : $concepto;
-                $impactos_nuevos_formateados[] = $texto_impacto;
-            }
-        }
 
-        $impactos_existentes = [];
-        $stmtSelect = $conexion->prepare("SELECT id, impacto_ambiental FROM impacto_ambiental_proyecto WHERE id_proyecto = ? ORDER BY id ASC");
-
+        $ids_existentes_bd = [];
+        $stmtSelect = $conexion->prepare("SELECT id FROM impacto_ambiental_proyecto WHERE id_proyecto = ? ORDER BY id ASC");
         $stmtSelect->bind_param("i", $id);
         $stmtSelect->execute();
         $resImpactos = $stmtSelect->get_result();
-
-        while ($row = $resImpactos->fetch_assoc()) {
-            $impactos_existentes[] = $row;
+        while($row = $resImpactos->fetch_assoc()) {
+            $ids_existentes_bd[] = (int)$row['id'];
         }
         $stmtSelect->close();
 
-        $impactos_nuevos = array_values($impactos_nuevos_formateados);
+        $ids_que_permanecen = [];
+        $stmtUpdateImp = $conexion->prepare("UPDATE impacto_ambiental_proyecto SET impacto_ambiental = ? WHERE id = ? AND id_proyecto = ?");
+        $stmtInsertImp = $conexion->prepare("INSERT INTO impacto_ambiental_proyecto (id_proyecto, impacto_ambiental) VALUES (?, ?)");
 
-        $total_existentes = count($impactos_existentes);
-        $total_nuevos = count($impactos_nuevos);
+        if (!empty($impactos_completos)) {
+            foreach ($impactos_completos as $imp) {
+                if (empty($imp["concepto"]) || $imp["concepto"] === "Sin Impacto") continue;
 
-        $limite = min($total_existentes, $total_nuevos);
+                $concepto = trim($imp["concepto"]);
+                $um = trim($imp["id"] ?? "");
+                $texto_impacto = $um !== "" ? "$concepto ($um)" : $concepto;
+                $id_imp_bd = !empty($imp["id"]) ? (int)$imp["id"] : null;
 
-        // Actualizar los registros existentes por posición
-        if ($limite > 0) {
-            $stmtUpdate = $conexion->prepare("UPDATE impacto_ambiental_proyecto SET impacto_ambiental = ? WHERE id = ? AND id_proyecto = ?
-            ");
-
-            for ($i = 0; $i < $limite; $i++) {
-                $nuevo_impacto = $impactos_nuevos[$i];
-                $id_registro = $impactos_existentes[$i]['id'];
-
-                $stmtUpdate->bind_param("sii", $nuevo_impacto, $id_registro, $id);
-                $stmtUpdate->execute();
+                if ($id_imp_bd && in_array($id_imp_bd, $ids_existentes_bd, true)) {
+                    $stmtUpdateImp->bind_param("sii", $texto_impacto, $id_imp_bd, $id);
+                    $stmtUpdateImp->execute();
+                    $ids_que_permanecen[] = $id_imp_bd;
+                } else {
+                    $stmtInsertImp->bind_param("is", $id, $texto_impacto);
+                    $stmtInsertImp->execute();
+                    $ids_que_permanecen[] = (int)$conexion->insert_id;
+                }
             }
-
-            $stmtUpdate->close();
         }
 
-        // Insertar los impactos adicionales
-        if ($total_nuevos > $total_existentes) {
-            $stmtInsert = $conexion->prepare("
-                INSERT INTO impacto_ambiental_proyecto
-                (id_proyecto, impacto_ambiental)
-                VALUES (?, ?)
-            ");
+        $stmtUpdateImp->close();
+        $stmtInsertImp->close();
 
-            for ($i = $total_existentes; $i < $total_nuevos; $i++) {
-                $nuevo_impacto = $impactos_nuevos[$i];
-
-                $stmtInsert->bind_param("is", $id, $nuevo_impacto);
-                $stmtInsert->execute();
-            }
-
-            $stmtInsert->close();
-        }
-
-       // Eliminar los registros sobrantes
-        if ($total_nuevos < $total_existentes) {
+        $ids_a_eliminar = array_diff($ids_existentes_bd, $ids_que_permanecen);
+        if (!empty($ids_a_eliminar)) {
             $stmtCheckReg = $conexion->prepare("SELECT COUNT(*) AS total FROM registros_impacto_ambiental WHERE id_impacto_ambiental_proyecto = ?");
-            $stmtDelete   = $conexion->prepare("DELETE FROM impacto_ambiental_proyecto WHERE id = ? AND id_proyecto = ?");
+            $stmtDeleteImp = $conexion->prepare("DELETE FROM impacto_ambiental_proyecto WHERE id = ? AND id_proyecto = ?");
 
-            if ($stmtDelete && $stmtCheckReg) {
-                for ($i = $total_nuevos; $i < $total_existentes; $i++) {
-                    $id_registro = $impactos_existentes[$id]['id'];
-
-                    $stmtCheckReg->bind_param("i", $id_registro);
+            if ($stmtCheckReg && $stmtDeleteImp) {
+                foreach ($ids_a_eliminar as $id_borrar) {
+                    $stmtCheckReg->bind_param("i", $id_borrar);
                     $stmtCheckReg->execute();
                     $resCheck = $stmtCheckReg->get_result()->fetch_assoc();
 
-                    if ((int)($resCheck['total'] ?? 0) > 0) {
+                    if ((int)($resCheck["total"] ?? 0) > 0) {
                         continue;
                     }
 
-                    $stmtDelete->bind_param("ii", $id_registro, $id);
+                    $stmtDeleteImp->bind_param("ii", $id_borrar, $id);
 
                     try{
-                        $stmtDelete->execute();
-                    }catch (mysqli_sql_exception $e) {
-                        continue;
-                    }
-                }
-
-                $stmtCheckReg->close();
-                $stmtDelete->close();
-            }
-        }
-
-        // Eliminar impactos seleccionados para borrar
-        if (!empty($impactos_a_borrar)) {
-            $stmtDelImpactos = $conexion->prepare("DELETE FROM impacto_ambiental_proyecto WHERE id_proyecto = ? AND impacto_ambiental = ?");
-
-            if ($stmtDelImpactos) {
-                foreach ($impactos_a_borrar as $imp_borrar) {
-                    $stmtDelImpactos->bind_param("is", $id, $imp_borrar);
-
-                    try {
-                        $stmtDelImpactos->execute();
+                        $stmtDeleteImp->execute();
                     } catch (mysqli_sql_exception $e) {
                         continue;
                     }
                 }
-                $stmtDelImpactos->close();
+                $stmtCheckReg->close();
+                $stmtDeleteImp->close();
             }
         }
 
