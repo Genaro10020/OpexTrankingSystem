@@ -3002,37 +3002,36 @@ const AltaProyectos = {
     },
 
     marcarImpactoNoAplica(impacto) {
-          Swal.fire({
-              title: '¿Estás seguro?',
-              text: 'Los campos se marcaran con: (N/A). ¿Deseas continuar?',
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonColor: '#1c7836',
-              cancelButtonColor: '#6c757d',
-              confirmButtonText: 'Sí, marcar como N/A',
-              cancelButtonText: 'Cancelar'
-          }).then((result) => {
-              if (result.isConfirmed) {
+      Swal.fire({
+        title: "¿Estás seguro?",
+        text: "Los campos se marcaran con: (N/A). ¿Deseas continuar?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#1c7836",
+        cancelButtonColor: "#6c757d",
+        confirmButtonText: "Sí, marcar como N/A",
+        cancelButtonText: "Cancelar",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          impacto.diagrama = "N/A";
+          impacto.tipo = "N/A";
+          impacto.concepto = "N/A";
+          impacto.alcance = 0;
+          impacto.um = "N/A";
+          impacto.referencia = "N/A";
 
-                  impacto.diagrama = 'N/A';
-                  impacto.tipo = 'N/A';
-                  impacto.concepto = 'N/A';
-                  impacto.alcance = 0;
-                  impacto.um = 'N/A';
-                  impacto.referencia = 'N/A';
-
-                  this.aplicarNA = true;
-              }
-          });
-      },
+          this.aplicarNA = true;
+        }
+      });
+    },
     reviertirNoAplica(impacto) {
-        impacto.diagrama = '';
-        impacto.tipo = '';
-        impacto.concepto = '';
-        impacto.alcance = '';
-        impacto.um = '';
-        impacto.referencia = '';
-        this.aplicarNA = false;
+      impacto.diagrama = "";
+      impacto.tipo = "";
+      impacto.concepto = "";
+      impacto.alcance = "";
+      impacto.um = "";
+      impacto.referencia = "";
+      this.aplicarNA = false;
     },
     nuevaFilaEmision() {
       this.emisiones_aspectos_ambientales_proyecto_ead.push({
@@ -3048,20 +3047,26 @@ const AltaProyectos = {
       });
     },
     eliminarImpacto(index) {
+      const impacto = this.emisiones_aspectos_ambientales_proyecto_ead[index];
+
+      if (impacto && impacto.tiene_seguimiento) {
+        Swal.fire({
+          icon: "warning",
+          title: "No se puede eliminar",
+          text: "Este impacto ambiental ya cuenta con datos capturados en la pestaña de Seguimiento y no puede ser eliminado",
+          confirmButtonText: "Entendido",
+          confirmButtonColor: "#1c7836",
+        });
+
+        return;
+      }
+
       if (this.emisiones_aspectos_ambientales_proyecto_ead.length === 1) {
         Swal.fire({
           icon: "warning",
           title: "No se puede eliminar",
           text: "Debe existir al menos un impacto ambiental",
         });
-
-        return;
-      }
-
-      const impacto = this.emisiones_aspectos_ambientales_proyecto_ead[index];
-
-      if (!impacto.id) {
-        this.emisiones_aspectos_ambientales_proyecto_ead.splice(index, 1);
 
         return;
       }
@@ -5075,13 +5080,16 @@ const AltaProyectos = {
 
           let eads_crudo = proyecto.id_eads ? JSON.parse(proyecto.id_eads) : [];
           let ids_eads = Array.isArray(eads_crudo) ? eads_crudo : [];
+          let impactos_bd = Array.isArray(response.data[0][20])
+            ? response.data[0][20]
+            : [];
 
           let impactos_reconstruidos = [];
 
           if (
             impacto_ambientales.length > 0 &&
             !impacto_ambientales.some(
-              (imp) => imp === "Sin Impacto" || imp === "",
+              (imp) => imp === "Sim Impacto" || imp === "",
             )
           ) {
             for (let i = 0; i < impacto_ambientales.length; i++) {
@@ -5091,12 +5099,14 @@ const AltaProyectos = {
                 emisiones_alcances[i] !== undefined
                   ? String(emisiones_alcances[i])
                   : "";
+
               let conceptoPuro = conceptoCrudo;
               let umExtraida = "";
 
               if (conceptoCrudo.includes("->")) {
                 let partes = conceptoCrudo.split("->");
                 conceptoPuro = partes[0].trim();
+
                 if (!alcance) alcance = partes[1].trim();
               }
 
@@ -5106,13 +5116,18 @@ const AltaProyectos = {
                 conceptoPuro = conceptoPuro.replace(/\([^)]+\)/g, "").trim();
               }
 
-              if (alcance.toLowerCase().includes("alcance")) {
+              if (alcance.toLocaleLowerCase().includes("alcance")) {
                 alcance = alcance.replace(/Alcance/i, "").trim();
               }
 
+              let infoBD = impactos_bd[i] || null;
+
               impactos_reconstruidos.push({
-                id: null,
+                id: infoBD ? infoBD.id : nulll,
                 id_eads: ids_eads[i] || null,
+                tiene_seguimiento: infoBD
+                  ? Boolean(infoBD.tiene_seguimiento)
+                  : false,
                 diagrama: diagramas[i] || "",
                 tipo: tipos[i] || "",
                 concepto: conceptoPuro,
@@ -5133,6 +5148,7 @@ const AltaProyectos = {
               {
                 id: null,
                 id_eads: null,
+                tiene_seguimiento: false,
                 diagrama: "",
                 tipo: "",
                 concepto: "",
@@ -6362,10 +6378,10 @@ const AltaProyectos = {
             }
           }
         })
-        .catch(error => {
-          console.log('Error:', error.response?.data);
-          console.log('Status:', error.response?.status);
-          console.log('Mensaje:', error.message);
+        .catch((error) => {
+          console.log("Error:", error.response?.data);
+          console.log("Status:", error.response?.status);
+          console.log("Mensaje:", error.message);
         });
     },
 
@@ -7220,50 +7236,42 @@ const AltaProyectos = {
         })
         .finally(() => {});
     },
-   enviarCorreoRechazo(anio, status_rechazo, enviar_a) {
-    axios
-      .post("enviarCorreoRechazo.php", {
-        correo: enviar_a,
-        nombre_proyecto: this.nombre_del_proyecto,
-        status: status_rechazo,
-        motivo: this.motivo_rechazo,
-        mes: this.mes_rechazo,
-        anio: anio,
-      })
-      .then((response) => {
+    enviarCorreoRechazo(anio, status_rechazo, enviar_a) {
+      axios
+        .post("enviarCorreoRechazo.php", {
+          correo: enviar_a,
+          nombre_proyecto: this.nombre_del_proyecto,
+          status: status_rechazo,
+          motivo: this.motivo_rechazo,
+          mes: this.mes_rechazo,
+          anio: anio,
+        })
+        .then((response) => {
+          console.log("RESPUESTA COMPLETA PHP:", response.data);
 
-        console.log("RESPUESTA COMPLETA PHP:", response.data);
+          if (response.data.success === true) {
+            console.log("SMTP ACEPTÓ EL CORREO");
+            console.log("Destinatario:", response.data.destinatario);
+            console.log("Mensaje:", response.data.mensaje);
+          } else {
+            console.error("NO SE PUDO ENVIAR EL CORREO");
+            console.error("Error:", response.data.error);
+          }
+        })
+        .catch((error) => {
+          console.error("ERROR EN AXIOS");
 
-        if (response.data.success === true) {
-
-          console.log("SMTP ACEPTÓ EL CORREO");
-          console.log("Destinatario:", response.data.destinatario);
-          console.log("Mensaje:", response.data.mensaje);
-
-        } else {
-
-          console.error("NO SE PUDO ENVIAR EL CORREO");
-          console.error("Error:", response.data.error);
-
-        }
-
-      })
-      .catch((error) => {
-
-        console.error("ERROR EN AXIOS");
-
-        if (error.response) {
-          console.error("Código HTTP:", error.response.status);
-          console.error("Respuesta PHP:", error.response.data);
-        } else {
-          console.error("Detalle:", error.message);
-        }
-
-      })
-      .finally(() => {
-        console.log("Proceso de envío finalizado");
-      });
-  },
+          if (error.response) {
+            console.error("Código HTTP:", error.response.status);
+            console.error("Respuesta PHP:", error.response.data);
+          } else {
+            console.error("Detalle:", error.message);
+          }
+        })
+        .finally(() => {
+          console.log("Proceso de envío finalizado");
+        });
+    },
     consultarSeguimientos() {
       this.sumarSoloUnaVez = 0;
       axios
