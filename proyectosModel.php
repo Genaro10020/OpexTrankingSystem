@@ -833,18 +833,31 @@ function actualizarProyecto($id, $folio, $fecha_alta_invertida, $nombre_proyecto
 
        // Eliminar los registros sobrantes
         if ($total_nuevos < $total_existentes) {
-            $stmtDelete = $conexion->prepare("DELETE FROM impacto_ambiental_proyecto WHERE id = ? AND id_proyecto = ?");
+            $stmtCheckReg = $conexion->prepare("SELECT COUNT(*) AS total FROM registros_impacto_ambiental WHERE id_impacto_ambiental_proyecto = ?");
+            $stmtDelete   = $conexion->prepare("DELETE FROM impacto_ambiental_proyecto WHERE id = ? AND id_proyecto = ?");
 
-            if ($stmtDelete) {
+            if ($stmtDelete && $stmtCheckReg) {
                 for ($i = $total_nuevos; $i < $total_existentes; $i++) {
-                    $id_registro = $impactos_existentes[$i]['id'];
+                    $id_registro = $impactos_existentes[$id]['id'];
+
+                    $stmtCheckReg->bind_param("i", $id_registro);
+                    $stmtCheckReg->execute();
+                    $resCheck = $stmtCheckReg->get_result()->fetch_assoc();
+
+                    if ((int)($resCheck['total'] ?? 0) > 0) {
+                        continue;
+                    }
+
                     $stmtDelete->bind_param("ii", $id_registro, $id);
-                    try {
+
+                    try{
                         $stmtDelete->execute();
-                    } catch (mysqli_sql_exception $e) {
+                    }catch (mysqli_sql_exception $e) {
                         continue;
                     }
                 }
+
+                $stmtCheckReg->close();
                 $stmtDelete->close();
             }
         }
