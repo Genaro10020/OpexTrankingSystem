@@ -443,9 +443,33 @@ function consultarProyectosID($id_proyecto)
     //bucar en la BD siglas que sean iguales WHERE id ='$id_proyecto'*/
    
     
+    $impactos_proyecto_bd = [];
+    $consultaImp = "SELECT iap.id, iap.impacto_ambiental, COUNT(ria.id) AS total_registros
+                    FROM impacto_ambiental_proyecto iap
+                    LEFT JOIN registros_impacto_ambiental ria ON iap.id = ria.id_impacto_ambiental_proyecto
+                    WHERE iap.id_proyecto = '$id_proyecto'
+                    GROUP BY iap.id, iap.impacto_ambiental
+                    ORDER BY iap.id ASC";
+    
+    $queryImp = $conexion->query($consultaImp);
 
-    return array($resultado, $estado,$fuenteBuscar, $soloSiglas, $fuente, $plantaBuscar, $planta, $areaBuscar, $area, $departamentoBuscar, $departamento, $metodologiaBuscar, $metodologia, $responsableBuscar, $responsable,
-     $observadorBuscar, $observador, $arregloObservador, $cantidad, $responsablesArreglo);
+    if ($queryImp) {
+        while ($rowImp = $queryImp->fetch_assoc()) {
+            $impactos_proyecto_bd[] = [
+                'id' => (int)$rowImp['id'],
+                'impacto_ambiental' => $rowImp['impacto_ambiental'],
+                'tiene_seguimiento' => ((int)$rowImp['total_registros'] > 0)
+            ];
+        }
+    }
+
+    return array(
+        $resultado, $estado, $fuenteBuscar, $soloSiglas, $fuente, 
+        $plantaBuscar, $planta, $areaBuscar, $area, $departamentoBuscar, 
+        $departamento, $metodologiaBuscar, $metodologia, $responsableBuscar, $responsable,
+        $observadorBuscar, $observador, $arregloObservador, $cantidad, $responsablesArreglo,
+        $impactos_proyecto_bd
+    );
 }
 
 function insertarProyecto($folio, $fecha_alta_invertida, $nombre_proyecto, $fuente, $planta, $area, $departamento, $metodologia, $responsable_id, $observador, $misiones, $pilares, $objetivos, $impacto_ambiental, $impacto_ambiental_emisiones, $valores, $tons_co2, $ahorro_duro, $ahorro_suave, $anioXmes, $mesXAnio, $valoresMensualCO, $valoresMensualAD, $valoresMensualAS, $presupuestado, $mesesPresupuestados, $diagrama_proceso, $tipo, $cantidad, $referencia, $id_eads,$impactos_completos)
